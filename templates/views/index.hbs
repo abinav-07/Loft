@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style>
+    body {
+      overflow: hidden;
+      margin-top: -10px;
+    }
+
+    #v-container {
+      margin-top: -50vh;
+    }
+
+    #header {}
+
+    #time-line {}
+
+    #plus-button {
+      margin-top: 62vh;
+      margin-left: 56vw;
+      position: fixed;
+      z-index: 3;
+      font-size: 26px;
+      border-radius: 70%;
+      width: 36px;
+      background-color: #91ecfa;
+    }
+
+    #top-block {
+      position: fixed;
+      width: 100%;
+      opacity: 1;
+      margin-top: 50px;
+      z-index: 99;
+      background: #fff;
+    }
+
+    #wave-container {
+      display: fixed;
+      height: 50vh;
+    }
+
+    #peaks-container {
+      transform: translateX(0%) rotate(90deg);
+      transform-origin: bottom left;
+      overflow: auto;
+      width: calc(214 * 96px);
+    }
+
+    #annotation-div {
+      box-shadow: 4px 4px 4px #888888;
+      margin-left: 15vw;
+      margin-top: 15vh;
+      width: 40vw;
+      position: absolute;
+
+    }
+
+    #annotation-box {
+      box-shadow: 4px 4px 4px #888888;
+      margin-left: 65vw;
+      margin-top: 250px;
+      border: 1px solid grey;
+      width: 350px;
+      height: 250px;
+      position: fixed;
+      z-index: 3;
+    }
+
+    #annotation-type {
+      width: 320px;
+      height: 50px;
+      margin: 10px;
+      border-radius: 15px;
+    }
+    .annotation-selection{
+      font-size: 20px;
+      padding:10px;
+    }
+    #speaker-name{
+      width: 320px;
+      height: 50px;
+      margin: 10px;
+      border-radius: 15px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="header">
+    {{>header}}
+  </div>
+  <div id="top-block">
+    <div id="button">
+      <a class="btn" id="play-button" href="#">
+        <i class="fa fa-play" style="color:grey;font-size:30px"></i></a>
+    </div>
+    <div id="time">
+      <h2 id="start-timestamp" style="margin-right:10px"></h2>
+      <h3 id="total-timestamp">00:00.000</h3>
+    </div>
+  </div>
+
+  <button id="plus-button">
+    <i class="fa fa-plus"></i>
+  </button>
+  <div id="annotation-div">
+    <p>Hello</p>
+  </div>
+  <div id="v-container">
+    <div id="wave-container">
+      <div id="peaks-container">
+        <div id="time-line">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="annotation-box">
+    <div style="margin-top:-20px ; background-color:#ffb570 ; height: 60px; ">
+      <p style="padding: 20px; font-size: 20px;"> Edit Annotation</p>
+    </div>
+    <div id="annotation-time">
+      <button style=" margin-left: 15px; border:none; background: none;"><i class="fa fa-repeat"
+          style=" color:black;font-size:16px"></i></a> </button>
+      <span id="annotation-start" style="font-size: 24px;font-weight: 520; padding-left: 5px;">00:00.000</span><span
+        style="font-size: 40px; padding-left: 10px; padding-right: 10px;">-</span><span id="annotation-end"
+        style="font-size: 24px;font-weight: 520; padding-left: 5px;">00:00.000</span>
+    </div>
+    <div>
+      <select id="annotation-type" style="z-index: 3;font-size: 18px; padding: 10px;">
+        <option value="singing" class="annotation-selections">Singing</option>
+        <option value="applause" class="annotation-selections">Applause</option>
+        <option value="dtmf" class="annotation-selections">DTMF</option>
+        <option value="laughter" class="annotation-selections">Laughter</option> 
+        <option value="music" class="annotation-selections">Music</option>
+        <option value="noise" class="annotation-selections">Noise</option>
+        <option value="ringtone" class="annotation-selections">Ringtone</option>
+      </select>
+    </div>
+    <div id="speaker">
+        <select id="speaker-name" aria-placeholder="Select or enter a new speaker">
+
+        </select>
+    </div>
+    <hr style="opacity: 0.5;">
+    <button id="annotation-remove"
+      style="margin:20px;color:red; border:none;background: none;font-size: 18px;">REMOVE</button>
+    <button id="annotation-split"
+      style="margin:20px 10px 20px 0px;color:black; border:none;background: none;font-size: 18px;">SPLIT</button>
+    <button id="annotation-save"
+      style="padding:10px; margin:5px 10px 15px 30px;color:white; border-radius:4px;border:none;background: #2f84ba;font-size: 18px;">SAVE</button>
+  </div><!-- Ending tag for Annotation Box -->
+
+  <audio id="my-audio">
+    <source src="example.mp3">
+  </audio>
+
+
+
+
+  <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+
+  <script src="wavesurfer.js/dist/wavesurfer.js"></script>
+  <script src="wavesurfer.js/dist/plugin/wavesurfer.timeline.js"></script>
+  <script src="wavesurfer.js/dist/plugin/wavesurfer.regions.js"></script>
+  <script>
+
+    var dragging = false;
+    var temp, y, diff, segmentStart, segmentEnd = 0;
+    var pressed = false;
+    var segmentBool = false;
+
+    window.onload = (function () {
+      $("html,body").on("keydown", function (event) {
+        if (event.which == 32) {
+          pressed = true;
+          console.log("event");
+          event.preventDefault();
+          if (!pressed) {
+            if (!spectrum.isPlaying()) {
+              spectrum.pause();
+            }
+            else {
+              spectrum.play();
+            }
+          }
+        }
+      });
+      $("html,body").on("keyup", function (event) {
+        if (event.which == 32) {
+          pressed = false;
+        }
+      });
+    })
+    var pixels = 0;
+    //var TimelinePlugin=window.WaveSurfer.timeline;
+    var temp = 0, scrolltop = 0, relativeScroll = 0;
+    var buttons = {
+      play: document.getElementById("play-button")
+    }
+    var spectrum = WaveSurfer.create({
+      container: '#peaks-container',
+      waveColor: 'grey',
+      progressColor: 'grey',
+      minPxPerSec: 96,
+      scrollParent: false,
+      autoCenter: true,
+      seekStyle: "line",
+      mediaControls: true,
+      barWidth: 1,
+      plugins: [
+        WaveSurfer.timeline.create({
+          container: "#time-line"
+        }),
+        WaveSurfer.regions.create({
+
+        })
+      ]
+    });
+    spectrum.zoom(96);
+
+
+    //handle play button
+    buttons.play.addEventListener("click", function (event) {
+      event.preventDefault();
+      if (!spectrum.isPlaying()) {
+        spectrum.play();
+      } else {
+        spectrum.pause();
+      }
+      document.getElementById('total-timestamp').innerText = secondsToTimestamp(spectrum.getDuration());
+    })
+
+    spectrum.on("ready", function () {
+      buttons.play.disabled = false;
+      totalDuration = spectrum.getDuration();
+      document.getElementById('total-timestamp').innerText = secondsToTimestamp(totalDuration);
+    });
+
+    function updateTimer() {
+      var formatTime = secondsToTimestamp(spectrum.getCurrentTime());
+      document.getElementById('start-timestamp').innerText = formatTime;
+      setTimeout(updateTimer, 1000);
+    }
+    updateTimer();
+
+
+    function secondsToTimestamp(seconds) {
+      var n = Math.floor(seconds);
+      var ms = (seconds - n).toFixed(3);
+      seconds = Math.floor(seconds);
+      var h = Math.floor(seconds / 3600);
+      var m = Math.floor((seconds - (h * 3600)) / 60);
+      var s = seconds - (h * 3600) - (m * 60);
+
+      m = m < 10 ? '0' + m : m;
+      s = s < 10 ? '0' + s : s;
+      ms = ms < 10 ? '0' + ms : ms;
+      return m + ':' + s + '.' + ms.split(".")[1];
+    }
+
+    spectrum.load("sample1.wav");
+
+
+    window.onload = (function () {
+      $("#peaks-container").mousedown(function (e) {
+        spectrum.pause();
+        dragging = true;
+        temp = y = e.clientY;
+      })
+      $("#peaks-container").mousemove(function (e) {
+        if (dragging == true) {
+          y = e.clientY;
+          diff = y - temp;
+          temp = y;
+
+          var req = (spectrum.getCurrentTime() + (diff * (-1) / 96)) / spectrum.getDuration();
+
+          req < 0 ? req = 0 : req = req;
+          req > 1 ? req = 1 : req = req;
+          spectrum.seekTo(req);
+
+        }
+      })
+      $(window).mouseup(function (e) {
+        dragging = false;
+      })
+    })
+    window.addEventListener("wheel", function (event) {
+      spectrum.pause();
+      var req = (spectrum.getCurrentTime() + (event.deltaY / 96)) / spectrum.getDuration();
+      req < 0 ? req = 0 : req = req;
+      req > 1 ? req = 1 : req = req;
+      spectrum.seekTo(req);
+
+    });
+
+    window.addEventListener("scroll", function (event) {
+      event.preventDefault();
+    })
+
+
+    spectrum.on("ready", function () {
+
+      $("#plus-button").on("click", function () {
+        if (!segmentBool) {
+          var topHeight = ($("#peaks-container wave wave").width());
+          console.log(topHeight);
+          segmentStart = spectrum.getCurrentTime();
+          segmentBool = true;
+        } else {
+          segmentEnd = spectrum.getCurrentTime();
+          segmentBool = false;
+          spectrum.addRegion({
+            id:1,
+            start: segmentStart,
+            end: segmentEnd,
+            drag: false
+          })
+          createDiv(segmentStart, segmentEnd);
+        }
+      })
+
+      //function to create a div
+      var zindexLoop = 1000;
+      function createDiv(segmentStart, segmentEnd) {
+        var div = document.createElement("div");
+        div.id="1";
+        var p=document.createElement("p");        
+        var colorArr = ["red", "blue", "green", "orange"];
+        div.style.height = "250px";        
+        div.style.background = colorArr[Math.floor(Math.random() * colorArr.length)];
+        div.style.zIndex = zindexLoop + 1;
+        p.innerHTML="Hello My Name is Anthony"+" Gonsalbhis I am From Nepal";
+        p.style.transform="translateX(0%) rotate(270deg)";
+        p.style.width="200px";
+        p.style.height="200px";
+        p.style.padding="20px";
+        div.appendChild(p);
+        div.style.position = "absolute";
+        console.log(segmentStart);
+        div.style.top = "0px";
+        var progress1 = segmentStart / spectrum.getDuration();
+        var progress2 = (segmentEnd-segmentStart) / spectrum.getDuration();
+        var minPxDelta = 1 / spectrum.params.pixelRatio;
+        var pos = Math.round((progress1) * spectrum.drawer.getWidth()) * minPxDelta;
+        var pos1 = Math.round((progress2) * spectrum.drawer.getWidth()) * minPxDelta;
+        
+        console.log(pos1);
+        div.style.left = pos + "px";
+        div.style.width = pos1+"px";
+        $("#peaks-container").append(div);
+      }
+
+      spectrum.on("seek", function () {
+        if (spectrum.regions.getCurrentRegion() != null) {
+          var startTime = secondsToTimestamp(spectrum.regions.getCurrentRegion().start);
+          var endTime = secondsToTimestamp(spectrum.regions.getCurrentRegion().end)
+          $("#annotation-start").text(startTime);
+          $("#annotation-end").text(endTime);
+          $("#annotation-remove").on("click", function () {
+            //spectrum.clearRegions();
+            console.log(spectrum.regions.getCurrentRegion().id);
+            $("#1").remove();
+          })
+        }
+      })
+    })
+  </script>
+
+</body>
+
+</html>
