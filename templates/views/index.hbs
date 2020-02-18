@@ -38,6 +38,25 @@
       margin-top: 50px;
       z-index: 99;
       background: #fff;
+      border-bottom:3px groove #888888;
+    }
+
+    #annotation-div-head{
+      box-shadow: 4px 4px 4px #888888;
+      left: 10vw;
+      top: 15vh;
+      width: 50vw;
+      position: fixed;           
+      opacity: 1;
+      z-index: 99;
+      height: 40px;
+    }
+    #annotation-div{           
+      
+      position: relative;           
+      opacity: 1;
+      z-index: 999;
+      height: 35px;
     }
 
     #wave-container {
@@ -49,25 +68,17 @@
       transform: translateX(0%) rotate(90deg);
       transform-origin: bottom left;
       overflow: auto;
+      position: relative;
       width: calc(214 * 96px);
     }
-
-    #annotation-div {
-      box-shadow: 4px 4px 4px #888888;
-      margin-left: 15vw;
-      margin-top: 15vh;
-      width: 40vw;
-      position: absolute;
-
-    }
-
+    
     #annotation-box {
       box-shadow: 4px 4px 4px #888888;
       margin-left: 65vw;
       margin-top: 250px;
       border: 1px solid grey;
-      width: 350px;
-      height: 250px;
+      /*width: 350px;*/
+      height: 500px;
       position: fixed;
       z-index: 3;
     }
@@ -78,15 +89,29 @@
       margin: 10px;
       border-radius: 15px;
     }
-    .annotation-selection{
+
+    .annotation-selection {
       font-size: 20px;
-      padding:10px;
+      padding: 10px;
     }
-    #speaker-name{
-      width: 320px;
-      height: 50px;
+
+    #speaker-name {
+      width: 300px;
+      height: 25px;
       margin: 10px;
       border-radius: 15px;
+    }
+
+    .speaker-type {
+      font-size: 20px;
+      padding: 10px;
+    }
+
+    #transcription-area {
+      width: 320px;
+      margin: 10px;
+      border-radius: 15px;
+
     }
   </style>
 </head>
@@ -103,15 +128,16 @@
     <div id="time">
       <h2 id="start-timestamp" style="margin-right:10px"></h2>
       <h3 id="total-timestamp">00:00.000</h3>
+    </div>    
+  </div>
+  <div id="annotation-div-head">
+    <div id="annotation-div">
+
     </div>
   </div>
-
   <button id="plus-button">
     <i class="fa fa-plus"></i>
-  </button>
-  <div id="annotation-div">
-    <p>Hello</p>
-  </div>
+  </button> 
   <div id="v-container">
     <div id="wave-container">
       <div id="peaks-container">
@@ -131,22 +157,29 @@
         style="font-size: 40px; padding-left: 10px; padding-right: 10px;">-</span><span id="annotation-end"
         style="font-size: 24px;font-weight: 520; padding-left: 5px;">00:00.000</span>
     </div>
-    <div>
-      <select id="annotation-type" style="z-index: 3;font-size: 18px; padding: 10px;">
-        <option value="singing" class="annotation-selections">Singing</option>
-        <option value="applause" class="annotation-selections">Applause</option>
-        <option value="dtmf" class="annotation-selections">DTMF</option>
-        <option value="laughter" class="annotation-selections">Laughter</option> 
-        <option value="music" class="annotation-selections">Music</option>
-        <option value="noise" class="annotation-selections">Noise</option>
-        <option value="ringtone" class="annotation-selections">Ringtone</option>
-      </select>
-    </div>
-    <div id="speaker">
-        <select id="speaker-name" aria-placeholder="Select or enter a new speaker">
-
+    
+      <div>
+        <select id="annotation-type" onchange="displayArea()" style="z-index: 3;font-size: 18px; padding: 10px;">
+          <option value="default" class="annotation-selections" selected="selected"></option>
+          <option value="Singing" class="annotation-selections">Singing</option>
+          <option value="Applause" class="annotation-selections">Applause</option>
+          <option value="DTMF" class="annotation-selections">DTMF</option>
+          <option value="Laughter" class="annotation-selections">Laughter</option>
+          <option value="Music" class="annotation-selections">Music</option>
+          <option value="Noise" class="annotation-selections">Noise</option>
+          <option value="Ringtone" class="annotation-selections">Ringtone</option>
         </select>
-    </div>
+      </div>
+      <div id="speaker">
+        <input id="speaker-name" placeholder="Select or enter a new speaker" type="text" list="select-options" style="z-index: 3;font-size: 18px; padding: 10px;">
+        <datalist id="select-options">
+          
+        </datalist>
+      </div>
+      <div>
+        <textarea id="transcription-area" rows="10"></textarea>
+      </div>
+  
     <hr style="opacity: 0.5;">
     <button id="annotation-remove"
       style="margin:20px;color:red; border:none;background: none;font-size: 18px;">REMOVE</button>
@@ -174,7 +207,7 @@
     var temp, y, diff, segmentStart, segmentEnd = 0;
     var pressed = false;
     var segmentBool = false;
-
+    var segmentId=1;
     window.onload = (function () {
       $("html,body").on("keydown", function (event) {
         if (event.which == 32) {
@@ -304,6 +337,24 @@
       event.preventDefault();
     })
 
+    //function to display the textarea and speakerfield
+    function displayArea() {
+      
+      var val = document.getElementById("annotation-type");
+      if (val.value !== "default") {
+        document.getElementById("speaker-name").value=val.value;
+        document.getElementById("transcription-area").value="";
+        document.getElementById("transcription-area").style.display="none";
+        document.getElementById("speaker-name").style.display="none";
+        $("#annotation-box").css("height",250+"px");
+      }
+      else{
+        document.getElementById("transcription-area").style.display="block";
+        document.getElementById("speaker-name").style.display="block";
+        $("#annotation-box").css("height",500+"px");
+      }
+    }
+
 
     spectrum.on("ready", function () {
 
@@ -316,61 +367,182 @@
         } else {
           segmentEnd = spectrum.getCurrentTime();
           segmentBool = false;
-          spectrum.addRegion({
-            id:1,
+          spectrum.addRegion({   
+            id:segmentId,
             start: segmentStart,
             end: segmentEnd,
-            drag: false
+            drag: false            
+          })        
+          
+        }
+      })      
+    })
+    $("#annotation-save").on("click",function(){            
+            var annotationText="";
+            var speakerName="";
+            var annotationType="";
+            var val = document.getElementById("annotation-type");
+            if(val.value !== "default"){
+              annotationText=val.value;
+              speakerName=document.getElementById("annotation-type").value;
+              annotationType= document.getElementById("annotation-type").value; 
+            }else{
+              annotationType= document.getElementById("annotation-type").value;
+              speakerName=document.getElementById("speaker-name").value;
+              annotationText=$("#transcription-area").val();
+            }           
+            //createDiv(divId,divClass,divTitle,segmentStart,segmentEnd,annotationText) 
+            createDiv(segmentId,speakerName,annotationType,segmentStart, segmentEnd,annotationText);
+            //Increasing the segment Id
+            segmentId+=1;
+    })     
+    spectrum.on("seek", function () {
+        if (spectrum.regions.getCurrentRegion() != null) {
+          var segmentId=spectrum.regions.getCurrentRegion().id;
+          var startTime = secondsToTimestamp(spectrum.regions.getCurrentRegion().start);
+          var endTime = secondsToTimestamp(spectrum.regions.getCurrentRegion().end);
+
+          if($("#peaks-container").has("#1").length>0){
+            var segmentType=document.getElementById(segmentId).title;
+            var segmentSpeaker=document.getElementById(segmentId).className.replace("-"," ");
+            var segmentText=document.getElementById(segmentId).innerText;
+          
+            if(segmentType!=="default"){
+              document.getElementById("transcription-area").style.display="none";
+              document.getElementById("speaker-name").style.display="none";
+              $("#annotation-box").css("height",250+"px");
+              document.getElementById("annotation-type").value=segmentType;
+              document.getElementById("speaker-name").value="";
+              document.getElementById("transcription-area").value="";
+            }else{
+              document.getElementById("transcription-area").style.display="block";
+              document.getElementById("speaker-name").style.display="block";
+              $("#annotation-box").css("height",500+"px");
+              document.getElementById("annotation-type").value=segmentType;
+              document.getElementById("speaker-name").value=segmentSpeaker;
+              document.getElementById("transcription-area").value=segmentText;
+            }
+          }
+
+          $("#annotation-start").text(startTime);
+          $("#annotation-end").text(endTime);          
+          $("#annotation-remove").on("click", function () {
+            //spectrum.clearRegions();
+            
+            console.log(spectrum.regions.getCurrentRegion().id);
+            console.log(document.getElementById(segmentId).innerText);
+            //$("#1").remove();
           })
-          createDiv(segmentStart, segmentEnd);
         }
       })
 
+    
       //function to create a div
       var zindexLoop = 1000;
-      function createDiv(segmentStart, segmentEnd) {
-        var div = document.createElement("div");
-        div.id="1";
-        var p=document.createElement("p");        
-        var colorArr = ["red", "blue", "green", "orange"];
-        div.style.height = "250px";        
-        div.style.background = colorArr[Math.floor(Math.random() * colorArr.length)];
+      function createDiv(segmentId,segmentClass="",segmentTitle="",segmentStart, segmentEnd,annotationText) {
+        var leftMargin=400;
+        var div = document.createElement("div");     
+        //div.style.marginTop="450px";           
+        div.id = segmentId;
+        div.className=segmentClass.replace(" ","-");
+        div.title=segmentTitle;
+        var p = document.createElement("p");
+        var colorArr = ["#f5d98c", "#f29363", "#b4ede9", "#a1edbc"];
+        var neededColor=colorArr[Math.floor(Math.random() * colorArr.length)]
+        div.style.height = "250px";
+        div.style.background = neededColor;
         div.style.zIndex = zindexLoop + 1;
-        p.innerHTML="Hello My Name is Anthony"+" Gonsalbhis I am From Nepal";
-        p.style.transform="translateX(0%) rotate(270deg)";
-        p.style.width="200px";
-        p.style.height="200px";
-        p.style.padding="20px";
+        p.innerHTML = annotationText;
+        p.style.transform = "translateX(0%) rotate(270deg)";
+        p.style.width = "200px";
+        p.style.height = "200px";
+        p.style.padding = "20px";
+        p.style.fontSize="18px";
         div.appendChild(p);
-        div.style.position = "absolute";
-        console.log(segmentStart);
-        div.style.top = "0px";
+        div.style.position = "absolute";        
+        //div.style.top = "0px";
         var progress1 = segmentStart / spectrum.getDuration();
-        var progress2 = (segmentEnd-segmentStart) / spectrum.getDuration();
+        var progress2 = (segmentEnd - segmentStart) / spectrum.getDuration();
         var minPxDelta = 1 / spectrum.params.pixelRatio;
         var pos = Math.round((progress1) * spectrum.drawer.getWidth()) * minPxDelta;
         var pos1 = Math.round((progress2) * spectrum.drawer.getWidth()) * minPxDelta;
-        
         console.log(pos1);
         div.style.left = pos + "px";
-        div.style.width = pos1+"px";
-        $("#peaks-container").append(div);
+        div.style.width = pos1 + "px";
+
+         
+        if($("#peaks-container").children().hasClass(segmentClass.replace(" ","-").toString())){
+          if(segmentTitle!=="default"){
+           div.style.top="0px";
+           $("#peaks-container").append(div);        
+          console.log("NOt default");
+          }else{
+             $("#annotation-div").children().each(function(index,value) {
+              if(value.className==segmentClass.replace(" ","-")){
+                console.log(index);
+                div.style.top=leftMargin/(index+1)+"px";
+                $("#peaks-container").append(div);
+                     
+                console.log(segmentClass);            
+                return false;
+              }              
+            });
+          }          
+        }else if(segmentTitle!=="default"){
+           div.style.top="0px";
+           $("#peaks-container").append(div);        
+          console.log("NOt default");
+        }
+         else{ 
+            //var topValue=$("#peaks-container").find("."+segmentClass.replace(" ","-")).position().top;
+             div.style.top=leftMargin/(($("#annotation-div").children("div").length)+1)+"px";         
+            $("#peaks-container").append(div);       
+             topSpeakerDiv(segmentClass,neededColor); 
+         }
+
+       
+       
       }
 
-      spectrum.on("seek", function () {
-        if (spectrum.regions.getCurrentRegion() != null) {
-          var startTime = secondsToTimestamp(spectrum.regions.getCurrentRegion().start);
-          var endTime = secondsToTimestamp(spectrum.regions.getCurrentRegion().end)
-          $("#annotation-start").text(startTime);
-          $("#annotation-end").text(endTime);
-          $("#annotation-remove").on("click", function () {
-            //spectrum.clearRegions();
-            console.log(spectrum.regions.getCurrentRegion().id);
-            $("#1").remove();
-          })
+      function topSpeakerDiv(segmentClass="",neededColor) {
+        var totalWidth=0;
+        var leftMargin=80;
+
+        var totalDivs=1;//$("#annotation-div").has("div").length
+        
+        if($("#annotation-div").children().hasClass(segmentClass.replace(" ","-").toString())){
+            console.log("Already Found");
+        }else{              
+          var div2 = document.createElement("div");     
+          var p2 = document.createElement("p");
+          div2.className=segmentClass.replace(" ","-");
+          div2.style.backgroundColor=neededColor;
+          p2.innerHTML = segmentClass;   
+          p2.style.height="30px"; 
+          p2.style.fontSize="16px";
+          div2.style.position="absolute";
+          div2.style.zIndex="3";
+          div2.style.width="80px";
+          div2.style.height="35px";          
+          div2.appendChild(p2); 
+          
+          $("#annotation-div").append(div2);
+               
+          if((($("#annotation-div").children("div").length)*leftMargin+80)>$("#annotation-div").width()){            
+            leftMargin=($("#annotation-div").width()-80)/$("#annotation-div").children("div").length;
+            $("#annotation-div").children().each(function(index,value) {
+              this.style.left = (leftMargin*index+"px");    
+              console.log(leftMargin*index);                        
+            }); 
+            
+          }else{              
+                 div2.style.left=($("#annotation-div").children("div").length)*leftMargin+"px";         
+          }
+          
+          //$("#annotation-div").children("div").css("width",($("#annotation-div").width()/totalDivs+1)+"px");
+          
         }
-      })
-    })
+      }
   </script>
 
 </body>
