@@ -1,0 +1,33 @@
+annotationType{
+    default{
+        speaker-1{
+            div-1{
+                annotation-text
+            },
+            div-2{
+
+            }
+        },
+        speaker-2{
+            div-3{
+
+            },
+            div-4{
+
+            }
+        }
+    },
+    others{
+
+    }
+}
+//(1,first_wave{annotation_id(AI),default{1,speaker-1,div_color,22:00,24:00,txt}})
+//(projectId,project_name{annotation_id(AI),annotation_Type{speakerdiv_id,div_ClassName,div_color,segment_Start,segment_End,annotation_Text,annotation_Type}}
+
+project(projectId,project_name,lengthTotal)
+
+userTable(userId,username)
+annotations(segment_id,div_ClassName,annotation_Type,segment_Start,segment_End,annotation_Text,channel,div_color)
+//(1,speaker-1,default,#fff,22:00,24:00,"Hey");
+//(2,speaker-2,default,#000,23:00,24:00,"no");
+//(3,)

@@ -56,6 +56,7 @@
     }
 
     #annotation-div {
+
       position: relative;
       opacity: 1;
       z-index: 999;
@@ -84,17 +85,6 @@
       height: 500px;
       position: fixed;
       z-index: 3;
-    }
-
-    #close {
-      position: relative;
-      cursor: pointer;
-      font-size: 34px;
-      font-weight: 300;
-      /*margin-left: 9vw;*/
-      float: right;
-      margin-right: 12px;
-
     }
 
     .annotation-time-class {
@@ -196,33 +186,32 @@
   </div>
 
   <div id="annotation-box">
-    <div class="annotation-editHeading" style=" background-color:#ffb570 ; height: 50px; ">
-      <p style="padding-left: 20px; font-size: 20px; margin:auto"> Edit Annotation <span id="close"
-          onclick="cancel()">x</span></p>
+    <div class="annotation-editHeading" style="margin-top:-20px ; background-color:#ffb570 ; height: 60px; ">
+      <p style="padding: 20px; font-size: 20px;"> Edit Annotation</p>
     </div>
     <div id="annotation-time">
       <button style=" margin-left: 7px; border:none; background: none;"><i class="fa fa-repeat"
           style=" color:black;font-size:16px"></i></a> </button>
       <span id="annotation-start" style="font-size: 16px;font-weight: 600;">
-        <input id="annotation-start-minute" class="annotation-time-class" type="number" min="0" max="59" onclick=""
-          onchange="updateSegmentonTimeChange()" value="00">
+        <input id="annotation-start-minute" class="annotation-time-class" type="number" min="0" max="59"
+          oninput="updateSegmentonTimeChange()" onchange="updateSegmentonTimeChange()">
         :
-        <input id="annotation-start-seconds" class="annotation-time-class" type="number" min="0" max="59" oninput=""
-          onchange="updateSegmentonTimeChange()" value="00">
+        <input id="annotation-start-seconds" class="annotation-time-class" type="number" min="0" max="59"
+          oninput="updateSegmentonTimeChange()" onchange="updateSegmentonTimeChange()">
         .
         <input id="annotation-start-milliseconds" class="annotation-time-ms-class" type="number" min="0" max="999"
-          oninput="" onchange="updateSegmentonTimeChange()" value="000">
+          oninput="updateSegmentonTimeChange()" onchange="updateSegmentonTimeChange()">
       </span>
       <span style="font-size: 40px;">-</span>
       <span id="annotation-end" style="font-size: 16px;font-weight: 600;">
-        <input id="annotation-end-minute" class="annotation-time-class" type="number" min="0" max="59" oninput=""
-          onchange="updateSegmentonTimeChange()" value="00">
+        <input id="annotation-end-minute" class="annotation-time-class" type="number" min="0" max="59"
+          oninput="updateSegmentonTimeChange()" onchange="updateSegmentonTimeChange()">
         :
-        <input id="annotation-end-seconds" class="annotation-time-class" type="number" min="0" max="59" oninput=""
-          onchange="updateSegmentonTimeChange()" value="00">
+        <input id="annotation-end-seconds" class="annotation-time-class" type="number" min="0" max="59"
+          oninput="updateSegmentonTimeChange()" onchange="updateSegmentonTimeChange()">
         .
         <input id="annotation-end-milliseconds" class="annotation-time-ms-class" type="number" min="0" max="999"
-          oninput="" onchange="updateSegmentonTimeChange()" value="000">
+          oninput="updateSegmentonTimeChange()" onchange="updateSegmentonTimeChange()">
       </span>
     </div>
 
@@ -269,17 +258,14 @@
   <script src="wavesurfer.js/dist/plugin/wavesurfer.regions.js"></script>
   <script>
 
-    var updateAnnotationOnClick = false;
-    var updateAnnotationOnChange = false;
+    var updateAnnotation = false;
     var updateSegments = true;
     var dragging = false;
     var temp, y, diff, segmentStart, segmentEnd = 0;
+    var currentStartTime, currentEndTime = 0;
     var pressed = false;
     var segmentBool = false;
     var segmentId = 1;
-    var currentId = "";
-    var currentStartTime, currentEndTime = 0;
-    var newStartTime, newEndTime = 0;
     window.onload = (function () {
       $("html,body").on("keydown", function (event) {
         if (event.which == 32) {
@@ -499,55 +485,25 @@
 
 
       $("#plus-button").on("click", function () {
-        //boolean to whether update database or create new data in database
-        updateSegments = false;
-
-        segmentEnd = spectrum.getCurrentTime();
-        if ((spectrum.getCurrentTime() - 2) < 0) {
-          segmentStart = 0;
+        if (!segmentBool) {
+          segmentStart = spectrum.getCurrentTime();
+          segmentBool = true;
         } else {
-          segmentStart = segmentEnd - 2;
+          segmentEnd = spectrum.getCurrentTime();
+          segmentBool = false;
+          updateSegments = false;
+          spectrum.addRegion({
+            id: segmentId,
+            start: segmentStart,
+            end: segmentEnd,
+            drag: false
+
+          })
         }
-        spectrum.addRegion({
-          id: segmentId,
-          start: segmentStart,
-          end: segmentEnd,
-          drag: false
-        })
-        currentId = segmentId;
-        //highlighting current Region
-        highlightRegion();
-
-        //segment start variables
-        var startMinute = secondsToMinutes(spectrum.regions.list[currentId].start);
-        var startSeconds = secondsToSeconds(spectrum.regions.list[currentId].start);
-        var startMilliseconds = secondsToMilliseconds(spectrum.regions.list[currentId].start);
-
-        //segment end variables
-        var endMinute = secondsToMinutes(spectrum.regions.list[currentId].end);
-        var endSeconds = secondsToSeconds(spectrum.regions.list[currentId].end);
-        var endMilliseconds = secondsToMilliseconds(spectrum.regions.list[currentId].end);
-
-        //displaying texts   
-        $("#annotation-start-minute").val(startMinute);
-        $("#annotation-start-seconds").val(startSeconds);
-        $("#annotation-start-milliseconds").val(startMilliseconds);
-        $("#annotation-end-minute").val(endMinute);
-        $("#annotation-end-seconds").val(endSeconds);
-        $("#annotation-end-milliseconds").val(endMilliseconds);
-
-
-        spectrum.on("seek", function () {
-          if (!updateAnnotationOnChange && spectrum.regions.list[segmentId] != null) {
-            spectrum.regions.list[segmentId].remove();
-            updateSegments = true;
-          }
-        })
       })
     })
     $("#annotation-save").on("click", function () {
-      saveClick();
-      /* if (updateSegments == false) {
+      if (updateSegments == false) {
 
         var annotationText = "";
         var speakerName = "";
@@ -590,7 +546,6 @@
         updateSegments = true;
       } else {
         //Updating Database
-        updateAnnotationOnChange=false;
         var segmentId = spectrum.regions.getCurrentRegion().id;
         var annotationText = "";
         var speakerName = "";
@@ -659,96 +614,95 @@
             console.log("Updated");
           }
         })
-      } */
-    })
-
-    //onClick for split
-    $("#close").on("click", function () {
-      updateSegments = true;
-      updateAnnotationOnChange = false;
-      updateAnnotationOnClick = false;
-      //current region highlight
-      highlightRegion();
-    })
-
-    //Region Remove             
-    $("#annotation-remove").on("click", function () {
-      updateSegments == true;
-      var regionId = currentId;
-      spectrum.regions.list[currentId].remove();
-      $("#" + currentId).empty();
-      $("#" + currentId).remove();
-
-
-      //ajax request to remove segments
-      var params = {
-        regionId
       }
-      $.ajax({
-        method: "POST",
-        url: "/remove-segments",
-        data: params,
-        success: function () {
-          console.log("Removed");
-        }
-      });
-
     })
+
     //Seeking Specturm
     spectrum.on("seek", function () {
-      if (spectrum.regions.getCurrentRegion() != null && !updateAnnotationOnChange && !updateAnnotationOnClick) {
-        var segmentId = spectrum.regions.getCurrentRegion().id;
-        currentId = spectrum.regions.getCurrentRegion().id;
+      if (updateAnnotation == false) {
+        console.log(updateAnnotation);
+        console.log("Please Dont");
+        if (spectrum.regions.getCurrentRegion() != null) {
+          var segmentId = spectrum.regions.getCurrentRegion().id;
+          /*spectrum.regions.list.filter(function(region){
+            console.log(region);
+            return region.id!=segmentId;
+          }).forEach((region)=>{
+            region.element.style.backgroundColor="rgba(0,0,0,0.6)"
+          })*/
+          spectrum.regions.getCurrentRegion().element.style.backgroundColor = "rgba(168,221,227,0.6)";
+          console.log("SegmentID" + segmentId);
 
-        //highlight current region
-        highlightRegion();
+          //segment start variables
+          var startMinute = secondsToMinutes(spectrum.regions.getCurrentRegion().start);
+          var startSeconds = secondsToSeconds(spectrum.regions.getCurrentRegion().start);
+          var startMilliseconds = secondsToMilliseconds(spectrum.regions.getCurrentRegion().start);
+          currentStartTime = spectrum.regions.getCurrentRegion().start
 
-        //segment start variables
-        var startMinute = secondsToMinutes(spectrum.regions.getCurrentRegion().start);
-        var startSeconds = secondsToSeconds(spectrum.regions.getCurrentRegion().start);
-        var startMilliseconds = secondsToMilliseconds(spectrum.regions.getCurrentRegion().start);
-        currentStartTime = spectrum.regions.getCurrentRegion().start
+          //segment end variables
+          var endMinute = secondsToMinutes(spectrum.regions.getCurrentRegion().end);
+          var endSeconds = secondsToSeconds(spectrum.regions.getCurrentRegion().end);
+          var endMilliseconds = secondsToMilliseconds(spectrum.regions.getCurrentRegion().end);
+          currentEndTime = spectrum.regions.getCurrentRegion().end;
 
-        //segment end variables
-        var endMinute = secondsToMinutes(spectrum.regions.getCurrentRegion().end);
-        var endSeconds = secondsToSeconds(spectrum.regions.getCurrentRegion().end);
-        var endMilliseconds = secondsToMilliseconds(spectrum.regions.getCurrentRegion().end);
-        currentEndTime = spectrum.regions.getCurrentRegion().end;
+          //displaying texts   
+          $("#annotation-start-minute").val(startMinute);
+          $("#annotation-start-seconds").val(startSeconds);
+          $("#annotation-start-milliseconds").val(startMilliseconds);
+          $("#annotation-end-minute").val(endMinute);
+          $("#annotation-end-seconds").val(endSeconds);
+          $("#annotation-end-milliseconds").val(endMilliseconds);
 
-        //displaying texts   
-        $("#annotation-start-minute").val(startMinute);
-        $("#annotation-start-seconds").val(startSeconds);
-        $("#annotation-start-milliseconds").val(startMilliseconds);
-        $("#annotation-end-minute").val(endMinute);
-        $("#annotation-end-seconds").val(endSeconds);
-        $("#annotation-end-milliseconds").val(endMilliseconds);
+          //($("#peaks-container").children().is(`#${segmentId}`) > 0)
+          if ($("#peaks-container").children().is(`#${segmentId}`) > 0) {
+            var segmentType = document.getElementById(segmentId).title;
+            var segmentSpeaker = document.getElementById(segmentId).className.replace("-", " ");
+            var segmentText = document.getElementById(segmentId).innerText;
+            var divColor = document.getElementById(segmentId).style.background;
 
-        //($("#peaks-container").children().is(`#${segmentId}`) > 0)
-        if ($("#peaks-container").children().is(`#${segmentId}`) > 0) {
-          var segmentType = document.getElementById(segmentId).title;
-          var segmentSpeaker = document.getElementById(segmentId).className.replace("-", " ");
-          var segmentText = document.getElementById(segmentId).innerText;
-          var divColor = document.getElementById(segmentId).style.background;
-
-          //changing color of Annotation Heading
-          $(".annotation-editHeading").css("backgroundColor", divColor);
-          if (segmentType !== "default") {
-            document.getElementById("transcription-area").style.display = "none";
-            document.getElementById("speaker-name").style.display = "none";
-            $("#annotation-box").css("height", 250 + "px");
-            document.getElementById("annotation-type").value = segmentType;
-            document.getElementById("speaker-name").value = "";
-            document.getElementById("transcription-area").value = "";
-          } else {
-            document.getElementById("transcription-area").style.display = "block";
-            document.getElementById("speaker-name").style.display = "block";
-            $("#annotation-box").css("height", 500 + "px");
-            document.getElementById("annotation-type").value = segmentType;
-            document.getElementById("speaker-name").value = segmentSpeaker;
-            document.getElementById("transcription-area").value = segmentText;
+            //changing color of Annotation Heading
+            $(".annotation-editHeading").css("backgroundColor", divColor);
+            if (segmentType !== "default") {
+              document.getElementById("transcription-area").style.display = "none";
+              document.getElementById("speaker-name").style.display = "none";
+              $("#annotation-box").css("height", 250 + "px");
+              document.getElementById("annotation-type").value = segmentType;
+              document.getElementById("speaker-name").value = "";
+              document.getElementById("transcription-area").value = "";
+            } else {
+              document.getElementById("transcription-area").style.display = "block";
+              document.getElementById("speaker-name").style.display = "block";
+              $("#annotation-box").css("height", 500 + "px");
+              document.getElementById("annotation-type").value = segmentType;
+              document.getElementById("speaker-name").value = segmentSpeaker;
+              document.getElementById("transcription-area").value = segmentText;
+            }
           }
         }
       }
+      //Region Remove             
+      $("#annotation-remove").on("click", function () {
+        if (spectrum.regions.getCurrentRegion() != null) {
+
+          var regionId = spectrum.regions.getCurrentRegion().id;
+          $("#" + regionId).empty();
+          $("#" + regionId).remove();
+          spectrum.regions.list[regionId].remove();
+
+          //ajax request to remove segments
+          var params = {
+            regionId
+          }
+          $.ajax({
+            method: "POST",
+            url: "/remove-segments",
+            data: params,
+            success: function () {
+              console.log("Removed");
+            }
+          });
+        }
+      })
     })
 
 
@@ -789,14 +743,13 @@
       var progress2 = (segmentEnd - segmentStart) / spectrum.getDuration();
       var minPxDelta = 1 / spectrum.params.pixelRatio;
       var pos = Math.round((progress1) * spectrum.drawer.getWidth()) * minPxDelta;
-      var pos1 = Math.round((progress2) * spectrum.drawer.getWidth()) * minPxDelta - 3;
+      var pos1 = Math.round((progress2) * spectrum.drawer.getWidth()) * minPxDelta;
 
       div.style.left = pos + "px";
       div.style.width = pos1 + "px";
 
-      //onClick and onChange action listener
+      //onClick action listener
       div.addEventListener("click", changeAnnotationOnClick);
-
 
       if ($("#peaks-container").children().hasClass(segmentClass.replace(" ", "-").toString())) {
         if (segmentTitle !== "default") {
@@ -861,44 +814,29 @@
             this.style.left = (leftMargin * index + "px");
 
           });
+
         } else {
           div2.style.left = ($("#annotation-div").children("div").length) * leftMargin + "px";
         }
+
+        //$("#annotation-div").children("div").css("width",($("#annotation-div").width()/totalDivs+1)+"px");
+
       }
     }
 
-    //function to update Segment Start on start time change
+    //function to update Segment Start on time change
     function updateSegmentonTimeChange() {
-      // if (updateSegments) {
-      updateAnnotationOnChange = true;
-      var starting = parseInt($("#annotation-start-minute").val() * 60) + parseInt($("#annotation-start-seconds").val()) + "." + parseInt($("#annotation-start-milliseconds").val());
-      var ending = parseInt($("#annotation-end-minute").val() * 60) + parseInt($("#annotation-end-seconds").val()) + "." + parseInt($("#annotation-end-milliseconds").val());
-      console.log(parseFloat(ending) - parseFloat(starting));
-      if (spectrum.regions.list[currentId] != null) {
+      updateAnnotation = true;
+      if (spectrum.regions.getCurrentRegion() != null) {
+        var regionId = spectrum.regions.getCurrentRegion().id;
+        console.log("Id" + regionId);
+        spectrum.regions.list[regionId].update({
+          start: parseInt($("#annotation-start-minute").val() * 60) + parseInt($("#annotation-start-seconds").val()) + "." + $("#annotation-start-milliseconds").val(),
+          end: parseInt($("#annotation-end-minute").val() * 60) + parseInt($("#annotation-end-seconds").val()) + "." + $("#annotation-end-milliseconds").val()
+        });
 
-        console.log("Id" + currentId);
-        if ((parseFloat(ending) - parseFloat(starting)) < 0.100 && (parseFloat(ending) - parseFloat(starting)) >= 0) {
-          spectrum.regions.list[currentId].update({
-            start: parseInt($("#annotation-start-minute").val() * 60) + parseInt($("#annotation-start-seconds").val()) + "." + parseInt($("#annotation-start-milliseconds").val()),//-0.050,
-            end: parseInt($("#annotation-end-minute").val() * 60) + parseInt($("#annotation-end-seconds").val()) + "." + parseInt($("#annotation-end-milliseconds").val())//+900
-          });
-        } else if ((parseFloat(ending) - parseFloat(starting)) < 0) {
-          spectrum.regions.list[currentId].update({
-            end: parseInt($("#annotation-start-minute").val() * 60) + parseInt($("#annotation-start-seconds").val()) + "." + parseInt($("#annotation-start-milliseconds").val()),
-            start: parseInt($("#annotation-end-minute").val() * 60) + parseInt($("#annotation-end-seconds").val()) + "." + parseInt($("#annotation-end-milliseconds").val())
-          });
-        } else {
-          spectrum.regions.list[currentId].update({
-            start: parseInt($("#annotation-start-minute").val() * 60) + parseInt($("#annotation-start-seconds").val()) + "." + $("#annotation-start-milliseconds").val(),
-            end: parseInt($("#annotation-end-minute").val() * 60) + parseInt($("#annotation-end-seconds").val()) + "." + $("#annotation-end-milliseconds").val()
-          });
-        }
-
-        //highlight clicked region
-        highlightRegion();
-
-        newStartTime = spectrum.regions.list[currentId].start;
-        newEndTime = spectrum.regions.list[currentId].end;
+        var newStartTime = spectrum.regions.getCurrentRegion().start;
+        var newEndTime = spectrum.regions.getCurrentRegion().end;
 
 
         var progress1 = newStartTime / spectrum.getDuration();
@@ -907,16 +845,8 @@
         var pos = Math.round((progress1) * spectrum.drawer.getWidth()) * minPxDelta;
         var pos1 = Math.round((progress2) * spectrum.drawer.getWidth()) * minPxDelta;
 
-        if ($("#peaks-container").children().is("#" + currentId)) {
-          document.getElementById(currentId).style.left = pos + "px";
-          document.getElementById(currentId).style.width = pos1 + "px";
-        }
-
-
-        //Change start and end on change
-        segmentStart = spectrum.regions.list[currentId].start;
-        segmentEnd = spectrum.regions.list[currentId].end;
-        console.log(segmentStart);
+        document.getElementById(regionId).style.left = pos + "px";
+        document.getElementById(regionId).style.width = pos1 + "px";
         /*if(dragging==true){
           spectrum.regions.list[regionId].update({
              start:currentStartTime,
@@ -924,288 +854,59 @@
           });     
         }*/
       }
-      //}
-
-
     }
 
     //function for annotation contents change on click
     function changeAnnotationOnClick(evt) {
-      if (!updateAnnotationOnChange) {
-        var clickedId = evt.target.id;
-        currentId = evt.target.id;
-        //highlight clicked region
-        highlightRegion();
+      var clickedId = evt.target.id;
 
-        currentStartTime = spectrum.regions.list[currentId].start;
-        currentEndTime = spectrum.regions.list[currentId].end;
-        console.log(clickedId);
+      //segment start variables
+      var startMinute = secondsToMinutes(spectrum.regions.list[clickedId].start);
+      var startSeconds = secondsToSeconds(spectrum.regions.list[clickedId].start);
+      var startMilliseconds = secondsToMilliseconds(spectrum.regions.list[clickedId].start);
 
-        //segment start variables
-        var startMinute = secondsToMinutes(spectrum.regions.list[currentId].start);
-        var startSeconds = secondsToSeconds(spectrum.regions.list[currentId].start);
-        var startMilliseconds = secondsToMilliseconds(spectrum.regions.list[currentId].start);
+      //segment end variables
+      var endMinute = secondsToMinutes(spectrum.regions.list[clickedId].end);
+      var endSeconds = secondsToSeconds(spectrum.regions.list[clickedId].end);
+      var endMilliseconds = secondsToMilliseconds(spectrum.regions.list[clickedId].end);
 
-        //segment end variables
-        var endMinute = secondsToMinutes(spectrum.regions.list[currentId].end);
-        var endSeconds = secondsToSeconds(spectrum.regions.list[currentId].end);
-        var endMilliseconds = secondsToMilliseconds(spectrum.regions.list[currentId].end);
+      //displaying texts   
+      $("#annotation-start-minute").val(startMinute);
+      $("#annotation-start-seconds").val(startSeconds);
+      $("#annotation-start-milliseconds").val(startMilliseconds);
+      $("#annotation-end-minute").val(endMinute);
+      $("#annotation-end-seconds").val(endSeconds);
+      $("#annotation-end-milliseconds").val(endMilliseconds);
 
-        //displaying texts   
-        $("#annotation-start-minute").val(startMinute);
-        $("#annotation-start-seconds").val(startSeconds);
-        $("#annotation-start-milliseconds").val(startMilliseconds);
-        $("#annotation-end-minute").val(endMinute);
-        $("#annotation-end-seconds").val(endSeconds);
-        $("#annotation-end-milliseconds").val(endMilliseconds);
 
-        if ($("#peaks-container").children().is("#" + clickedId) > 0) {
-          var segmentType = document.getElementById(clickedId).title;
-          var segmentSpeaker = document.getElementById(clickedId).className.replace("-", " ");
-          var segmentText = document.getElementById(clickedId).innerText;
-          var divColor = document.getElementById(clickedId).style.background;
+      if ($("#peaks-container").children().is("#" + clickedId) > 0) {
+        var segmentType = document.getElementById(clickedId).title;
+        var segmentSpeaker = document.getElementById(clickedId).className.replace("-", " ");
+        var segmentText = document.getElementById(clickedId).innerText;
+        var divColor = document.getElementById(clickedId).style.background;
 
-          //changing color of Annotation Heading
-          $(".annotation-editHeading").css("backgroundColor", divColor);
-          if (segmentType !== "default") {
-            document.getElementById("transcription-area").style.display = "none";
-            document.getElementById("speaker-name").style.display = "none";
-            $("#annotation-box").css("height", 250 + "px");
-            document.getElementById("annotation-type").value = segmentType;
-            document.getElementById("speaker-name").value = "";
-            document.getElementById("transcription-area").value = "";
-          } else {
-            document.getElementById("transcription-area").style.display = "block";
-            document.getElementById("speaker-name").style.display = "block";
-            $("#annotation-box").css("height", 500 + "px");
-            document.getElementById("annotation-type").value = segmentType;
-            document.getElementById("speaker-name").value = segmentSpeaker;
-            document.getElementById("transcription-area").value = segmentText;
-          }
+        //changing color of Annotation Heading
+        $(".annotation-editHeading").css("backgroundColor", divColor);
+        if (segmentType !== "default") {
+          document.getElementById("transcription-area").style.display = "none";
+          document.getElementById("speaker-name").style.display = "none";
+          $("#annotation-box").css("height", 250 + "px");
+          document.getElementById("annotation-type").value = segmentType;
+          document.getElementById("speaker-name").value = "";
+          document.getElementById("transcription-area").value = "";
+        } else {
+          document.getElementById("transcription-area").style.display = "block";
+          document.getElementById("speaker-name").style.display = "block";
+          $("#annotation-box").css("height", 500 + "px");
+          document.getElementById("annotation-type").value = segmentType;
+          document.getElementById("speaker-name").value = segmentSpeaker;
+          document.getElementById("transcription-area").value = segmentText;
         }
       }
     }
 
-    //Cancel Save or any Changes
-    function cancel() {
-      //updateAnnotationOnChange=true;            
-      if ($("#peaks-container").children().is("#" + currentId)) {
-        spectrum.regions.list[currentId].update({
-          start: currentStartTime,
-          end: currentEndTime
-        });
+    //change boolean to allow/disallow annotation contents change on Seek/Scroll
 
-        //segment start variables
-        var startMinute = secondsToMinutes(spectrum.regions.list[currentId].start);
-        var startSeconds = secondsToSeconds(spectrum.regions.list[currentId].start);
-        var startMilliseconds = secondsToMilliseconds(spectrum.regions.list[currentId].start);
-
-        //segment end variables
-        var endMinute = secondsToMinutes(spectrum.regions.list[currentId].end);
-        var endSeconds = secondsToSeconds(spectrum.regions.list[currentId].end);
-        var endMilliseconds = secondsToMilliseconds(spectrum.regions.list[currentId].end);
-
-        //displaying texts   
-        $("#annotation-start-minute").val(startMinute);
-        $("#annotation-start-seconds").val(startSeconds);
-        $("#annotation-start-milliseconds").val(startMilliseconds);
-        $("#annotation-end-minute").val(endMinute);
-        $("#annotation-end-seconds").val(endSeconds);
-        $("#annotation-end-milliseconds").val(endMilliseconds);
-
-        var progress1 = currentStartTime / spectrum.getDuration();
-        var progress2 = (currentEndTime - currentStartTime) / spectrum.getDuration();
-        var minPxDelta = 1 / spectrum.params.pixelRatio;
-        var pos = Math.round((progress1) * spectrum.drawer.getWidth()) * minPxDelta;
-        var pos1 = Math.round((progress2) * spectrum.drawer.getWidth()) * minPxDelta;
-
-        document.getElementById(currentId).style.left = pos + "px";
-        document.getElementById(currentId).style.width = pos1 + "px";
-
-      } else {
-        spectrum.regions.list[currentId].remove();
-        updateAnnotationOnChange = false;
-      }
-    }
-
-    //function for annotation contents change on click    
-    $(".annotation-time-class, .annotation-time-ms-class, #annotation-type, #speaker-name, #transcription-area").on("click", function () {
-      updateAnnotationOnClick = true;
-
-    });
-
-    $(".annotation-time-class, .annotation-time-ms-class, #annotation-type, #speaker-name, #transcription-area").on("focusout", function () {
-      if (updateAnnotationOnClick) {
-        updateAnnotationOnClick = false;
-      }
-    })
-
-    $(".annotation-time-class, .annotation-time-ms-class, #annotation-type, #speaker-name, #transcription-area").on("change", function () {
-      updateSegmentonTimeChange();
-    });
-
-    //function to highlight current region
-    function highlightRegion() {
-      var highlightId = currentId;
-      //console.log(spectrum.regions.list[highlightId].element);
-
-      Object.keys(spectrum.regions.list).forEach(function (id) {
-        var region = spectrum.regions.list[id];
-        if (region.id == highlightId) {
-          region.element.children[0].style.backgroundColor = "rgba(94, 196, 247,1)";
-          region.element.children[1].style.backgroundColor = "rgba(94, 196, 247,1)";
-          region.element.style.backgroundColor = "rgba(168,221,227,0.6)";
-          if ($("#peaks-container").children().is("#" + highlightId)) {
-            document.getElementById(highlightId).style.opacity = "0.4";
-            document.getElementById(highlightId).style.boxShadow = "2px 2px 20px";
-          }
-        } else {
-          region.element.children[0].style.backgroundColor = "rgba(0,0,0,0)";
-          region.element.children[1].style.backgroundColor = "rgba(0,0,0,0)";
-          region.element.style.backgroundColor = "rgba(0,0,0,0.1)";
-          if ($("#peaks-container").children().is("#" + region.id)) {
-            document.getElementById(region.id).style.opacity = "1"
-            document.getElementById(region.id).style.boxShadow = "0px 0px 0px";
-          }
-
-        }
-      })
-    }
-
-
-    //function to save data to database on saveClick
-    function saveClick() {
-      if (updateSegments == false) {
-        segmentStart = spectrum.regions.list[currentId].start;
-        segmentEnd = spectrum.regions.list[currentId].end;
-        var annotationText = "";
-        var speakerName = "";
-        var annotationType = "";
-        var val = document.getElementById("annotation-type");
-        if (val.value !== "default") {
-          annotationType = document.getElementById("annotation-type").value;
-
-          speakerName = document.getElementById("annotation-type").value;
-
-          annotationText = val.value;
-        } else {
-          annotationType = document.getElementById("annotation-type").value;
-
-          speakerName = document.getElementById("speaker-name").value;
-
-          annotationText = $("#transcription-area").val();
-        }
-
-        //ajax Request to Create    
-        var params = {
-          speakerName,
-          annotationType,
-          segmentStart,
-          segmentEnd,
-          annotationText
-        }
-
-        $.ajax({
-          method: "POST",
-          url: "/database",
-          data: params,
-          success: function () {
-            console.log("Success");
-          }
-        })
-        //createDiv(divId,divClass,divTitle,segmentStart,segmentEnd,annotationText) 
-        createDiv(window.segmentId, speakerName, annotationType, segmentStart, segmentEnd, annotationText);
-        updateAnnotationOnChange = false;
-        window.segmentId++;
-        updateSegments = true;
-      } else {
-        var params;
-        console.log("Old" + segmentStart);
-        //Updating Database
-
-        var segmentId = currentId;
-        var annotationText = "";
-        var speakerName = "";
-        var annotationType = "";
-        var segmentclass = document.getElementById("speaker-name").value;
-        console.log(segmentclass.replace(" ", "-"));
-        var val = document.getElementById("annotation-type");
-        if (val.value !== "default") {
-          document.getElementById(segmentId).style.top = "0px";
-          annotationType = document.getElementById("annotation-type").value;
-          document.getElementById(segmentId).title = annotationType;
-          speakerName = document.getElementById("annotation-type").value;
-          document.getElementById(segmentId).className = speakerName;
-          annotationText = val.value;
-          document.getElementById(segmentId).querySelector("p").innerText = annotationText;
-        } else {
-          //checking if speaker is already Available          
-          if ($("#annotation-div").children().hasClass(segmentclass.replace(" ", "-"))) {
-            $("#annotation-div").children().each(function (index, value) {
-              if (value.className == (segmentclass.replace(" ", "-"))) {
-                console.log("old")
-                console.log(value);
-                annotationType = document.getElementById("annotation-type").value;
-                document.getElementById(segmentId).title = annotationType;
-                speakerName = document.getElementById("speaker-name").value;
-                document.getElementById(segmentId).className = speakerName.replace(" ", "-");
-                annotationText = $("#transcription-area").val();
-                document.getElementById(segmentId).querySelector("p").innerText = annotationText;
-                document.getElementById(segmentId).style.background = value.style.backgroundColor;
-                //400=leftMargin
-                document.getElementById(segmentId).style.top = 400 / (index + 1) + "px";
-                return;
-              }
-            });
-          } else {
-            console.log("new");
-            var newColor = getRandomColor();
-            annotationType = document.getElementById("annotation-type").value;
-            document.getElementById(segmentId).title = annotationType;
-            speakerName = document.getElementById("speaker-name").value;
-            document.getElementById(segmentId).className = speakerName.replace(" ", "-");
-            annotationText = $("#transcription-area").val();
-            document.getElementById(segmentId).querySelector("p").innerText = annotationText;
-            document.getElementById(segmentId).style.background = newColor;
-            //400=leftMargin
-            document.getElementById(segmentId).style.top = 400 / (($("#annotation-div").children("div").length) + 1) + "px";
-            topSpeakerDiv(speakerName, newColor);
-          }
-        }
-
-        //ajax Request To Update
-        if (updateAnnotationOnChange) {
-          params = {
-            segmentId,
-            speakerName,
-            annotationType,
-            segmentStart: newStartTime,
-            segmentEnd: newEndTime,
-            annotationText
-          }
-        } else {
-          params = {
-            segmentId,
-            speakerName,
-            annotationType,
-            segmentStart,
-            segmentEnd,
-            annotationText
-          }
-        }
-
-
-        $.ajax({
-          method: "POST",
-          url: "/updatedatabase",
-          data: params,
-          success: function () {
-            console.log("Updated");
-          }
-        })
-        updateAnnotationOnChange = false;
-      }
-    }
 
   </script>
 

@@ -17,91 +17,74 @@ var newData="";
 console.log(path.join(__dirname,"./js"));
 const app=express();
 
-const partialPaths=path.join(__dirname,"./templates/partials")
-const viewPath=path.join(__dirname,"./templates/views")
+const partialPaths=path.join(__dirname,"./templates/partials");
+const viewPath=path.join(__dirname,"./templates/views");
 const pubDir=path.join(__dirname,"./public");
 
 app.use(express.static(pubDir));
 app.use(express.static(path.join(__dirname,"./node_modules")));
-app.set("view engine","hbs")
-app.set("views",viewPath)
-hbs.registerPartials(partialPaths)
+app.set("view engine","hbs");
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.set("views",viewPath);
+hbs.registerPartials(partialPaths);
 
-app.get("",(req,res)=>{
 
-  res.render("index")})
+//Database
+const pool=require("./config/pool");
+pool.getConnection((err,connect)=>{
+  if(err) throw err;
+  console.log("Connected");
+  connect.release();
+});
 
-app.post("/audio",function(req,res){
-  fetch("https://file-examples.com/wp-content/uploads/2017/11/file_example_MP3_700KB.mp3")
-  .then(response=>response.arrayBuffer())
-  .then(data=>{
-    const options={
-      audio_context:context,
-      array_buffer:data,
-      scale:128
-    };
-    return new Promise((resolve, reject) => {
-      WaveformData.createFromAudio(options, (err, waveform) => {
-        if (err) {
-          reject(err);
-        }
-        else {
-          resolve(waveform);
-        }
-      });
-    });
+app.get("/",(req,res)=>{   
+  res.render("index")
+});
+
+//Insert Into Database
+app.post("/database",(req,res)=>{  
+  let sql=`INSERT INTO posts (div_className,div_title,segment_start,segment_end,annotation_text) VALUES ('${req.body.speakerName}','${req.body.annotationType}','${req.body.segmentStart}','${req.body.segmentEnd}','${req.body.annotationText}')`;
+  pool.query(sql,(err,result)=>{
+      if(err) throw err;
+      console.log(result);
+      console.log("Data Inserted")
   })
-  .then(waveform=>{
-    res.send(waveform.channels)
+  console.log(req.body);
+  res.send("Success");
+});
+
+//Update Database
+app.post("/updatedatabase",(req,res)=>{  
+    let sql=`Update  posts 
+             SET div_className='${req.body.speakerName}',div_title='${req.body.annotationType}',segment_start='${req.body.segmentStart}',segment_end='${req.body.segmentEnd}',annotation_text='${req.body.annotationText}'
+             WHERE segment_id='${req.body.segmentId}' `;
+    pool.query(sql,(err,result)=>{
+      if(err) throw err;
+      console.log("Updated");
+    })         
+});
+
+//Get Values From Database
+app.post("/get-segments",(req,res)=>{
+  let sql="Select * FROM posts";
+  pool.query(sql,(err,result)=>{
+    if(err) throw err;
+    res.send(result);
+  })  
+});
+
+//remove segments from database
+app.post("/remove-segments",(req,res)=>{
+  let sql=`DELETE FROM posts WHERE segment_id=${req.body.regionId}`;
+  pool.query(sql,(err,result)=>{
+    if(err) throw err;
+    res.send(result);
   })
+});
 
-})
-
-//
-// app.post("/audio",(req,res)=>{
-//   var strings=["rad","bla"];
-//   var n = Math.floor(Math.random() * strings.length)
-//   res.send((strings[n]))
-// })
-
-app.get("/audiofile",(req,res)=>{
-  fetch("https://file-examples.com/wp-content/uploads/2017/11/file_example_MP3_700KB.mp3")
-  .then(response=>response.arrayBuffer())
-  .then(data=>{
-    const options={
-      audio_context:context,
-      array_buffer:data,
-      scale:128
-    };
-    newData=options;
-    // return new Promise((resolve, reject) => {
-    //   WaveformData.createFromAudio(options, (err, waveform) => {
-    //     if (err) {
-    //       reject(err);
-    //     }
-    //     else {
-    //       resolve(waveform);
-    //     }
-    //   });
-    // });
-  })
-  // .then(waveform => {
-  //   console.log(`Waveform has ${waveform.channels} channels`);
-  //   console.log(`Waveform has length ${waveform.length} points`);
-  //     res.render("new",{
-  //       data:waveform
-  //     })
-  // });
-
-})
-
-app.post("",(req,res)=>{
-
-    console.log(newData);
-    res.send(console.log("hellow"))
-})
 app.listen(3000,()=>{
   console.log("Listening on 3000");
-})
+});
 
-// module.exports=WaveSurfer;
+
