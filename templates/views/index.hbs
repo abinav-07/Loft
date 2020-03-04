@@ -18,7 +18,9 @@
 
     #header {}
 
-    #time-line {}
+    #time-line {
+      /*transform: translate(0px,1040px);*/
+    }
 
     #plus-button {
       margin-top: 60vh;
@@ -94,7 +96,6 @@
       /*margin-left: 9vw;*/
       float: right;
       margin-right: 12px;
-
     }
 
     .annotation-time-class {
@@ -118,6 +119,7 @@
       height: 50px;
       margin: 10px;
       border-radius: 15px;
+      cursor: pointer;
     }
 
     .annotation-selection {
@@ -147,6 +149,10 @@
     }
 
     .annotation-time-class:invalid {
+      color: red;
+    }
+
+    .annotation-time-ms-class:invalid {
       color: red;
     }
 
@@ -201,8 +207,8 @@
           onclick="cancel()">x</span></p>
     </div>
     <div id="annotation-time">
-      <button style=" margin-left: 7px; border:none; background: none;"><i class="fa fa-repeat"
-          style=" color:black;font-size:16px"></i></a> </button>
+      <button id="repeat-button" style=" margin-left: 7px; border:none; background: none;"><i class="fa fa-repeat"
+          style=" color:black;font-size:16px;cursor:pointer;"></i> </button>
       <span id="annotation-start" style="font-size: 16px;font-weight: 600;">
         <input id="annotation-start-minute" class="annotation-time-class" type="number" min="0" max="59" onclick=""
           onchange="updateSegmentonTimeChange()" value="00">
@@ -251,11 +257,11 @@
 
     <hr style="opacity: 0.5;">
     <button id="annotation-remove"
-      style="margin:10px;color:red; border:none;background: none;font-size: 18px;">REMOVE</button>
+      style="margin:10px;color:red; border:none;background: none;font-size: 18px; cursor:pointer;">REMOVE</button>
     <button id="annotation-split"
       style="margin:5px 10px 20px 0px;color:black; border:none;background: none;font-size: 18px;">SPLIT</button>
     <button id="annotation-save"
-      style="padding:10px; margin:0px 10px 15px 50px;color:white; border-radius:4px;border:none;background: #2f84ba;font-size: 18px;">SAVE</button>
+      style="padding:10px; margin:0px 10px 15px 50px;color:white; border-radius:4px;border:none;background: #2f84ba;font-size: 18px;cursor: pointer;">SAVE</button>
   </div><!-- Ending tag for Annotation Box -->
 
   <audio id="my-audio">
@@ -280,28 +286,7 @@
     var currentId = "";
     var currentStartTime, currentEndTime = 0;
     var newStartTime, newEndTime = 0;
-    window.onload = (function () {
-      $("html,body").on("keydown", function (event) {
-        if (event.which == 32) {
-          pressed = true;
-          console.log("event");
-          event.preventDefault();
-          if (!pressed) {
-            if (!spectrum.isPlaying()) {
-              spectrum.pause();
-            }
-            else {
-              spectrum.play();
-            }
-          }
-        }
-      });
-      $("html,body").on("keyup", function (event) {
-        if (event.which == 32) {
-          pressed = false;
-        }
-      });
-    })
+
     var pixels = 0;
     //var TimelinePlugin=window.WaveSurfer.timeline;
     var temp = 0, scrolltop = 0, relativeScroll = 0;
@@ -320,7 +305,8 @@
       barWidth: 1,
       plugins: [
         WaveSurfer.timeline.create({
-          container: "#time-line"
+          container: "#time-line",
+          timeInterval:0.1
         }),
         WaveSurfer.regions.create({
 
@@ -329,7 +315,13 @@
     });
     spectrum.zoom(96);
 
-
+    //Split test
+    $("#annotation-split").on("click", function () {
+      var firstLength = ($("#transcription-area").prop("selectionStart"));
+      var reqText = $("#transcription-area").val();
+      console.log(reqText.substring(0, firstLength));
+      console.log(reqText.substring(firstLength, reqText.length));
+    })
     //handle play button
     buttons.play.addEventListener("click", function (event) {
       event.preventDefault();
@@ -342,9 +334,46 @@
     })
 
     spectrum.on("ready", function () {
+      
+      console.log($("#peaks-container").height());
+      console.log($("wave").height());
+      $("#time-line").css({
+        "transform":`translate(0px,${$("wave").height()-10}px)`
+      })
       buttons.play.disabled = false;
       totalDuration = spectrum.getDuration();
       document.getElementById('total-timestamp').innerText = secondsToTimestamp(totalDuration);
+
+      //Add Region on key down
+      $("html").on("keydown", function (event) {
+        if (event.ctrlKey && event.shiftKey && event.which == 65) {
+          console.log("Pressed");
+          addRegion();
+          renew();
+        }
+      });
+
+      //Replay Region on KeyDown
+      $("html").on("keydown", function (event) {
+        if (event.altKey && event.which == 82 || event.which == 82) {
+          console.log("Pressed");
+          repeatRegion();
+        }
+      });
+
+      $("html").on("keydown", function (event) {
+        if (event.which == 32) {
+          console.log("event");
+
+          if (spectrum.isPlaying()) {
+            spectrum.pause();
+          }
+          else {
+            spectrum.play();
+            highlightRegion();
+          }
+        }
+      });
     });
 
     function updateTimer() {
@@ -401,12 +430,13 @@
 
 
     window.onload = (function () {
-      $("#peaks-container").mousedown(function (e) {
+      $("#peaks-container").on("mousedown", function (e) {
+
         spectrum.pause();
         dragging = true;
         temp = y = e.clientY;
       })
-      $("#peaks-container").mousemove(function (e) {
+      $("#peaks-container").on("mousemove", function (e) {
         if (dragging == true) {
           y = e.clientY;
           diff = y - temp;
@@ -420,7 +450,7 @@
 
         }
       })
-      $(window).mouseup(function (e) {
+      $(window).on("mouseup", function (e) {
         dragging = false;
       })
     })
@@ -441,7 +471,7 @@
     function displayArea() {
 
       var val = document.getElementById("annotation-type");
-      if (val.value !== "default") {
+      if (val.value !== "default" && val.value !== "Singing") {
         document.getElementById("speaker-name").value = val.value;
         document.getElementById("transcription-area").value = "";
         document.getElementById("transcription-area").style.display = "none";
@@ -499,50 +529,8 @@
 
 
       $("#plus-button").on("click", function () {
-        //boolean to whether update database or create new data in database
-        updateSegments = false;
-
-        segmentEnd = spectrum.getCurrentTime();
-        if ((spectrum.getCurrentTime() - 2) < 0) {
-          segmentStart = 0;
-        } else {
-          segmentStart = segmentEnd - 2;
-        }
-        spectrum.addRegion({
-          id: segmentId,
-          start: segmentStart,
-          end: segmentEnd,
-          drag: false
-        })
-        currentId = segmentId;
-        //highlighting current Region
-        highlightRegion();
-
-        //segment start variables
-        var startMinute = secondsToMinutes(spectrum.regions.list[currentId].start);
-        var startSeconds = secondsToSeconds(spectrum.regions.list[currentId].start);
-        var startMilliseconds = secondsToMilliseconds(spectrum.regions.list[currentId].start);
-
-        //segment end variables
-        var endMinute = secondsToMinutes(spectrum.regions.list[currentId].end);
-        var endSeconds = secondsToSeconds(spectrum.regions.list[currentId].end);
-        var endMilliseconds = secondsToMilliseconds(spectrum.regions.list[currentId].end);
-
-        //displaying texts   
-        $("#annotation-start-minute").val(startMinute);
-        $("#annotation-start-seconds").val(startSeconds);
-        $("#annotation-start-milliseconds").val(startMilliseconds);
-        $("#annotation-end-minute").val(endMinute);
-        $("#annotation-end-seconds").val(endSeconds);
-        $("#annotation-end-milliseconds").val(endMilliseconds);
-
-
-        spectrum.on("seek", function () {
-          if (!updateAnnotationOnChange && spectrum.regions.list[segmentId] != null) {
-            spectrum.regions.list[segmentId].remove();
-            updateSegments = true;
-          }
-        })
+        addRegion();
+        renew();
       })
     })
     $("#annotation-save").on("click", function () {
@@ -696,6 +684,11 @@
     })
     //Seeking Specturm
     spectrum.on("seek", function () {
+
+      //function on ctrl+quote key down and ctrl+colon
+
+      ctrlquote();
+      ctrlcolon();
       if (spectrum.regions.getCurrentRegion() != null && !updateAnnotationOnChange && !updateAnnotationOnClick) {
         var segmentId = spectrum.regions.getCurrentRegion().id;
         currentId = spectrum.regions.getCurrentRegion().id;
@@ -732,7 +725,7 @@
 
           //changing color of Annotation Heading
           $(".annotation-editHeading").css("backgroundColor", divColor);
-          if (segmentType !== "default") {
+          if (segmentType !== "default" && segmentType !== "Singing") {
             document.getElementById("transcription-area").style.display = "none";
             document.getElementById("speaker-name").style.display = "none";
             $("#annotation-box").css("height", 250 + "px");
@@ -799,7 +792,7 @@
 
 
       if ($("#peaks-container").children().hasClass(segmentClass.replace(" ", "-").toString())) {
-        if (segmentTitle !== "default") {
+        if (segmentTitle !== "default" && segmentTitle !== "Singing") {
           div.style.top = "0px";
           $("#peaks-container").append(div);
 
@@ -815,7 +808,7 @@
             }
           });
         }
-      } else if (segmentTitle !== "default") {
+      } else if (segmentTitle !== "default" && segmentTitle !== "Singing") {
         div.style.top = "0px";
         $("#peaks-container").append(div);
 
@@ -875,7 +868,6 @@
       var ending = parseInt($("#annotation-end-minute").val() * 60) + parseInt($("#annotation-end-seconds").val()) + "." + parseInt($("#annotation-end-milliseconds").val());
       console.log(parseFloat(ending) - parseFloat(starting));
       if (spectrum.regions.list[currentId] != null) {
-
         console.log("Id" + currentId);
         if ((parseFloat(ending) - parseFloat(starting)) < 0.100 && (parseFloat(ending) - parseFloat(starting)) >= 0) {
           spectrum.regions.list[currentId].update({
@@ -928,7 +920,9 @@
 
 
     }
-
+    $(document).on("mousedown", "wave", function () {
+      console.log("Okay");
+    });
     //function for annotation contents change on click
     function changeAnnotationOnClick(evt) {
       if (!updateAnnotationOnChange) {
@@ -967,7 +961,7 @@
 
           //changing color of Annotation Heading
           $(".annotation-editHeading").css("backgroundColor", divColor);
-          if (segmentType !== "default") {
+          if (segmentType !== "default" && segmentType !== "Singing") {
             document.getElementById("transcription-area").style.display = "none";
             document.getElementById("speaker-name").style.display = "none";
             $("#annotation-box").css("height", 250 + "px");
@@ -1023,8 +1017,10 @@
         document.getElementById(currentId).style.width = pos1 + "px";
 
       } else {
-        spectrum.regions.list[currentId].remove();
-        updateAnnotationOnChange = false;
+        if (spectrum.regions.list[currentId]) {
+          spectrum.regions.list[currentId].remove();
+          //updateAnnotationOnChange = false;
+        }
       }
     }
 
@@ -1056,7 +1052,7 @@
           region.element.children[1].style.backgroundColor = "rgba(94, 196, 247,1)";
           region.element.style.backgroundColor = "rgba(168,221,227,0.6)";
           if ($("#peaks-container").children().is("#" + highlightId)) {
-            document.getElementById(highlightId).style.opacity = "0.4";
+            document.getElementById(highlightId).style.opacity = "0.7";
             document.getElementById(highlightId).style.boxShadow = "2px 2px 20px";
           }
         } else {
@@ -1082,7 +1078,7 @@
         var speakerName = "";
         var annotationType = "";
         var val = document.getElementById("annotation-type");
-        if (val.value !== "default") {
+        if (val.value !== "default" && val.value !== "Singing") {
           annotationType = document.getElementById("annotation-type").value;
 
           speakerName = document.getElementById("annotation-type").value;
@@ -1116,9 +1112,10 @@
         //createDiv(divId,divClass,divTitle,segmentStart,segmentEnd,annotationText) 
         createDiv(window.segmentId, speakerName, annotationType, segmentStart, segmentEnd, annotationText);
         updateAnnotationOnChange = false;
+
         window.segmentId++;
         updateSegments = true;
-      } else {
+      } else if (updateAnnotationOnChange == true) {
         var params;
         console.log("Old" + segmentStart);
         //Updating Database
@@ -1130,7 +1127,7 @@
         var segmentclass = document.getElementById("speaker-name").value;
         console.log(segmentclass.replace(" ", "-"));
         var val = document.getElementById("annotation-type");
-        if (val.value !== "default") {
+        if (val.value !== "default" && val.value !== "Singing") {
           document.getElementById(segmentId).style.top = "0px";
           annotationType = document.getElementById("annotation-type").value;
           document.getElementById(segmentId).title = annotationType;
@@ -1204,8 +1201,205 @@
           }
         })
         updateAnnotationOnChange = false;
+        updateAnnotationOnClick = false;
       }
     }
+
+    //function for ctrl+singlequote
+    function ctrlquote(currentregionId) {
+      $("html,body").on("keydown", function (event) {
+        if (event.ctrlKey && event.which == 222) {
+          console.log("Pressed");
+          var currentTime = spectrum.getCurrentTime();
+          updateAnnotationOnChange = true;
+          updateAnnotationOnClick = true;
+          //segment end variables
+          var endMinute = secondsToMinutes(currentTime);
+          var endSeconds = secondsToSeconds(currentTime);
+          var endMilliseconds = secondsToMilliseconds(currentTime);
+
+          //displaying texts          
+          $("#annotation-end-minute").val(endMinute);
+          $("#annotation-end-seconds").val(endSeconds);
+          $("#annotation-end-milliseconds").val(endMilliseconds);
+
+
+          var starting = parseInt($("#annotation-start-minute").val() * 60) + parseInt($("#annotation-start-seconds").val()) + "." + parseInt($("#annotation-start-milliseconds").val());
+          var ending = parseInt($("#annotation-end-minute").val() * 60) + parseInt($("#annotation-end-seconds").val()) + "." + parseInt($("#annotation-end-milliseconds").val());
+
+          if (spectrum.regions.list[currentId] != null) {
+            console.log("Id" + currentId);
+            if ((parseFloat(ending) - parseFloat(starting)) < 0.100 && (parseFloat(ending) - parseFloat(starting)) >= 0) {
+              spectrum.regions.list[currentId].update({
+                start: parseInt($("#annotation-start-minute").val() * 60) + parseInt($("#annotation-start-seconds").val()) + "." + parseInt($("#annotation-start-milliseconds").val()),//-0.050,
+                end: parseInt($("#annotation-end-minute").val() * 60) + parseInt($("#annotation-end-seconds").val()) + "." + parseInt($("#annotation-end-milliseconds").val())//+900
+              });
+            } else if ((parseFloat(ending) - parseFloat(starting)) < 0) {
+              spectrum.regions.list[currentId].update({
+                end: parseInt($("#annotation-start-minute").val() * 60) + parseInt($("#annotation-start-seconds").val()) + "." + parseInt($("#annotation-start-milliseconds").val()),
+                start: parseInt($("#annotation-end-minute").val() * 60) + parseInt($("#annotation-end-seconds").val()) + "." + parseInt($("#annotation-end-milliseconds").val())
+              });
+            } else {
+              spectrum.regions.list[currentId].update({
+                start: parseInt($("#annotation-start-minute").val() * 60) + parseInt($("#annotation-start-seconds").val()) + "." + $("#annotation-start-milliseconds").val(),
+                end: parseInt($("#annotation-end-minute").val() * 60) + parseInt($("#annotation-end-seconds").val()) + "." + $("#annotation-end-milliseconds").val()
+              });
+            }
+            //highlight clicked region
+            highlightRegion();
+
+            newStartTime = spectrum.regions.list[currentId].start;
+            newEndTime = spectrum.regions.list[currentId].end;
+
+            //Div Position
+            var progress1 = newStartTime / spectrum.getDuration();
+            var progress2 = (newEndTime - newStartTime) / spectrum.getDuration();
+            var minPxDelta = 1 / spectrum.params.pixelRatio;
+            var pos = Math.round((progress1) * spectrum.drawer.getWidth()) * minPxDelta;
+            var pos1 = Math.round((progress2) * spectrum.drawer.getWidth()) * minPxDelta;
+
+            if ($("#peaks-container").children().is("#" + currentId)) {
+              document.getElementById(currentId).style.left = pos + "px";
+              document.getElementById(currentId).style.width = pos1 + "px";
+            }
+
+          }
+        }
+      });
+    }
+
+    //function for ctrl+singlequote
+    function ctrlcolon(currentregionId) {
+      $("html,body").on("keydown", function (event) {
+        if (event.ctrlKey && event.which == 186) {
+          console.log("Pressed");
+          var currentTime = spectrum.getCurrentTime();
+          updateAnnotationOnChange = true;
+          updateAnnotationOnClick = true;
+          //segment end variables
+          //segment start variables
+          var startMinute = secondsToMinutes(currentTime);
+          var startSeconds = secondsToSeconds(currentTime);
+          var startMilliseconds = secondsToMilliseconds(currentTime);
+
+
+          //displaying texts          
+          $("#annotation-start-minute").val(startMinute);
+          $("#annotation-start-seconds").val(startSeconds);
+          $("#annotation-start-milliseconds").val(startMilliseconds);
+
+
+          var starting = parseInt($("#annotation-start-minute").val() * 60) + parseInt($("#annotation-start-seconds").val()) + "." + parseInt($("#annotation-start-milliseconds").val());
+          var ending = parseInt($("#annotation-end-minute").val() * 60) + parseInt($("#annotation-end-seconds").val()) + "." + parseInt($("#annotation-end-milliseconds").val());
+
+          if (spectrum.regions.list[currentId] != null) {
+            console.log("Id" + currentId);
+            if ((parseFloat(ending) - parseFloat(starting)) < 0.100 && (parseFloat(ending) - parseFloat(starting)) >= 0) {
+              spectrum.regions.list[currentId].update({
+                start: parseInt($("#annotation-start-minute").val() * 60) + parseInt($("#annotation-start-seconds").val()) + "." + parseInt($("#annotation-start-milliseconds").val()),//-0.050,
+                end: parseInt($("#annotation-end-minute").val() * 60) + parseInt($("#annotation-end-seconds").val()) + "." + parseInt($("#annotation-end-milliseconds").val())//+900
+              });
+            } else if ((parseFloat(ending) - parseFloat(starting)) < 0) {
+              spectrum.regions.list[currentId].update({
+                end: parseInt($("#annotation-start-minute").val() * 60) + parseInt($("#annotation-start-seconds").val()) + "." + parseInt($("#annotation-start-milliseconds").val()),
+                start: parseInt($("#annotation-end-minute").val() * 60) + parseInt($("#annotation-end-seconds").val()) + "." + parseInt($("#annotation-end-milliseconds").val())
+              });
+            } else {
+              spectrum.regions.list[currentId].update({
+                start: parseInt($("#annotation-start-minute").val() * 60) + parseInt($("#annotation-start-seconds").val()) + "." + $("#annotation-start-milliseconds").val(),
+                end: parseInt($("#annotation-end-minute").val() * 60) + parseInt($("#annotation-end-seconds").val()) + "." + $("#annotation-end-milliseconds").val()
+              });
+            }
+            //highlight clicked region
+            highlightRegion();
+
+            newStartTime = spectrum.regions.list[currentId].start;
+            newEndTime = spectrum.regions.list[currentId].end;
+
+            var progress1 = newStartTime / spectrum.getDuration();
+            var progress2 = (newEndTime - newStartTime) / spectrum.getDuration();
+            var minPxDelta = 1 / spectrum.params.pixelRatio;
+            var pos = Math.round((progress1) * spectrum.drawer.getWidth()) * minPxDelta;
+            var pos1 = Math.round((progress2) * spectrum.drawer.getWidth()) * minPxDelta;
+
+            if ($("#peaks-container").children().is("#" + currentId)) {
+              document.getElementById(currentId).style.left = pos + "px";
+              document.getElementById(currentId).style.width = pos1 + "px";
+            }
+          }
+        }
+      });
+    }
+
+    //Add New Region
+    function addRegion() {
+      //boolean to whether update database or create new data in database
+      updateSegments = false;
+
+      segmentEnd = spectrum.getCurrentTime();
+      if ((spectrum.getCurrentTime() - 2) < 0) {
+        segmentStart = 0;
+      } else {
+        segmentStart = segmentEnd - 2;
+      }
+      spectrum.addRegion({
+        id: segmentId,
+        start: segmentStart,
+        end: segmentEnd,
+        drag: false
+      })
+      currentId = segmentId;
+      //highlighting current Region
+      highlightRegion();
+
+      //segment start variables
+      var startMinute = secondsToMinutes(spectrum.regions.list[currentId].start);
+      var startSeconds = secondsToSeconds(spectrum.regions.list[currentId].start);
+      var startMilliseconds = secondsToMilliseconds(spectrum.regions.list[currentId].start);
+
+      //segment end variables
+      var endMinute = secondsToMinutes(spectrum.regions.list[currentId].end);
+      var endSeconds = secondsToSeconds(spectrum.regions.list[currentId].end);
+      var endMilliseconds = secondsToMilliseconds(spectrum.regions.list[currentId].end);
+
+      //displaying texts   
+      $("#annotation-start-minute").val(startMinute);
+      $("#annotation-start-seconds").val(startSeconds);
+      $("#annotation-start-milliseconds").val(startMilliseconds);
+      $("#annotation-end-minute").val(endMinute);
+      $("#annotation-end-seconds").val(endSeconds);
+      $("#annotation-end-milliseconds").val(endMilliseconds);
+
+
+
+      spectrum.on("seek", function () {
+        if (!updateAnnotationOnChange && !updateAnnotationOnClick && spectrum.regions.list[segmentId] != null) {
+          spectrum.regions.list[segmentId].remove();
+          updateSegments = true;
+        }
+      })
+    }
+
+    //function to repeat a region
+    function repeatRegion() {
+      if (spectrum.regions.list[currentId] != null) {
+        spectrum.regions.list[currentId].play();
+      }
+    }
+
+    //function to renew annotation
+    function renew() {
+      $("#annotation-type").val("");
+      $("#speaker-name").val("");
+      $("#transcription-area").val("");
+      document.getElementById("transcription-area").style.display = "block";
+      document.getElementById("speaker-name").style.display = "block";
+      $("#annotation-box").css("height", 500 + "px");
+    }
+
+    $("#repeat-button").on("click", function () {
+      repeatRegion();
+    })
 
   </script>
 
