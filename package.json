@@ -1,0 +1,32 @@
+{
+  "name": "transcribe",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "dependencies": {
+    "audio-decode": "^1.4.0",
+    "audio-lena": "^2.1.1",
+    "mysql": "^2.18.1",
+    "node-fetch": "^2.6.0",
+    "peaks.js": "^0.17.0",
+    "promise": "^8.0.3",
+    "require": "^2.4.20",
+    "waveform-data": "^3.1.0",
+    "web-audio-api": "^0.2.2",
+    "wavesurfer.js": "^3.3.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abinav-07/LOFT.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/abinav-07/LOFT/issues"
+  },
+  "homepage": "https://github.com/abinav-07/LOFT#readme"
+}
