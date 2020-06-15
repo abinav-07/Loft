@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+
+    </title>
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+</head>
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    table {
+        border-spacing: 0px;
+        border-collapse: collapse;
+        width: 100%;
+        margin: auto;
+        background-color: transparent;
+        /* Change the background-color of table here */
+        text-align: left;
+        /* Change the text-alignment of table here */
+    }
+
+    th {
+        font-weight: bold;
+        border: 1px solid #cccccc;
+
+        padding: 8px;
+    }
+
+    td {
+        border: 1px solid #cccccc;
+
+        padding: 8px;
+    }
+
+    tr {
+        background-color: transparent;
+
+    }
+
+    tr:nth-of-type(2n+1) {
+        background-color: #eeeeee;
+        /* Change the background-color of odd rows here */
+    }
+
+    tr th {
+        background-color: #dddddd;
+        /* Change the background-color of heading here */
+    }
+
+    tr {
+        -moz-transition: background-color 300ms ease-in-out 0s;
+        -ms-transition: background-color 300ms ease-in-out 0s;
+        -o-transition: background-color 300ms ease-in-out 0s;
+        -webkit-transition: background-color 300ms ease-in-out 0s;
+        transition: background-color 300ms ease-in-out 0s;
+    }
+
+    tr:hover {
+        background-color: #fff176;
+        /* Change the hover background-color of rows here */
+    }
+
+    /* Removing left and right border of rows for modern UIs */
+
+    tr {
+        border-top: 1px solid #cccccc;
+        border-bottom: 1px solid #cccccc;
+    }
+
+    th,
+    td {
+        border: none;
+    }
+
+    .user-name-class {
+        cursor: pointer;
+    }
+
+    .confirm-button {
+        display: none;
+        cursor: pointer;
+    }
+</style>
+
+<body>
+    <table id="users_table">
+        <thead>
+            <th>Name</th>
+            <th>Audio Name</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Score</th>
+            <th>Status <span id="export-work">&emsp; &emsp;<button id="export-button">EXPORT</button></span></th>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</body>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+        function recreatingHRTable() {
+            $.ajax({
+                method: "POST",
+                url: "/transcription-hr-review-table-datas",
+                success: function (users_data) {
+                    $("#users_table tbody").html("");
+                    for (var i = 0; i < users_data.length; i++) {
+                        
+                        if (users_data[i].status == "PASS") {
+                            $("#users_table tbody").append(
+                                `<tr data-user-id="${users_data[i].users_audio_id}">
+                                <td class="user-name-class">${users_data[i].name}</td>  
+                                <td>${users_data[i].audio_name}</td>                
+                                <td>${getNepaliTimeNow(users_data[i].start_time)}</td>
+                                <td>${getNepaliTimeNow(users_data[i].end_time)}</td>
+                                <td>${users_data[i].transcription_score}</td>
+                                <td><select class="${users_data[i].users_audio_id}"><option>${users_data[i].status}</option><option>FAIL</option></select>
+                                    <button class="${users_data[i].users_audio_id} confirm-button">Confirm</button>
+                                </td>
+                            </tr>`);
+                        } else if (users_data[i].status == "FAIL") {
+                            $("#users_table tbody").append(
+                                `<tr data-user-id="${users_data[i].users_audio_id}">
+                                <td class="user-name-class">${users_data[i].name}</td>
+                                <td>${users_data[i].audio_name}</td>                
+                                 <td>${getNepaliTimeNow(users_data[i].start_time)}</td>
+                                 <td>${getNepaliTimeNow(users_data[i].end_time)}</td>
+                                 <td>${users_data[i].transcription_score}</td>
+                                 <td><select class="${users_data[i].users_audio_id}"><option>${users_data[i].status}</option><option>PASS</option></select>
+                                    <button class="${users_data[i].users_audio_id} confirm-button">Confirm</button>
+                                 </td>
+                            </tr>`);
+                        } else {
+                            $("#users_table tbody").append(
+                                `<tr data-user-id="${users_data[i].users_audio_id}">
+                                <td class="user-name-class">${users_data[i].name}</td>
+                                <td>${users_data[i].audio_name}</td>                
+                                 <td>${getNepaliTimeNow(users_data[i].start_time)}</td>
+                                 <td>${getNepaliTimeNow(users_data[i].end_time)}</td>
+                                 <td>${users_data[i].transcription_score}</td>
+                                 <td><select class="${users_data[i].users_audio_id}"><option>${users_data[i].status}</option><option>PASS</option><option>FAIL</option><option>RETRY</option></select>
+                                    <button class="${users_data[i].users_audio_id} confirm-button">Confirm</button>
+                                 </td>
+                            </tr>`);
+                        }
+                    }
+                    //DataTable
+                    var table=$("#users_table").DataTable();
+                    table.destroy();                    
+                    $("#users_table").DataTable({
+                        "order":[[2,"desc"]]
+                    });
+                }
+            });
+        }
+
+        //calling the function for creating table
+        recreatingHRTable();
+
+        //Directing To Segmented Platform on Click
+        $("body").on("click", ".user-name-class", function (event) {
+            //console.log("Here");
+            var clicked_user_id = event.target.closest("tr").getAttribute("data-user-id");
+            var params = {
+                clicked_user_id
+            }
+            $.ajax({
+                method: "POST",
+                url: "/hr-click-get-user-id",
+                data: params,
+                success: function (response) {
+                   
+                    window.open(
+                        //`http://localhost:3000/transcribe?user_id=${clicked_user_id}`,
+                        `${new URL(window.location).origin}/transcription?user_id=${response[0]["user_id"]}&audio_id=${response[0]["audio_id"]}`,
+                        '_blank' //New Tab
+                    );
+                }
+            })
+
+        });
+
+        //Confirm Button PASS FAIL Changes
+        $("#users_table").on("change", (event) => {
+            var clicked_button_id = event.target.closest("tr").getAttribute("data-user-id");//This is equal to userId   
+            //console.log(clicked_button_id);         
+            confirmButton(clicked_button_id);
+        });
+        //Displaying confirm button
+        function confirmButton(userId) {
+            $(`button.${userId}`).show();
+            //On Confirm Click
+            $(`button.${userId}`).on("click", () => {
+                var changedPassFailValue = $(`select.${userId}`).val();
+                params = {
+                    userId,
+                    changedPassFailValue
+                }
+                
+                $.ajax({
+                    method: "POST",
+                    url: "/confirm-pass-fail-hr-review",
+                    data: params,
+                    success: function () {
+                        $(`button.${userId}`).hide();
+                        console.log("Pass Fail Saved");
+                       // console.log(userId);
+                        $.ajax({
+                            method: "POST",
+                            url: "/get-web-app-id-for-hr",
+                            data: { userId },
+                            success: function (response) {
+                                var status;
+                                console.log($(`select.${userId}`).val());
+                                if($(`select.${userId}`).val()=="PASS"){
+                                    status=7;
+                                }else if($(`select.${userId}`).val()=="FAIL"){
+                                    status=6;
+                                }else if($(`select.${userId}`).val()=="RETRY"){
+                                    status=4;
+                                }
+                                var mailParams = {
+                                    "user_id": `${response[0].web_app_id}`,
+                                    "status": status,
+                                    "project_type_id": "4"
+                                }
+                                console.log(mailParams);
+                                
+                                $.ajax({
+                                    method: "POST",
+                                    url: "https://webapp.theaudiobee.com/api/set-user-language-project-type-status",
+                                    data:mailParams,
+                                    success:function(){
+                                        console.log("EMAIl Sent and web app status set");
+                                    }
+                                });
+                            }
+                        })
+
+                        
+
+                    }
+                });                
+                recreatingHRTable();
+            });
+        }
+
+
+        //Function to export data to csv file
+        function download_csvFile(csv, fileName) {
+            var csvFile;
+            var downloadLink;
+
+            //File
+            csvFile = new Blob([csv], { type: "text/csv" });
+
+            //link
+            downloadLink = document.createElement("a");
+
+            //file name
+            downloadLink.download = fileName;
+
+            //link to the file
+            downloadLink.href = window.URL.createObjectURL(csvFile);
+
+            //link not diplaying
+            downloadLink.style.display = "none";
+
+            //link to our DOM
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+        }
+
+        function export_htmlTable_to_csv(htmlTable, fileName) {
+            var csv = [];
+            //selecting valid data
+            var rows = document.querySelectorAll("table tbody tr:not(#export-work)");
+            for (var i = 0; i < rows.length; i++) {
+
+                var row = [], cols = rows[i].querySelectorAll("td");
+                for (var j = 0; j < cols.length - 1; j++) {
+                    row.push(cols[j].innerText);
+                }
+                row.push(cols[cols.length - 1].querySelector("select").value);
+                csv.push('"' + row.join('","') + '"');
+            }
+            //download csv
+            download_csvFile(csv.join("\n"), fileName);
+        }
+
+        $("#export-button").on("click", () => {
+            var html = document.querySelector("table").outerHTML;
+            export_htmlTable_to_csv(html, "listExport.csv");
+        });
+        //Exporting Work End
+
+        //Function to get GTM to Nepali Time
+        function getNepaliTimeNow(datetime) {
+            
+            if (datetime == null) {
+                return null;
+               
+            } else {
+                var time = new Date(datetime);
+                var time_in_nepal = time.toLocaleString("en-US", {
+                    timeZone: "Asia/Kathmandu"
+                });
+
+                var split = time_in_nepal.split(",");
+                var split2 = split[0].split("/");
+                var dd = String(split2[1]).padStart(2, "0");
+                var mm = String(split2[0]).padStart(2, "0"); //January is 0!
+                var yyyy = String(split2[2]);
+                var pm = false;
+                if (split[1].match("PM")) {
+                    pm = true;
+                    var time = split[1]
+                        .trim()
+                        .replace(" PM", "")
+                        .split(":");
+                } else {
+                    var time = split[1]
+                        .trim()
+                        .replace(" AM", "")
+                        .split(":");
+                }
+                var new_time =
+                    String(pm ? parseInt(time[0]) + 12 : time[0]) +
+                    ":" +
+                    time[1] +
+                    ":" +
+                    time[2];
+                var now = yyyy + "-" + mm + "-" + dd + "," + new_time;
+                return now;
+            }
+        }
+
+    });
+      /*  var big_data = [
+{
+name: "Abinav",
+email: "email"
+},
+{
+name: "Mai HO",
+email: "Merei Ho"
+}
+]
+for(var i=0;i<big_data.length;i++){
+$("#users_table tbody").append(`<tr><td>${big_data[i].name}</td><td>${big_data[i].email}</td></tr>`);
+}
+});*/
+
+</script>
+
+</html>

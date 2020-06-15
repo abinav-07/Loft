@@ -1,60 +1,80 @@
-header{
-  padding-top: 16px;
-  padding-bottom: 16px;
-  position: fixed;
-  z-index: 2;
-  background-color: #fff;
-  width: 100%;
-  opacity: 1;
-}
-.disabled{
-    pointer-events: none;
-    cursor: default;
-}
-#tasks-header,#history-header{
-  font-size: 14px;
-
-}
-#loft-header{
-  padding-right: 20px;
-  font-size: 18px;
-
-}
-#send-feedback-header{
-  font-size: 20px;
-  float: right;
-  margin-right: 40px;
-}
-header a{
-  color:#888888;
-  margin-right: 16px;
-  text-decoration: none;
-
-}
-
-#top-block{
-  display:flex;
-  flex-direction: row;
-}
-#time{
-  display:flex;
-  flex-direction: row;
-  margin-left: 20px;
-}
-#button{
-  margin-left: 75px;
-}
-body{
-  color:#333333;
-  font-family: arial;
-  padding: 0 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-#peaks-container{
-  /* margin-top: -40px;
-  margin-left: 40px;
-  height: 100%;
-  width: 100%; */
-}
+    header {
+        padding-top: 16px;
+        padding-bottom: 16px;
+        position: fixed;
+        /*z-index: 2;*/
+        background-color: #fff;
+        width: 100%;
+        opacity: 1;
+        /**/
+        top: 0;
+        background-color: #fff;
+        padding: 0;
+        width: 100%;
+        z-index: 2000;
+        height: 60px;
+        border-bottom: 1px #eee solid;
+    }
+    
+    .disabled {
+        pointer-events: none;
+        cursor: default;
+    }
+    
+    #tasks-header,
+    #history-header {
+        font-size: 14px;
+    }
+    
+    #loft-header {
+        padding-right: 20px;
+        font-size: 18px;
+    }
+    
+    #read-guidelines-header {
+        font-size: 20px;
+        float: right;
+        margin-right: 60px;
+    }
+    
+    #help-icon {
+        float: right;
+        margin-top: 0.8em;
+        font-size: 24px;
+        color: grey;
+        cursor: pointer;
+    }
+    
+    header a {
+        color: #888888;
+        /*margin-right: 16px;*/
+        text-decoration: none;
+        font-weight: 300;
+        color: #444;
+        margin: 1em 1em .375em 1.5em;
+        font-size: 1.85em;
+        display: inline-block;
+    }
+    
+    #top-block {
+        display: flex;
+        flex-direction: row;
+    }
+    
+    #time {
+        display: flex;
+        flex-direction: row;
+        margin-left: 20px;
+    }
+    
+    #button {
+        margin-left: 75px;
+    }
+    
+    body {
+        color: #333333;
+        font-family: arial;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }

@@ -4,16 +4,19 @@
   "description": "",
   "main": "app.js",
   "dependencies": {
+    "async": "^3.2.0",
     "audio-decode": "^1.4.0",
     "audio-lena": "^2.1.1",
+    "diff": "^4.0.2",
+    "express-session": "^1.17.0",
     "mysql": "^2.18.1",
     "node-fetch": "^2.6.0",
     "peaks.js": "^0.17.0",
     "promise": "^8.0.3",
     "require": "^2.4.20",
     "waveform-data": "^3.1.0",
-    "web-audio-api": "^0.2.2",
-    "wavesurfer.js": "^3.3.1"
+    "wavesurfer.js": "^3.3.1",
+    "web-audio-api": "^0.2.2"
   },
   "devDependencies": {},
   "scripts": {

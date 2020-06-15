@@ -75,7 +75,7 @@
       /*right: 0px;*/
       padding: 25px;
       top: -15px;
-      display: none;
+
       background: #ededed;
       list-style-type: none;
       -webkit-font-smoothing: antialiased;
@@ -1049,7 +1049,7 @@
     var user_id;
     var audio_id;
     audio_id = {{ audio_id }};
-    user_id = {{ user_id }};
+    //user_id = {{ user_id }};
     ////console.log(user_id);
   </script>
   <script>
@@ -1073,7 +1073,7 @@
     var dragging = false;//allow dragging
     var temp, y, diff, segmentStart, segmentEnd = 0;
     var pressed = false;
-    var segmentId = 1;
+    var segmentId = 0;
     var currentId = "";
     var currentStartTime, currentEndTime = 0;
     var newStartTime, newEndTime = 0;
@@ -1164,7 +1164,6 @@
         if (!updateTopDivSpeaker) {
           if (event.ctrlKey && event.shiftKey && event.which == 65) {
             console.log("Pressed");
-            event.preventDefault();
             addRegion();
             if (addRegionBool == true && !updateAnnotationOnChange && !updateTopDivSpeaker) {
               renew();
@@ -1177,7 +1176,6 @@
       $("html").on("keydown", function (event) {
         if (event.altKey && event.which == 82 || event.which == 82 && event.target.id != "speaker-name" && event.target.id != "transcription-area" && event.target.id != "top-div-control-speaker-name") {
           //////console.log("Pressed");
-          event.preventDefault();
           repeatRegion();
         }
       });//Replay Function end
@@ -1186,7 +1184,7 @@
       $("html").on("keydown", function (event) {
         if ((event.which == 32 || event.which == 96 || event.which == 48 || (event.ctrlKey && event.which == 32)) && event.target.id != "speaker-name" && event.target.id != "transcription-area" && event.target.id != "annotation-start-minute" && event.target.id != "annotation-start-seconds" && event.target.id != "annotation-start-milliseconds" && event.target.id != "annotation-end-minute" && event.target.id != "annotation-end-seconds" && event.target.id != "annotation-end-milliseconds" && event.target.id != "top-div-control-speaker-name") {
           //console.log(event.target);
-          event.preventDefault();
+
           if (spectrum.isPlaying()) {
             spectrum.pause();
             $("#play-button").find($(".fa")).toggleClass('fa-pause fa-play');
@@ -1202,7 +1200,6 @@
       //skip audio backwards 500ms on "8" pressed
       $("html").on("keydown", function (event) {
         if ((event.which == 104 || event.which == 56) && event.target.id != "speaker-name" && event.target.id != "transcription-area" && event.target.id != "annotation-start-minute" && event.target.id != "annotation-start-seconds" && event.target.id != "annotation-start-milliseconds" && event.target.id != "annotation-end-minute" && event.target.id != "annotation-end-seconds" && event.target.id != "annotation-end-milliseconds") {
-          event.preventDefault();
           skipAudio(-0.5);
         }
       });
@@ -1210,7 +1207,6 @@
       //skip audio backwards 500ms on "5" pressed
       $("html").on("keydown", function (event) {
         if ((event.which == 101 || event.which == 53) && event.target.id != "speaker-name" && event.target.id != "transcription-area" && event.target.id != "annotation-start-minute" && event.target.id != "annotation-start-seconds" && event.target.id != "annotation-start-milliseconds" && event.target.id != "annotation-end-minute" && event.target.id != "annotation-end-seconds" && event.target.id != "annotation-end-milliseconds") {
-          event.preventDefault();
           skipAudio(0.5);
         }
       });
@@ -1226,7 +1222,6 @@
       //jump audio to end
       $("html").on("keydown", function (event) {
         if (event.which == 35) {
-          event.preventDefault();
           skipAudio(spectrum.getDuration());
         }
       });
@@ -1438,13 +1433,13 @@
 
     //function on spectrum ready
     spectrum.on("ready", function () {
-      //Responsiveness for annotation box      
+      //Responsiveness for annotation box
       if (((window.screen.width * window.devicePixelRatio) < 1920) && ((window.screen.height * window.devicePixelRatio) < 1080)) {
         $("#annotation-box").css({
           "bottom": "1vh",
           "transform": "scale(0.7)"
         })
-      };
+      }
 
       //Load Wave to previous time stamp from cookie
       if (getCookie("current_time") > 0) {
@@ -1536,9 +1531,9 @@
       //ajax to create previously created segments by user on spectrum load
       $.ajax({
         method: "POST",
-        url: "/get-segments",
+        url: "/get-segments-from-actual-data-for-admin",
         data: {
-          user_id: user_id,
+          //user_id: user_id,
           audio_id: audio_id
         },
         async: true,
@@ -1570,11 +1565,12 @@
           }
 
           //ajax to check if the user has already submitted
+          /*
           $.ajax({
             method: "POST",
             url: "/get-submitted-or-not",
             data: {
-              user_id: user_id,
+              //user_id: user_id,
               audio_id: audio_id
             },
             async: true,
@@ -1584,15 +1580,15 @@
                 //Checking if already submitted
                 if (is_submitted == "TRUE") {
                   console.log("Euta log");
-                  disableAllInterfaceOnSubmit();
-                  ajaxReq();//Ajax Request to check correct incorrect segment
+                  //disableAllInterfaceOnSubmit();
+                  //ajaxReq();//Ajax Request to check correct incorrect segment
                   //displayHamburger();
-                  $("#submit-button").hide();
-                  $("#profile-link-button").show();
+                  //$("#submit-button").hide();
+                  //$("#profile-link-button").show();
                 }
               }
             }
-          })
+          })*/
         }
       })
     }
@@ -1635,13 +1631,13 @@
       //ajax request to remove segments
       var params = {
         regionId,
-        user_id,
+        //user_id,
         audio_id: audio_id
       }
       if (regionId != null) {
         $.ajax({
           method: "POST",
-          url: "/remove-segments",
+          url: "/remove-segments-from-actual",
           data: params,
           success: function () {
             //Hiding Annotation Div      
@@ -1708,13 +1704,13 @@
           params = {
             userInputTopSpeakerName: userInputTopSpeakerName,
             previousTopSpeakerName: getClickedIdClass.replace(/-/g, " "),
-            user_id,
+            //user_id,
             audio_id: audio_id
           }
 
           $.ajax({
             method: "POST",
-            url: "/top-speaker-control-save-button",
+            url: "/top-speaker-control-save-button-for-actual",
             data: params,
             success: function (response) {
               console.log("Top Speakers Name Updated");
@@ -1796,6 +1792,7 @@
     function createDiv(segmentId, segmentClass = "", segmentTitle = "", segmentStart, segmentEnd, annotationText, actual = false) {
       //leftMargin =400;
       //declaring the add region bool true to allow adding regions
+      console.log("Is it this?");
       addRegionBool = true;
       var leftMargin = canvasHeight - 8;
       var div = document.createElement("div");
@@ -1932,6 +1929,8 @@
     //function to update Segment Start on start time change
     function updateSegmentonTimeChange() {
       // if (updateSegments) {
+        console.log(segmentId);
+        console.log("Am i HEre");
       updateAnnotationOnChange = true;
       var starting = parseInt($("#annotation-start-minute").val() * 60) + parseInt($("#annotation-start-seconds").val()) + "." + ($("#annotation-start-milliseconds").val());
       var ending = parseInt($("#annotation-end-minute").val() * 60) + parseInt($("#annotation-end-seconds").val()) + "." + ($("#annotation-end-milliseconds").val());
@@ -2183,7 +2182,7 @@
           segmentStart,
           segmentEnd,
           annotationText,
-          user_id,
+          //user_id,
           audio_id: audio_id
         }
         //console.log(checkOverlappingDiv(speakerName, segmentStart, segmentEnd));
@@ -2194,7 +2193,7 @@
 
             $.ajax({
               method: "POST",
-              url: "/database",
+              url: "/insert-into-actual-data",
               data: params,
               async: false,
               success: function (response) {
@@ -2342,7 +2341,7 @@
             segmentStart: newStartTime,
             segmentEnd: newEndTime,
             annotationText,
-            user_id,
+            //user_id,
             audio_id: audio_id
           }
         } else {
@@ -2353,7 +2352,7 @@
             segmentStart,
             segmentEnd,
             annotationText,
-            user_id,
+            //user_id,
             audio_id: audio_id
           }
         }
@@ -2365,7 +2364,7 @@
           //console.log("Update vairako");
           $.ajax({
             method: "POST",
-            url: "/updatedatabase",
+            url: "/update-actual-database",
             data: params,
             success: function () {
               //console.log("Updated");
@@ -2608,13 +2607,13 @@
         segmentStart: regionStartTime,
         segmentEnd: spectrumCurrentTime - 0.010,
         annotationText: textBeforeCursor,
-        user_id,
+        //user_id,
         audio_id: audio_id
       }
 
       $.ajax({
         method: "POST",
-        url: "/update-on-split",
+        url: "/update-actual-data-on-split",
         data: updateParams,
         success: function () {
           //console.log("Updated");
@@ -2628,13 +2627,13 @@
         segmentStart: spectrumCurrentTime + 0.010,
         segmentEnd: regionEndTime,
         annotationText: textAfterCursor,
-        user_id,
+        //user_id,
         audio_id: audio_id
       }
 
       $.ajax({
         method: "POST",
-        url: "/database",
+        url: "/insert-into-actual-data",
         data: params,
         success: function () {
           //console.log("Success");
@@ -2919,7 +2918,7 @@
       console.trace(1);
       var overlapping = false;
       var sameSpeakerParams = {
-        user_id,
+        //user_id,
         speakerName
       }
 
@@ -2927,16 +2926,11 @@
       Object.keys(spectrum.regions.list).forEach(function (region) {
         var previousSpeakerStart = spectrum.regions.list[region].start;
         var previousSpeakerEnd = spectrum.regions.list[region].end;
-        
-        //|| (segmentStart == previousSpeakerStart && segmentEnd == previousSpeakerEnd)
-        if ((segmentStart > previousSpeakerStart && segmentStart < previousSpeakerEnd) || (segmentStart == previousSpeakerStart && segmentEnd == previousSpeakerEnd)||
+        if ((segmentStart > previousSpeakerStart && segmentStart < previousSpeakerEnd) ||
           (segmentEnd > previousSpeakerStart && segmentEnd < previousSpeakerEnd) || (previousSpeakerStart > segmentStart && previousSpeakerStart < segmentEnd)) {
-          
+          //console.log("herer1")
+          var previousSpeakerName = document.getElementById(region).className;
           if (speakerName != "DTMF" && speakerName != "Applause" && speakerName != "Laughter" && speakerName != "Music" && speakerName != "Noise" && speakerName != "Ringtone") {
-            if(document.getElementById(region)!=null){
-              var previousSpeakerName = document.getElementById(region).className;  
-            }
-            //var previousSpeakerName = document.getElementById(region).className;
             if (previousSpeakerName == speakerName.replace(/ /g, "-")) {
               //console.log("herer2")
               overlapping = true;
@@ -2964,7 +2958,7 @@
                 method: "POST",
                 url: "/get-segments",
                 data: {
-                  user_id: user_id,
+                  //user_id: user_id,
                   audio_id: audio_id
                 },
 
@@ -3206,16 +3200,11 @@
     //Function to call on submit click
     $("#submit-button").on("click", function () {
       //submitClick();      
-      ajaxReq();
-      displayHamburger();
-      saveScores();
-      $("#submit-button").hide();
-      $("#profile-link-button").show();
-      //Event logs
-      var eventProperties = {
-        project_type: "Sample Segmentation",
-      };
-      logEvent("Sample Completed", eventProperties);
+      //ajaxReq();
+      //displayHamburger();
+      //saveScores();
+      //$("#submit-button").hide();
+      //$("#profile-link-button").show();
     });//Submit Button Click Function End
 
     //clicking in profile link button
@@ -3288,140 +3277,6 @@
       $(".disable-all-on-Submit").css({ "cursor": "not-allowed" });
     }//disable all interface on submit end
 
-  </script>
-
-  <script type="text/javascript">
-    (function (e, t) {
-      var n = e.amplitude || { _q: [], _iq: {} };
-      var r = t.createElement("script");
-      r.type = "text/javascript";
-      r.integrity =
-        "sha384-RsEu4WZflrqYcEacpfoGSib3qaSvdYwT4D+DrWqeBuDarSzjwUQR1jO8gDiXZd0E";
-      r.crossOrigin = "anonymous";
-      r.async = true;
-      r.src = "https://cdn.amplitude.com/libs/amplitude-6.2.0-min.gz.js";
-      r.onload = function () {
-        if (!e.amplitude.runQueuedFunctions) {
-          console.log("[Amplitude] Error: could not load SDK");
-        }
-      };
-      var i = t.getElementsByTagName("script")[0];
-      i.parentNode.insertBefore(r, i);
-      function s(e, t) {
-        e.prototype[t] = function () {
-          this._q.push([t].concat(Array.prototype.slice.call(arguments, 0)));
-          return this;
-        };
-      }
-      var o = function () {
-        this._q = [];
-        return this;
-      };
-      var a = [
-        "add",
-        "append",
-        "clearAll",
-        "prepend",
-        "set",
-        "setOnce",
-        "unset",
-      ];
-      for (var u = 0; u < a.length; u++) {
-        s(o, a[u]);
-      }
-      n.Identify = o;
-      var c = function () {
-        this._q = [];
-        return this;
-      };
-      var l = [
-        "setProductId",
-        "setQuantity",
-        "setPrice",
-        "setRevenueType",
-        "setEventProperties",
-      ];
-      for (var p = 0; p < l.length; p++) {
-        s(c, l[p]);
-      }
-      n.Revenue = c;
-      var d = [
-        "init",
-        "logEvent",
-        "logRevenue",
-        "setUserId",
-        "setUserProperties",
-        "setOptOut",
-        "setVersionName",
-        "setDomain",
-        "setDeviceId",
-        "enableTracking",
-        "setGlobalUserProperties",
-        "identify",
-        "clearUserProperties",
-        "setGroup",
-        "logRevenueV2",
-        "regenerateDeviceId",
-        "groupIdentify",
-        "onInit",
-        "logEventWithTimestamp",
-        "logEventWithGroups",
-        "setSessionId",
-        "resetSessionId",
-      ];
-      function v(e) {
-        function t(t) {
-          e[t] = function () {
-            e._q.push([t].concat(Array.prototype.slice.call(arguments, 0)));
-          };
-        }
-        for (var n = 0; n < d.length; n++) {
-          t(d[n]);
-        }
-      }
-      v(n);
-      n.getInstance = function (e) {
-        e = (!e || e.length === 0 ? "$default_instance" : e).toLowerCase();
-        if (!n._iq.hasOwnProperty(e)) {
-          n._iq[e] = { _q: [] };
-          v(n._iq[e]);
-        }
-        return n._iq[e];
-      };
-      e.amplitude = n;
-    })(window, document);
-    var reqAPIKey = "534517ca15b0c94bfebf670795e2850d";
-    var params = {
-      user_id
-    }
-    $.ajax({
-      method: "POST",
-      url: "/get-web-app-id",
-      data: params,
-      success: function (response) {
-        
-        amplitude.getInstance().init(reqAPIKey, response.web_app_id, {
-          includeReferrer: true,
-          includeUtm: true,
-          includeGclid: true,
-        });
-        logEvent("Segmentation Task Loaded");
-      }
-    });
-
-  </script>
-  <script>
-    function logEvent(ampEventName, ampEventProp) {
-      amplitude.getInstance().logEvent(ampEventName, ampEventProp);
-    }
-    function setUserProp(identifyObj) {
-      amplitude.getInstance().Identify(identifyObj);
-    }
-  </script>
-  <script>
-    $(function () {
-      //logEvent("Segmentation Task Loaded");
-    });      
   </script>
 </body>
 

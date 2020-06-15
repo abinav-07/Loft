@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Login</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/hrLogin.css">
+</head>
+<body>
+	<div class="login-page">
+  	<div class="form">
+      <form class="login-form">
+        <input id="email" type="text" placeholder="Email"/>
+        <input id="password" type="password" placeholder="password"/>
+        <button id="hr-login-button">login</button>
+        <span id="wrong-input" style="color:red"></span>        
+      </form>
+    </div>
+  </div>  
+</body>
+<script>
+window.onload=function(){
+  var ourEmail="admin@admin.com";
+  var ourPassword="m:2(29JhHdDFVjS)";
+
+    //Admin-login-button
+  document.getElementById("hr-login-button").addEventListener("click",function(e){
+    e.preventDefault();
+    console.log(inputEmail);
+    var inputEmail=document.getElementById("email").value;
+    var inputPassword=document.getElementById("password").value;
+    if(inputEmail==ourEmail && inputPassword==ourPassword){
+      window.location.href= `${new URL(window.location).origin}/admin-review-table`;
+      //`http://localhost:3000/admin-review-table`;
+     
+    }else{
+      document.getElementById("wrong-input").innerText="Incorrect";
+    }
+  });
+}
+</script>
+</html>

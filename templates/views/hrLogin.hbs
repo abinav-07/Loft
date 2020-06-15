@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>HR Login</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/hrLogin.css">
+  <style>
+    #login-for{
+      margin: 1em;
+      padding: 0.4em;
+      border-radius: 10px;
+      font-family: monospace;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+	<div class="login-page">
+  	<div class="form">
+      <form class="login-form">        
+        <select id="login-for">
+          <option value="training">Training</option>
+          <option value="sample-test">Sample Test</option>
+          <option value="transcription">Transcription</option>
+        </select>
+        <input id="email" type="text" placeholder="Email"/>
+        <input id="password" type="password" placeholder="password"/>
+        <button id="hr-login-button">login</button>
+        <span id="wrong-input" style="color:red"></span>        
+      </form>
+    </div>
+  </div>  
+</body>
+<script>
+window.onload=function(){
+  var ourEmail="test123@yahoo.com";
+  var ourPassword="78y}4:4UF6yL9..{";
+
+  document.getElementById("hr-login-button").addEventListener("click",function(e){
+    e.preventDefault();
+    var inputEmail=document.getElementById("email").value;
+    var inputPassword=document.getElementById("password").value;
+    
+    if(inputEmail==ourEmail && inputPassword==ourPassword){
+      var selectedLoginFor=document.getElementById("login-for").value;
+      
+      if(selectedLoginFor=="training"){
+        window.location.href= `${new URL(window.location).origin}/training-hr-review-table`;  
+      }else if(selectedLoginFor=="sample-test"){
+        window.location.href= `${new URL(window.location).origin}/hr-review-table`;
+      }else if(selectedLoginFor=="transcription"){
+        window.location.href= `${new URL(window.location).origin}/transcription-hr-review-table`;
+      }      
+      //`http://localhost:3000/hr-review-table`;
+     
+    }else{
+      document.getElementById("wrong-input").innerText="Incorrect";
+    }
+  });
+}
+</script>
+</html>
