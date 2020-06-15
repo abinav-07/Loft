@@ -9,6 +9,7 @@
     "audio-lena": "^2.1.1",
     "diff": "^4.0.2",
     "express-session": "^1.17.0",
+    "hbs": "^4.1.1",
     "mysql": "^2.18.1",
     "node-fetch": "^2.6.0",
     "peaks.js": "^0.17.0",
