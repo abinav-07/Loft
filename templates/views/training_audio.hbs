@@ -75,7 +75,7 @@
       /*right: 0px;*/
       padding: 25px;
       top: -15px;
-      
+      display: none;
       background: #ededed;
       list-style-type: none;
       -webkit-font-smoothing: antialiased;
@@ -111,7 +111,24 @@
       border-radius: 4%;
       list-style-type: none;
       -webkit-font-smoothing: antialiased;
-      white-space: normal;     
+      white-space: normal;
+    }
+
+    #user_info{
+      text-align: center;
+      font-size: 14px;
+      /*width: 680px;*/
+      color: #fff;
+      float: right;
+      font-weight: bold;
+      padding: 16px;
+      background: #3e97e6;
+      display: inline-block;
+      border-radius: 4%;
+      list-style-type: none;
+      -webkit-font-smoothing: antialiased;
+      white-space: normal;
+      margin-right:20px ;
     }
 
 
@@ -257,6 +274,7 @@
       opacity: 1;
       z-index: 999;
       height: 35px;
+      cursor: pointer;
     }
 
     #wave-container {
@@ -471,6 +489,20 @@
       display: none;
     }
 
+    #top-speaker-remove-dialouge-box {
+      background-color: #f9f9f9;
+      box-shadow: 0 0 12px lightgrey;
+      clear: both;
+      color: #333;
+      margin: 0 auto;
+      padding: 2em;
+      position: absolute;
+      z-index: 10000;
+      top: 50vh;
+      left: 40vw;
+      display: none;
+    }
+
     #guidelines-box {
       background-color: #f9f9f9;
       box-shadow: 0 0 12px lightgrey;
@@ -590,6 +622,105 @@
       cursor: pointer;
     }
 
+    #top-div-speaker-control {
+      right: 2rem;
+      bottom: 10rem;
+      border: 1px groove;
+      width: 350px;
+      position: fixed;
+      background: rgb(233, 237, 225);
+      display: none;
+    }
+
+    #top-div-control-header {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      margin: 8px;
+      font-size: 1.1rem;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    #top-div-control-close-button {
+      background: none;
+      border: none;
+      font-size: 1.1rem;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    #top-div-control-speaker-name {
+      margin: 10px;
+      padding: 5px;
+      border: none;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 1.5rem;
+      background: transparent;
+      font-size: 1.6em;
+
+
+    }
+
+    #top-div-control-speaker-name:hover {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+    }
+
+
+    #top-div-control-remove-save-section {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      margin: 8px;
+      font-size: 1.1rem;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    #top-div-control-remove-button {
+      margin: 8px;
+      border: none;
+
+      color: red;
+      background: none;
+      font-family: Arial, Helvetica, sans-serif;
+      border-radius: 4px;
+
+      cursor: pointer;
+
+      font-size: 14px;
+      font-weight: 600;
+      height: 36px;
+      letter-spacing: 1.2;
+      min-width: 72px;
+    }
+
+    #top-div-control-save-button {
+      margin: 8px;
+      border-radius: 4px;
+
+      font-family: Arial, Helvetica, sans-serif;
+      background: #4285f4;
+
+      border: none;
+      cursor: pointer;
+      float: right;
+      font-size: 14px;
+      font-weight: 600;
+      height: 36px;
+      letter-spacing: 1.2;
+      min-width: 72px;
+      padding: 8px 16px;
+
+    }
+
+    #top-div-control-navigator {
+      border-top: 1px solid #888888;
+      display: flex;
+      flex-direction: row;
+      padding: 8px;
+      font-size: 16px;
+      justify-content: space-around;
+
+    }
+
     /* Chrome, Safari, Edge, Opera */
     input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button {
@@ -639,7 +770,6 @@
       </div>
     </div>
     {{!-- div for hamburger Icons After Submit Click --}}
-    
     <div id="errorToggle">
       <input type="checkbox" id="displayErrorCB" />
       <span class="showHamburger"></span>
@@ -750,6 +880,28 @@
       style="padding:10px; margin:0px 10px 15px 50px;color:white; border-radius:4px;border:none;background: #2f84ba;font-size: 18px;cursor: pointer;">SAVE</button>
   </div><!-- Ending tag for Annotation Box -->
 
+  {{!-- Div For Top Div Speakers --}}
+  <div id="top-div-speaker-control">
+    <section id="top-div-control-header">
+      <p id="top-div-control-lable" style="padding: 10px 11px;">SPEAKER</p>
+      <button id="top-div-control-close-button">X</button>
+    </section>
+    <input id="top-div-control-speaker-name"></input>
+    <section id="top-div-control-remove-save-section">
+      <button id="top-div-control-remove-button">REMOVE</button>
+      <button id="top-div-control-save-button">SAVE</button>
+    </section>
+    <section id="top-div-control-navigator">
+      <p id="navigator-label">Navigate Speaker Turn</p>
+      <button id="top-speaker-first-navigator-button"
+        style=" margin-left: 7px; border:none; background: none; float:right"><i class="fa fa-arrow-left"
+          style=" color:black;font-size:14px;cursor:pointer;"></i> </button>
+      <button id="top-speaker-last-navigator-button" style=" margin-left: 7px; border:none; background: none;"><i
+          class="fa fa-arrow-right" style=" color:black;font-size:14px;cursor:pointer;"></i> </button>
+    </section>
+  </div>
+  {{!-- Div For Top Div Speakers End --}}
+
   <!-- Div For Confirmation Dialouge Box -->
   <div id="confirmation-box">
     <p>Pending Changes, Wish to discard Them?</p>
@@ -784,6 +936,12 @@
   {{!-- Div For sameSpeaker-Overlapping Dialouge Box --}}
   <div id="sameSpeaker-Overlapping">
     <p>Same Speakers cannot be Overlapped.</p>
+    <button class="discard-changes">Ok</button>
+  </div>
+
+  {{!-- Div For top speakers Remove Dialouge Box --}}
+  <div id="top-speaker-remove-dialouge-box">
+    <p>Speaker is in use and can't be removed.</p>
     <button class="discard-changes">Ok</button>
   </div>
 
@@ -906,12 +1064,16 @@
   <!--<script src="wavesurfer.js/src/drawer.multicanvas.js"></script>-->
   <script>
     var user_id;
+    var audio_id;
+    audio_id = {{ audio_id }};
     user_id = {{ user_id }};
+    var audio_order;
+    audio_order={{ audio_order }};
     ////console.log(user_id);
   </script>
   <script>
     var is_submitted = "FALSE";
-
+    console.log(audio_order);
     var actualResponseLength = 0;//Assigns total response length
     var postsResponseLength = 0;//Assigns total posts length
     var wrongSpeakerScore = 0;
@@ -924,6 +1086,8 @@
     var canvasHeight = 0;
     var updateAnnotationOnClick = false;//allow updating annotation box only on click
     var updateAnnotationOnChange = false;//allow updating annotation box only on change
+    var updateTopDivSpeakerOnClick = false;//allow updating only on click 
+    var updateTopDivSpeaker = false;//checking top div speaker changes
     var updateSegments = true;//update segments only if not new region 
     var dragging = false;//allow dragging
     var temp, y, diff, segmentStart, segmentEnd = 0;
@@ -939,6 +1103,7 @@
     var sameSpeakerOverlapping = false;//true if two same speakers overlap each other
     var pixels = 0;
     var correctSegmentCreated = false;
+    var getTopClickedId;
 
     //var TimelinePlugin=window.WaveSurfer.timeline;
     var temp = 0, scrolltop = 0, relativeScroll = 0;
@@ -954,6 +1119,7 @@
       minPxPerSec: 96,
       scrollParent: false,
       autoCenter: true,
+      backgroundColor: "#fff",
       seekStyle: "line",
       mediaControls: true,
       barWidth: 1,
@@ -988,6 +1154,11 @@
     //function on spectrum is ready 
     spectrum.on("ready", function () {
 
+      //User Information On Top
+      $("#training-userId").text("User Name: "+"{{user_name}}");
+      $("#training-audioName").text("Audio: "+"{{audio_url}}"+` (${audio_order})`)
+
+      //Total Duration Of the Audio
       totalDuration = spectrum.getDuration();
 
       //canvas height to set the top speaker annotation div position from left 
@@ -1013,28 +1184,33 @@
 
       //Add Region on key down
       $("html").on("keydown", function (event) {
-        if (event.ctrlKey && event.shiftKey && event.which == 65) {
-          ////console.log("Pressed");
-          addRegion();
-          if (addRegionBool == true && !updateAnnotationOnChange) {
-            renew();
+
+        if (!updateTopDivSpeaker) {
+          if (event.ctrlKey && event.shiftKey && event.which == 65) {
+            console.log("Pressed");
+            event.preventDefault();
+            addRegion();
+            if (addRegionBool == true && !updateAnnotationOnChange && !updateTopDivSpeaker) {
+              renew();
+            }
           }
         }
       });
 
       //Replay Region on KeyDown
       $("html").on("keydown", function (event) {
-        if (event.altKey && event.which == 82 || event.which == 82 && event.target.id != "speaker-name" && event.target.id != "transcription-area") {
+        if (event.altKey && event.which == 82 || event.which == 82 && event.target.id != "speaker-name" && event.target.id != "transcription-area" && event.target.id != "top-div-control-speaker-name") {
           //////console.log("Pressed");
+          event.preventDefault();
           repeatRegion();
         }
       });//Replay Function end
 
       //play pause on space bar
       $("html").on("keydown", function (event) {
-        if ((event.which == 32 || event.which == 96 || event.which == 48 || (event.ctrlKey && event.which == 32)) && event.target.id != "speaker-name" && event.target.id != "transcription-area" && event.target.id != "annotation-start-minute" && event.target.id != "annotation-start-seconds" && event.target.id != "annotation-start-milliseconds" && event.target.id != "annotation-end-minute" && event.target.id != "annotation-end-seconds" && event.target.id != "annotation-end-milliseconds") {
+        if ((event.which == 32 || event.which == 96 || event.which == 48 || (event.ctrlKey && event.which == 32)) && event.target.id != "speaker-name" && event.target.id != "transcription-area" && event.target.id != "annotation-start-minute" && event.target.id != "annotation-start-seconds" && event.target.id != "annotation-start-milliseconds" && event.target.id != "annotation-end-minute" && event.target.id != "annotation-end-seconds" && event.target.id != "annotation-end-milliseconds" && event.target.id != "top-div-control-speaker-name") {
           //console.log(event.target);
-
+          event.preventDefault();
           if (spectrum.isPlaying()) {
             spectrum.pause();
             $("#play-button").find($(".fa")).toggleClass('fa-pause fa-play');
@@ -1050,6 +1226,7 @@
       //skip audio backwards 500ms on "8" pressed
       $("html").on("keydown", function (event) {
         if ((event.which == 104 || event.which == 56) && event.target.id != "speaker-name" && event.target.id != "transcription-area" && event.target.id != "annotation-start-minute" && event.target.id != "annotation-start-seconds" && event.target.id != "annotation-start-milliseconds" && event.target.id != "annotation-end-minute" && event.target.id != "annotation-end-seconds" && event.target.id != "annotation-end-milliseconds") {
+          event.preventDefault();
           skipAudio(-0.5);
         }
       });
@@ -1057,6 +1234,7 @@
       //skip audio backwards 500ms on "5" pressed
       $("html").on("keydown", function (event) {
         if ((event.which == 101 || event.which == 53) && event.target.id != "speaker-name" && event.target.id != "transcription-area" && event.target.id != "annotation-start-minute" && event.target.id != "annotation-start-seconds" && event.target.id != "annotation-start-milliseconds" && event.target.id != "annotation-end-minute" && event.target.id != "annotation-end-seconds" && event.target.id != "annotation-end-milliseconds") {
+          event.preventDefault();
           skipAudio(0.5);
         }
       });
@@ -1072,6 +1250,7 @@
       //jump audio to end
       $("html").on("keydown", function (event) {
         if (event.which == 35) {
+          event.preventDefault();
           skipAudio(spectrum.getDuration());
         }
       });
@@ -1205,12 +1384,7 @@
           temp = y = e.clientY;
         })
         $("#peaks-container,#top-div-for-scrolling-enabling").on("mousemove", function (e) {
-          //Condition to hide top scrollable div if user scrolls 
-          /*if ($("#peaks-container").css("marginTop").replace("px", "") < -300) {
-            $("#top-div-for-scrolling-enabling").css({ "display": "none" });
-          } else if ($("#peaks-container").css("marginTop").replace("px", "") > -100) {
-            $("#top-div-for-scrolling-enabling").css({ "display": "block" });
-          }*/
+
           if (dragging == true) {
             y = e.clientY;
             diff = y - temp;
@@ -1232,12 +1406,13 @@
 
     //Function on scrolling to seek spectrum  
     document.getElementById("peaks-container").addEventListener("wheel", function (event) {
-      /*if ($("#peaks-container").css("marginTop").replace("px", "") < -100) {
+
+      /*if (parseInt($("#peaks-container").css("marginTop").replace("px", "")) < -100) {
         $("#top-div-for-scrolling-enabling").css({ "display": "none" });
-      } else if ($("#peaks-container").css("marginTop").replace("px", "") > -100) {
+      } else if (parseInt($("#peaks-container").css("marginTop").replace("px", "")) > -100) {
         $("#top-div-for-scrolling-enabling").css({ "display": "block" });
       }*/
-      
+
       if (!confirmChangesboxBool) {
         if (spectrum.isPlaying()) {
           spectrum.pause();
@@ -1287,13 +1462,13 @@
 
     //function on spectrum ready
     spectrum.on("ready", function () {
-      //Responsiveness for annotation box
+      //Responsiveness for annotation box      
       if (((window.screen.width * window.devicePixelRatio) < 1920) && ((window.screen.height * window.devicePixelRatio) < 1080)) {
         $("#annotation-box").css({
           "bottom": "1vh",
           "transform": "scale(0.7)"
         })
-      }
+      };
 
       //Load Wave to previous time stamp from cookie
       if (getCookie("current_time") > 0) {
@@ -1308,12 +1483,16 @@
       ctrlcolon();
 
 
-
+      getPreviousCreatedSegments();
+      /*
       //ajax to create previously created segments by user on spectrum load
       $.ajax({
         method: "POST",
         url: "/get-segments",
-        data: { user_id: user_id },
+        data: { 
+          user_id: user_id,
+          audio_id:audio_id          
+           },
         async: true,
         success: function (response) {
 
@@ -1346,7 +1525,82 @@
           $.ajax({
             method: "POST",
             url: "/get-submitted-or-not",
-            data: { user_id: user_id },
+            data: { 
+              user_id: user_id,
+              audio_id:audio_id
+              },
+            async: true,
+            success: function (response) {
+              if (response.length > 0) {
+                is_submitted = response[0]["is_submitted"];
+                //Checking if already submitted
+                if (is_submitted == "TRUE") {
+                  console.log("Euta log");
+                  disableAllInterfaceOnSubmit();
+                  ajaxReq();//Ajax Request to check correct incorrect segment
+                  displayHamburger();
+                  $("#submit-button").hide();
+                  $("#profile-link-button").show();
+                }
+              }
+            }
+          })
+        }
+      });*/
+
+      //Creating a new region on plus button click
+      $("#plus-button").on("click", function () {
+        if (!updateTopDivSpeaker) {
+          addRegion();
+        }
+      });
+    });//spectrum on ready function end
+
+    function getPreviousCreatedSegments() {
+      //ajax to create previously created segments by user on spectrum load
+      $.ajax({
+        method: "POST",
+        url: "/get-segments",
+        data: {
+          user_id: user_id,
+          audio_id: audio_id
+        },
+        async: true,
+        success: function (response) {
+
+          ////console.log(response[0]["segment_id"]);
+          for (var i = 0; i < response.length; i++) {
+            var segmentId = response[i]["segment_id"];
+            var speakerName = response[i]["div_className"];
+            var annotationType = response[i]["div_title"];
+            var segmentStart = response[i]["segment_start"];
+            var segmentEnd = response[i]["segment_end"];
+            var annotationText = response[i]["annotation_text"];
+
+            //creating Segments 
+            spectrum.addRegion({
+              id: segmentId,
+              start: segmentStart,
+              end: segmentEnd,
+              drag: false,
+              color: "rgba(0,0,0,0)"
+            })
+            if (!reqSpeakers.includes(speakerName) && speakerName.includes("speaker")) {
+              $("#select-options").append(`<option value="${speakerName}"/>`);
+              reqSpeakers.push(speakerName);
+            }
+            //createDiv(divId,divClass,divTitle,segmentStart,segmentEnd,annotationText) 
+            createDiv(segmentId, speakerName, annotationType, segmentStart, segmentEnd, annotationText);
+          }
+
+          //ajax to check if the user has already submitted
+          $.ajax({
+            method: "POST",
+            url: "/get-submitted-or-not",
+            data: {
+              user_id: user_id,
+              audio_id: audio_id
+            },
             async: true,
             success: function (response) {
               if (response.length > 0) {
@@ -1364,23 +1618,20 @@
             }
           })
         }
-      });
-
-      //Creating a new region on plus button click
-      $("#plus-button").on("click", function () {
-        addRegion();
-      });
-    });//spectrum on ready function end
+      })
+    }
 
     //Saving Segments On Save Button Click
     $("#annotation-save").on("click", function () {
       saveClick();
+
     });
 
     //onClick for close(X) button on Annotation Box
     $("#close").on("click", function () {
       updateSegments = true;
       updateAnnotationOnClick = false;
+      updateTopDivSpeakerOnClick = false;
       if (updateAnnotationOnChange) {
         confirmDialogue();
         confirmChangesboxBool = true;
@@ -1390,7 +1641,16 @@
       }
       //current region highlight
       highlightRegion();
-    })
+    });
+
+    $("#top-div-control-close-button").on("click", function () {
+      if (updateTopDivSpeaker) {
+        confirmDialogue();
+      } else {
+        $("#top-div-speaker-control").hide();
+
+      }
+    });
 
     //Remove Region             
     $("#annotation-remove").on("click", function () {
@@ -1399,7 +1659,8 @@
       //ajax request to remove segments
       var params = {
         regionId,
-        user_id
+        user_id,
+        audio_id: audio_id
       }
       if (regionId != null) {
         $.ajax({
@@ -1424,21 +1685,126 @@
       addRegionBool = true;
     });//Remove Region Function End
 
+    //Remove top speaker divs
+    $("#top-div-control-remove-button").on("click", function () {
+      removeTopDivSpeakers(getTopClickedId);
+    });
+
+    function removeTopDivSpeakers(topSpeakerClickedId) {
+      //Getting the clicked Top Div Class
+      var getClickedIdClass = document.getElementById(topSpeakerClickedId).className;
+      console.log(getClickedIdClass);
+      //Checking if the segments of the class still remain
+      if ($("#peaks-container").children().hasClass(getClickedIdClass)) {
+
+        topSpeakerRemoveDialougeBox();
+      } else {
+        //Removing top div
+        $("#" + topSpeakerClickedId).remove();
+        $("#top-div-speaker-control").hide();
+        updateTopDivSpeakerOnClick = false;
+        updateTopDivSpeaker = false;
+        console.log("Class Not Found");
+      }
+    }
+
+    //function to save all top div speakers
+    $("#top-div-control-save-button").on("click", function () {
+      saveTopDivSpeakers(getTopClickedId);
+    });
+
+    function saveTopDivSpeakers(topSpeakerClickedId) {
+      //Getting the clicked Top Div Class
+      var getClickedIdClass = document.getElementById(topSpeakerClickedId).className;
+      var speakerNameFound = false;
+      var userInputTopSpeakerName = $("#top-div-control-speaker-name").val();
+      if (spellCheckSpeakerName(userInputTopSpeakerName)) {
+        document.getElementById(topSpeakerClickedId).className = userInputTopSpeakerName.replace(/ /g, "-");
+        document.getElementById(topSpeakerClickedId).querySelector("p").innerText = userInputTopSpeakerName;
+        $("#peaks-container").children().each(function (index, value) {
+          if (this.className == getClickedIdClass) {
+            speakerNameFound = true;
+            console.log(this.className);
+            this.className = userInputTopSpeakerName.replace(/ /g, "-");
+          }
+        });
+        if (speakerNameFound) {
+          params = {
+            userInputTopSpeakerName: userInputTopSpeakerName,
+            previousTopSpeakerName: getClickedIdClass.replace(/-/g, " "),
+            user_id,
+            audio_id: audio_id
+          }
+
+          $.ajax({
+            method: "POST",
+            url: "/top-speaker-control-save-button",
+            data: params,
+            success: function (response) {
+              console.log("Top Speakers Name Updated");
+              updateTopDivSpeaker = false;
+              updateTopDivSpeakerOnClick = false;
+            }
+          })
+        };
+      } else {
+        emptySpeaker();
+      }
+      console.log(userInputTopSpeakerName);
+    }
+    //save top div speakers function end 
+
+    //First Navigator Turn Button
+    $("#top-speaker-first-navigator-button").on("click", function () {
+      navigateTurnsFirstButton(getTopClickedId);
+    });
+
+    function navigateTurnsFirstButton(topSpeakerClickedId) {
+      var getClickedIdClass = document.getElementById(topSpeakerClickedId).className;
+      if ($("#peaks-container").children().hasClass(getClickedIdClass)) {
+        var firstSegmentId = $(`#peaks-container .${getClickedIdClass}`)[0].id;
+        var firstSegmentStartTime = spectrum.regions.list[firstSegmentId].start;
+        spectrum.seekTo(firstSegmentStartTime / spectrum.getDuration());
+      }
+    }
+
+    //first navigator function end
+
+    //second navigator function start
+    $("#top-speaker-last-navigator-button").on("click", function () {
+      navigateTurnsLastButton(getTopClickedId);
+    });
+
+    function navigateTurnsLastButton(topSpeakerClickedId) {
+      var getClickedIdClass = document.getElementById(topSpeakerClickedId).className;
+      if ($("#peaks-container").children().hasClass(getClickedIdClass)) {
+        var lastSegmentId = $(`#peaks-container .${getClickedIdClass}`)[$(`#peaks-container .${getClickedIdClass}`).length - 1].id;
+
+        var lastSegmentStartTime = spectrum.regions.list[lastSegmentId].start;
+        spectrum.seekTo(lastSegmentStartTime / spectrum.getDuration());
+      }
+
+    }
+
+    //Second Navigator Function End
+
     //displaying contents on audio processing
     spectrum.on("audioprocess", () => {
-      if (spectrum.regions.getCurrentRegion() != null && !updateAnnotationOnChange) {
+      if (spectrum.regions.getCurrentRegion() != null && !updateAnnotationOnChange && !updateTopDivSpeaker) {
         currentId = spectrum.regions.getCurrentRegion().id;
         displayCurrentContents();
         highlightRegion();
-      }      
+      }
     })
 
     //Seeking Specturm
     spectrum.on("seek", function () {
       //Displaying Current Segments Contents in our Annotation Box      
-      displayCurrentContents();  
+      if (!updateTopDivSpeaker) {
+        displayCurrentContents();
+      }
       //Displaying submit button only if audio is played to last and 10 segements are created    
-      if((spectrum.getCurrentTime()>(spectrum.getDuration()-0.1)) && ($("#peaks-container").children("div").length>10)){
+      if ((spectrum.getCurrentTime() > (spectrum.getDuration() - 0.1)) && ($("#peaks-container").children("div").length > 10)) {
         $("#submit-button").show();
       }
     });
@@ -1459,6 +1825,7 @@
       var div = document.createElement("div");
       //div.style.marginTop="450px";           
       div.id = segmentId;
+
       div.className = segmentClass.replace(/ /g, "-");
       div.title = segmentTitle;
       var p = document.createElement("p");
@@ -1482,7 +1849,7 @@
       p.style.transform = "translateX(0%) rotate(270deg)";
       p.style.width = "200px";
       p.style.height = "200px";
-      p.style.padding = "20px";
+      p.style.padding = "5px";
       p.style.fontSize = "18px";
       p.style.pointerEvents = "none";
       div.appendChild(p);
@@ -1540,6 +1907,7 @@
         var div2 = document.createElement("div");
         var p2 = document.createElement("p");
         div2.className = segmentClass.replace(/ /g, "-");
+        div2.id = `top-${segmentClass.replace(/ /g, "-")}`;
         div2.style.backgroundColor = neededColor;
         div2.style.border = `2px groove ${neededColor}`;
         div2.style.boxShadow = "2px 2px 10px";
@@ -1551,22 +1919,39 @@
         div2.style.zIndex = "3";
         div2.style.width = "120px";
         div2.style.height = "35px";
+        p2.style.pointerEvents = "none";
         div2.appendChild(p2);
+        div2.addEventListener("click", changeTopSpeakerDivControlOnClick);
         div2.style.left = ($("#annotation-div").children("div").length) * leftSpeakerCategoryDivMargin + "px";
-
         if ((($("#annotation-div").children("div").length) * leftSpeakerCategoryDivMargin + leftSpeakerCategoryDivMargin) > $("#annotation-div").width()) {
+
           leftSpeakerCategoryDivMargin = ($("#annotation-div").width() - leftSpeakerCategoryDivMargin) / $("#annotation-div").children("div").length;
+          console.log(leftSpeakerCategoryDivMargin);
           $("#annotation-div").children().each(function (index, value) {
             this.style.left = (leftSpeakerCategoryDivMargin * index + "px");
+            //this.style.left = (this.style.left.replace("px","")-20)+"px";
             div2.style.left = ($("#annotation-div").children("div").length) * leftSpeakerCategoryDivMargin + "px";
+
+            //Decreasing the width size of segments
+            decreaseDivWidth();
           });
         } else {
           //div2.style.left = ($("#annotation-div").children("div").length) * leftSpeakerCategoryDivMargin + "px";          
         }
         $("#annotation-div").append(div2);
       }
+    };
 
-    }
+    function decreaseDivWidth() {
+      $("#peaks-container").children("div").each(function (index, value) {
+        //this.style.left = (leftSpeakerCategoryDivMargin * index + "px");
+        //div2.style.left = ($("#annotation-div").children("div").length) * leftSpeakerCategoryDivMargin + "px";            
+        this.style.height = (180 + "px");
+        if (this.title != "default" && this.title != "Singing") {
+          this.style.height = (150 + "px");
+        }
+      });
+    };
 
     //function to update Segment Start on start time change
     function updateSegmentonTimeChange() {
@@ -1633,6 +2018,11 @@
       //}
     }//Update Segment On Change End
 
+    //function to check changes on top div speaker control
+    function updateTopSpeakerControl() {
+      updateTopDivSpeaker = true;
+    }
+
     $(document).on("mousedown", "wave", function () {
       //console.log("Okay");
     });
@@ -1640,8 +2030,12 @@
     //function for annotation contents change on click
     function changeAnnotationOnClick(evt) {
       //Displaying Annotation Div
-      $("#annotation-box").show();
-      if (!updateAnnotationOnChange) {
+      if (!updateTopDivSpeaker) {
+        $("#top-div-speaker-control").hide();
+        $("#annotation-box").show();
+      }
+
+      if (!updateAnnotationOnChange && !updateTopDivSpeaker) {
         var clickedId = evt.target.id;
         currentId = evt.target.id;
         //highlight clicked region
@@ -1694,6 +2088,24 @@
           }
         }
       }
+    };
+
+    function changeTopSpeakerDivControlOnClick(event) {
+      if (!updateAnnotationOnChange && !updateTopDivSpeaker) {
+        getTopClickedId = event.target.id;
+        var getTopClickedClass = document.getElementById(getTopClickedId).className.replace(/-/g, " ");
+
+        displayTopDivSpeakersControls(getTopClickedClass);
+      }
+    }
+
+    //function to display top div speakers on click
+    function displayTopDivSpeakersControls(speakerName) {
+      if (!updateAnnotationOnChange) {
+        $("#annotation-box").hide();
+        $("#top-div-speaker-control").show();
+        $("#top-div-control-speaker-name").val(speakerName);
+      }
     }
 
 
@@ -1703,15 +2115,30 @@
 
     });
 
-    $(".annotation-time-class, .annotation-time-ms-class, #annotation-type, #speaker-name, #transcription-area").on("focusout", function () {
+    //function to check if top div speaker control is clicked
+    $("#top-div-control-speaker-name").on("click", function () {
+      updateTopDivSpeakerOnClick = true;
+    });
+
+    $(".annotation-time-class, .annotation-time-ms-class, #annotation-type, #speaker-name, #transcription-area,#top-div-control-speaker-name").on("focusout", function () {
       if (updateAnnotationOnClick) {
         updateAnnotationOnClick = false;
+
+      }
+      if (updateTopDivSpeakerOnClick) {
+        updateTopDivSpeakerOnClick = false;
       }
     })
 
     $(".annotation-time-class, .annotation-time-ms-class, #annotation-type, #speaker-name, #transcription-area").on("change", function () {
       updateSegmentonTimeChange();
     });
+
+    $("#top-div-control-speaker-name").on("change", function () {
+      updateTopDivSpeaker = true;
+    });
+
+
 
     //function to highlight current region
     function highlightRegion() {
@@ -1780,7 +2207,8 @@
           segmentStart,
           segmentEnd,
           annotationText,
-          user_id
+          user_id,
+          audio_id: audio_id
         }
         //console.log(checkOverlappingDiv(speakerName, segmentStart, segmentEnd));
         if (speakerName.length > 0 && hundredMillisecSegmentCheck && !segmentEndingTimeMoreThanStartingTime && spellCheckSpeakerName(speakerName) && (!checkOverlappingDiv(speakerName, segmentStart, segmentEnd))) {
@@ -1865,7 +2293,7 @@
           document.getElementById(segmentId).className = speakerName;
           annotationText = val.value;
           document.getElementById(segmentId).querySelector("p").innerText = annotationText;
-        } else if (segmentclass.length >= 1 && segmentclass.split(" ").length <= 2 && spellCheckSpeakerName(segmentclass)) {
+        } else if (segmentclass.length >= 1 /*&& segmentclass.split(" ").length <= 2*/ && spellCheckSpeakerName(segmentclass)) {
           //checking if speaker is already Available          
           if ($("#annotation-div").children().hasClass(segmentclass.replace(/ /g, "-"))) {
             $("#annotation-div").children().each(function (index, value) {
@@ -1938,7 +2366,8 @@
             segmentStart: newStartTime,
             segmentEnd: newEndTime,
             annotationText,
-            user_id
+            user_id,
+            audio_id: audio_id
           }
         } else {
           params = {
@@ -1948,7 +2377,8 @@
             segmentStart,
             segmentEnd,
             annotationText,
-            user_id
+            user_id,
+            audio_id: audio_id
           }
         }
 
@@ -1994,6 +2424,7 @@
     function ctrlquote(currentregionId) {
       $("html").on("keydown", function (event) {
         if (event.ctrlKey && event.which == 222) {
+          event.preventDefault();
           var currentTime = spectrum.getCurrentTime();
           updateAnnotationOnChange = true;
           updateAnnotationOnClick = true;
@@ -2020,6 +2451,7 @@
     function ctrlcolon(currentregionId) {
       $("html").on("keydown", function (event) {
         if (event.ctrlKey && event.which == 186) {
+          event.preventDefault();
           //console.log("Pressed");
           var currentTime = spectrum.getCurrentTime();
           updateAnnotationOnChange = true;
@@ -2048,13 +2480,18 @@
     //Add New Region
     function addRegion() {
       //show annotation box
-      $("#annotation-box").show();
+      if (!updateTopDivSpeaker) {
+        $("#top-div-speaker-control").hide();
+        $("#annotation-box").show();
+      }
+
       /*
         Boolean to whether create new segment or delete previous new region and create new segment again
         Two New Segments Cannot Be Created
       */
       if (addRegionBool == true) {
-        if (!updateAnnotationOnChange) {
+        if (!updateAnnotationOnChange && !updateTopDivSpeaker) {
+
           renew();//Renew Annotation Box
           updateSegments = false;
           addRegionBool = false;
@@ -2095,7 +2532,7 @@
           $("#annotation-end-milliseconds").val(endMilliseconds);
         }
       } else {
-        if (!updateAnnotationOnChange) {
+        if (!updateAnnotationOnChange && !updateTopDivSpeaker) {
           spectrum.regions.list[segmentId].remove();
           updateSegments = true;
           addRegionBool = true;
@@ -2104,7 +2541,7 @@
       }
 
       spectrum.on("seek", function () {
-        if (!updateAnnotationOnChange && !updateAnnotationOnClick && spectrum.regions.list[segmentId] != null) {
+        if (!updateTopDivSpeakerOnClick && !updateTopDivSpeaker && !updateAnnotationOnChange && !updateAnnotationOnClick && spectrum.regions.list[segmentId] != null) {
           spectrum.regions.list[segmentId].remove();
           updateSegments = true;
           addRegionBool = true;
@@ -2195,7 +2632,8 @@
         segmentStart: regionStartTime,
         segmentEnd: spectrumCurrentTime - 0.010,
         annotationText: textBeforeCursor,
-        user_id
+        user_id,
+        audio_id: audio_id
       }
 
       $.ajax({
@@ -2214,7 +2652,8 @@
         segmentStart: spectrumCurrentTime + 0.010,
         segmentEnd: regionEndTime,
         annotationText: textAfterCursor,
-        user_id
+        user_id,
+        audio_id: audio_id
       }
 
       $.ajax({
@@ -2243,48 +2682,58 @@
 
     //function for confirming changes on close click
     function confirmChanges() {
-      //Hiding Annotation Div      
-      $("#annotation-box").hide();
-      updateAnnotationOnChange = false;
-      if ($("#peaks-container").children().is("#" + currentId)) {
-        spectrum.regions.list[currentId].update({
-          start: currentStartTime,
-          end: currentEndTime
-        });
+      //if changes were made in annotation box
+      if (updateAnnotationOnChange) {
+        console.log("Update Annotation Cancel");
+        //Hiding Annotation Div      
+        $("#annotation-box").hide();
+        updateAnnotationOnChange = false;
+        if ($("#peaks-container").children().is("#" + currentId)) {
+          spectrum.regions.list[currentId].update({
+            start: currentStartTime,
+            end: currentEndTime
+          });
 
-        //segment start variables
-        var startMinute = secondsToMinutes(spectrum.regions.list[currentId].start);
-        var startSeconds = secondsToSeconds(spectrum.regions.list[currentId].start);
-        var startMilliseconds = secondsToMilliseconds(spectrum.regions.list[currentId].start);
+          //segment start variables
+          var startMinute = secondsToMinutes(spectrum.regions.list[currentId].start);
+          var startSeconds = secondsToSeconds(spectrum.regions.list[currentId].start);
+          var startMilliseconds = secondsToMilliseconds(spectrum.regions.list[currentId].start);
 
-        //segment end variables
-        var endMinute = secondsToMinutes(spectrum.regions.list[currentId].end);
-        var endSeconds = secondsToSeconds(spectrum.regions.list[currentId].end);
-        var endMilliseconds = secondsToMilliseconds(spectrum.regions.list[currentId].end);
+          //segment end variables
+          var endMinute = secondsToMinutes(spectrum.regions.list[currentId].end);
+          var endSeconds = secondsToSeconds(spectrum.regions.list[currentId].end);
+          var endMilliseconds = secondsToMilliseconds(spectrum.regions.list[currentId].end);
 
-        //displaying texts   
-        $("#annotation-start-minute").val(startMinute);
-        $("#annotation-start-seconds").val(startSeconds);
-        $("#annotation-start-milliseconds").val(startMilliseconds);
-        $("#annotation-end-minute").val(endMinute);
-        $("#annotation-end-seconds").val(endSeconds);
-        $("#annotation-end-milliseconds").val(endMilliseconds);
+          //displaying texts   
+          $("#annotation-start-minute").val(startMinute);
+          $("#annotation-start-seconds").val(startSeconds);
+          $("#annotation-start-milliseconds").val(startMilliseconds);
+          $("#annotation-end-minute").val(endMinute);
+          $("#annotation-end-seconds").val(endSeconds);
+          $("#annotation-end-milliseconds").val(endMilliseconds);
 
-        var progress1 = currentStartTime / spectrum.getDuration();
-        var progress2 = (currentEndTime - currentStartTime) / spectrum.getDuration();
-        var minPxDelta = 1 / spectrum.params.pixelRatio;
-        var pos = Math.round((progress1) * spectrum.drawer.getWidth()) * minPxDelta;
-        var pos1 = Math.round((progress2) * spectrum.drawer.getWidth()) * minPxDelta;
+          var progress1 = currentStartTime / spectrum.getDuration();
+          var progress2 = (currentEndTime - currentStartTime) / spectrum.getDuration();
+          var minPxDelta = 1 / spectrum.params.pixelRatio;
+          var pos = Math.round((progress1) * spectrum.drawer.getWidth()) * minPxDelta;
+          var pos1 = Math.round((progress2) * spectrum.drawer.getWidth()) * minPxDelta;
 
-        document.getElementById(currentId).style.left = pos + "px";
-        document.getElementById(currentId).style.width = pos1 + "px";
+          document.getElementById(currentId).style.left = pos + "px";
+          document.getElementById(currentId).style.width = pos1 + "px";
 
-      } else {
-        if (spectrum.regions.list[currentId]) {
-          spectrum.regions.list[currentId].remove();
-          //updateAnnotationOnChange = false;
+        } else {
+          if (spectrum.regions.list[currentId]) {
+            spectrum.regions.list[currentId].remove();
+            //updateAnnotationOnChange = false;
+          }
         }
+      } else if (updateTopDivSpeaker) {
+        //Hiding Annotation Div    
+        console.log("Update Top Div Cancel");
+        $("#top-div-speaker-control").hide();
+        updateTopDivSpeaker = false;
       }
+
     }
 
     //Function to create a cancel confirm Dialogue Box
@@ -2310,13 +2759,14 @@
 
     //function to deny changes on close click
     $(".discard-changes").on("click", function () {
-      updateAnnotationOnChange = true;
+      //updateAnnotationOnChange = true;
       confirmChangesboxBool = false;
       $("#confirmation-box").hide();
       $("#empty-speaker").hide();
       $("#hundredMilliseconds-gap").hide();
       $("#endTime-moreThanStartTime").hide();
       $("#sameSpeaker-Overlapping").hide();
+      $("#top-speaker-remove-dialouge-box").hide();
       $("body").css({
         backgroundColor: "#fff",
         opacity: "1"
@@ -2381,6 +2831,15 @@
       })
     };
 
+    //function for top speaker div remove dialouge box
+    function topSpeakerRemoveDialougeBox() {
+      $("#top-speaker-remove-dialouge-box").show();
+      $("body").not("#top-speaker-remove-dialouge-box").css({
+        backgroundColor: "#d9dedb",
+        opacity: "0.8"
+      })
+    }
+
     //function to check and create segments
     function createSegments(currentId, starting, ending) {
       if (spectrum.regions.list[currentId] != null) {
@@ -2428,14 +2887,25 @@
 
     //Function to Check correct speakername
     function spellCheckSpeakerName(speakerName) {
+      console.log(speakerName);
       var splitSpeakerName = speakerName.split(" ");
+      console.log(splitSpeakerName);
       if (splitSpeakerName[0] != "speaker") {
-        if (splitSpeakerName[0] == "DTMF" || splitSpeakerName[0] == "Applause" || splitSpeakerName[0] == "Laughter" || splitSpeakerName[0] == "Music" || splitSpeakerName[0] == "Noise" || splitSpeakerName[0] == "Ringtone" || (splitSpeakerName[0]=="unidentifiable" && splitSpeakerName[1]=="speaker"))  {
+        if (splitSpeakerName[0] == "DTMF" || splitSpeakerName[0] == "Applause" || splitSpeakerName[0] == "Laughter" || splitSpeakerName[0] == "Music" || splitSpeakerName[0] == "Noise" || splitSpeakerName[0] == "Ringtone" || (splitSpeakerName[0] == "unidentifiable" && splitSpeakerName[1] == "speaker")) {
           return true;
-        }else if(splitSpeakerName[0] == "pre" && splitSpeakerName[1] == "recorded" && splitSpeakerName[2] == "speaker"){
-            //Insert More Code Below if pre recorded speaker name is needed too!
-            
+        } else if (splitSpeakerName[0] == "pre" && splitSpeakerName[1] == "recorded" && splitSpeakerName[2] == "speaker") {
+          //Insert More Code Below if pre recorded speaker name is needed too!
+          if (splitSpeakerName.length != 4) {
+            console.log("HERE")
+            return false;
+          }
+          if (isNaN(splitSpeakerName[3])) {
+            console.log("HERE")
+            return false;
+          }
+          return true;
         }
+        console.log("HERE")
         return false;
       }
       if (isNaN(splitSpeakerName[1])) {
@@ -2481,11 +2951,16 @@
       Object.keys(spectrum.regions.list).forEach(function (region) {
         var previousSpeakerStart = spectrum.regions.list[region].start;
         var previousSpeakerEnd = spectrum.regions.list[region].end;
-        if ((segmentStart > previousSpeakerStart && segmentStart < previousSpeakerEnd)||
+        
+        //|| (segmentStart == previousSpeakerStart && segmentEnd == previousSpeakerEnd)
+        if ((segmentStart > previousSpeakerStart && segmentStart < previousSpeakerEnd) || (segmentStart == previousSpeakerStart && segmentEnd == previousSpeakerEnd)||
           (segmentEnd > previousSpeakerStart && segmentEnd < previousSpeakerEnd) || (previousSpeakerStart > segmentStart && previousSpeakerStart < segmentEnd)) {
-          //console.log("herer1")
-          var previousSpeakerName = document.getElementById(region).className;
+          
           if (speakerName != "DTMF" && speakerName != "Applause" && speakerName != "Laughter" && speakerName != "Music" && speakerName != "Noise" && speakerName != "Ringtone") {
+            if(document.getElementById(region)!=null){
+              var previousSpeakerName = document.getElementById(region).className;  
+            }
+            //var previousSpeakerName = document.getElementById(region).className;
             if (previousSpeakerName == speakerName.replace(/ /g, "-")) {
               //console.log("herer2")
               overlapping = true;
@@ -2505,13 +2980,18 @@
         var promise = new Promise((resolve, reject) => {
           $.ajax({
             method: "POST",
+            data: { audio_id: audio_id },
             url: "/get-reviews",
             async: false,
             success: function (actualResponse) {
               $.ajax({
                 method: "POST",
                 url: "/get-segments",
-                data: { user_id: user_id },
+                data: {
+                  user_id: user_id,
+                  audio_id: audio_id
+                },
+
                 async: false,
                 success: function (postResponse) {
                   actualResponseLength = actualResponse.length;
@@ -2729,6 +3209,7 @@
       var todayDate = new Date();
       params = {
         user_id,
+        audio_id: audio_id,
         wrongSpeakerScore,
         wrongAnnotationScore,
         unnecessarySegmentsErrors,
@@ -2750,10 +3231,15 @@
     $("#submit-button").on("click", function () {
       //submitClick();      
       ajaxReq();
-      //displayHamburger();
+      displayHamburger();
       saveScores();
       $("#submit-button").hide();
       $("#profile-link-button").show();
+      //Event logs
+      var eventProperties = {
+        project_type: "Sample Segmentation",
+      };
+      logEvent("Sample Completed", eventProperties);
     });//Submit Button Click Function End
 
     //clicking in profile link button
@@ -2763,7 +3249,8 @@
 
     //function to display current div content in annotation box
     function displayCurrentContents() {
-      if (spectrum.regions.getCurrentRegion() != null && !updateAnnotationOnChange && !updateAnnotationOnClick) {
+      if (spectrum.regions.getCurrentRegion() != null && !updateAnnotationOnChange && !updateAnnotationOnClick && !updateTopDivSpeaker && !updateTopDivSpeakerOnClick) {
+        $("#top-div-speaker-control").hide();
         $("#annotation-box").show();
         var segmentId = spectrum.regions.getCurrentRegion().id;
         currentId = spectrum.regions.getCurrentRegion().id;
@@ -2825,6 +3312,140 @@
       $(".disable-all-on-Submit").css({ "cursor": "not-allowed" });
     }//disable all interface on submit end
 
+  </script>
+
+  <script type="text/javascript">
+    (function (e, t) {
+      var n = e.amplitude || { _q: [], _iq: {} };
+      var r = t.createElement("script");
+      r.type = "text/javascript";
+      r.integrity =
+        "sha384-RsEu4WZflrqYcEacpfoGSib3qaSvdYwT4D+DrWqeBuDarSzjwUQR1jO8gDiXZd0E";
+      r.crossOrigin = "anonymous";
+      r.async = true;
+      r.src = "https://cdn.amplitude.com/libs/amplitude-6.2.0-min.gz.js";
+      r.onload = function () {
+        if (!e.amplitude.runQueuedFunctions) {
+          console.log("[Amplitude] Error: could not load SDK");
+        }
+      };
+      var i = t.getElementsByTagName("script")[0];
+      i.parentNode.insertBefore(r, i);
+      function s(e, t) {
+        e.prototype[t] = function () {
+          this._q.push([t].concat(Array.prototype.slice.call(arguments, 0)));
+          return this;
+        };
+      }
+      var o = function () {
+        this._q = [];
+        return this;
+      };
+      var a = [
+        "add",
+        "append",
+        "clearAll",
+        "prepend",
+        "set",
+        "setOnce",
+        "unset",
+      ];
+      for (var u = 0; u < a.length; u++) {
+        s(o, a[u]);
+      }
+      n.Identify = o;
+      var c = function () {
+        this._q = [];
+        return this;
+      };
+      var l = [
+        "setProductId",
+        "setQuantity",
+        "setPrice",
+        "setRevenueType",
+        "setEventProperties",
+      ];
+      for (var p = 0; p < l.length; p++) {
+        s(c, l[p]);
+      }
+      n.Revenue = c;
+      var d = [
+        "init",
+        "logEvent",
+        "logRevenue",
+        "setUserId",
+        "setUserProperties",
+        "setOptOut",
+        "setVersionName",
+        "setDomain",
+        "setDeviceId",
+        "enableTracking",
+        "setGlobalUserProperties",
+        "identify",
+        "clearUserProperties",
+        "setGroup",
+        "logRevenueV2",
+        "regenerateDeviceId",
+        "groupIdentify",
+        "onInit",
+        "logEventWithTimestamp",
+        "logEventWithGroups",
+        "setSessionId",
+        "resetSessionId",
+      ];
+      function v(e) {
+        function t(t) {
+          e[t] = function () {
+            e._q.push([t].concat(Array.prototype.slice.call(arguments, 0)));
+          };
+        }
+        for (var n = 0; n < d.length; n++) {
+          t(d[n]);
+        }
+      }
+      v(n);
+      n.getInstance = function (e) {
+        e = (!e || e.length === 0 ? "$default_instance" : e).toLowerCase();
+        if (!n._iq.hasOwnProperty(e)) {
+          n._iq[e] = { _q: [] };
+          v(n._iq[e]);
+        }
+        return n._iq[e];
+      };
+      e.amplitude = n;
+    })(window, document);
+    var reqAPIKey = "534517ca15b0c94bfebf670795e2850d";
+    var params = {
+      user_id
+    }
+    $.ajax({
+      method: "POST",
+      url: "/get-web-app-id",
+      data: params,
+      success: function (response) {
+        
+        amplitude.getInstance().init(reqAPIKey, response.web_app_id, {
+          includeReferrer: true,
+          includeUtm: true,
+          includeGclid: true,
+        });
+        logEvent("Segmentation Task Loaded");
+      }
+    });
+
+  </script>
+  <script>
+    function logEvent(ampEventName, ampEventProp) {
+      amplitude.getInstance().logEvent(ampEventName, ampEventProp);
+    }
+    function setUserProp(identifyObj) {
+      amplitude.getInstance().Identify(identifyObj);
+    }
+  </script>
+  <script>
+    $(function () {
+      //logEvent("Segmentation Task Loaded");
+    });      
   </script>
 </body>
 
