@@ -94,14 +94,19 @@
             <th>Start Time</th>
             <th>End Time</th>
             <th>Score</th>
-            <th>Status <span id="export-work">&emsp; &emsp;<button id="export-button">EXPORT</button></span></th>
+            <th>Status <span id="export-work" style="display: none;">&emsp; &emsp;<button id="export-button">EXPORT</button></span></th>
         </thead>
         <tbody>
         </tbody>
     </table>
 </body>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.flash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.print.min.js"></script>
 
 <script>
 
@@ -153,10 +158,24 @@
                         }
                     }
                     //DataTable
-                    var table=$("#users_table").DataTable();
-                    table.destroy();                    
+                    var table = $("#users_table").DataTable();
+                    table.destroy();
                     $("#users_table").DataTable({
-                        //"order":[[2,"desc"]]
+                        "order": [[2, "desc"]],
+                        dom: 'Bfrtip',
+                        buttons: [{
+                            extend: 'excel',
+                            text: 'Export to excel',
+                            exportOptions: {
+                                columns: [0, 1, 2, 3,4],
+                                modifier: {
+                                    order: 'current',
+                                    page: 'all'
+                                }
+                            }
+                        }
+
+                        ]
                     });
                 }
             });

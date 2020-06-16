@@ -28,6 +28,7 @@ const pubDir = path.join(__dirname, "./public");
 //Using Paths
 app.use(express.static(pubDir));
 app.use(express.static(path.join(__dirname, "./node_modules")));
+app.use(express.static(path.join(__dirname, "./local_modules")));
 app.set("view engine", "hbs");
 
 app.use(
@@ -902,7 +903,7 @@ app.post("/training-hr-review-table-datas", (req, res) => {
     })
 });
 
-//get data from users-table to training hr review table 
+//get data from users-table to transcription hr review table 
 app.post("/transcription-hr-review-table-datas", (req, res) => {
     let sql = `
     Select audio.audio_id, audio.audio_name, users_audio.users_audio_id, users_audio.user_id, users_audio.audio_id, CONVERT_TZ(users_audio.start_time, '+00:00', '+05:45') start_time,
@@ -924,7 +925,6 @@ app.post("/transcription-hr-review-table-datas", (req, res) => {
         console.log(sql);
     })
 });
-
 
 
 //Change Pass Fail Data in Database 
@@ -1013,18 +1013,28 @@ app.get("/admin-review-table", (req, res) => {
     res.render("admin_reviewing_table");
 });
 
+app.get("/transcription-admin-review-table", (req, res) => {
+    res.render("transcription-admin-table");
+});
+
+app.get("/training-admin-review-table", (req, res) => {
+    res.render("training_admin_table");
+});
+
 //get data from users table to admin-review table
 app.post("/admin-review-table-datas", (req, res) => {
-    let sql = `
-                        Select audio.audio_id, users_audio.users_audio_id, users_audio.user_id, users_audio.audio_id, CONVERT_TZ(users_audio.start_time, '+00:00', '+05:45') start_time,
-                            CONVERT_TZ(users_audio.end_time, '+00:00', '+05:45') end_time, users_audio.overall_score, users.name, users_audio.status
+    let sql = `Select audio.audio_id, audio.audio_name, users_audio.users_audio_id, users_audio.user_id, users_audio.audio_id, CONVERT_TZ(users_audio.start_time, '+00:00', '+05:45') start_time,
+                        CONVERT_TZ(users_audio.end_time, '+00:00', '+05:45') end_time, users_audio.overall_score, users.name, users_audio.status
                         from users_audio
                         JOIN users
                         ON users_audio.user_id = users.user_id
                         JOIN audio
                         ON users_audio.audio_id = audio.audio_id
                         WHERE users_audio.status IS NOT NULL AND users_audio.status NOT LIKE 'RETRY%'
+                        AND audio.is_training="FALSE"
                         ORDER BY users_audio.start_time DESC `;
+
+
 
     pool.query(sql, (err, result) => {
         if (err) {
@@ -1036,13 +1046,60 @@ app.post("/admin-review-table-datas", (req, res) => {
     })
 });
 
+//get data from users-table to transcription admin review table 
+app.post("/transcription-admin-review-table-datas", (req, res) => {
+    let sql = `
+    Select audio.audio_id, audio.audio_name, users_audio.users_audio_id, users_audio.user_id, users_audio.audio_id, CONVERT_TZ(users_audio.start_time, '+00:00', '+05:45') start_time,
+    CONVERT_TZ(users_audio.end_time, '+00:00', '+05:45') end_time, users_audio.transcription_score, users.name, users_audio.status
+    from users_audio, users , audio WHERE
+    users_audio.user_id = users.user_id
+    AND users_audio.audio_id = audio.audio_id   
+    AND users_audio.type="transcription"
+    AND users_audio.status IS NOT NULL AND users_audio.status NOT LIKE 'RETRY%'    
+    ORDER BY users_audio.start_time DESC`;
+
+    pool.query(sql, (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(400).send("error in get /training-hr-review-table-datas query.");
+        };
+        console.log(result[0]);
+        res.send(result);
+        console.log(sql);
+    })
+});
+
+//get data from users-table to training admin review table 
+app.post("/training-admin-review-table-datas", (req, res) => {
+    let sql = `
+    Select audio.audio_id, audio.audio_name, users_audio.users_audio_id, users_audio.user_id, users_audio.audio_id, CONVERT_TZ(users_audio.start_time, '+00:00', '+05:45') start_time,
+    CONVERT_TZ(users_audio.end_time, '+00:00', '+05:45') end_time, users_audio.overall_score, users.name, users_audio.status,audio.audio_order
+    from users_audio, users , audio WHERE
+    users_audio.user_id = users.user_id
+    AND users_audio.audio_id = audio.audio_id
+    AND (users_audio.status IS NOT NULL AND users_audio.status NOT LIKE 'RETRY%')
+    AND audio.is_training = "TRUE"
+    AND audio.audio_order IS NOT NULL
+    ORDER BY users.user_id asc,audio.audio_order DESC`;
+
+    pool.query(sql, (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(400).send("error in get /training-admin-review-table-datas query.");
+        };
+        console.log(result[0]);
+        res.send(result);
+    })
+});
+
+
 //Change Pass Fail Data in Database 
 app.post("/confirm-pass-fail-admin-review", (req, res) => {
     let sql = `
-                        UPDATE users_audio
-                        SET status = "${req.body.changedPassFailValue}"
-                        WHERE users_audio_id = "${req.body.userId}"
-                        `;
+            UPDATE users_audio
+            SET status = "${req.body.changedPassFailValue}"
+            WHERE users_audio_id = "${req.body.userId}"
+            `;
 
     pool.query(sql, (err, result) => {
         if (err) {
@@ -1055,11 +1112,11 @@ app.post("/confirm-pass-fail-admin-review", (req, res) => {
 
 app.post("/get-web-app-id-for-admin", (req, res) => {
     let sql = `
-                        SELECT web_app_id FROM users
-                        WHERE user_id IN(
-                            SELECT user_id from users_audio WHERE users_audio_id = "${req.body.userId}"
-                        )
-                        `;
+            SELECT web_app_id FROM users
+            WHERE user_id IN(
+                SELECT user_id from users_audio WHERE users_audio_id = "${req.body.userId}"
+            )
+            `;
     pool.query(sql, (err, result) => {
         if (err) {
             console.error(err);
@@ -1071,9 +1128,9 @@ app.post("/get-web-app-id-for-admin", (req, res) => {
 
 app.post("/admin-click-get-user-id", (req, res) => {
     let sql = `
-                        Select users_audio.user_id, users_audio.audio_id FROM users_audio
-                        WHERE users_audio_id = "${req.body.clicked_user_id}"
-                        `;
+            Select users_audio.user_id, users_audio.audio_id FROM users_audio
+            WHERE users_audio_id = "${req.body.clicked_user_id}"
+            `;
     pool.query(sql, (err, result) => {
         if (err) {
             console.error(err);

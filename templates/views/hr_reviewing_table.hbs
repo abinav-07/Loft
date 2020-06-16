@@ -94,7 +94,7 @@
             <th>Start Time</th>
             <th>End Time</th>
             <th>Score</th>
-            <th>Status <span id="export-work">&emsp; &emsp;<button id="export-button">EXPORT</button></span></th>
+            <th>Status <span id="export-work" style="display: none;">&emsp; &emsp;<button id="export-button">EXPORT</button></span></th>
         </thead>
         <tbody>
         </tbody>
@@ -164,9 +164,9 @@
                         dom: 'Bfrtip',
                         buttons: [{
                             extend: 'excel',
-                            text: 'Export to Excel',
-                            exportOption: {
-                                columns: [0, 1, 2, 3],
+                            text: 'Export to excel',
+                            exportOptions: {
+                                columns: [0, 1, 2, 3,4],
                                 modifier: {
                                     order: 'current',
                                     page: 'all'

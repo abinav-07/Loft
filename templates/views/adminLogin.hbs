@@ -4,12 +4,26 @@
   <title>Admin Login</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="/css/hrLogin.css">
+  <link rel="stylesheet" type="text/css" href="/css/hrLogin.css">
+  <style>
+    #login-for{
+      margin: 1em;
+      padding: 0.4em;
+      border-radius: 10px;
+      font-family: monospace;
+      font-size: 18px;
+    }
+  </style>
 </head>
 <body>
 	<div class="login-page">
   	<div class="form">
       <form class="login-form">
+        <select id="login-for">
+          <option value="training">Training</option>
+          <option value="sample-test">Sample Test</option>
+          <option value="transcription">Transcription</option>
+        </select>
         <input id="email" type="text" placeholder="Email"/>
         <input id="password" type="password" placeholder="password"/>
         <button id="hr-login-button">login</button>
@@ -26,11 +40,20 @@ window.onload=function(){
     //Admin-login-button
   document.getElementById("hr-login-button").addEventListener("click",function(e){
     e.preventDefault();
-    console.log(inputEmail);
+    
     var inputEmail=document.getElementById("email").value;
     var inputPassword=document.getElementById("password").value;
     if(inputEmail==ourEmail && inputPassword==ourPassword){
-      window.location.href= `${new URL(window.location).origin}/admin-review-table`;
+      var selectedLoginFor=document.getElementById("login-for").value;
+      
+      if(selectedLoginFor=="training"){
+        window.location.href= `${new URL(window.location).origin}/training-admin-review-table`;  
+      }else if(selectedLoginFor=="sample-test"){
+        window.location.href= `${new URL(window.location).origin}/admin-review-table`;
+      }else if(selectedLoginFor=="transcription"){
+        window.location.href= `${new URL(window.location).origin}/transcription-admin-review-table`;
+      }      
+      
       //`http://localhost:3000/admin-review-table`;
      
     }else{
