@@ -181,7 +181,9 @@ app.get("/transcribe", (req, res) => {
 //Route for training
 app.get("/training", (req, res) => {
     var audio_url = "";
+    var audio_order;
     var audioId = req.query.audio_id;
+    var user_name = "";
     if (req.query.audio_id == undefined) {
         audioId = 4;
         audio_url = "cryophile.wav";
@@ -193,14 +195,32 @@ app.get("/training", (req, res) => {
                 console.error(err);
                 res.status(400).send("error in get /transcribe query.");
             };
+            //Audio Name
             audio_url = result[0]["audio_url"];
-            //console.log(audio_url);
-            res.render("index", {
-                user_id: req.query.user_id,
-                audio_url: audio_url,
-                audio_id: req.query.audio_id
-            });
-            console.log(result);
+            //Getting audio order for training
+            if (result[0]["audio_order"] != null) {
+                audio_order = result[0]["audio_order"];
+            }
+
+            //SQL to get user name
+            var get_user_name = `SELECT * FROM users WHERE user_id='${req.query.user_id}'`;
+            pool.query(get_user_name, (err, userName_result) => {
+                    if (err) {
+                        console.error(err);
+                        res.status(400).send("error in get /get_user_name query.");
+                    }
+                    user_name = userName_result[0]["name"];
+                    res.render("training_audio", {
+                        user_id: req.query.user_id,
+                        audio_url: audio_url,
+                        audio_id: req.query.audio_id,
+                        audio_order: audio_order,
+                        user_name: user_name
+                    });
+                })
+                //console.log(audio_url);
+
+
         })
     }
 

@@ -115,7 +115,7 @@
       white-space: normal;
     }
 
-    #user_info {
+    #user_info{
       text-align: center;
       font-size: 14px;
       /*width: 680px;*/
@@ -129,7 +129,7 @@
       list-style-type: none;
       -webkit-font-smoothing: antialiased;
       white-space: normal;
-      margin-right: 20px;
+      margin-right:20px ;
     }
 
 
@@ -3442,7 +3442,6 @@
       url: "/get-web-app-id",
       data: params,
       success: function (response) {
-
         amplitude.getInstance().init(reqAPIKey, response.web_app_id, {
           includeReferrer: true,
           includeUtm: true,
