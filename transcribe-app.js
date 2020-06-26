@@ -74,7 +74,7 @@ app.get("/", (req, res) => {
     //console.log(req.query);
 
     if (typeof req.session.user_id == "undefined") {
-        if (req.query.user_id != "undefined") {
+        if (typeof req.query.user_id != "undefined") {
             var check_sql = `SELECT * FROM users_audio WHERE user_id IN (
                 SELECT user_id from users WHERE web_app_id='${req.query.user_id}'                
             )          
@@ -86,12 +86,14 @@ app.get("/", (req, res) => {
                     pool.query(sql, (err, result) => {
                         if (err) {
                             console.error(err);
-                            res.status(400).send("error in get / query.");
-                        };
-                        req.session.user_id = result.insertId;
-                        req.session.user = req.query.full_name;
-                        //   res.redirect("/review");
-                        res.redirect(`/transcribe?user_id=${req.session.user_id}&audio_id=${req.query.audio_id}`);
+                            res.status(400).send("Please Use Webapp to access this URL.");
+                        } else {
+                            req.session.user_id = result.insertId;
+                            req.session.user = req.query.full_name;
+                            //   res.redirect("/review");
+                            res.redirect(`/transcribe?user_id=${req.session.user_id}&audio_id=${req.query.audio_id}`);
+                        }
+
                     });
                 } else {
                     if (result[0].status != "RETRY") {
@@ -991,7 +993,7 @@ app.post("/hr-click-get-user-id", (req, res) => {
         };
         res.send(result);
     })
-})
+});
 
 app.post("/get-web-app-id-for-hr", (req, res) => {
     let sql = `
