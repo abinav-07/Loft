@@ -217,14 +217,14 @@
         function confirmButton(userId) {
             $(`button.${userId}`).show();
             //On Confirm Click
-            $(`button.${userId}`).on("click", () => {
+            $(`button.${userId}`).on("click",async() => {
                 var changedPassFailValue = $(`select.${userId}`).val();
                 params = {
                     userId,
                     changedPassFailValue
                 }
                 
-                $.ajax({
+                await $.ajax({
                     method: "POST",
                     url: "/confirm-pass-fail-hr-review",
                     data: params,
