@@ -71,7 +71,6 @@ app.get("/", (req, res) => {
     }
     //   res.render("index");*/
 
-    //console.log(req.query);
 
     if (typeof req.session.user_id == "undefined") {
         if (typeof req.query.user_id != "undefined") {
@@ -117,8 +116,7 @@ app.get("/", (req, res) => {
 
 });
 /*app.get("/transcribe", (req, res) => {
-    console.log(req.query);
-    res.render("index", {
+    console.log(req.query);res.render("index", {
         user_id: req.query.user_id,
         audio_url: "cryophile.wav"
     });
@@ -144,17 +142,14 @@ app.get("/transcribe", (req, res) => {
                 res.status(400).send("error in get /transcribe query.");
             };
             audio_url = result[0]["audio_url"];
-            console.log(audio_url);
             res.render("index", {
                 user_id: req.query.user_id,
                 audio_url: audio_url,
                 audio_id: audioId
             });
-            console.log(result);
         })
     }
 
-    console.log(req.query);
     // res.render("index", {
     //     user_id: req.query.user_id,
     //     audio_url: audio_url
@@ -220,13 +215,11 @@ app.get("/training", (req, res) => {
                         user_name: user_name
                     });
                 })
-                //console.log(audio_url);
 
 
         })
     }
 
-    console.log(req.query);
     // res.render("index", {
     //     user_id: req.query.user_id,
     //     audio_url: audio_url
@@ -274,7 +267,6 @@ app.get("/transcription", async(req, res) => {
                 audio_url: audio_url,
                 audio_id: req.query.audio_id
             });
-            console.log(result);
         })
     }
 
