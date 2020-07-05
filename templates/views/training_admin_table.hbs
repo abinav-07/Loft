@@ -94,7 +94,8 @@
             <th>Start Time</th>
             <th>End Time</th>
             <th>Score</th>
-            <th>Status <span id="export-work" style="display: none;">&emsp; &emsp;<button id="export-button">EXPORT</button></span></th>
+            <th>Status <span id="export-work" style="display: none;">&emsp; &emsp;<button
+                        id="export-button">EXPORT</button></span></th>
         </thead>
         <tbody>
         </tbody>
@@ -118,7 +119,7 @@
                 success: function (users_data) {
                     $("#users_table tbody").html("");
                     for (var i = 0; i < users_data.length; i++) {
-                        
+
                         if (users_data[i].status == "PASS") {
                             $("#users_table tbody").append(
                                 `<tr data-user-id="${users_data[i].users_audio_id}">
@@ -167,7 +168,7 @@
                             extend: 'excel',
                             text: 'Export to excel',
                             exportOptions: {
-                                columns: [0, 1, 2, 3,4],
+                                columns: [0, 1, 2, 3, 4],
                                 modifier: {
                                     order: 'current',
                                     page: 'all'
@@ -196,7 +197,7 @@
                 url: "/hr-click-get-user-id",
                 data: params,
                 success: function (response) {
-                   
+
                     window.open(
                         //`http://localhost:3000/transcribe?user_id=${clicked_user_id}`,
                         `${new URL(window.location).origin}/training?user_id=${response[0]["user_id"]}&audio_id=${response[0]["audio_id"]}`,
@@ -216,13 +217,13 @@
         function confirmButton(userId) {
             $(`button.${userId}`).show();
             //On Confirm Click
-            $(`button.${userId}`).on("click", async() => {
+            $(`button.${userId}`).on("click", async () => {
                 var changedPassFailValue = $(`select.${userId}`).val();
                 params = {
                     userId,
                     changedPassFailValue
                 }
-                
+
                 await $.ajax({
                     method: "POST",
                     url: "/confirm-pass-fail-hr-review",
@@ -230,7 +231,7 @@
                     success: function () {
                         $(`button.${userId}`).hide();
                         console.log("Pass Fail Saved");
-                       // console.log(userId);
+                        // console.log(userId);
                         $.ajax({
                             method: "POST",
                             url: "/get-web-app-id-for-hr",
@@ -238,12 +239,12 @@
                             success: function (response) {
                                 var status;
                                 console.log($(`select.${userId}`).val());
-                                if($(`select.${userId}`).val()=="PASS"){
-                                    status=7;
-                                }else if($(`select.${userId}`).val()=="FAIL"){
-                                    status=6;
-                                }else if($(`select.${userId}`).val()=="RETRY"){
-                                    status=4;
+                                if ($(`select.${userId}`).val() == "PASS") {
+                                    status = 7;
+                                } else if ($(`select.${userId}`).val() == "FAIL") {
+                                    status = 6;
+                                } else if ($(`select.${userId}`).val() == "RETRY") {
+                                    status = 4;
                                 }
                                 var mailParams = {
                                     "user_id": `${response[0].web_app_id}`,
@@ -263,10 +264,10 @@
                             }
                         })
 
-                        
+
 
                     }
-                });                
+                });
                 recreatingHRTable();
             });
         }
@@ -322,20 +323,20 @@
 
         //Function to get GTM to Nepali Time
         function getNepaliTimeNow(datetime) {
-            
+
             if (datetime == null) {
                 return null;
-               
+
             } else {
                 var time = new Date(datetime);
                 var time_in_nepal = time.toLocaleString("en-US", {
                     timeZone: "Asia/Kathmandu",
-                    hour12:false
+                    hour12: false
                 });
                 return time_in_nepal;
+            }
         }
-
-    }); 
+    });
 
 </script>
 
