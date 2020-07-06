@@ -87,6 +87,7 @@
 </style>
 
 <body>
+    <button id="logOutHR" style="float: right; padding:5px; border-radius:10%">Log Out</button>
     <table id="users_table">
         <thead>
             <th>Name</th>
@@ -94,7 +95,9 @@
             <th>Start Time</th>
             <th>End Time</th>
             <th>Score</th>
-            <th>Status <span id="export-work" style="display: none;">&emsp; &emsp;<button id="export-button">EXPORT</button></span></th>
+            <th>Status 
+                {{!-- <span id="export-work" style="display: none;">&emsp; &emsp;<button id="export-button">EXPORT</button></span> --}}
+            </th>
         </thead>
         <tbody>
         </tbody>
@@ -111,6 +114,12 @@
 <script>
 
     $(document).ready(function () {
+
+          //Button To Log Out From Table
+        $("#logOutHR").on("click",function(){
+            window.location.href= `${new URL(window.location).origin}/hr-login-form`;  
+        });
+
         function recreatingHRTable() {
             $.ajax({
                 method: "POST",
@@ -165,12 +174,27 @@
                         dom: 'Bfrtip',
                         buttons: [{
                             extend: 'excel',
+                            filename:'transcription',
                             text: 'Export to excel',
                             exportOptions: {
                                 columns: [0, 1, 2, 3,4],
                                 modifier: {
                                     order: 'current',
                                     page: 'all'
+                                },
+                                format: {
+                                    body:function(data,row,col,node){
+                                        if(col==5){
+                                            return table
+                                                    .cell({row:row,column:col})
+                                                    .nodes()
+                                                    .to$()
+                                                    .find(':selected')
+                                                    .text()
+                                        }else{
+                                            return data;
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -328,12 +352,13 @@
                 return null;
                
             } else {
-                var time = new Date(datetime);
+                   var time = new Date(datetime);
                 var time_in_nepal = time.toLocaleString("en-US", {
                     timeZone: "Asia/Kathmandu",
                     hour12:false
                 });
                 return time_in_nepal;
+
             }
         }
 

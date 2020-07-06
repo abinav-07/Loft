@@ -2685,7 +2685,7 @@
         var previousSpeakerEnd = spectrum.regions.list[region].end;
         
         //|| (segmentStart == previousSpeakerStart && segmentEnd == previousSpeakerEnd)
-        if ((segmentStart > previousSpeakerStart && segmentStart < previousSpeakerEnd) || (segmentStart == previousSpeakerStart && segmentEnd == previousSpeakerEnd)||
+        if ((segmentStart > previousSpeakerStart && segmentStart < previousSpeakerEnd) || //(segmentStart == previousSpeakerStart && segmentEnd == previousSpeakerEnd)||
           (segmentEnd > previousSpeakerStart && segmentEnd < previousSpeakerEnd) || (previousSpeakerStart > segmentStart && previousSpeakerStart < segmentEnd)) {
           
           if (speakerName != "DTMF" && speakerName != "Applause" && speakerName != "Laughter" && speakerName != "Music" && speakerName != "Noise" && speakerName != "Ringtone") {

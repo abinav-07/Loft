@@ -115,7 +115,7 @@
       white-space: normal;
     }
 
-    #user_info{
+    #user_info {
       text-align: center;
       font-size: 14px;
       /*width: 680px;*/
@@ -129,7 +129,7 @@
       list-style-type: none;
       -webkit-font-smoothing: antialiased;
       white-space: normal;
-      margin-right:20px ;
+      margin-right: 20px;
     }
 
 
@@ -1613,7 +1613,7 @@
                 if (is_submitted == "TRUE") {
                   console.log("Euta log");
                   disableAllInterfaceOnSubmit();
-                  ajaxReq();//Ajax Request to check correct incorrect segment
+                  //ajaxReq();//Ajax Request to check correct incorrect segment
                   //displayHamburger();
                   $("#submit-button").hide();
                   $("#profile-link-button").show();
@@ -2964,7 +2964,7 @@
         var previousSpeakerEnd = spectrum.regions.list[region].end;
 
         //|| (segmentStart == previousSpeakerStart && segmentEnd == previousSpeakerEnd)
-        if ((segmentStart > previousSpeakerStart && segmentStart < previousSpeakerEnd) || (segmentStart == previousSpeakerStart && segmentEnd == previousSpeakerEnd) ||
+        if ((segmentStart > previousSpeakerStart && segmentStart < previousSpeakerEnd) || //(segmentStart == previousSpeakerStart && segmentEnd == previousSpeakerEnd) ||
           (segmentEnd > previousSpeakerStart && segmentEnd < previousSpeakerEnd) || (previousSpeakerStart > segmentStart && previousSpeakerStart < segmentEnd)) {
 
           if (speakerName != "DTMF" && speakerName != "Applause" && speakerName != "Laughter" && speakerName != "Music" && speakerName != "Noise" && speakerName != "Ringtone") {
@@ -2985,7 +2985,7 @@
     //function for promises and ajax request on submit
     function ajaxReq() {
       //console.log("Hawa ");
-      if (Object.keys(spectrum.regions.list).length == 0) {
+      if (Object.keys(spectrum.regions.list).length == 0 || overallScore<0) {
         overallScore = 100;
       } else {
         var promise = new Promise((resolve, reject) => {
@@ -3241,7 +3241,8 @@
     //Function to call on submit click
     $("#submit-button").on("click", function () {
       //submitClick();      
-      ajaxReq();
+      //ajaxReq();
+      disableAllInterfaceOnSubmit();
       displayHamburger();
       saveScores();
       $("#submit-button").hide();
@@ -3442,6 +3443,7 @@
       url: "/get-web-app-id",
       data: params,
       success: function (response) {
+
         amplitude.getInstance().init(reqAPIKey, response.web_app_id, {
           includeReferrer: true,
           includeUtm: true,

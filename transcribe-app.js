@@ -71,6 +71,7 @@ app.get("/", (req, res) => {
     }
     //   res.render("index");*/
 
+    //console.log(req.query);
 
     if (typeof req.session.user_id == "undefined") {
         if (typeof req.query.user_id != "undefined") {
@@ -116,7 +117,8 @@ app.get("/", (req, res) => {
 
 });
 /*app.get("/transcribe", (req, res) => {
-    console.log(req.query);res.render("index", {
+    console.log(req.query);
+    res.render("index", {
         user_id: req.query.user_id,
         audio_url: "cryophile.wav"
     });
@@ -142,14 +144,17 @@ app.get("/transcribe", (req, res) => {
                 res.status(400).send("error in get /transcribe query.");
             };
             audio_url = result[0]["audio_url"];
+            console.log(audio_url);
             res.render("index", {
                 user_id: req.query.user_id,
                 audio_url: audio_url,
                 audio_id: audioId
             });
+            console.log(result);
         })
     }
 
+    console.log(req.query);
     // res.render("index", {
     //     user_id: req.query.user_id,
     //     audio_url: audio_url
@@ -215,11 +220,13 @@ app.get("/training", (req, res) => {
                         user_name: user_name
                     });
                 })
+                //console.log(audio_url);
 
 
         })
     }
 
+    console.log(req.query);
     // res.render("index", {
     //     user_id: req.query.user_id,
     //     audio_url: audio_url
@@ -267,6 +274,7 @@ app.get("/transcription", async(req, res) => {
                 audio_url: audio_url,
                 audio_id: req.query.audio_id
             });
+            console.log(result);
         })
     }
 
@@ -315,6 +323,9 @@ app.get("/transcription", async(req, res) => {
                     res.status(400).send("error in get /transcription query")
                 }
             })
+            console.log("HERE");
+            console.log(result.length);
+            console.log(insert_sql);
         }
     })
 });
@@ -328,6 +339,7 @@ app.post("/route-for-diff-check", (req, res) => {
             console.error(err);
             res.status(400).send("error in get /route-for-diff-check query")
         }
+        console.log("BElow");
         async.series([
             function(cb) {
                 for (var i = 0; i < result.length; i++) {
@@ -384,10 +396,12 @@ app.get("/actual-data-admin", (req, res) => {
                 res.status(400).send("error in get /transcribe query.");
             };
             audio_url = result[0]["audio_url"];
+            console.log(audio_url);
             res.render("actual_data_insert", {
                 audio_url: audio_url,
                 audio_id: audioId
             });
+            console.log(result);
         })
     }
 })
@@ -398,11 +412,13 @@ app.post("/database", (req, res) => {
     let sql = `
             INSERT INTO posts(div_className, div_title, segment_start, segment_end, annotation_text, user_id, audio_id) VALUES('${req.body.speakerName}', '${req.body.annotationType}', '${req.body.segmentStart}', '${req.body.segmentEnd}', '${req.body.annotationText}', '${req.body.user_id}', '${req.body.audio_id}')
             `;
+    console.log(sql);
     pool.query(sql, (err, result) => {
         if (err) {
             console.error(err);
             res.status(400).send("error in get /database query.");
         };
+        console.log("Data Inserted");
         res.send(result);
     });
 });
@@ -413,6 +429,7 @@ app.post("/insert-into-actual-data", (req, res) => {
     let sql = `
             INSERT INTO actual(div_className, div_title, segment_start, segment_end, annotation_text, audio_id) VALUES('${req.body.speakerName}', '${req.body.annotationType}', '${req.body.segmentStart}', '${req.body.segmentEnd}', '${req.body.annotationText}', '${req.body.audio_id}')
             `;
+    console.log(sql);
     pool.query(sql, (err, result) => {
         if (err) {
             console.error(err);
@@ -431,6 +448,7 @@ app.post("/insert-into-transcription-table", (req, res) => {
     let sql = `
             INSERT INTO transcription(div_className, div_title, segment_start, segment_end, annotation_text, user_id, audio_id) VALUES('${req.body.speakerName}', '${req.body.annotationType}', '${req.body.segmentStart}', '${req.body.segmentEnd}', '${req.body.annotationText}', '${req.body.user_id}', '${req.body.audio_id}')
             `;
+    console.log(sql);
     pool.query(sql, (err, result) => {
         if (err) {
             console.error(err);
@@ -451,6 +469,7 @@ app.post("/updatedatabase", (req, res) => {
             AND user_id = '${req.body.user_id}'
             AND audio_id = '${req.body.audio_id}'
             `;
+    console.log(sql);
     pool.query(sql, (err, result) => {
         if (err) {
             console.error(err);
@@ -470,6 +489,7 @@ app.post("/update-actual-database", (req, res) => {
             WHERE segment_id = '${req.body.segmentId}'            
             AND audio_id = '${req.body.audio_id}'
             `;
+    console.log(sql);
     pool.query(sql, (err, result) => {
         if (err) {
             console.error(err);
@@ -493,6 +513,7 @@ app.post("/update-transcription-table", (req, res) => {
             AND user_id = '${req.body.user_id}'
             AND audio_id = '${req.body.audio_id}'
             `;
+    console.log(sql);
     pool.query(sql, (err, result) => {
         if (err) {
             console.error(err);
@@ -512,6 +533,8 @@ app.post("/update-on-split", (req, res) => {
             AND user_id = '${req.body.user_id}'
             AND audio_id = '${req.body.audio_id}'
             `;
+    console.log(sql);
+    console.log(sql);
     pool.query(sql, (err, result) => {
         if (err) {
             console.error(err);
@@ -529,6 +552,8 @@ app.post("/update-actual-data-on-split", (req, res) => {
             WHERE segment_id = '${req.body.segmentId}'            
             AND audio_id = '${req.body.audio_id}'
             `;
+    console.log(sql);
+    console.log(sql);
     pool.query(sql, (err, result) => {
         if (err) {
             console.error(err);
@@ -542,12 +567,15 @@ app.post("/update-actual-data-on-split", (req, res) => {
 //Route to check if the user has  already submitted or not
 app.post("/get-submitted-or-not", (req, res) => {
     var audioId = req.query.audio_id;
+    console.log("HEre");
+    console.log(req.query);
     let sql = `
             Select users_audio.is_submitted FROM users_audio
             WHERE
             user_id = '${req.body.user_id}'
             AND audio_id = '${req.body.audio_id}'
             `;
+    console.log(sql);
     pool.query(sql, (err, result) => {
         if (err) {
             console.error(err);
@@ -556,6 +584,7 @@ app.post("/get-submitted-or-not", (req, res) => {
         console.log("Checking Submitted Or not")
 
         res.send(result);
+        console.log(result);
     });
 });
 
@@ -563,6 +592,8 @@ app.post("/get-submitted-or-not", (req, res) => {
 //Route to check if the user for transcription has  already submitted or not
 app.post("/get-submitted-or-not-for-transcription", (req, res) => {
     var audioId = req.query.audio_id;
+    console.log("HEre");
+    console.log(req.query);
     let sql = `
             Select users_audio.is_submitted FROM users_audio
             WHERE
@@ -570,6 +601,7 @@ app.post("/get-submitted-or-not-for-transcription", (req, res) => {
             AND audio_id = '${req.body.audio_id}'
             AND type="transcription"
             `;
+    console.log(sql);
     pool.query(sql, (err, result) => {
         if (err) {
             console.error(err);
@@ -578,6 +610,7 @@ app.post("/get-submitted-or-not-for-transcription", (req, res) => {
         console.log("Checking Submitted Or not")
 
         res.send(result);
+        console.log(result);
     });
 });
 
@@ -604,6 +637,7 @@ app.post("/get-segments", (req, res) => {
             res.status(400).send("error in get /get-segments query.");
         };
         res.send(result);
+        console.log(result);
     });
 });
 //get segments route end
@@ -630,6 +664,7 @@ app.post("/get-segments-from-actual-data-for-admin", (req, res) => {
             res.status(400).send("error in get /get-segments-from-actual-data-for-admin query.");
         };
         res.send(result);
+        console.log(result);
     });
 });
 //get segments from actual table route end
@@ -661,6 +696,7 @@ app.post("/transcription-actual-segments", (req, res) => {
             res.status(400).send("error in get /get-segments query.");
         };
         res.send(result);
+        console.log(result);
     });
 });
 //get segments route end
@@ -676,6 +712,8 @@ app.post("/get-reviews", (req, res) => {
             console.error(err);
             res.status(400).send("error in get /ger-reviews query.");
         };
+        console.log("result");
+        console.log(result);
         res.send(result);
     });
 });
@@ -689,6 +727,7 @@ app.post("/remove-segments", (req, res) => {
             AND user_id = '${req.body.user_id}'
             AND audio_id = '${req.body.audio_id}'
             `;
+    console.log(sql);
     pool.query(sql, (err, result) => {
         if (err) {
             console.error(err);
@@ -706,6 +745,7 @@ app.post("/remove-segments-from-actual", (req, res) => {
             segment_id = '${req.body.regionId}'            
             AND audio_id = '${req.body.audio_id}'
             `;
+    console.log(sql);
     pool.query(sql, (err, result) => {
         if (err) {
             console.error(err);
@@ -753,6 +793,7 @@ app.post("/save-test-score-on-users_audio_table", (req, res) => {
             console.error(err);
             res.status(400).send("error in get /get-segments-with-same-speaker query.");
         };
+        console.log(result);
         res.send(result);
     })
 });
@@ -775,6 +816,7 @@ app.post("/save-test-score-on-users_audio_table-for-transcription", (req, res) =
             console.error(err);
             res.status(400).send("error in get /get-segments-with-same-speaker query.");
         };
+        console.log(result);
         res.send(result);
     })
 });
@@ -797,6 +839,7 @@ app.post("/top-speaker-control-save-button", (req, res) => {
             res.status(400).send("error in get /get-segments-with-same-speaker query.");
         };
         res.send(result);
+        console.log(result);
     });
 
 });
@@ -815,6 +858,7 @@ app.post("/top-speaker-control-save-button-for-actual", (req, res) => {
             res.status(400).send("error in get /get-segments-with-same-speaker query.");
         };
         res.send(result);
+        console.log(result);
     });
 
 });
@@ -846,7 +890,7 @@ app.post("/hr-review-table-datas", (req, res) => {
             ON users_audio.user_id = users.user_id
             JOIN audio
             ON users_audio.audio_id = audio.audio_id
-            WHERE users_audio.status IS NULL OR users_audio.status = 'RETRY'
+            WHERE (users_audio.status IS NULL OR users_audio.status = 'RETRY')
             AND audio.is_training = "FALSE"
             ORDER BY users_audio.start_time DESC`;
 
@@ -855,6 +899,7 @@ app.post("/hr-review-table-datas", (req, res) => {
             console.error(err);
             res.status(400).send("error in get /hr-review-table-datas query.");
         };
+        console.log(result[0]);
         res.send(result);
     })
 });
@@ -876,6 +921,7 @@ app.post("/training-hr-review-table-datas", (req, res) => {
             console.error(err);
             res.status(400).send("error in get /training-hr-review-table-datas query.");
         };
+        console.log(result[0]);
         res.send(result);
     })
 });
@@ -888,6 +934,7 @@ app.post("/transcription-hr-review-table-datas", (req, res) => {
     from users_audio, users , audio WHERE
     users_audio.user_id = users.user_id
     AND users_audio.audio_id = audio.audio_id
+   
     AND users_audio.type="transcription"    
     ORDER BY users_audio.start_time DESC`;
 
@@ -896,7 +943,9 @@ app.post("/transcription-hr-review-table-datas", (req, res) => {
             console.error(err);
             res.status(400).send("error in get /training-hr-review-table-datas query.");
         };
+        console.log(result[0]);
         res.send(result);
+        console.log(sql);
     })
 });
 
@@ -1004,7 +1053,7 @@ app.post("/admin-review-table-datas", (req, res) => {
                         ON users_audio.user_id = users.user_id
                         JOIN audio
                         ON users_audio.audio_id = audio.audio_id
-                        WHERE users_audio.status IS NOT NULL AND users_audio.status NOT LIKE 'RETRY%'
+                        WHERE (users_audio.status IS NOT NULL AND users_audio.status NOT LIKE 'RETRY%')
                         AND audio.is_training="FALSE"
                         ORDER BY users_audio.start_time DESC `;
 
@@ -1029,7 +1078,7 @@ app.post("/transcription-admin-review-table-datas", (req, res) => {
     users_audio.user_id = users.user_id
     AND users_audio.audio_id = audio.audio_id   
     AND users_audio.type="transcription"
-    AND users_audio.status IS NOT NULL AND users_audio.status NOT LIKE 'RETRY%'    
+    AND (users_audio.status IS NOT NULL AND users_audio.status NOT LIKE 'RETRY%')    
     ORDER BY users_audio.start_time DESC`;
 
     pool.query(sql, (err, result) => {
@@ -1037,7 +1086,9 @@ app.post("/transcription-admin-review-table-datas", (req, res) => {
             console.error(err);
             res.status(400).send("error in get /training-hr-review-table-datas query.");
         };
+        console.log(result[0]);
         res.send(result);
+        console.log(sql);
     })
 });
 
@@ -1059,6 +1110,7 @@ app.post("/training-admin-review-table-datas", (req, res) => {
             console.error(err);
             res.status(400).send("error in get /training-admin-review-table-datas query.");
         };
+        console.log(result[0]);
         res.send(result);
     })
 });
