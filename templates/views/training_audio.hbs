@@ -1881,6 +1881,7 @@
       if ($("#peaks-container").children().hasClass(segmentClass.replace(/ /g, "-").toString())) {
         if (segmentTitle !== "default" && segmentTitle !== "Singing") {
           div.style.top = "0px";
+          div.style.height = "160px";
           $("#peaks-container").append(div);
         } else {
           $("#annotation-div").children().each(function (index, value) {
@@ -1894,6 +1895,7 @@
         }
       } else if (segmentTitle !== "default" && segmentTitle !== "Singing") {
         div.style.top = "0px";
+        div.style.height = "160px";
         $("#peaks-container").append(div);
       }
       else {
