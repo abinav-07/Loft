@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>HR Register</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/css/hrLogin.css">
+  <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+  <style>
+    #login-for{
+      margin: 1em;
+      padding: 0.4em;
+      border-radius: 10px;
+      font-family: monospace;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+	<div class="register-page">
+  	<div class="form">
+      <form action="/register-hr" method="POST" class="register-form">        
+        
+        <input id="email" name="email" type="text" placeholder="Email" required/>
+        <input id="password" name="password" type="password" placeholder="password" required/>
+        <button type="submit" id="hr-register-button">Register</button>
+        {{!-- <span id="wrong-input" style="color:red"></span>         --}}
+      </form>
+      <a href="/hr-login-form"><button type="button" style="margin-top: 20px;">Login</button></a>
+    </div>
+  </div>  
+</body>
+<script>
+</script>
+</html>

@@ -2340,7 +2340,7 @@
             annotationType,
             segmentStart: newStartTime,
             segmentEnd: newEndTime,
-            annotationText,
+            annotationText:annotationText.replace("'", "''"),
             //user_id,
             audio_id: audio_id
           }
@@ -2351,7 +2351,7 @@
             annotationType,
             segmentStart,
             segmentEnd,
-            annotationText,
+            annotationText:annotationText.replace("'", "''"),
             //user_id,
             audio_id: audio_id
           }
@@ -2362,12 +2362,13 @@
         //console.log(checkOverlappingDiv(speakerName, newStartTime, newEndTime));
         if (speakerName.length > 0 && hundredMillisecSegmentCheck && !segmentEndingTimeMoreThanStartingTime && spellCheckSpeakerName(speakerName) && !checkOverlappingDiv(speakerName, newStartTime, newEndTime)) {
           //console.log("Update vairako");
+          console.log(JSON.stringify(params));
           $.ajax({
             method: "POST",
             url: "/update-actual-database",
-            data: params,
+            data: (params),
             success: function () {
-              //console.log("Updated");
+              console.log("Updated");
 
             }
           })

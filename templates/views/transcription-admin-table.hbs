@@ -87,6 +87,7 @@
 </style>
 
 <body>
+    <button id="logOutAdmin" style="float: right; padding:5px; border-radius:10%">Log Out</button>
     <table id="users_table">
         <thead>
             <th>Name</th>
@@ -94,7 +95,9 @@
             <th>Start Time</th>
             <th>End Time</th>
             <th>Score</th>
-            <th>Status <span id="export-work" style="display: none;">&emsp; &emsp;<button id="export-button">EXPORT</button></span></th>
+            <th>Status 
+                {{!-- <span id="export-work" style="display: none;">&emsp; &emsp;<button id="export-button">EXPORT</button></span> --}}
+            </th>
         </thead>
         <tbody>
         </tbody>
@@ -111,6 +114,12 @@
 <script>
 
     $(document).ready(function () {
+
+                //Button To Log Out From Table
+        $("#logOutAdmin").on("click",function(){
+            window.location.href= `${new URL(window.location).origin}/admin-login-form`;  
+        });
+
         function recreatingHRTable() {
             $.ajax({
                 method: "POST",
@@ -165,12 +174,28 @@
                         dom: 'Bfrtip',
                         buttons: [{
                             extend: 'excel',
+                            filename:'transcription',
+                            title:"",
                             text: 'Export to excel',
                             exportOptions: {
-                                columns: [0, 1, 2, 3,4],
+                                columns: [0, 1, 2, 3,4,5],
                                 modifier: {
                                     order: 'current',
                                     page: 'all'
+                                },
+                                format: {
+                                    body:function(data,row,col,node){
+                                        if(col==5){
+                                            return table
+                                                    .cell({row:row,column:col})
+                                                    .nodes()
+                                                    .to$()
+                                                    .find(':selected')
+                                                    .text()
+                                        }else{
+                                            return data;
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -217,14 +242,14 @@
         function confirmButton(userId) {
             $(`button.${userId}`).show();
             //On Confirm Click
-            $(`button.${userId}`).on("click", () => {
+            $(`button.${userId}`).on("click",async() => {
                 var changedPassFailValue = $(`select.${userId}`).val();
                 params = {
                     userId,
                     changedPassFailValue
                 }
                 
-                $.ajax({
+                await $.ajax({
                     method: "POST",
                     url: "/confirm-pass-fail-hr-review",
                     data: params,
@@ -328,37 +353,13 @@
                 return null;
                
             } else {
-                var time = new Date(datetime);
+                   var time = new Date(datetime);
                 var time_in_nepal = time.toLocaleString("en-US", {
-                    timeZone: "Asia/Kathmandu"
+                    timeZone: "Asia/Kathmandu",
+                    hour12:false
                 });
+                return time_in_nepal;
 
-                var split = time_in_nepal.split(",");
-                var split2 = split[0].split("/");
-                var dd = String(split2[1]).padStart(2, "0");
-                var mm = String(split2[0]).padStart(2, "0"); //January is 0!
-                var yyyy = String(split2[2]);
-                var pm = false;
-                if (split[1].match("PM")) {
-                    pm = true;
-                    var time = split[1]
-                        .trim()
-                        .replace(" PM", "")
-                        .split(":");
-                } else {
-                    var time = split[1]
-                        .trim()
-                        .replace(" AM", "")
-                        .split(":");
-                }
-                var new_time =
-                    String(pm ? parseInt(time[0]) + 12 : time[0]) +
-                    ":" +
-                    time[1] +
-                    ":" +
-                    time[2];
-                var now = yyyy + "-" + mm + "-" + dd + "," + new_time;
-                return now;
             }
         }
 

@@ -5,6 +5,8 @@ const express = require("express");
 const async = require("async");
 const fs = require("fs");
 const path = require("path");
+const bcrypt = require("bcrypt");
+const passport = require("passport");
 const decode = require("audio-decode");
 const diffCheck = require("diff");
 var AudioContext = require("web-audio-api").AudioContext,
@@ -12,7 +14,11 @@ var AudioContext = require("web-audio-api").AudioContext,
 var router = express.Router();
 const bodyParser = require("body-parser");
 const session = require("express-session");
+const flash = require("express-flash");
 // var WaveSurfer=require("wavesurfer.js")
+
+const intializePassport = require("./passport-config");
+intializePassport(passport);
 
 
 var newData = "";
@@ -38,6 +44,12 @@ app.use(
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.set("views", viewPath);
+app.use(flash());
+
+//Setting passport
+app.use(passport.initialize())
+app.use(passport.session())
+
 hbs.registerPartials(partialPaths);
 
 //Database Connection
@@ -45,7 +57,7 @@ const pool = require("./config/pool");
 pool.getConnection((err, connect) => {
     if (err) {
         console.error(err);
-        res.status(400).send("error in get /admin-review-table-datas query.");
+        //res.status(400).send("error in get /admin-review-table-datas query.");
     };
     console.log("Connected");
     connect.release();
@@ -74,7 +86,7 @@ app.get("/", (req, res) => {
     //console.log(req.query);
 
     if (typeof req.session.user_id == "undefined") {
-        if (req.query.user_id != "undefined") {
+        if (typeof req.query.user_id != "undefined") {
             var check_sql = `SELECT * FROM users_audio WHERE user_id IN (
                 SELECT user_id from users WHERE web_app_id='${req.query.user_id}'                
             )          
@@ -86,12 +98,14 @@ app.get("/", (req, res) => {
                     pool.query(sql, (err, result) => {
                         if (err) {
                             console.error(err);
-                            res.status(400).send("error in get / query.");
-                        };
-                        req.session.user_id = result.insertId;
-                        req.session.user = req.query.full_name;
-                        //   res.redirect("/review");
-                        res.redirect(`/transcribe?user_id=${req.session.user_id}&audio_id=${req.query.audio_id}`);
+                            res.status(400).send("Please Use Webapp to access this URL.");
+                        } else {
+                            req.session.user_id = result.insertId;
+                            req.session.user = req.query.full_name;
+                            //   res.redirect("/review");
+                            res.redirect(`/transcribe?user_id=${req.session.user_id}&audio_id=${req.query.audio_id}`);
+                        }
+
                     });
                 } else {
                     if (result[0].status != "RETRY") {
@@ -306,7 +320,7 @@ app.get("/transcription", async(req, res) => {
     await pool.query(check_actual_data_in_transcription, (err, result) => {
         if (err) {
             console.error(err);
-            res.res.status(400).send("error in get /transcription-check-actual query")
+            res.status(400).send("error in get /transcription-check-actual query")
         }
         if (result.length == 0) {
             //Inserting actual data from actual table to transcription table
@@ -862,20 +876,100 @@ app.post("/top-speaker-control-save-button-for-actual", (req, res) => {
 });
 
 //Routes Below Are For HR Team 
+app.get("/hr-register-form", (req, res) => {
+    res.render("hr-register");
+});
+
+const user = [];
+
+//Register hr reviewers
+app.post("/register-hr", async(req, res) => {
+    try {
+        const hashedPassword = await bcrypt.hash(req.body.password, 10);
+        let checkSql = `SELECT * FROM reviewers 
+                    WHERE reviewer_email='${req.body.email}'`
+        pool.query(checkSql, (err, result) => {
+            if (result.length > 0) {
+                console.log("Already Registered");
+                res.redirect('/hr-login-form')
+            } else {
+                let sql = `
+                        INSERT INTO reviewers(reviewer_email,reviewer_password)
+                        VALUES ("${req.body.email}","${hashedPassword}")        
+                        `
+                console.log(sql);
+                pool.query(sql, (err, result2) => {
+                    if (err) {
+                        console.error(err);
+                        res.status(400).send("error in post /register-hr.");
+                    };
+
+                    res.redirect('/hr-login-form');
+
+                });
+            }
+        })
+
+
+        // user.push({
+        //     id: Date.now().toString(),
+        //     email: req.body.email,
+        //     password: hashedPassword
+        // })
+
+        //window.location.href = `${new URL(window.location).origin}/hr-review-table`;
+    } catch {
+        res.redirect("/hr-login-form")
+    }
+
+});
+
+
 app.get("/hr-login-form", (req, res) => {
+    // console.log(req.flash('message'));
     res.render("hrLogin");
 });
+//New Passport Post Methods
+app.post("/hr-login", passport.authenticate('local', {
+    failureRedirect: "/hr-login-form"
+}), (req, res) => {
 
-app.get("/hr-review-table", (req, res) => {
-    res.render("hr_reviewing_table");
+    if (req.body.loginFor == "training") {
+        res.redirect("/training-hr-review-table");
+        console.log("here");
+
+    } else if (req.body.loginFor == "sample-test") {
+        res.redirect("/hr-review-table");
+    } else if (req.body.loginFor == "transcription") {
+        res.redirect("/transcription-hr-review-table");
+    }
 });
 
-app.get("/training-hr-review-table", (req, res) => {
-    res.render("training_hr_table")
+app.get("/hr-logout", function(req, res) {
+    req.logout();
+    res.redirect("/hr-login-form");
+})
+
+app.get("/hr-review-table", checkNotAuthenticated, (req, res) => {
+    res.render("hr_reviewing_table", {
+        // reviewerId: req.session["passport"]["user"]
+        reviewerId: req.user.id,
+        reviewerEmail: req.user.reviewer_email
+    });
 });
 
-app.get("/transcription-hr-review-table", (req, res) => {
-    res.render("transcription_hr_table")
+app.get("/training-hr-review-table", checkNotAuthenticated, (req, res) => {
+    res.render("training_hr_table", {
+        reviewerId: req.user.id,
+        reviewerEmail: req.user.reviewer_email
+    })
+});
+
+app.get("/transcription-hr-review-table", checkNotAuthenticated, (req, res) => {
+    res.render("transcription_hr_table", {
+        reviewerId: req.user.id,
+        reviewerEmail: req.user.reviewer_email
+    })
 });
 
 //get data from users table to hr-review table
@@ -888,7 +982,7 @@ app.post("/hr-review-table-datas", (req, res) => {
             ON users_audio.user_id = users.user_id
             JOIN audio
             ON users_audio.audio_id = audio.audio_id
-            WHERE users_audio.status IS NULL OR users_audio.status = 'RETRY'
+            WHERE (users_audio.status IS NULL OR users_audio.status = 'RETRY')
             AND audio.is_training = "FALSE"
             ORDER BY users_audio.start_time DESC`;
 
@@ -991,7 +1085,7 @@ app.post("/hr-click-get-user-id", (req, res) => {
         };
         res.send(result);
     })
-})
+});
 
 app.post("/get-web-app-id-for-hr", (req, res) => {
     let sql = `
@@ -1051,7 +1145,7 @@ app.post("/admin-review-table-datas", (req, res) => {
                         ON users_audio.user_id = users.user_id
                         JOIN audio
                         ON users_audio.audio_id = audio.audio_id
-                        WHERE users_audio.status IS NOT NULL AND users_audio.status NOT LIKE 'RETRY%'
+                        WHERE (users_audio.status IS NOT NULL AND users_audio.status NOT LIKE 'RETRY%')
                         AND audio.is_training="FALSE"
                         ORDER BY users_audio.start_time DESC `;
 
@@ -1076,7 +1170,7 @@ app.post("/transcription-admin-review-table-datas", (req, res) => {
     users_audio.user_id = users.user_id
     AND users_audio.audio_id = audio.audio_id   
     AND users_audio.type="transcription"
-    AND users_audio.status IS NOT NULL AND users_audio.status NOT LIKE 'RETRY%'    
+    AND (users_audio.status IS NOT NULL AND users_audio.status NOT LIKE 'RETRY%')    
     ORDER BY users_audio.start_time DESC`;
 
     pool.query(sql, (err, result) => {
@@ -1129,7 +1223,50 @@ app.post("/confirm-pass-fail-admin-review", (req, res) => {
         };
         res.send(result);
     })
-})
+});
+
+//Route for test logs
+app.post("/save-hr-test-logs", (req, res) => {
+    let sql = `INSERT INTO reviewer_logs(reviewer_id,users_name,users_status,status_changed_time,type)
+            VALUES ("${req.body.reviewerId}","${req.body.user_name}","${req.body.user_status}",Now(),"${req.body.type}")
+    `;
+    pool.query(sql, (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(400).send("error in get /hr-save-test-logs");
+        };
+        res.send(result);
+    })
+});
+
+//Route for training logs
+app.post("/save-hr-training-logs", (req, res) => {
+    let sql = `INSERT INTO reviewer_logs(reviewer_id,users_name,users_status,status_changed_time,type)
+            VALUES ("${req.body.reviewerId}","${req.body.user_name}","${req.body.user_status}",Now(),"${req.body.type}")
+    `;
+    pool.query(sql, (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(400).send("error in get /hr-save-training-logs");
+        };
+        res.send(result);
+    })
+});
+
+//Route for transcription logs
+app.post("/save-hr-transcription-logs", (req, res) => {
+    let sql = `INSERT INTO reviewer_logs(reviewer_id,users_name,users_status,status_changed_time,type)
+            VALUES ("${req.body.reviewerId}","${req.body.user_name}","${req.body.user_status}",Now(),"${req.body.type}")
+    `;
+    pool.query(sql, (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(400).send("error in get /hr-save-transcription-logs");
+        };
+        res.send(result);
+    })
+});
+
 
 app.post("/get-web-app-id-for-admin", (req, res) => {
     let sql = `
@@ -1162,6 +1299,15 @@ app.post("/admin-click-get-user-id", (req, res) => {
 })
 
 //admin server side end
+
+//checking authentication
+function checkNotAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next();
+    }
+
+    return res.redirect("/hr-login-form")
+}
 
 app.listen(3000, () => {
     console.log("Listening on 3000");
