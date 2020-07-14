@@ -16,7 +16,8 @@
   <meta charset="utf-8">
   <title></title>
   <link rel="stylesheet" type="text/css" href="/css/styles.css">
-  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <style>
     body {
       overflow: hidden;
@@ -355,6 +356,7 @@
     }
 
     #transcripted_text_paragraph {
+      display: none;
       position: relative;
       width: 320px;
       height: 150px;
@@ -362,7 +364,6 @@
       overflow: auto;
       margin: 10px;
       border-radius: 15px;
-      display: flex;
       flex-direction: row;
       justify-content: space-between;
       padding: 10px;
@@ -1502,8 +1503,12 @@
       //getting actual data from actual table in database   
       getPreviousCreatedSegments();
 
-      //disable unnecessary elemeats for transcription  
-      disableForTranscription()
+      const params = new URLSearchParams(window.location.search);
+      if (!(params.has('linguist_reviewer_test') && params.get('linguist_reviewer_test') == "true")) {
+
+        //disable unnecessary elemeats for transcription  
+        disableForTranscription()
+      }
 
       /*
       //ajax to create previously created segments by user on spectrum load
@@ -1823,23 +1828,23 @@
     spectrum.on("seek", function () {
       //Displaying Current Segments Contents in our Annotation Box      
       //Var to check whether the user has filled segments
-      var checkTextsForSubmit=true;
+      var checkTextsForSubmit = true;
       if (!updateTopDivSpeaker) {
         displayCurrentContents();
       }
       //Displaying submit button only if audio is played to last and 10 segements are created    
-      if ((spectrum.getCurrentTime() > (spectrum.getDuration() - 0.1)) && ($("#peaks-container").children("div").length > 10) && is_submitted=="FALSE") {
-        
-        for(var i=1;i<$("#peaks-container").children("div").length;i++){
-         
-          if($("#peaks-container").children("div")[i].innerText===""){
-             console.log("False"); 
-            checkTextsForSubmit=false;
-          }          
-        }        
-          if(checkTextsForSubmit){
-            $("#submit-button").show();
-          }               
+      if ((spectrum.getCurrentTime() > (spectrum.getDuration() - 0.1)) && ($("#peaks-container").children("div").length > 10) && is_submitted == "FALSE") {
+
+        for (var i = 1; i < $("#peaks-container").children("div").length; i++) {
+
+          if ($("#peaks-container").children("div")[i].innerText === "") {
+            console.log("False");
+            checkTextsForSubmit = false;
+          }
+        }
+        if (checkTextsForSubmit) {
+          $("#submit-button").show();
+        }
       }
     });
 
@@ -3027,8 +3032,8 @@
       Object.keys(spectrum.regions.list).forEach(function (region) {
         var previousSpeakerStart = spectrum.regions.list[region].start;
         var previousSpeakerEnd = spectrum.regions.list[region].end;
-        
-        if ((segmentStart > previousSpeakerStart && segmentStart < previousSpeakerEnd) || 
+
+        if ((segmentStart > previousSpeakerStart && segmentStart < previousSpeakerEnd) ||
           (segmentEnd > previousSpeakerStart && segmentEnd < previousSpeakerEnd) || (previousSpeakerStart > segmentStart && previousSpeakerStart < segmentEnd)) {
           //console.log("herer1")
           var previousSpeakerName = document.getElementById(region).className;
@@ -3253,7 +3258,7 @@
     //Function to Display Errors and hamburger icons
     function displayHamburger() {
       $("#errorToggle").show();
-      
+
       $("#total-errors").text(`Your Overall Score: ${scoreInPercentage}%`);
     }//display Hamburger End
 
@@ -3297,7 +3302,7 @@
         method: "POST",
         url: "/route-for-diff-check",
         data: params,
-        async:false,
+        async: false,
         success: function (response) {
           diffCheckSubmit = true;
           console.log("Diff Checker Success");
