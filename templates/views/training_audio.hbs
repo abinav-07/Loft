@@ -722,6 +722,12 @@
 
     }
 
+    #display-training-segments{
+      margin-top: 4rem;
+      margin-left: 1rem;
+      display: none;
+    }
+
     /* Chrome, Safari, Edge, Opera */
     input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button {
@@ -798,6 +804,14 @@
       </ul>
     </div>
     {{!-- Hambuger Work Finish --}}
+    {{!-- Training Segment Display Button --}}
+    <div id="display-training-segments">
+      <label>Display Correct Segments: </label>
+      <select id="select-display-training-segments">
+        <option value="on" selected="selected">On</option>
+        <option value="off">Off</option>
+      </select>
+    </div>
   </div>
   <div id="top-div-for-scrolling-enabling">
   </div>
@@ -1613,6 +1627,9 @@
                 if (is_submitted == "TRUE") {
                   console.log("Euta log");
                   disableAllInterfaceOnSubmit();
+
+                  $("#display-training-segments").show();//Display Select Tag For Correct Segments
+
                   ajaxReq();//Ajax Request to check correct incorrect segment
                   //displayHamburger();
                   $("#submit-button").hide();
@@ -3190,6 +3207,31 @@
         });
       }
     }//ajaxReq function end
+
+  $("#select-display-training-segments").on("change",function(){
+    displayCorrectSegment();
+  });
+
+    //Display Correct Training Segments 
+    function displayCorrectSegment(){
+      var selected=$("#select-display-training-segments").val();
+      console.log(selected);
+      if(selected=="on"){
+        $("#peaks-container").children().each(function (index, value) {
+          if (this.getAttribute("actual") == "true") {
+            $(this).show();
+          }
+          console.log(this.getAttribute("actual"));
+        });
+      }else if(selected=="off"){
+       $("#peaks-container").children().each(function (index, value) {
+          if (this.getAttribute("actual") == "true" ) {
+            $(this).hide();
+          }
+          console.log(this.getAttribute("actual"));
+        });
+      }
+    }
 
     //Function to Display Errors and hamburger icons
     function displayHamburger() {

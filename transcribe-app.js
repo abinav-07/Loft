@@ -343,6 +343,34 @@ app.get("/transcription", async(req, res) => {
 });
 //Route for transcription end
 
+//Route for transcription review
+app.get("/transcription-review", async(req, res) => {
+    var audio_url = "";
+    var audioId = req.query.audio_id;
+    if (req.query.audio_id == undefined) {
+        audioId = 4;
+        audio_url = "cryophile.wav";
+    } else {
+        audioId = req.query.audio_id;
+        var get_audio_url = `SELECT * FROM audio WHERE audio_id='${req.query.audio_id}'`
+        await pool.query(get_audio_url, (err, result) => {
+            if (err) {
+                console.error(err);
+                res.status(400).send("error in get /transcription query.");
+            };
+            audio_url = result[0]["audio_url"];
+            //console.log(audio_url);
+            res.render("transcription-review", {
+                user_id: req.query.user_id,
+                audio_url: audio_url,
+                audio_id: req.query.audio_id
+            });
+            console.log(result);
+        })
+    }
+});
+
+
 app.post("/route-for-diff-check", (req, res) => {
     var get_text_sql = `SELECT segment_id,annotation_text,actual_text FROM transcription 
                       WHERE user_id=${req.body.user_id} AND audio_id=${req.body.audio_id}`;
