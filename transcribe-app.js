@@ -372,8 +372,9 @@ app.get("/transcription-review", async(req, res) => {
 
 
 app.post("/route-for-diff-check", (req, res) => {
-    var get_text_sql = `SELECT segment_id,annotation_text,actual_text FROM transcription 
+    var get_text_sql = `SELECT segment_id,div_className,segment_start,segment_end,annotation_text,actual_text FROM transcription 
                       WHERE user_id=${req.body.user_id} AND audio_id=${req.body.audio_id}`;
+    console.log(get_text_sql);
     pool.query(get_text_sql, (err, result) => {
         if (err) {
             console.error(err);
@@ -1103,7 +1104,7 @@ app.post("/confirm-pass-fail-hr-review", (req, res) => {
 
 app.post("/hr-click-get-user-id", (req, res) => {
     let sql = `
-                        Select users_audio.user_id, users_audio.audio_id FROM users_audio
+                        Select users_audio.user_id, users_audio.audio_id, users_audio.is_submitted FROM users_audio
                         WHERE users_audio_id = "${req.body.clicked_user_id}"
                         `;
     pool.query(sql, (err, result) => {

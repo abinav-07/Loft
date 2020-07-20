@@ -1636,8 +1636,8 @@
                   console.log("Euta log");
                   disableAllInterfaceOnSubmit();
                   //ajaxReq();//Ajax Request to check correct incorrect segment
-                  diffCheck();
-                  displayHamburger();
+                  //diffCheck();
+                  //displayHamburger();
                   $("#submit-button").hide();
                   $("#profile-link-button").show();
                 }
@@ -3281,14 +3281,14 @@
 
     //Function to call on submit click
     $("#submit-button").on("click", function () {
-      diffCheck();
+      //diffCheck();
       disableAllInterfaceOnSubmit();
       //submitClick();      
       //ajaxReq();
       displayHamburger();
       saveScores();
-      //$("#submit-button").hide();
-      //$("#profile-link-button").show();
+      $("#submit-button").hide();
+      $("#profile-link-button").show();
     });//Submit Button Click Function End
 
     //function for diffCheck 
