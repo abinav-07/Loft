@@ -1836,11 +1836,14 @@
       if ((spectrum.getCurrentTime() > (spectrum.getDuration() - 0.1)) && ($("#peaks-container").children("div").length > 10) && is_submitted == "FALSE") {
 
         for (var i = 1; i < $("#peaks-container").children("div").length; i++) {
-
-          if ($("#peaks-container").children("div")[i].innerText === "") {
+          console.log($("#peaks-container").children("div")[i].title);
+          if($("#peaks-container").children("div")[i].title=="default" || $("#peaks-container").children("div")[i].title=="Singing"){
+            if ($("#peaks-container").children("div")[i].innerText === "")  {
             console.log("False");
             checkTextsForSubmit = false;
           }
+          }
+          
         }
         if (checkTextsForSubmit) {
           $("#submit-button").show();
@@ -2120,22 +2123,21 @@
           $(".annotation-editHeading").css("backgroundColor", divColor);
           if (segmentType !== "default" && segmentType !== "Singing") {
             document.getElementById("transcription-area").style.display = "none";
-            document.getElementById("transcripted_text_paragraph").style.display = "none";
             document.getElementById("speaker-name").style.display = "none";
             //$("#annotation-box").css("height", 250 + "px");
             document.getElementById("annotation-type").value = segmentType;
             document.getElementById("speaker-name").value = "";
             document.getElementById("transcription-area").value = "";
           } else {
-            //document.getElementById("transcription-area").style.display = "block";
+            document.getElementById("transcription-area").style.display = "block";
             document.getElementById("speaker-name").style.display = "block";
             //$("#annotation-box").css("height", 32 + "rem");
             document.getElementById("annotation-type").value = segmentType;
             document.getElementById("speaker-name").value = segmentSpeaker;
-            //document.getElementById("transcription-area").value = segmentText;
+            document.getElementById("transcription-area").value = segmentText;
 
             //Checking if submitted or not
-            if (diffCheckSubmit) {
+           /* if (diffCheckSubmit) {
               if (document.getElementById(clickedId).querySelector("p").childNodes.length > 0) {
                 //Storing values from segment
                 var p1_child_text = document.getElementById(clickedId).querySelector("p").childNodes[0].innerHTML;
@@ -2165,7 +2167,7 @@
                 //Display Normal Text
                 document.getElementById("transcription-area").value = segmentText;
               }
-            }
+            }*/
           }
         }
       }
