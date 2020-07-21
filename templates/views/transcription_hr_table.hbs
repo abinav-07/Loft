@@ -112,12 +112,13 @@
 <script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.print.min.js"></script>
 
 <script>
-
+    var reviewerId={{reviewerId}};
+    var reviewerEmail=`{{reviewerEmail}}`;
     $(document).ready(function () {
 
           //Button To Log Out From Table
         $("#logOutHR").on("click",function(){
-            window.location.href= `${new URL(window.location).origin}/hr-login-form`;  
+            window.location.href= `${new URL(window.location).origin}/hr-logout`;  
         });
 
         function recreatingHRTable() {
@@ -130,7 +131,7 @@
                         
                         if (users_data[i].status == "PASS") {
                             $("#users_table tbody").append(
-                                `<tr data-user-id="${users_data[i].users_audio_id}">
+                                `<tr data-user-id="${users_data[i].users_audio_id}" data-user-name="${users_data[i].name}">
                                 <td class="user-name-class">${users_data[i].name}</td>  
                                 <td>${users_data[i].audio_name}</td>                
                                 <td>${getNepaliTimeNow(users_data[i].start_time)}</td>
@@ -142,7 +143,7 @@
                             </tr>`);
                         } else if (users_data[i].status == "FAIL") {
                             $("#users_table tbody").append(
-                                `<tr data-user-id="${users_data[i].users_audio_id}">
+                                `<tr data-user-id="${users_data[i].users_audio_id}" data-user-name="${users_data[i].name}">
                                 <td class="user-name-class">${users_data[i].name}</td>
                                 <td>${users_data[i].audio_name}</td>                
                                  <td>${getNepaliTimeNow(users_data[i].start_time)}</td>
@@ -154,7 +155,7 @@
                             </tr>`);
                         } else {
                             $("#users_table tbody").append(
-                                `<tr data-user-id="${users_data[i].users_audio_id}">
+                                `<tr data-user-id="${users_data[i].users_audio_id}" data-user-name="${users_data[i].name}">
                                 <td class="user-name-class">${users_data[i].name}</td>
                                 <td>${users_data[i].audio_name}</td>                
                                  <td>${getNepaliTimeNow(users_data[i].start_time)}</td>
@@ -221,12 +222,20 @@
                 url: "/hr-click-get-user-id",
                 data: params,
                 success: function (response) {
-                   
-                    window.open(
+                    console.log(response[0]["is_submitted"]);
+                   if(response[0]["is_submitted"]=="TRUE"){
+                       window.open(
+                        //`http://localhost:3000/transcribe?user_id=${clicked_user_id}`,
+                        `${new URL(window.location).origin}/transcription-review?user_id=${response[0]["user_id"]}&audio_id=${response[0]["audio_id"]}`,
+                        '_blank' //New Tab
+                    );
+                   }else{
+                       window.open(
                         //`http://localhost:3000/transcribe?user_id=${clicked_user_id}`,
                         `${new URL(window.location).origin}/transcription?user_id=${response[0]["user_id"]}&audio_id=${response[0]["audio_id"]}`,
                         '_blank' //New Tab
                     );
+                   }                      
                 }
             })
 
@@ -241,6 +250,7 @@
         //Displaying confirm button
         function confirmButton(userId) {
             $(`button.${userId}`).show();
+            var clickedUserName = event.target.closest("tr").getAttribute("data-user-name");//This is equal to user name   
             //On Confirm Click
             $(`button.${userId}`).on("click", async() => {
                 var changedPassFailValue = $(`select.${userId}`).val();
@@ -257,7 +267,18 @@
                         $(`button.${userId}`).hide();
                         console.log("Pass Fail Saved");
                        // console.log(userId);
+
                         $.ajax({
+                            method:"POST",
+                            url:"/save-hr-transcription-logs",
+                            data:{
+                                reviewerId,
+                                user_name:clickedUserName,
+                                user_status:$(`select.${userId}`).val(),
+                                type:"transcription"
+                                },
+                            success:function(){
+                                $.ajax({
                             method: "POST",
                             url: "/get-web-app-id-for-hr",
                             data: { userId },
@@ -288,6 +309,9 @@
                                 });
                             }
                         })
+                            }
+                        });
+                        
 
                         
 

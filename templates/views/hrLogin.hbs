@@ -5,8 +5,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="/css/hrLogin.css">
+  <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
   <style>
-    #login-for{
+    #loginFor{
       margin: 1em;
       padding: 0.4em;
       border-radius: 10px;
@@ -16,24 +17,37 @@
   </style>
 </head>
 <body>
+  
 	<div class="login-page">
   	<div class="form">
-      <form class="login-form">        
-        <select id="login-for">
+      <form action="/hr-login" method="POST" class="login-form">        
+        <select id="loginFor" name="loginFor">
           <option value="training">Training</option>
           <option value="sample-test">Sample Test</option>
           <option value="transcription">Transcription</option>
         </select>
-        <input id="email" type="text" placeholder="Email"/>
-        <input id="password" type="password" placeholder="password"/>
-        <button id="hr-login-button">login</button>
-        <span id="wrong-input" style="color:red"></span>        
+        
+      
+    
+        <input id="email" name="email" type="text" placeholder="Email" required/>
+        <input id="password" name="password" type="password" placeholder="password" required/>
+        <button type="submit" id="hr-login-button">login</button>
+        <button type="button" id="register-page-button" style="margin-top: 5px;">Register</button>
+        <span id="wrong-input" style="color:red">
+          {{!-- {{message}} --}}
+          </span>        
       </form>
     </div>
   </div>  
 </body>
 <script>
+  
+  
 window.onload=function(){
+  $("#register-page-button").on("click",function(){
+      window.location.href= `${new URL(window.location).origin}/hr-register-form`;  
+  })
+  /*
   var ourEmail="test123@yahoo.com";
   var ourPassword="78y}4:4UF6yL9..{";
 
@@ -42,13 +56,29 @@ window.onload=function(){
     var inputEmail=document.getElementById("email").value;
     var inputPassword=document.getElementById("password").value;
     
-    if(inputEmail==ourEmail && inputPassword==ourPassword){
+    if(inputEmail!="" && inputPassword!=""){
       var selectedLoginFor=document.getElementById("login-for").value;
       
       if(selectedLoginFor=="training"){
-        window.location.href= `${new URL(window.location).origin}/training-hr-review-table`;  
+        $.ajax({
+          method:"POST",
+          url:"/hr-training-login",
+          data:{email:inputEmail,password:inputPassword},
+          success:function(){
+
+          }
+        });
+        //window.location.href= `${new URL(window.location).origin}/training-hr-review-table`;  
       }else if(selectedLoginFor=="sample-test"){
-        window.location.href= `${new URL(window.location).origin}/hr-review-table`;
+        $.ajax({
+          method:"POST",
+          url:"/hr-test-login",
+          data:{email:inputEmail,password:inputPassword},
+          success:function(){
+
+          }
+        });
+        //window.location.href= `${new URL(window.location).origin}/hr-review-table`;
       }else if(selectedLoginFor=="transcription"){
         window.location.href= `${new URL(window.location).origin}/transcription-hr-review-table`;
       }      
@@ -57,7 +87,7 @@ window.onload=function(){
     }else{
       document.getElementById("wrong-input").innerText="Incorrect";
     }
-  });
+  });*/
 }
 </script>
 </html>
