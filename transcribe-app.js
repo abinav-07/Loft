@@ -615,6 +615,7 @@ app.post("/get-submitted-or-not", (req, res) => {
             WHERE
             user_id = '${req.body.user_id}'
             AND audio_id = '${req.body.audio_id}'
+            AND type="segmentation"
             `;
     console.log(sql);
     pool.query(sql, (err, result) => {

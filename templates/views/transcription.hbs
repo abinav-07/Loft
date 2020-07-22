@@ -1888,7 +1888,7 @@
       div.style.background = neededColor;
       div.style.zIndex = zindexLoop + 1;
       p.innerHTML = annotationText;
-      p.style.transform = "translateX(-20%) translateY(25%) rotate(270deg)";
+      /* p.style.transform = "translateX(0%) rotate(270deg)";
       p.style.width = "350px";
       p.style.height = "200px";
       p.style.padding = "5px";
@@ -1897,6 +1897,15 @@
       p.style.display = "flex";
       p.style.flexDirection = "row";
       p.style.justifyContent = "space-between"
+      div.appendChild(p);
+      div.style.position = "absolute"; */
+
+      p.style.transform = "translateX(0%) rotate(270deg)";
+      p.style.width = "200px";
+      p.style.height = "200px";
+      p.style.padding = "5px";
+      p.style.fontSize = "18px";
+      p.style.pointerEvents = "none";
       div.appendChild(p);
       div.style.position = "absolute";
       //div.style.top = "0px";
@@ -1915,7 +1924,9 @@
       if ($("#peaks-container").children().hasClass(segmentClass.replace(/ /g, "-").toString())) {
         if (segmentTitle !== "default" && segmentTitle !== "Singing") {
           div.style.top = "0px";
-          div.style.height = "200px";
+          div.style.height = "180px";
+          p.style.width = "150px";
+          p.style.height = "150px";
           $("#peaks-container").append(div);
 
         } else {
@@ -1923,7 +1934,7 @@
             if (value.className == segmentClass.replace(/ /g, "-")) {
               div.style.background = value.style.backgroundColor;
               div.style.bottom = (leftMargin + leftSpeakerCategoryDivMargin * (index)) + "px";
-              div.style.height = "350px";
+              div.style.height = "250px";
               $("#peaks-container").append(div);
               return false;
             };
@@ -1931,13 +1942,15 @@
         }
       } else if (segmentTitle !== "default" && segmentTitle !== "Singing") {
         div.style.top = "0px";
-        div.style.height = "200px";
+        div.style.height = "180px";
+        p.style.width = "150px";
+        p.style.height = "150px";
         $("#peaks-container").append(div);
       }
       else {
         //var topValue=$("#peaks-container").find("."+segmentClass.replace(" ","-")).position().top;
         div.style.bottom = (leftMargin + leftSpeakerCategoryDivMargin * (($("#annotation-div").children("div").length))) + "px";
-        div.style.height = "350px";
+        div.style.height = "250px";
         $("#peaks-container").append(div);
         topSpeakerDiv(segmentClass, neededColor);
       }

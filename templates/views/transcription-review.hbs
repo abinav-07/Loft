@@ -3337,6 +3337,13 @@
     });//Display Error Menu Close
 
 
+    //Transcription Play Button event listener
+    function transcriptionPlayButton(e){
+        var  transcriptionSegmentStart=$(e).data("id")
+        spectrum.seekTo(transcriptionSegmentStart/spectrum.getDuration());
+        console.log(transcriptionSegmentStart);   
+    }
+
 
     //Function to call on submit click
     $("#submit-button").on("click", function () {
@@ -3392,17 +3399,17 @@
                   replaced_annotation_text = difference.value.replace(regexToReplace, " .").split(" ");
                   replaced_actual_text = difference.value.replace(regexToReplace, " .").split(" ");
                   rightWordsScore += replaced_annotation_text.length;
-                  console.log(replaced_annotation_text);
+                  //console.log(replaced_annotation_text);
 
                   totalWordCount += replaced_actual_text.length;
                 }
-                console.log("Right" + rightWordsScore)
+                //console.log("Right" + rightWordsScore)
 
-                console.log("Total" + totalWordCount);
+                //console.log("Total" + totalWordCount);
 
 
-                console.log(replaced_annotation_text);
-                console.log(actual_text);
+                //console.log(replaced_annotation_text);
+                //console.log(actual_text);
               })
 
               //console.log(document.getElementById(`${transcription_id}`).innerHTML);
@@ -3437,9 +3444,9 @@
                 `
                   <tr style="vertical-align:baseline">
                     <td>
-                      <div class='col'>
-                                  <div style="color:#007bff; padding:10px 0px 10px 0px">
-                                      ${speakerName}<span style="color:black"><i class="fa fa-play" style="font-size:12px;padding:0px 5px 0px 5px" aria-hidden="true"></i>${segmentStartTime} - ${segmentEndTime}</span>
+                      <div class='col' data-id="${response[i]["segment_start"]}" onclick="transcriptionPlayButton(this)">
+                                  <div style="cursor:pointer; color:#007bff; padding:10px 0px 10px 0px">
+                                      ${speakerName}<span style="color:black"><i class="fa fa-play" style=" font-size:12px;padding:0px 5px 0px 5px" aria-hidden="true"></i>${segmentStartTime} - ${segmentEndTime}</span>
                                   </div>
                                   <div style="padding-bottom:5px">
                                     ${actual_text}
@@ -3448,8 +3455,8 @@
                       
                     </td>
                     <td>
-                      <div class='col'>
-                                  <div style="color:#007bff;  padding:10px 0px 10px 0px">
+                      <div class='col' data-id="${response[i]["segment_start"]}" onclick="transcriptionPlayButton(this)">
+                                  <div style="cursor:pointer; color:#007bff;  padding:10px 0px 10px 0px">
                                       ${speakerName} <span style="color:black"><i class="fa fa-play" style="font-size:12px;padding:0px 3px 0px 5px" aria-hidden="true"></i>${segmentStartTime} - ${segmentEndTime}</span>
                                   </div>
                                   <div style="padding-bottom:5px">
