@@ -85,47 +85,86 @@ app.get("/", (req, res) => {
 
     //console.log(req.query);
 
-    if (typeof req.session.user_id == "undefined") {
-        if (typeof req.query.user_id != "undefined") {
-            var check_sql = `SELECT * FROM users_audio WHERE user_id IN (
-                SELECT user_id from users WHERE web_app_id='${req.query.user_id}'                
-            )          
-                AND audio_id = '${req.query.audio_id}'`;
+    // if (typeof req.session.user_id == "undefined") {
+    if (typeof req.query.user_id != "undefined") {
+        var check_sql;
+        if (req.query.type == "segmentation" || typeof req.query.type == "undefined") {
+            check_sql = `SELECT * FROM users_audio WHERE user_id IN (
+                    SELECT user_id from users WHERE web_app_id='${req.query.user_id}'                
+                )          
+                    AND audio_id = '${req.query.audio_id}' AND users_audio.type= 'segmentation' `;
+        } else if (req.query.type == "transcription") {
+            check_sql = `SELECT * FROM users_audio WHERE user_id IN (
+                    SELECT user_id from users WHERE web_app_id='${req.query.user_id}'                
+                )          
+                    AND audio_id = '${req.query.audio_id}' AND users_audio.type= '${req.query.type}' `;
+        }
 
-            pool.query(check_sql, (err, result) => {
-                if (result.length == 0) {
-                    var sql = `INSERT INTO users(name, email, web_app_id) VALUES('${req.query.full_name}', '${req.query.email}', '${req.query.user_id}')`;
-                    pool.query(sql, (err, result) => {
-                        if (err) {
-                            console.error(err);
-                            res.status(400).send("Please Use Webapp to access this URL.");
-                        } else {
-                            req.session.user_id = result.insertId;
-                            req.session.user = req.query.full_name;
-                            //   res.redirect("/review");
-                            res.redirect(`/transcribe?user_id=${req.session.user_id}&audio_id=${req.query.audio_id}`);
+
+        pool.query(check_sql, (err, result) => {
+            if (result.length == 0) {
+                var sql = `INSERT INTO users(name, email, web_app_id) VALUES('${req.query.full_name}', '${req.query.email}', '${req.query.user_id}')`;
+                pool.query(sql, (err, result) => {
+                    if (err) {
+                        console.error(err);
+                        res.status(400).send("Please Use Webapp to access this URL.");
+                    } else {
+                        req.session.user_id = result.insertId;
+                        req.session.user = req.query.full_name;
+                        if (req.query.type == "segmentation" || req.query.type == "undefined") {
+                            res.redirect(`/transcribe?user_id=${result.insertId}&audio_id=${req.query.audio_id}`);
+                        } else if (req.query.type == "transcription") {
+                            var getAudioIdSQL = `SELECT * FROM audio WHERE Language_id=${req.query.language_id}`;
+                            pool.query(getAudioIdSQL, (err, result1) => {
+                                if (err) {
+                                    console.error(err);
+                                    res.status(400).send("Error in Language Id.");
+                                } else {
+                                    res.redirect(`/transcription?user_id=${ result.insertId}&audio_id=${result1[0]["audio_id"]}`);
+                                }
+                            });
                         }
 
-                    });
-                } else {
-                    if (result[0].status != "RETRY") {
+                        //   res.redirect("/review");
+
+                    }
+
+                });
+            } else {
+                if (result[0].status != "RETRY") {
+                    if (req.query.type == "segmentation" || req.query.type == "undefined") {
                         res.redirect(
                             `/transcribe?user_id=${result[0].user_id}&audio_id=${req.query.audio_id}`
                         );
-                    } else {
-                        res.redirect(
-                            `/transcribe?user_id=${result[0].user_id}&audio_id=25`
-                        );
-                    }
-                }
-            });
-        } else {
-            res.send("Error in URL. Please use webapp to access this location.");
-        }
+                    } else if (req.query.type == "transcription") {
+                        var getAudioIdSQL = `SELECT * FROM audio WHERE Language_id=${req.query.language_id}`;
+                        pool.query(getAudioIdSQL, (err, result1) => {
+                            if (err) {
+                                console.error(err);
+                                res.status(400).send("Error in Language Id.");
+                            } else {
+                                res.redirect(`/transcription?user_id=${result[0].user_id}&audio_id=${result1[0]["audio_id"]}`);
+                            }
+                        });
 
+                    }
+
+                } else {
+                    res.redirect(
+                        `/transcribe?user_id=${result[0].user_id}&audio_id=25`
+                    );
+                }
+            }
+        });
     } else {
-        res.redirect(`/guided-audio?user_id=${req.session.user_id}`);
+        res.send("Error in URL. Please use webapp to access this location.");
+        // res.redirect(`/guided-audio?user_id=${req.session.user_id}`);
     }
+
+    // } 
+    // else {
+    //     res.redirect(`/guided-audio?user_id=${req.session.user_id}`);
+    // }
 
 });
 /*app.get("/transcribe", (req, res) => {
