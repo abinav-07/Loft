@@ -987,7 +987,7 @@ app.post("/register-hr", async(req, res) => {
         // })
 
         //window.location.href = `${new URL(window.location).origin}/hr-review-table`;
-    } catch {
+    } catch(err) {
         res.redirect("/hr-login-form")
     }
 
