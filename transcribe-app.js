@@ -102,6 +102,10 @@ app.get("/", (req, res) => {
     }
 
     pool.query(check_sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.status(400).send(err);
+      }
       console.log(result);
       if (result.length == 0) {
         var sql = `INSERT INTO users(name, email, web_app_id) VALUES('${req.query.full_name}', '${req.query.email}', '${req.query.user_id}')`;
@@ -116,6 +120,7 @@ app.get("/", (req, res) => {
               req.query.type == "segmentation" ||
               typeof req.query.type == "undefined"
             ) {
+              console.log(1);
               res.redirect(
                 `/transcribe?user_id=${result.insertId}&audio_id=${req.query.audio_id}`
               );
@@ -143,6 +148,7 @@ app.get("/", (req, res) => {
           }
         });
       } else {
+        console.log(2);
         if (result[0].status != "RETRY") {
           if (
             req.query.type == "segmentation" ||
