@@ -145,7 +145,7 @@ app.get("/", (req, res) => {
         if (result[0].status != "RETRY") {
           if (
             req.query.type == "segmentation" ||
-            req.query.type == "undefined"
+            typeof req.query.type == "undefined"
           ) {
             res.redirect(
               `/transcribe?user_id=${result[0].user_id}&audio_id=${req.query.audio_id}`
