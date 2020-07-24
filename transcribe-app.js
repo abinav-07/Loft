@@ -102,6 +102,7 @@ app.get("/", (req, res) => {
     }
 
     pool.query(check_sql, (err, result) => {
+      console.log(result);
       if (result.length == 0) {
         var sql = `INSERT INTO users(name, email, web_app_id) VALUES('${req.query.full_name}', '${req.query.email}', '${req.query.user_id}')`;
         pool.query(sql, (err, result) => {
@@ -113,7 +114,7 @@ app.get("/", (req, res) => {
             req.session.user = req.query.full_name;
             if (
               req.query.type == "segmentation" ||
-              req.query.type == "undefined"
+              typeof req.query.type == "undefined"
             ) {
               res.redirect(
                 `/transcribe?user_id=${result.insertId}&audio_id=${req.query.audio_id}`
