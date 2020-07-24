@@ -95,6 +95,8 @@
             <th>Audio Number</th>
             <th>Start Time</th>
             <th>End Time</th>
+            <th>Reviewed By</th>
+            <th>Reviewed Time</th>
             <th>Score</th>
             <th>Status 
                 {{!-- <span id="export-work" style="display: none;">&emsp; &emsp;<button id="export-button">EXPORT</button></span> --}}
@@ -128,7 +130,7 @@
                 success: function (users_data) {
                     $("#users_table tbody").html("");
                     for (var i = 0; i < users_data.length; i++) {
-                        
+                        console.log(users_data[i]);
                         if (users_data[i].status == "PASS") {
                             $("#users_table tbody").append(
                                 `<tr data-user-id="${users_data[i].users_audio_id}">                                
@@ -137,6 +139,8 @@
                                 <td>${users_data[i].audio_order}</td>        
                                 <td>${getNepaliTimeNow(users_data[i].start_time)}</td>
                                 <td>${getNepaliTimeNow(users_data[i].end_time)}</td>
+                                <td>${users_data[i].reviewer_email}</td>                                       
+                                <td>${getNepaliTimeNow(users_data[i].status_changed_time)}</td>
                                 <td>${users_data[i].overall_score<0?0:users_data[i].overall_score}</td>
                                 <td><select class="${users_data[i].users_audio_id}"><option>${users_data[i].status}</option><option>FAIL</option></select>
                                     <button class="${users_data[i].users_audio_id} confirm-button">Confirm</button>
@@ -150,6 +154,8 @@
                                 <td>${users_data[i].audio_order}</td>               
                                  <td>${getNepaliTimeNow(users_data[i].start_time)}</td>
                                  <td>${getNepaliTimeNow(users_data[i].end_time)}</td>
+                                 <td>${users_data[i].reviewer_email}</td>                                       
+                                 <td>${getNepaliTimeNow(users_data[i].status_changed_time)}</td>
                                  <td>${users_data[i].overall_score<0?0:users_data[i].overall_score}</td>
                                  <td><select class="${users_data[i].users_audio_id}"><option>${users_data[i].status}</option><option>PASS</option></select>
                                     <button class="${users_data[i].users_audio_id} confirm-button">Confirm</button>
@@ -163,6 +169,8 @@
                                 <td>${users_data[i].audio_order}</td>          
                                  <td>${getNepaliTimeNow(users_data[i].start_time)}</td>
                                  <td>${getNepaliTimeNow(users_data[i].end_time)}</td>
+                                 <td>${users_data[i].reviewer_email}</td>                                       
+                                 <td>${getNepaliTimeNow(users_data[i].status_changed_time)}</td>
                                  <td>${users_data[i].overall_score<0?0:users_data[i].overall_score}</td>
                                  <td><select class="${users_data[i].users_audio_id}"><option>${users_data[i].status}</option><option>PASS</option><option>FAIL</option><option>RETRY</option></select>
                                     <button class="${users_data[i].users_audio_id} confirm-button">Confirm</button>
@@ -182,14 +190,14 @@
                             title:"",
                             text: 'Export to excel',
                             exportOptions: {
-                                columns: [0, 1, 2, 3, 4, 5, 6],
+                                columns: [0, 1, 2, 3, 4, 5, 6,7,8],
                                 modifier: {
                                     order: 'current',
                                     page: 'all'
                                 },
                                 format: {
                                     body:function(data,row,col,node){
-                                        if(col==6){
+                                        if(col==8){
                                             return table
                                                     .cell({row:row,column:col})
                                                     .nodes()

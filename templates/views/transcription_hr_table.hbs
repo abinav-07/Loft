@@ -273,6 +273,7 @@
                             url:"/save-hr-transcription-logs",
                             data:{
                                 reviewerId,
+                                user_id:userId,
                                 user_name:clickedUserName,
                                 user_status:$(`select.${userId}`).val(),
                                 type:"transcription"

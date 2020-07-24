@@ -3339,8 +3339,17 @@
 
     //Transcription Play Button event listener
     function transcriptionPlayButton(e){
-        var  transcriptionSegmentStart=$(e).data("id")
+        var  transcriptionSegmentStart=$(e).data("id");
+        var transcriptionSegmentEnd=$(e).data("segmentEndId");
+        $(".transcription-color-div").css("background-color","white");
+        $(e).closest("div").css("background-color","#c5c7c9");
+
         spectrum.seekTo(transcriptionSegmentStart/spectrum.getDuration());
+        if(!spectrum.isPlaying()){
+          $("#play-button").find($(".fa")).toggleClass('fa-play fa-pause');
+        }
+        
+        spectrum.play();
         console.log(transcriptionSegmentStart);   
     }
 
@@ -3444,7 +3453,7 @@
                 `
                   <tr style="vertical-align:baseline">
                     <td>
-                      <div class='col' data-id="${response[i]["segment_start"]}" onclick="transcriptionPlayButton(this)">
+                      <div class='col transcription-color-div' data-id="${response[i]["segment_start"]}" data-segmentEndId="${response[i]["segment_end"]}" onclick="transcriptionPlayButton(this)">
                                   <div style="cursor:pointer; color:#007bff; padding:10px 0px 10px 0px">
                                       ${speakerName}<span style="color:black"><i class="fa fa-play" style=" font-size:12px;padding:0px 5px 0px 5px" aria-hidden="true"></i>${segmentStartTime} - ${segmentEndTime}</span>
                                   </div>
@@ -3455,7 +3464,7 @@
                       
                     </td>
                     <td>
-                      <div class='col' data-id="${response[i]["segment_start"]}" onclick="transcriptionPlayButton(this)">
+                      <div class='col transcription-color-div' data-id="${response[i]["segment_start"]}" data-segmentEndId="${response[i]["segment_end"]}" onclick="transcriptionPlayButton(this)">
                                   <div style="cursor:pointer; color:#007bff;  padding:10px 0px 10px 0px">
                                       ${speakerName} <span style="color:black"><i class="fa fa-play" style="font-size:12px;padding:0px 3px 0px 5px" aria-hidden="true"></i>${segmentStartTime} - ${segmentEndTime}</span>
                                   </div>
