@@ -3340,17 +3340,21 @@
     //Transcription Play Button event listener
     function transcriptionPlayButton(e){
         var  transcriptionSegmentStart=$(e).data("id");
-        var transcriptionSegmentEnd=$(e).data("segmentEndId");
+        var transcriptionSegmentEnd=$(e).attr('data-segmentEndId');
+        console.log($(e).attr('data-segmentEndId'));
+        
         $(".transcription-color-div").css("background-color","white");
-        $(e).closest("div").css("background-color","#c5c7c9");
+        $(e).closest("tr").css("background-color","#c5c7c9");
 
         spectrum.seekTo(transcriptionSegmentStart/spectrum.getDuration());
         if(!spectrum.isPlaying()){
-          $("#play-button").find($(".fa")).toggleClass('fa-play fa-pause');
+         $("#play-button").find($(".fa")).toggleClass('fa-play fa-pause');
         }
         
-        spectrum.play();
-        console.log(transcriptionSegmentStart);   
+        spectrum.play(parseFloat(transcriptionSegmentStart),parseFloat(transcriptionSegmentEnd));
+         
+        console.log(transcriptionSegmentStart);
+        console.log(transcriptionSegmentEnd);   
     }
 
 
@@ -3451,9 +3455,9 @@
 
               $("#transcription-data-table").append(
                 `
-                  <tr style="vertical-align:baseline">
+                  <tr style="vertical-align:baseline; cursor:pointer" class='col transcription-color-div' data-id="${response[i]["segment_start"]}" data-segmentEndId="${response[i]["segment_end"]}" onclick="transcriptionPlayButton(this)">
                     <td>
-                      <div class='col transcription-color-div' data-id="${response[i]["segment_start"]}" data-segmentEndId="${response[i]["segment_end"]}" onclick="transcriptionPlayButton(this)">
+                      <div>
                                   <div style="cursor:pointer; color:#007bff; padding:10px 0px 10px 0px">
                                       ${speakerName}<span style="color:black"><i class="fa fa-play" style=" font-size:12px;padding:0px 5px 0px 5px" aria-hidden="true"></i>${segmentStartTime} - ${segmentEndTime}</span>
                                   </div>
@@ -3464,7 +3468,7 @@
                       
                     </td>
                     <td>
-                      <div class='col transcription-color-div' data-id="${response[i]["segment_start"]}" data-segmentEndId="${response[i]["segment_end"]}" onclick="transcriptionPlayButton(this)">
+                      <div>
                                   <div style="cursor:pointer; color:#007bff;  padding:10px 0px 10px 0px">
                                       ${speakerName} <span style="color:black"><i class="fa fa-play" style="font-size:12px;padding:0px 3px 0px 5px" aria-hidden="true"></i>${segmentStartTime} - ${segmentEndTime}</span>
                                   </div>
