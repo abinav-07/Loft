@@ -270,7 +270,7 @@
                                 reviewerId,
                                 user_id:userId,
                                 user_name:clickedUserName,
-                                user_status:$(`select.${userId}`).val(),
+                                user_status:changedPassFailValue,
                                 type:"training"
                                 },
                             success:function(){
@@ -280,12 +280,12 @@
                             data: { userId },
                             success: function (response) {
                                 var status;
-                                console.log($(`select.${userId}`).val());
-                                if($(`select.${userId}`).val()=="PASS"){
+                                console.log(changedPassFailValue);
+                                if(changedPassFailValue=="PASS"){
                                     status=7;
-                                }else if($(`select.${userId}`).val()=="FAIL"){
+                                }else if(changedPassFailValue=="FAIL"){
                                     status=6;
-                                }else if($(`select.${userId}`).val()=="RETRY"){
+                                }else if(changedPassFailValue=="RETRY"){
                                     status=4;
                                 }
                                 var mailParams = {

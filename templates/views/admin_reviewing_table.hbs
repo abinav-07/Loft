@@ -267,11 +267,11 @@
                             data: { userId },
                             success: function (response) {
                                 var status;
-                                if ($(`select.${userId}`).val() == "PASS") {
+                                if (changedPassFailValue == "PASS") {
                                     status = 7;
-                                } else if ($(`select.${userId}`).val() == "FAIL") {
+                                } else if (changedPassFailValue == "FAIL") {
                                     status = 6;
-                                } else if ($(`select.${userId}`).val() == "RETRY") {
+                                } else if (changedPassFailValue == "RETRY") {
                                     status = 4;
                                 }
                                 var mailParams = {
