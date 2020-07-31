@@ -3347,9 +3347,7 @@
         $(e).closest("tr").css("background-color","#c5c7c9");
 
         spectrum.seekTo(transcriptionSegmentStart/spectrum.getDuration());
-        if(!spectrum.isPlaying()){
-         $("#play-button").find($(".fa")).toggleClass('fa-play fa-pause');
-        }
+        
         
         spectrum.play(parseFloat(transcriptionSegmentStart),parseFloat(transcriptionSegmentEnd));
          

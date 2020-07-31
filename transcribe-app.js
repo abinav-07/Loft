@@ -1071,7 +1071,7 @@ app.get("/transcription-hr-review-table", checkNotAuthenticated, (req, res) => {
 app.post("/hr-review-table-datas", (req, res) => {
     let sql = `
             Select audio.audio_id, audio.audio_name, users_audio.users_audio_id, users_audio.user_id, users_audio.audio_id, CONVERT_TZ(users_audio.start_time, '+00:00', '+05:45') start_time,
-                CONVERT_TZ(users_audio.end_time, '+00:00', '+05:45') end_time, users_audio.overall_score, users.name, users_audio.status
+            CONVERT_TZ(users_audio.end_time, '+00:00', '+05:45') end_time, users_audio.overall_score, users.name, users_audio.status
             from users_audio
             JOIN users
             ON users_audio.user_id = users.user_id
@@ -1236,20 +1236,46 @@ app.get("/training-admin-review-table", (req, res) => {
 
 //get data from users table to admin-review table
 app.post("/admin-review-table-datas", (req, res) => {
-    let sql = `Select audio.audio_id, audio.audio_name, users_audio.users_audio_id, users_audio.user_id, users_audio.audio_id, CONVERT_TZ(users_audio.start_time, '+00:00', '+05:45') start_time,
-                        CONVERT_TZ(users_audio.end_time, '+00:00', '+05:45') end_time, users_audio.overall_score, users.name, users_audio.status,reviewer_logs.status_changed_time,reviewer_logs.reviewer_id,reviewers.id,reviewers.reviewer_email from users_audio
-                        JOIN users
-                        ON users_audio.user_id = users.user_id
-                        LEFT JOIN reviewer_logs
-                        ON users.user_id=reviewer_logs.user_id
-                        LEFT JOIN reviewers
-                        ON reviewer_logs.reviewer_id=reviewers.id                        
-                        JOIN audio
-                        ON users_audio.audio_id = audio.audio_id
-                        WHERE (users_audio.status IS NOT NULL AND users_audio.status NOT LIKE 'RETRY%')
-                        AND audio.is_training="FALSE"           
-                        
-                        ORDER BY users_audio.start_time DESC `;
+    let sql = `Select
+                audio.audio_id,
+                audio.audio_name,
+                users_audio.users_audio_id,
+                users_audio.user_id,
+                users_audio.audio_id, CONVERT_TZ(users_audio.start_time, '+00:00', '+05:45') start_time,
+                CONVERT_TZ(users_audio.end_time, '+00:00', '+05:45') end_time, users_audio.overall_score, users.name, users_audio.status,reviewer_logs.status_changed_time,reviewer_logs.reviewer_id,reviewers.id,reviewers.reviewer_email from users_audio
+                JOIN users
+                ON users_audio.user_id = users.user_id
+                JOIN audio
+                ON users_audio.audio_id = audio.audio_id
+                LEFT JOIN reviewer_logs
+                ON users.user_id=reviewer_logs.user_id
+                LEFT JOIN reviewers
+                ON reviewers.id=reviewer_logs.reviewer_id
+
+                WHERE    
+                audio.is_training="FALSE" AND                
+                (users_audio.status IS NOT NULL AND users_audio.status NOT LIKE 'RETRY%')
+                ORDER BY users_audio.start_time DESC `;
+
+    // let sql = `Select
+    //             audio.audio_id,
+    //             audio.audio_name,
+    //             users_audio.users_audio_id,
+    //             users_audio.user_id,
+    //             users_audio.audio_id, CONVERT_TZ(users_audio.start_time, '+00:00', '+05:45') start_time,
+    //             CONVERT_TZ(users_audio.end_time, '+00:00', '+05:45') end_time, users_audio.overall_score, users.name, users_audio.status from users_audio
+    //             JOIN users
+    //             ON users_audio.user_id = users.user_id
+    //             JOIN audio
+    //             ON users_audio.audio_id = audio.audio_id
+
+    //             WHERE    
+    //             audio.is_training="FALSE" AND                
+    //             (users_audio.status IS NOT NULL AND users_audio.status NOT LIKE 'RETRY%')
+    //             ORDER BY users_audio.start_time DESC `;
+
+
+
 
 
 
@@ -1267,19 +1293,22 @@ app.post("/admin-review-table-datas", (req, res) => {
 //get data from users-table to transcription admin review table
 app.post("/transcription-admin-review-table-datas", (req, res) => {
     let sql = `
-    Select audio.audio_id, audio.audio_name, users_audio.users_audio_id, users_audio.user_id, users_audio.audio_id, CONVERT_TZ(users_audio.start_time, '+00:00', '+05:45') start_time,
+    Select audio.audio_id, 
+    audio.audio_name, 
+    users_audio.users_audio_id, 
+    users_audio.user_id, 
+    users_audio.audio_id, CONVERT_TZ(users_audio.start_time, '+00:00', '+05:45') start_time,
     CONVERT_TZ(users_audio.end_time, '+00:00', '+05:45') end_time, users_audio.transcription_score, users.name, users_audio.status, reviewer_logs.status_changed_time,reviewer_logs.reviewer_id,reviewers.id,reviewers.reviewer_email
     from users_audio 
     JOIN users
-                        ON users_audio.user_id = users.user_id
-                        LEFT JOIN reviewer_logs
-                        ON users.user_id=reviewer_logs.user_id
-                        LEFT JOIN reviewers
-                        ON reviewer_logs.reviewer_id=reviewers.id                        
-                        JOIN audio
-                        ON users_audio.audio_id = audio.audio_id 
-    WHERE
-    
+    ON users_audio.user_id = users.user_id
+    LEFT JOIN reviewer_logs
+    ON users.user_id=reviewer_logs.user_id
+    LEFT JOIN reviewers
+    ON reviewer_logs.reviewer_id=reviewers.id                        
+    JOIN audio
+    ON users_audio.audio_id = audio.audio_id 
+    WHERE    
     users_audio.type="transcription"
     AND (users_audio.status IS NOT NULL AND users_audio.status NOT LIKE 'RETRY%')    
     ORDER BY users_audio.start_time DESC`;
@@ -1350,8 +1379,8 @@ app.post("/confirm-pass-fail-admin-review", (req, res) => {
 
 //Route for test logs
 app.post("/save-hr-test-logs", (req, res) => {
-    let sql = `INSERT INTO reviewer_logs(reviewer_id,users_name,users_status,status_changed_time,type)
-            VALUES ("${req.body.reviewerId}","${req.body.user_name}","${req.body.user_status}",Now(),"${req.body.type}")
+    let sql = `INSERT INTO reviewer_logs(reviewer_id,users_name,user_id,users_status,status_changed_time,type)
+            VALUES ("${req.body.reviewerId}","${req.body.user_name}","${req.body.user_id}","${req.body.user_status}",Now(),"${req.body.type}")
     `;
     pool.query(sql, (err, result) => {
         if (err) {
@@ -1379,7 +1408,7 @@ app.post("/save-hr-training-logs", (req, res) => {
 //Route for transcription logs
 app.post("/save-hr-transcription-logs", (req, res) => {
     let sql = `INSERT INTO reviewer_logs(reviewer_id,users_name,users_status,status_changed_time,type)
-            VALUES ("${req.body.reviewerId}","${req.body.user_name}","${req.body.user_status}",Now(),"${req.body.type}")
+            VALUES ("${req.body.reviewerId}","${req.body.user_name}","${req.body.user_id}","${req.body.user_status}",Now(),"${req.body.type}")
     `;
     pool.query(sql, (err, result) => {
         if (err) {
