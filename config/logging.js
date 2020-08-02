@@ -18,12 +18,12 @@ function jsonFormat(tokens, req, res) {
 }
 const generator = (time, index) => {
   const pad = (num) => (num > 9 ? "" : "0") + num;
-  if (!time) return "file.log";
+  if (!time) return "file(transcribe).log";
 
   var month = time.getFullYear() + "" + pad(time.getMonth() + 1);
   var day = pad(time.getDate());
 
-  return `${month}/${month}${day}-${index}-file.log`;
+  return `${month}/${month}${day}-${index}-file(transcribe).log`;
 };
 var accessLogStream = rfs.createStream(generator, {
   interval: "1d", // rotate daily
