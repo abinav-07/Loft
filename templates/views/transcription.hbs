@@ -1203,7 +1203,7 @@
       document.getElementById('total-timestamp').innerText = secondsToTimestamp(totalDuration);
 
       //Changes for top information 
-      $("#guide-for-submit-button-appearance").text("Press the SUBMIT button once you finish. The SUBMIT button will only appear if you finish playing the entire audio.");
+      $("#guide-for-submit-button-appearance").text("Press the Submit button once you finish. The Submit button will only after you've transcribed all the segments.");
 
       //Add Region on key down
       $("html").on("keydown", function (event) {
@@ -1833,7 +1833,7 @@
         displayCurrentContents();
       }
       //Displaying submit button only if audio is played to last and 10 segements are created    
-      if ((spectrum.getCurrentTime() > (spectrum.getDuration() - 0.1)) && ($("#peaks-container").children("div").length > 10) && is_submitted == "FALSE") {
+      if (is_submitted == "FALSE") {
 
         for (var i = 1; i < $("#peaks-container").children("div").length; i++) {
           console.log($("#peaks-container").children("div")[i].title);
