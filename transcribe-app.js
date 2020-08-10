@@ -53,7 +53,17 @@ hbs.registerPartials(partialPaths);
 
 //Database Connection
 const pool = require("./config/pool");
+const audio_bee_pool = require("./config/audiobee-db");
 pool.getConnection((err, connect) => {
+    if (err) {
+        console.error(err);
+        //res.status(400).send("error in get /admin-review-table-datas query.");
+    }
+    console.log("Connected");
+    connect.release();
+});
+
+audio_bee_pool.getConnection((err, connect) => {
     if (err) {
         console.error(err);
         //res.status(400).send("error in get /admin-review-table-datas query.");
@@ -406,7 +416,10 @@ app.get("/transcription", async(req, res) => {
 //Route for transcription review
 app.get("/transcription-review", async(req, res) => {
     var audio_url = "";
+    var user_name = "";
     var audioId = req.query.audio_id;
+    var language_name = "";
+    var languageId = "";
     if (typeof req.query.audio_id == "undefined") {
         audioId = 4;
         audio_url = "cryophile.wav";
@@ -419,12 +432,44 @@ app.get("/transcription-review", async(req, res) => {
                 res.status(400).send("error in get /transcription query.");
             }
             audio_url = result[0]["audio_url"];
-            //console.log(audio_url);
-            res.render("transcription-review", {
-                user_id: req.query.user_id,
-                audio_url: audio_url,
-                audio_id: req.query.audio_id,
+            languageId = result[0]["Language_id"];
+
+
+            //SQL to get user name
+            var get_user_name = `SELECT * FROM users WHERE user_id='${req.query.user_id}'`;
+            pool.query(get_user_name, async(err, userName_result) => {
+                if (err) {
+                    console.error(err);
+                    res.status(400).send("error in get /get_user_name query.");
+                }
+
+
+
+                if (typeof userName_result[0]["name"] != "undefined") {
+                    user_name = userName_result[0]["name"];
+                }
+
+
+                var get_language_id = `SELECT * FROM languages WHERE Language_id=${languageId}`;
+
+                await audio_bee_pool.query(get_language_id, (err, data) => {
+                    console.log(data);
+                    if (err) {
+                        console.error(err);
+                        res.status(400).send("error in get /get_language_id query.");
+                    }
+                    language_name = data[0]["Language_name"];
+                    res.render("transcription-review", {
+                        user_id: req.query.user_id,
+                        audio_url: audio_url,
+                        audio_id: req.query.audio_id,
+                        language_name: language_name,
+                        user_name: user_name
+                    });
+                })
             });
+            //console.log(audio_url);
+
             console.log(result);
         });
     }
@@ -1459,6 +1504,19 @@ function checkNotAuthenticated(req, res, next) {
 
     return res.redirect("/hr-login-form");
 }
+
+function run_query(sql) {
+    return new Promise((resolve, reject) => {
+        audio_bee_pool.query(sql, (err, result) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(result);
+            }
+        });
+    });
+}
+
 
 app.listen(3000, () => {
     console.log("Listening on 3000");

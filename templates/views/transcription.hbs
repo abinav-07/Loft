@@ -3296,7 +3296,9 @@
 
     //Function to call on submit click
     $("#submit-button").on("click", function () {
+      /*
       //diffCheck();
+      
       disableAllInterfaceOnSubmit();
       //submitClick();      
       //ajaxReq();
@@ -3304,7 +3306,36 @@
       saveScores();
       $("#submit-button").hide();
       $("#profile-link-button").show();
+      */
+      getWebAppId();
+      console.log(user_id);
     });//Submit Button Click Function End
+
+    function getWebAppId(){
+      $.ajax({
+        method:"POST",
+        url:"/get-web-app-id",
+        data:{
+          user_id:user_id
+        },
+        success:function(data){
+          
+          var mailParams = {
+                "user_id": `${data[0].web_app_id}`,
+                "status": "3",
+                "project_type_id": "2"
+          }
+               $.ajax({
+                  method: "POST",
+                  url: "https://webapp.theaudiobee.com/api/set-user-language-project-type-status",
+                  data: mailParams,
+                  success: function () {
+                      console.log("Web app status set");
+                  }
+              });
+        }
+      });
+    }
 
     //function for diffCheck 
     function diffCheck() {

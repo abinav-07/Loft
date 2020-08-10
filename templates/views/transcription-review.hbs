@@ -763,6 +763,24 @@
       display: block;
     }
 
+     #user_info {
+      text-align: center;
+      font-size: 14px;
+      /*width: 680px;*/
+      color: #fff;
+      float: right;
+      font-weight: bold;
+      padding: 16px;
+      background: #3e97e6;
+      display: inline-block;
+      border-radius: 4%;
+      list-style-type: none;
+      -webkit-font-smoothing: antialiased;
+      white-space: normal;
+      margin-right: 20px;
+    }
+
+
     /* Chrome, Safari, Edge, Opera */
     input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button {
@@ -1233,6 +1251,12 @@
     //function on spectrum is ready 
     spectrum.on("ready", function () {
 
+        //User Information On Top
+      $("#training-userId").text("User Name: " + "{{user_name}}");
+      $("#training-audioName").text("Audio: " + "{{language_name}}");
+
+
+      //Total Duration of the audio
       totalDuration = spectrum.getDuration();
 
 
@@ -3341,7 +3365,7 @@
     function transcriptionPlayButton(e){
         var  transcriptionSegmentStart=$(e).data("id");
         var transcriptionSegmentEnd=$(e).attr('data-segmentEndId');
-        console.log($(e).attr('data-segmentEndId'));
+        //console.log($(e).attr('data-segmentEndId'));
         
         $(".transcription-color-div").css("background-color","white");
         $(e).closest("tr").css("background-color","#c5c7c9");
@@ -3351,8 +3375,7 @@
         
         spectrum.play(parseFloat(transcriptionSegmentStart),parseFloat(transcriptionSegmentEnd));
          
-        console.log(transcriptionSegmentStart);
-        console.log(transcriptionSegmentEnd);   
+        
     }
 
 
@@ -3392,6 +3415,7 @@
               var speakerName=response[i]["div_className"];
               var differences = response[i]["difference"];
               var regexToReplace = /[\s_.,!"'&?/$]*/g;
+              console.log(segmentStartTime);
               //console.log(response[i]);
               //console.log(differences);
               var actual_text = "", annotation_text = "";
