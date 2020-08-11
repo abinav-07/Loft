@@ -91,6 +91,7 @@
     <table id="users_table">
         <thead>
             <th>Name</th>
+            <th>Email</th>
             <th>Audio Name</th>
             <th>Start Time</th>
             <th>End Time</th>
@@ -134,6 +135,7 @@
                             $("#users_table tbody").append(
                                 `<tr data-user-id="${users_data[i].users_audio_id}">
                                 <td class="user-name-class">${users_data[i].name}</td>  
+                                <td>${users_data[i].email}</td>
                                 <td>${users_data[i].audio_name}</td>                
                                 <td>${getNepaliTimeNow(users_data[i].start_time)}</td>
                                 <td>${getNepaliTimeNow(users_data[i].end_time)}</td>
@@ -148,6 +150,7 @@
                             $("#users_table tbody").append(
                                 `<tr data-user-id="${users_data[i].users_audio_id}">
                                 <td class="user-name-class">${users_data[i].name}</td>
+                                <td>${users_data[i].email}</td>
                                 <td>${users_data[i].audio_name}</td>                
                                  <td>${getNepaliTimeNow(users_data[i].start_time)}</td>
                                  <td>${getNepaliTimeNow(users_data[i].end_time)}</td>
@@ -162,6 +165,7 @@
                             $("#users_table tbody").append(
                                 `<tr data-user-id="${users_data[i].users_audio_id}">
                                 <td class="user-name-class">${users_data[i].name}</td>
+                                <td>${users_data[i].email}</td>
                                 <td>${users_data[i].audio_name}</td>                
                                  <td>${getNepaliTimeNow(users_data[i].start_time)}</td>
                                  <td>${getNepaliTimeNow(users_data[i].end_time)}</td>
@@ -178,7 +182,7 @@
                     var table = $("#users_table").DataTable();
                     table.destroy();
                     $("#users_table").DataTable({
-                        "order": [[2, "desc"]],
+                        "order": [[3, "desc"]],
                         dom: 'Bfrtip',
                         buttons: [{
                             extend: 'excel',
@@ -186,14 +190,14 @@
                             title:"",
                             text: 'Export to excel',
                             exportOptions: {
-                                columns: [0, 1, 2, 3,4,5,6,7],
+                                columns: [0, 1, 2, 3,4,5,6,7,8],
                                 modifier: {
                                     order: 'current',
                                     page: 'all'
                                 },
                                 format: {
                                     body:function(data,row,col,node){
-                                        if(col==7){
+                                        if(col==8){
                                             return table
                                                     .cell({row:row,column:col})
                                                     .nodes()

@@ -1121,7 +1121,7 @@ app.get("/transcription-hr-review-table", checkNotAuthenticated, (req, res) => {
 app.post("/hr-review-table-datas", (req, res) => {
     let sql = `
             Select audio.audio_id, audio.audio_name, users_audio.users_audio_id, users_audio.user_id, users_audio.audio_id, CONVERT_TZ(users_audio.start_time, '+00:00', '+05:45') start_time,
-            CONVERT_TZ(users_audio.end_time, '+00:00', '+05:45') end_time, users_audio.overall_score, users.name, users_audio.status
+            CONVERT_TZ(users_audio.end_time, '+00:00', '+05:45') end_time, users_audio.overall_score, users.name,users.email, users_audio.status
             from users_audio
             JOIN users
             ON users_audio.user_id = users.user_id
@@ -1144,7 +1144,7 @@ app.post("/hr-review-table-datas", (req, res) => {
 app.post("/training-hr-review-table-datas", (req, res) => {
     let sql = `
     Select audio.audio_id, audio.audio_name, users_audio.users_audio_id, users_audio.user_id, users_audio.audio_id, CONVERT_TZ(users_audio.start_time, '+00:00', '+05:45') start_time,
-    CONVERT_TZ(users_audio.end_time, '+00:00', '+05:45') end_time, users_audio.overall_score, users.name, users_audio.status,audio.audio_order
+    CONVERT_TZ(users_audio.end_time, '+00:00', '+05:45') end_time, users_audio.overall_score, users.name,users.email, users_audio.status,audio.audio_order
     from users_audio, users , audio WHERE
     users_audio.user_id = users.user_id
     AND users_audio.audio_id = audio.audio_id
@@ -1169,7 +1169,7 @@ app.post("/training-hr-review-table-datas", (req, res) => {
 app.post("/transcription-hr-review-table-datas", (req, res) => {
     let sql = `
     Select audio.audio_id, audio.audio_name, users_audio.users_audio_id, users_audio.user_id, users_audio.audio_id, CONVERT_TZ(users_audio.start_time, '+00:00', '+05:45') start_time,
-    CONVERT_TZ(users_audio.end_time, '+00:00', '+05:45') end_time, users_audio.transcription_score, users.name, users_audio.status
+    CONVERT_TZ(users_audio.end_time, '+00:00', '+05:45') end_time, users_audio.transcription_score, users.name,users.email, users_audio.status
     from users_audio, users , audio WHERE
     users_audio.user_id = users.user_id
     AND users_audio.audio_id = audio.audio_id
@@ -1292,7 +1292,7 @@ app.post("/admin-review-table-datas", (req, res) => {
                 users_audio.users_audio_id,
                 users_audio.user_id,
                 users_audio.audio_id, CONVERT_TZ(users_audio.start_time, '+00:00', '+05:45') start_time,
-                CONVERT_TZ(users_audio.end_time, '+00:00', '+05:45') end_time, users_audio.overall_score, users.name, users_audio.status,reviewer_logs.status_changed_time,reviewer_logs.reviewer_id,reviewers.id,reviewers.reviewer_email from users_audio
+                CONVERT_TZ(users_audio.end_time, '+00:00', '+05:45') end_time, users_audio.overall_score, users.name,users.email, users_audio.status,reviewer_logs.status_changed_time,reviewer_logs.reviewer_id,reviewers.id,reviewers.reviewer_email from users_audio
                 JOIN users
                 ON users_audio.user_id = users.user_id
                 JOIN audio
@@ -1343,7 +1343,7 @@ app.post("/transcription-admin-review-table-datas", (req, res) => {
     users_audio.users_audio_id, 
     users_audio.user_id, 
     users_audio.audio_id, CONVERT_TZ(users_audio.start_time, '+00:00', '+05:45') start_time,
-    CONVERT_TZ(users_audio.end_time, '+00:00', '+05:45') end_time, users_audio.transcription_score, users.name, users_audio.status, reviewer_logs.status_changed_time,reviewer_logs.reviewer_id,reviewers.id,reviewers.reviewer_email
+    CONVERT_TZ(users_audio.end_time, '+00:00', '+05:45') end_time, users_audio.transcription_score, users.name,users.email, users_audio.status, reviewer_logs.status_changed_time,reviewer_logs.reviewer_id,reviewers.id,reviewers.reviewer_email
     from users_audio 
     JOIN users
     ON users_audio.user_id = users.user_id
@@ -1375,7 +1375,7 @@ app.post("/transcription-admin-review-table-datas", (req, res) => {
 app.post("/training-admin-review-table-datas", (req, res) => {
     let sql = `
     Select audio.audio_id, audio.audio_name, users_audio.users_audio_id, users_audio.user_id, users_audio.audio_id, CONVERT_TZ(users_audio.start_time, '+00:00', '+05:45') start_time,
-    CONVERT_TZ(users_audio.end_time, '+00:00', '+05:45') end_time, users_audio.overall_score, users.name, users_audio.status,audio.audio_order, reviewer_logs.status_changed_time,reviewer_logs.reviewer_id,reviewers.id,reviewers.reviewer_email
+    CONVERT_TZ(users_audio.end_time, '+00:00', '+05:45') end_time, users_audio.overall_score, users.name,users.email, users_audio.status,audio.audio_order, reviewer_logs.status_changed_time,reviewer_logs.reviewer_id,reviewers.id,reviewers.reviewer_email
     from users_audio
     JOIN users
     ON users_audio.user_id = users.user_id
