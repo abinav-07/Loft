@@ -1023,9 +1023,9 @@ app.post("/top-speaker-control-save-button-for-actual", (req, res) => {
 });
 
 //Routes Below Are For HR Team
-app.get("/hr-register-form", (req, res) => {
-    res.render("hr-register");
-});
+// app.get("/hr-register-form", (req, res) => {
+//     res.render("hr-register");
+// });
 
 const user = [];
 
