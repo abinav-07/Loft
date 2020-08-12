@@ -1298,10 +1298,9 @@ app.post("/admin-review-table-datas", (req, res) => {
                 JOIN audio
                 ON users_audio.audio_id = audio.audio_id
                 LEFT JOIN reviewer_logs
-                ON users.user_id=reviewer_logs.user_id
+                ON  users_audio.users_audio_id=reviewer_logs.user_id
                 LEFT JOIN reviewers
                 ON reviewers.id=reviewer_logs.reviewer_id
-
                 WHERE    
                 audio.is_training="FALSE" AND                
                 (users_audio.status IS NOT NULL AND users_audio.status NOT LIKE 'RETRY%')
@@ -1348,7 +1347,7 @@ app.post("/transcription-admin-review-table-datas", (req, res) => {
     JOIN users
     ON users_audio.user_id = users.user_id
     LEFT JOIN reviewer_logs
-    ON users.user_id=reviewer_logs.user_id
+    ON users_audio.users_audio_id=reviewer_logs.user_id
     LEFT JOIN reviewers
     ON reviewer_logs.reviewer_id=reviewers.id                        
     JOIN audio
@@ -1380,7 +1379,7 @@ app.post("/training-admin-review-table-datas", (req, res) => {
     JOIN users
     ON users_audio.user_id = users.user_id
     LEFT JOIN reviewer_logs
-    ON users.user_id=reviewer_logs.user_id
+    ON users_audio.users_audio_id=reviewer_logs.user_id
     LEFT JOIN reviewers
     ON reviewer_logs.reviewer_id=reviewers.id                        
     JOIN audio
