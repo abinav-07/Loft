@@ -1203,7 +1203,7 @@
       document.getElementById('total-timestamp').innerText = secondsToTimestamp(totalDuration);
 
       //Changes for top information 
-      $("#guide-for-submit-button-appearance").text("Press the Submit button once you finish. The Submit button will only after you've transcribed all the segments.");
+      $("#guide-for-submit-button-appearance").text("Press the SUBMIT button once you finish. The SUBMIT button will only appear after you finish transcribing all the speaker segments.");
 
       //Add Region on key down
       $("html").on("keydown", function (event) {
@@ -1834,7 +1834,7 @@
       }
       //Displaying submit button only if audio is played to last and 10 segements are created    
       if (is_submitted == "FALSE") {
-
+        console.log($("#peaks-container").children("div"));
         for (var i = 1; i < $("#peaks-container").children("div").length; i++) {
           console.log($("#peaks-container").children("div")[i].title);
           if($("#peaks-container").children("div")[i].title=="default" || $("#peaks-container").children("div")[i].title=="Singing"){
@@ -1845,7 +1845,8 @@
           }
           
         }
-        if (checkTextsForSubmit) {
+        if ((spectrum.getCurrentTime() > (spectrum.getDuration()/2)) && checkTextsForSubmit) {
+          console.log(checkTextsForSubmit);
           $("#submit-button").show();
         }
       }
@@ -3307,6 +3308,7 @@
       $("#submit-button").hide();
       $("#profile-link-button").show();
       */
+      $("#profile-link-button").show();
       getWebAppId();
       console.log(user_id);
     });//Submit Button Click Function End
