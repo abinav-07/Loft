@@ -641,7 +641,8 @@ app.post("/updatedatabase", (req, res) => {
 app.post("/update-actual-database", (req, res) => {
     let sql = `
             Update actual
-            SET div_className = '${req.body.speakerName}', div_title = '${req.body.annotationType}', segment_start = '${req.body.segmentStart}', segment_end = '${req.body.segmentEnd}', annotation_text = '${req.body.annotationText}'
+            SET div_className = '${req.body.speakerName}', div_title = '${req.body.annotationType}', segment_start = '${req.body.segmentStart}', segment_end = '${req.body.segmentEnd}', 
+            annotation_text = '${req.body.annotationText!="undefined"?req.body.annotationText.replace(/'/g,'\"'):""}'
             WHERE segment_id = '${req.body.segmentId}'            
             AND audio_id = '${req.body.audio_id}'
             `;
