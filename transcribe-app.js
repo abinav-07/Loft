@@ -642,7 +642,7 @@ app.post("/update-actual-database", (req, res) => {
     let sql = `
             Update actual
             SET div_className = '${req.body.speakerName}', div_title = '${req.body.annotationType}', segment_start = '${req.body.segmentStart}', segment_end = '${req.body.segmentEnd}', 
-            annotation_text = '${req.body.annotationText!="undefined"?req.body.annotationText.replace(/'/g,'\"'):""}'
+            annotation_text = '${req.body.annotationText!="undefined"?req.body.annotationText.replace(/'/g,"\\'"):""}'
             WHERE segment_id = '${req.body.segmentId}'            
             AND audio_id = '${req.body.audio_id}'
             `;
@@ -1169,7 +1169,7 @@ app.post("/training-hr-review-table-datas", (req, res) => {
 //get data from users-table to transcription hr review table
 app.post("/transcription-hr-review-table-datas", (req, res) => {
     let sql = `
-    Select audio.audio_id, audio.audio_name, users_audio.users_audio_id, users_audio.user_id, users_audio.audio_id, CONVERT_TZ(users_audio.start_time, '+00:00', '+05:45') start_time,
+    Select audio.audio_id,audio.Language_id, audio.audio_name, users_audio.users_audio_id, users_audio.user_id, users_audio.audio_id, CONVERT_TZ(users_audio.start_time, '+00:00', '+05:45') start_time,
     CONVERT_TZ(users_audio.end_time, '+00:00', '+05:45') end_time, users_audio.transcription_score, users.name,users.email, users_audio.status
     from users_audio, users , audio WHERE
     users_audio.user_id = users.user_id
@@ -1185,10 +1185,32 @@ app.post("/transcription-hr-review-table-datas", (req, res) => {
                 .status(400)
                 .send("error in get /training-hr-review-table-datas query.");
         }
-        console.log(result[0]);
+        //console.log(result[0]);
         res.send(result);
-        console.log(sql);
+        // console.log(sql);
     });
+});
+
+app.post("/reset-transcription-data-for-retry", (req, res) => {
+    var reset_sql = `Update transcription 
+                    SET annotation_text=""
+                    WHERE user_id IN (
+                        SELECT users_audio.user_id FROM users_audio
+                        WHERE users_audio_id = "${req.body.user_id}"
+                    ) AND audio_id IN (
+                        SELECT users_audio.audio_id FROM users_audio
+                        WHERE users_audio_id = "${req.body.user_id}"
+                    )
+    `;
+
+    pool.query(reset_sql, (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(400).send("error in get /reset-transcription-data-for-retry.");
+        }
+        res.send(result);
+    });
+    //console.log(reset_sql);
 });
 
 //Change Pass Fail Data in Database
@@ -1238,7 +1260,7 @@ app.post("/hr-click-get-user-id", (req, res) => {
 
 app.post("/get-web-app-id-for-hr", (req, res) => {
     let sql = `
-                        SELECT web_app_id FROM users
+                        SELECT users.web_app_id FROM users
                         WHERE user_id IN(
                             SELECT user_id from users_audio WHERE users_audio_id = "${req.body.userId}"
                         )
@@ -1452,7 +1474,7 @@ app.post("/save-hr-training-logs", (req, res) => {
 
 //Route for transcription logs
 app.post("/save-hr-transcription-logs", (req, res) => {
-    let sql = `INSERT INTO reviewer_logs(reviewer_id,users_name,users_status,status_changed_time,type)
+    let sql = `INSERT INTO reviewer_logs(reviewer_id,users_name,user_id,users_status,status_changed_time,type)
             VALUES ("${req.body.reviewerId}","${req.body.user_name}","${req.body.user_id}","${req.body.user_status}",Now(),"${req.body.type}")
     `;
     pool.query(sql, (err, result) => {

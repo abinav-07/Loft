@@ -132,7 +132,7 @@
                         
                         if (users_data[i].status == "PASS") {
                             $("#users_table tbody").append(
-                                `<tr data-user-id="${users_data[i].users_audio_id}" data-user-name="${users_data[i].name}">
+                                `<tr data-user-id="${users_data[i].users_audio_id}" data-user-name="${users_data[i].name}"  data-language-id="${users_data[i].Language_id}" data-audio-id="${users_data[i].audio_id}">
                                 <td class="user-name-class">${users_data[i].name}</td>  
                                 <td>${users_data[i].email}</td>
                                 <td>${users_data[i].audio_name}</td>                
@@ -145,7 +145,7 @@
                             </tr>`);
                         } else if (users_data[i].status == "FAIL") {
                             $("#users_table tbody").append(
-                                `<tr data-user-id="${users_data[i].users_audio_id}" data-user-name="${users_data[i].name}">
+                                `<tr data-user-id="${users_data[i].users_audio_id}" data-user-name="${users_data[i].name}" data-language-id="${users_data[i].Language_id}" data-audio-id="${users_data[i].audio_id}">
                                 <td class="user-name-class">${users_data[i].name}</td>
                                 <td>${users_data[i].email}</td>
                                 <td>${users_data[i].audio_name}</td>                
@@ -158,7 +158,7 @@
                             </tr>`);
                         } else {
                             $("#users_table tbody").append(
-                                `<tr data-user-id="${users_data[i].users_audio_id}" data-user-name="${users_data[i].name}">
+                                `<tr data-user-id="${users_data[i].users_audio_id}" data-user-name="${users_data[i].name}" data-language-id="${users_data[i].Language_id}" data-audio-id="${users_data[i].audio_id}">
                                 <td class="user-name-class">${users_data[i].name}</td>
                                 <td>${users_data[i].email}</td>
                                 <td>${users_data[i].audio_name}</td>                
@@ -248,11 +248,13 @@
         //Confirm Button PASS FAIL Changes
         $("#users_table").on("change", (event) => {
             var clicked_button_id = event.target.closest("tr").getAttribute("data-user-id");//This is equal to userId   
+            var clicked_language_id = event.target.closest("tr").getAttribute("data-language-id");//This is equal to language id
+            var clicked_audio_id= event.target.closest("tr").getAttribute("data-audio-id");//This is equal to language id
             //console.log(clicked_button_id);         
-            confirmButton(clicked_button_id);
+            confirmButton(clicked_button_id,clicked_language_id,clicked_audio_id);
         });
         //Displaying confirm button
-        function confirmButton(userId) {
+        function confirmButton(userId,languageId,audioId) {
             $(`button.${userId}`).show();
             var clickedUserName = event.target.closest("tr").getAttribute("data-user-name");//This is equal to user name   
             //On Confirm Click
@@ -289,7 +291,7 @@
                             data: { userId },
                             success: function (response) {
                                 var status;
-                                console.log(changedPassFailValue);
+                                console.log(response);
                                 if(changedPassFailValue=="PASS"){
                                     status=7;
                                 }else if(changedPassFailValue=="FAIL"){
@@ -300,7 +302,8 @@
                                 var mailParams = {
                                     "user_id": `${response[0].web_app_id}`,
                                     "status": status,
-                                    "project_type_id": "2"
+                                    "project_type_id": "2",
+                                    "language_id":languageId
                                 }
                                 console.log(mailParams);
                                 
@@ -309,8 +312,24 @@
                                     url: "https://webapp.theaudiobee.com/api/set-user-language-project-type-status",
                                     data:mailParams,
                                     success:function(){
-                                        console.log("EMAIl Sent and web app status set");
+                                        console.log(status);
+                                        if(status==4){
+                                            
+                                            console.log("Here");
+                                            $.ajax({
+                                            method:"POST",
+                                            url:"/reset-transcription-data-for-retry",
+                                            data:{user_id:userId,audio_id:audioId},
+                                            success:function(){
+                                                console.log("EMAIl Sent and web app status set and transcription reset");
+                                                recreatingHRTable();
+                                            }
+                                        })
+                                        }else{
+                                             console.log("EMAIl Sent and web app status set");
                                          recreatingHRTable();
+                                        }
+                                       
                                     }
                                 });
                             }
