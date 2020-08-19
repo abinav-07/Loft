@@ -3298,16 +3298,18 @@
     //Function to call on submit click
     $("#submit-button").on("click", function () {
       /*
-      //diffCheck();
+      
       
       disableAllInterfaceOnSubmit();
       //submitClick();      
       //ajaxReq();
       displayHamburger();
-      saveScores();
+
       $("#submit-button").hide();
       $("#profile-link-button").show();
       */
+      diffCheck();
+            saveScores();
       $("#profile-link-button").show();
       getWebAppId();
       console.log(user_id);
@@ -3392,24 +3394,21 @@
               })
 
               //console.log(document.getElementById(`${transcription_id}`).innerHTML);
-              document.getElementById(`${transcription_id}`).querySelector("p").innerText = "";
-              document.getElementById(`${transcription_id}`).querySelector("p").appendChild(document.createElement("p")).innerHTML = actual_text;
-              document.getElementById(`${transcription_id}`).querySelector("p").appendChild(document.createElement("p")).innerHTML = annotation_text;
-              var p1_child = document.getElementById(`${transcription_id}`).querySelector("p").childNodes[0];
-              //p1_child.className = "transcription_area_first_child";
-              var p2_child = document.getElementById(`${transcription_id}`).querySelector("p").childNodes[1];
-              p1_child.style.width = "40%";
-              p1_child.style.height = "150px";
-              p1_child.style.margin = "10px";
-              p1_child.style.border = "1px solid black";
-              p2_child.style.width = "40%";
-              p2_child.style.height = "150px";
-              p2_child.style.margin = "10px";
-              p2_child.style.border = "1px solid black";
-              //console.log(p1_child);
-              //console.log(p2_child);
-              // p1_child.style.width="50vw";
-
+              //document.getElementById(`${transcription_id}`).querySelector("p").innerText = "";
+              //document.getElementById(`${transcription_id}`).querySelector("p").appendChild(document.createElement("p")).innerHTML = actual_text;
+              //document.getElementById(`${transcription_id}`).querySelector("p").appendChild(document.createElement("p")).innerHTML = annotation_text;
+              //var p1_child = document.getElementById(`${transcription_id}`).querySelector("p").childNodes[0];
+              
+              //var p2_child = document.getElementById(`${transcription_id}`).querySelector("p").childNodes[1];
+              //p1_child.style.width = "40%";
+              //p1_child.style.height = "150px";
+              //p1_child.style.margin = "10px";
+              //p1_child.style.border = "1px solid black";
+              //p2_child.style.width = "40%";
+              //p2_child.style.height = "150px";
+              //p2_child.style.margin = "10px";
+              //p2_child.style.border = "1px solid black";
+              
             }
 
           }
