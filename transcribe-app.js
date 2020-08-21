@@ -18,7 +18,7 @@ const flash = require("express-flash");
 var morgan = require("morgan");
 // var WaveSurfer=require("wavesurfer.js")
 
-const intializePassport = require("./passport-config");
+const intializePassport = require("./config/passport-config");
 intializePassport(passport);
 
 var newData = "";

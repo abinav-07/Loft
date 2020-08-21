@@ -1,5 +1,6 @@
 const mysql = require("mysql");
-
+const dotenv = require("dotenv");
+dotenv.config();
 // var pool = mysql.createPool({
 //     host: "remotemysql.com",
 //     user: "iGDKuaofUU",
@@ -14,12 +15,12 @@ const mysql = require("mysql");
 //     database: "nodemysql"
 // })
 var pool = mysql.createPool({
-    host: "13.49.25.172",
-    port: "3306",
-    user: "dikson",
-    password: "password",
-    database: "audio-bee-transcribe-test",
-    supportBigNumbers: true
+  port: process.env.MYSQL_PORT,
+  host: process.env.MYSQL_HOST,
+  user: process.env.MYSQL_USER,
+  password: process.env.MYSQL_PASSWORD,
+  database: process.env.MYSQL_DBNAME_TRANSCRIBE_DB,
+  supportBigNumbers: true,
 });
 
 module.exports = pool;
