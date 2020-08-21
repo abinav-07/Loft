@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Signature Verification</title>
+    {{!-- Font Awesome CSS --}}
+    <link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    {{!-- Bootstrap CSS --}}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    {{!-- Tabulator CSS --}}
+    <link href="https://unpkg.com/tabulator-tables@4.7.2/dist/css/tabulator.min.css" rel="stylesheet">
+    <style>
+        .word-wrap {
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+
+<body>
+    <h3>User Signature Verification</h3>
+    <ul class="nav nav-tabs mb-3 position-relative" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <a class="nav-link active" id="pending-tab" data-toggle="tab" href="#pending" role="tab"
+                aria-controls="pending" aria-selected="true">Pending</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="approved-tab" data-toggle="tab" href="#approved" role="tab" aria-controls="approved"
+                aria-selected="false">Approved</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="rejected-tab" data-toggle="tab" href="#rejected" role="tab" aria-controls="rejected"
+                aria-selected="false">Rejected</a>
+        </li>
+        <li class="position-absolute" style="right: 0;">
+            <div class="row">
+                <div class="col-6"> <button class="btn btn-success" id="save-btn">Save</button></div>
+                <div class="col-6"> <button class="btn btn-danger" id="cancel-btn">Cancel</button></div>
+            </div>
+        </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active text-center" id="pending" role="tabpanel" aria-labelledby="pending-tab">
+            <table id="pending-table"></table>
+        </div>
+        <div class="tab-pane fade text-center" id="approved" role="tabpanel" aria-labelledby="approved-tab">
+            <table id="approved-table"></table>
+        </div>
+        <div class="tab-pane fade text-center" id="rejected" role="tabpanel" aria-labelledby="rejected-tab">
+            <table id="rejected-table"></table>
+        </div>
+    </div>
+    {{!-- Jquery Bootstrap --}}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    {{!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script> --}}
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+        crossorigin="anonymous"></script>
+    {{!-- Tabulator --}}
+    <script type="text/javascript" src="https://unpkg.com/tabulator-tables@4.7.2/dist/js/tabulator.min.js"></script>
+
+    <script>
+        var save_payload = {
+            approved: [],
+            rejected: []
+        };
+
+
+        var approved_table = new Tabulator("#approved-table", {
+            ajaxURL: "./approved-list",
+            ajaxConfig: "POST",
+            minHeight: 100,
+            layout: "fitColumns",
+            columns: [
+                { title: "Full Name", field: "Full_name" },
+                { title: "Email", field: "Email" },
+                { title: "Address", field: "Country_of_residence" },
+                { title: "Language", field: "Languages", width: "150" },
+                {
+                    title: "Signature", field: "Signature_url", formatter: "image", formatterParams: {
+                        width: 100
+                    }
+                },
+                {
+                    title: "Comment", field: "Signature_comment"
+                }
+            ]
+        })
+        var pending_table = new Tabulator("#pending-table", {
+            ajaxURL: "./pending-list",
+            ajaxConfig: "POST",
+            layout: "fitColumns",
+            minHeight: 100,
+            columns: [
+                { title: "Full Name", field: "Full_name" },
+                { title: "Email", field: "Email" },
+                { title: "Address", field: "Country_of_residence" },
+                { title: "Language", field: "Languages", width: 150 },
+                {
+                    title: "Signature", field: "Signature_url", formatter: "image", formatterParams: {
+                        width: 100
+                    }
+                },
+                {
+                    title: "Approve", hozAlign: "center", formatter: function (cell) {
+                        var cell_data = cell._cell.row.data;
+                        var user_signature_id = cell_data.User_signature_id;
+                        return `<input type="checkbox" data-user_signature_id=${user_signature_id} class="form-control status-checkbox select-checkbox">`;
+                    }
+                },
+                {
+                    title: "Reject", hozAlign: "center", formatter: function (cell) {
+                        var cell_data = cell._cell.row.data;
+                        var user_signature_id = cell_data.User_signature_id;
+                        return `<input type="checkbox" data-user_signature_id=${user_signature_id} class="form-control status-checkbox reject-checkbox">`;
+                    }
+                },
+                {
+                    title: "Comment", formatter: cell => {
+                        var cell_data = cell._cell.row.data;
+                        var user_signature_id = cell_data.User_signature_id;
+                        return `<input type="text" data-user_signature_id=${user_signature_id} class="form-control comment-box">`
+                    }
+                },
+                {
+                    title: "Retry Count", field: "Retry_count"
+                }
+            ]
+        })
+
+        var rejected_table = new Tabulator("#rejected-table", {
+            ajaxURL: "./rejected-list",
+            ajaxConfig: "POST",
+            layout: "fitColumns",
+            minHeight: 100,
+            columns: [
+                { title: "Full Name", field: "Full_name" },
+                { title: "Email", field: "Email" },
+                { title: "Address", field: "Country_of_residence" },
+                { title: "Language", field: "Languages", width: "150", cssClass: "word-wrap" },
+                {
+                    title: "Signature", field: "Signature_url", formatter: "image", formatterParams: {
+                        width: 100
+                    }
+                },
+                {
+                    title: "Comment", field: "Signature_comment"
+                }
+            ]
+        })
+    </script>
+    <script>
+        $(document).on("click", ".select-checkbox", (event) => {
+            var checked = event.target.checked;
+            var user_signature_id = event.target.dataset.user_signature_id;
+
+            if (checked) {
+                //   Disable checkbox with the user_signature_id under reject
+                $(`.reject-checkbox[data-user_signature_id=${user_signature_id}]`).prop("disabled", true);
+                save_payload.approved.push({ user_signature_id: user_signature_id });
+                $(`.comment-box[data-user_signature_id=${user_signature_id}]`).prop("disabled", true)
+            } else {
+                //   Reenable checkbox with the user_signature_id under accept and reject
+                $(`.reject-checkbox[data-user_signature_id=${user_signature_id}]`).prop("disabled", false);
+                save_payload.approved = save_payload.approved.filter(approved_signature => {
+                    return !(approved_signature.user_signature_id == user_signature_id)
+                });
+                $(`.comment-box[data-user_signature_id=${user_signature_id}]`).prop("disabled", false)
+            }
+        })
+    </script>
+    <script>
+        $(document).on("click", ".reject-checkbox", (event) => {
+            var checked = event.target.checked;
+            var user_signature_id = event.target.dataset.user_signature_id;
+            var comment = $(`.comment-box[data-user_signature_id=${user_signature_id}]`).val();
+            if (comment) {
+                if (checked) {
+                    //   Disable checkbox with the user_signature_id under select
+                    $(`.select-checkbox[data-user_signature_id=${user_signature_id}]`).prop("disabled", true);
+                    save_payload.rejected.push({ user_signature_id: user_signature_id, comment: comment })
+                    $(`.comment-box[data-user_signature_id=${user_signature_id}]`).prop("disabled", true)
+                } else {
+                    //   Reenable checkbox with the user_signature_id under select
+                    $(`.select-checkbox[data-user_signature_id=${user_signature_id}]`).prop("disabled", false);
+                    save_payload.rejected = save_payload.rejected.filter(rejected_signature => {
+                        return !(rejected_signature.user_signature_id == user_signature_id)
+                    });
+                    $(`.comment-box[data-user_signature_id=${user_signature_id}]`).prop("disabled", false)
+                }
+            } else {
+                event.preventDefault();
+                alert("Please comment before rejecting")
+            }
+        })
+    </script>
+    <script>
+        $("#save-btn").on("click", (event) => {
+            $.ajax({
+                url: "./update-user-signature-status",
+                method: "POST",
+                data: { save_payload: JSON.stringify(save_payload) },
+                success: (data) => {
+                    alert("Updated");
+                    window.location.reload();
+                }
+            })
+        })
+    </script>
+</body>
+
+</html>
