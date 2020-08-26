@@ -1835,7 +1835,7 @@
         displayCurrentContents();
       }
       //Displaying submit button only if audio is played to last and 10 segements are created    
-      if (is_submitted == "FALSE") {
+      if (is_submitted == "FALSE" && $("#peaks-container").children("div").length>1) {
         console.log($("#peaks-container").children("div"));
         for (var i = 1; i < $("#peaks-container").children("div").length; i++) {
           console.log($("#peaks-container").children("div")[i].title);
@@ -1844,7 +1844,7 @@
             console.log("False");
             checkTextsForSubmit = false;
           }
-          }
+        }
           
         }
         if ((spectrum.getCurrentTime() > (spectrum.getDuration()/2)) && checkTextsForSubmit) {
