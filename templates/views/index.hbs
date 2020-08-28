@@ -3234,11 +3234,7 @@
       saveScores();
       $("#submit-button").hide();
       $("#profile-link-button").show();
-      //Event logs
-      var eventProperties = {
-        project_type: "Sample Segmentation",
-      };
-      logEvent("Sample Completed", eventProperties);
+      logEvent("Audio Test Submitted - S");
       getWebAppId();
     });//Submit Button Click Function End
 
@@ -3455,7 +3451,7 @@
           includeUtm: true,
           includeGclid: true,
         });
-        logEvent("Segmentation Task Loaded");
+        logEvent("Audio Test Screen Loaded - S");
       }
     });
 
