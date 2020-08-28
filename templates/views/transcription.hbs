@@ -1992,7 +1992,10 @@
         }
         if ((spectrum.getCurrentTime() > (spectrum.getDuration() / 2)) && checkTextsForSubmit) {
           console.log(checkTextsForSubmit);
-          $("#submit-button").show();
+          if(is_submitted=="FALSE"){
+             $("#submit-button").show();
+          }
+         
         }
       }
     });
