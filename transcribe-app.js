@@ -1128,7 +1128,8 @@ app.post("/hr-review-table-datas", (req, res) => {
             JOIN audio
             ON users_audio.audio_id = audio.audio_id
             WHERE (users_audio.status IS NULL OR users_audio.status = 'RETRY')
-            AND audio.is_training = "FALSE"
+            AND audio.is_training = "FALSE" 
+            AND audio.type="segmentation"
             ORDER BY users_audio.start_time DESC`;
 
     pool.query(sql, (err, result) => {
