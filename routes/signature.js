@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-
 const axios = require("axios");
 const async = require("async");
 const _ = require("lodash");
