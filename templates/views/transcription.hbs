@@ -1205,27 +1205,23 @@
       e.amplitude = n;
     })(window, document);
     var reqAPIKey = "534517ca15b0c94bfebf670795e2850d";
-                // Dev Key
-                // var reqAPIKey = "0dbfbe1b135e0cd5065ac2538595afd4";
-  </script>
-  <script>
+    var params = {
+      user_id
+    }
     $.ajax({
       method: "POST",
       url: "/get-web-app-id",
-      data: {
-        user_id: user_id
-      },
-      success: function (data) {
-        var web_app_id = data[0].web_app_id;
-        amplitude.getInstance().init(reqAPIKey, web_app_id, {
+      data: params,
+      success: function (response) {
+
+        amplitude.getInstance().init(reqAPIKey, response.web_app_id, {
           includeReferrer: true,
           includeUtm: true,
           includeGclid: true,
         });
-        $(function () {
-          logEvent("Audio Test Screen Loaded - Trans");
-        })
+        logEvent("Audio Test Screen Loaded - Trans");
       }
+    });
     })
   </script>
   <script>
@@ -1993,10 +1989,10 @@
         }
         if ((spectrum.getCurrentTime() > (spectrum.getDuration() / 2)) && checkTextsForSubmit) {
           console.log(checkTextsForSubmit);
-          if(is_submitted=="FALSE"){
-             $("#submit-button").show();
+          if (is_submitted == "FALSE") {
+            $("#submit-button").show();
           }
-         
+
         }
       }
     });
