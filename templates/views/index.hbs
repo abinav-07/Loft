@@ -1793,7 +1793,11 @@
       }
       //Displaying submit button only if audio is played to last and 10 segements are created    
       if ((spectrum.getCurrentTime() > (spectrum.getDuration() - 0.1)) && ($("#peaks-container").children("div").length > 10)) {
-        $("#submit-button").show();
+        console.log(is_submitted);
+        if(is_submitted=="FALSE"){
+          $("#submit-button").show();
+        }
+        
       }
     });
 

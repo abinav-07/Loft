@@ -1089,8 +1089,7 @@
   <script>
     var user_id;
     var audio_id;
-    audio_id = {{ audio_id }
-             };
+    audio_id = {{ audio_id }};
     user_id = {{ user_id }};
 
 
@@ -1994,7 +1993,10 @@
         }
         if ((spectrum.getCurrentTime() > (spectrum.getDuration() / 2)) && checkTextsForSubmit) {
           console.log(checkTextsForSubmit);
-          $("#submit-button").show();
+          if(is_submitted=="FALSE"){
+             $("#submit-button").show();
+          }
+         
         }
       }
     });
