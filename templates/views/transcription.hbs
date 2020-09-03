@@ -1222,7 +1222,6 @@
         logEvent("Audio Test Screen Loaded - Trans");
       }
     });
-    })
   </script>
   <script>
     function logEvent(ampEventName, ampEventProp) {
@@ -1775,7 +1774,6 @@
                 is_submitted = response[0]["is_submitted"];
                 //Checking if already submitted
                 if (is_submitted == "TRUE") {
-                  console.log("Euta log");
                   disableAllInterfaceOnSubmit();
                   //ajaxReq();//Ajax Request to check correct incorrect segment
                   //diffCheck();
@@ -1862,7 +1860,6 @@
     function removeTopDivSpeakers(topSpeakerClickedId) {
       //Getting the clicked Top Div Class
       var getClickedIdClass = document.getElementById(topSpeakerClickedId).className;
-      console.log(getClickedIdClass);
       //Checking if the segments of the class still remain
       if ($("#peaks-container").children().hasClass(getClickedIdClass)) {
 
@@ -1919,7 +1916,6 @@
       } else {
         emptySpeaker();
       }
-      console.log(userInputTopSpeakerName);
     }
     //save top div speakers function end 
 
@@ -1976,9 +1972,7 @@
       }
       //Displaying submit button only if audio is played to last and 10 segements are created    
       if (is_submitted == "FALSE" && $("#peaks-container").children("div").length > 1) {
-        console.log($("#peaks-container").children("div"));
         for (var i = 1; i < $("#peaks-container").children("div").length; i++) {
-          console.log($("#peaks-container").children("div")[i].title);
           if ($("#peaks-container").children("div")[i].title == "default" || $("#peaks-container").children("div")[i].title == "Singing") {
             if ($("#peaks-container").children("div")[i].innerText === "") {
               console.log("False");
@@ -1988,7 +1982,6 @@
 
         }
         if ((spectrum.getCurrentTime() > (spectrum.getDuration() / 2)) && checkTextsForSubmit) {
-          console.log(checkTextsForSubmit);
           if (is_submitted == "FALSE") {
             $("#submit-button").show();
           }
@@ -2135,7 +2128,6 @@
         if ((($("#annotation-div").children("div").length) * leftSpeakerCategoryDivMargin + leftSpeakerCategoryDivMargin) > $("#annotation-div").width()) {
 
           leftSpeakerCategoryDivMargin = ($("#annotation-div").width() - leftSpeakerCategoryDivMargin) / $("#annotation-div").children("div").length;
-          console.log(leftSpeakerCategoryDivMargin);
           $("#annotation-div").children().each(function (index, value) {
             this.style.left = (leftSpeakerCategoryDivMargin * index + "px");
             //this.style.left = (this.style.left.replace("px","")-20)+"px";
@@ -3129,25 +3121,25 @@
 
     //Function to Check correct speakername
     function spellCheckSpeakerName(speakerName) {
-      console.log(speakerName);
+      {{!-- console.log(speakerName); --}}
       var splitSpeakerName = speakerName.split(" ");
-      console.log(splitSpeakerName);
+      {{!-- console.log(splitSpeakerName); --}}
       if (splitSpeakerName[0] != "speaker") {
         if (splitSpeakerName[0] == "DTMF" || splitSpeakerName[0] == "Applause" || splitSpeakerName[0] == "Laughter" || splitSpeakerName[0] == "Music" || splitSpeakerName[0] == "Noise" || splitSpeakerName[0] == "Ringtone" || (splitSpeakerName[0] == "unidentifiable" && splitSpeakerName[1] == "speaker")) {
           return true;
         } else if (splitSpeakerName[0] == "pre" && splitSpeakerName[1] == "recorded" && splitSpeakerName[2] == "speaker") {
           //Insert More Code Below if pre recorded speaker name is needed too!
           if (splitSpeakerName.length != 4) {
-            console.log("HERE")
+            {{!-- console.log("HERE") --}}
             return false;
           }
           if (isNaN(splitSpeakerName[3])) {
-            console.log("HERE")
+            {{!-- console.log("HERE") --}}
             return false;
           }
           return true;
         }
-        console.log("HERE")
+        {{!-- console.log("HERE") --}}
         return false;
       }
       if (isNaN(splitSpeakerName[1])) {
@@ -3539,17 +3531,17 @@
                   replaced_annotation_text = difference.value.replace(regexToReplace, " .").split(" ");
                   replaced_actual_text = difference.value.replace(regexToReplace, " .").split(" ");
                   rightWordsScore += replaced_annotation_text.length;
-                  console.log(replaced_annotation_text);
+                  {{!-- console.log(replaced_annotation_text); --}}
 
                   totalWordCount += replaced_actual_text.length;
                 }
-                console.log("Right" + rightWordsScore)
+                {{!-- console.log("Right" + rightWordsScore)
 
                 console.log("Total" + totalWordCount);
 
 
                 console.log(replaced_annotation_text);
-                console.log(actual_text);
+                console.log(actual_text); --}}
               })
 
               //console.log(document.getElementById(`${transcription_id}`).innerHTML);
@@ -3583,9 +3575,9 @@
     function saveScores() {
       //console.log(overallScore);
       var todayDate = new Date();
-      console.log(rightWordsScore);
+      {{!-- console.log(rightWordsScore); --}}
 
-      console.log(scoreInPercentage);
+      {{!-- console.log(scoreInPercentage); --}}
       params = {
         user_id,
         audio_id: audio_id,
