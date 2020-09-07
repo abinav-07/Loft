@@ -3259,7 +3259,7 @@
           }
           $.ajax({
             method: "POST",
-            url: "https://webapp.theaudiobee.com/api/set-user-language-project-type-status",
+            url: "{{ webapp_basepath }}/api/set-user-language-project-type-status",
             data: mailParams,
             success: function () {
               console.log("Web app status set");
@@ -3271,7 +3271,7 @@
 
     //clicking in profile link button
     $("#profile-link-button").on("click", () => {
-      window.location.href = "https://webapp.theaudiobee.com/sample#segmentation";
+      window.location.href = "{{ webapp_basepath }}/sample#segmentation";
     });//Profile Link Button function End
 
     //function to display current div content in annotation box

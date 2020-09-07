@@ -60,6 +60,7 @@ app.use(passport.session());
 app.use(function (req, res, next) {
   res.locals.path = req.path.split("/")[1];
   res.locals.amplitude_api_key = process.env.AMPLITUDE_API_KEY;
+  res.locals.webapp_basepath = process.env.WEBAPP_BASEPATH;
   next();
 });
 hbs.registerPartials(partialPaths);

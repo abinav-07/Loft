@@ -3477,7 +3477,7 @@
               console.log(mailParams);
               $.ajax({
                 method: "POST",
-                url: "https://webapp.theaudiobee.com/api/set-user-language-project-type-status",
+                url: "{{ webapp_basepath }}/api/set-user-language-project-type-status",
                 data: mailParams,
                 success: function () {
                   console.log("Web app status set");
@@ -3589,7 +3589,7 @@
 
     //clicking in profile link button
     $("#profile-link-button").on("click", () => {
-      window.location.href = "https://webapp.theaudiobee.com/sample#transcription";
+      window.location.href = "{{ webapp_basepath }}/sample#transcription";
       //window.location.href = "http://localhost:5000/sample#transcription";
       //localStorage.setItem("goToTab","#transcription");
     });//Profile Link Button function End
