@@ -1259,6 +1259,102 @@
       }//Canvas Creation End      
     });//Function end for on ready spectrum
 
+    
+    //Resize Window on ready
+    $(document).ready(function(){
+      resizeWindow();
+    });
+
+    window.onload = function(e){ 
+      resizeWindow();
+    }
+
+    window.addEventListener("resize",resizeWindow)
+
+    function resizeWindow(){
+        
+      if (window.matchMedia("(max-width: 1500px)").matches) {
+          $("#peaks-container > wave").css({ "height": "65vw" });
+          $("#annotation-box").css({
+             "box-shadow": "4px 4px 4px #888888",
+              "bottom": "6rem",
+              "right": "1rem",
+              "border": "1px solid grey",
+              "width": "370px",
+              "position": "fixed",
+              "z-index": "3",
+              "background-color": "white",
+              "overflow-x" :"hidden",
+              "overflow-y": "hidden",
+              "display": "none"
+          });
+
+          //canvas height to set the top speaker annotation div position from left 
+          canvasHeight = $("#peaks-container > wave canvas").height();
+
+            $("#plus-button").css({
+              "marginLeft": `65vw`
+            })
+
+            $("#plus-button").css({
+               "marginTop": `${$("#peaks-container").position().top}px`
+            })
+
+            $("#time-line").css({
+              "transform": `translate(0px,${$("wave").height() - 10}px)`
+            })
+            //$("#annotation-div-head").css({
+            //  "left": `${canvasHeight}px`
+            //})
+
+        
+            seekToCookie();
+             
+          /* The viewport is less than, or equal to, 1500 pixels wide */
+        } else if(window.matchMedia("(min-width: 1500px)").matches) {
+              $("#peaks-container > wave").css({ "height": "55vw" });
+              $("#annotation-box").css({
+                "box-shadow": "4px 4px 4px #888888",
+                  "bottom": "2rem",
+                  "right": "10rem",
+                  "border": "1px solid grey",
+                  
+                  "position": "fixed",
+                  "z-index": "3",
+                  "background-color": "white",
+                  "overflow-x" :"hidden",
+                  "overflow-y": "hidden",
+                  "display": "none"
+              });
+
+
+              //canvas height to set the top speaker annotation div position from left 
+              canvasHeight = $("#peaks-container > wave canvas").height();
+
+              $("#plus-button").css({
+                "marginLeft": `56vw`
+              })
+              $("#plus-button").css({
+               "marginTop": `${$("#peaks-container").position().top}px`
+            })
+              $("#time-line").css({
+                "transform": `translate(0px,${$("wave").height() - 10}px)`
+              });
+              seekToCookie();
+        }  
+    }
+  //function to seek to set cookie
+    function seekToCookie(){
+          //Load Wave to previous time stamp from cookie
+            setTimeout(function(){
+              if (getCookie("current_time") > 0) {
+                spectrum.seekTo(parseFloat(getCookie("current_time")));
+              //spectrum.seekTo(0.0404);
+            };
+            },1500);
+    }
+
+
     //Function to set current time
     function updateTimer() {
       var formatTime = secondsToTimestamp(spectrum.getCurrentTime());

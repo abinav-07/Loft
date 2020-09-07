@@ -204,11 +204,11 @@
 
     #top-div-for-scrolling-enabling {
       width: 50vw;
-      height: 60vh;
+      height: 30vh;
       position: absolute;
       z-index: 1;
       left: 0px;
-      top: 0px;
+      top: 150px;
     }
 
     #plus-button {
@@ -395,6 +395,12 @@
       text-align: center;
       vertical-align: top;
       white-space: nowrap;
+    }
+
+    #display-training-segments{
+      margin-top: 4rem;
+      margin-left: 1rem;
+      display: none;
     }
 
     .discard-changes {
@@ -695,6 +701,24 @@
 
     }
 
+    #already-submitted-dialouge-box{
+      background-color: white;
+      box-shadow: 0 0 12px black;
+      clear: both;
+      text-align: center;
+      font-size: 18px;
+      color: #333;
+      margin: 0 auto;
+      padding: 2em;
+      position: absolute;
+      width:20vw;
+      height: 10vh;
+      z-index: 10000;
+      top: 20vh;
+      left: 40vw;
+      display: none;
+    }
+
     #top-div-control-navigator {
       border-top: 1px solid #888888;
       display: flex;
@@ -703,6 +727,12 @@
       font-size: 16px;
       justify-content: space-around;
 
+    }
+
+    @-moz-document url-prefix() { 
+      .annotation-time-ms-class{
+        width: 45px;
+      }
     }
 
     /* Chrome, Safari, Edge, Opera */
@@ -723,339 +753,14 @@
   <div id="header">
     {{>header}}
   </div>
-
-  <div id="top-block">
-    <div id="button">
-      <a class="btn" id="play-button" href="#">
-        <i class="fa fa-play" style="color:grey;font-size:30px"></i></a>
-    </div>
-    <div id="time">
-      <h3 class="audio_time_hours">00 h</h3>
-      <h2 id="start-timestamp">00:00.000 </h2>
-      <span id="audio-time-divider"></span>
-      <h3 class="audio_time_hours">00 h</h3>
-      <h3 id="total-timestamp">00:00.000</h3>
-    </div>
-    <div class="audio-button-top-container">
-      <div class="audio-button-top-row">
-
-      </div>
-      <div class="audio-button-bottom-row">
-        <label class="playback_speed">
-          Playback Speed:
-          <select id="play_back_rate" style="border-style: none; font-size: 1em; margin-left: .1em;">
-            <option value="0.5">0.5x</option>
-            <option value="0.75">0.75x</option>
-            <option value="1" selected>1x</option>
-            <option value="1.25">1.25x</option>
-            <option value="1.5">1.5x</option>
-          </select>
-        </label>
-      </div>
-    </div>
-    {{!-- div for hamburger Icons After Submit Click --}}
-    <div id="errorToggle">
-      <input type="checkbox" id="displayErrorCB" />
-      <span class="showHamburger"></span>
-      <span class="showHamburger"></span>
-      <span class="showHamburger"></span>
-      <p id="closeHamburger">X</p>
-      <ul id="errorMenu">
-        <a href="#">
-          <li id="speaker-labelling-error"></li>
-        </a>
-        <a href="#">
-          <li id="annotation-labelling-error"></li>
-        </a>
-        <a href="#">
-          <li id="unnecessary-segments-errors"></li>
-        </a>
-        <a href="#">
-          <li id="total-errors"></li>
-        </a>
-
-        {{!--<a href="#">
-          <li id="total-points">Total Points: 100%</li>
-        </a>
-        --}}
-      </ul>
-    </div>
-    {{!-- Hambuger Work Finish --}}
-  </div>
-  <div id="top-div-for-scrolling-enabling">
-  </div>
-  <div id="annotation-div-head">
-    <div id="annotation-div">
-
-    </div>
-  </div>
-  
-  
-       <button id="plus-button">
-         <i class="fa fa-plus"></i>
-  </button> 
-  <div id="v-container">
-    <div id="wave-container">
-      <div id="peaks-container">
-        <div id="time-line">
-        </div>
-      </div>
-    </div>
-  </div>
-      
-      
-   
-      
-    
-   <div id="annotation-box">
-    <div class="annotation-editHeading" style=" background-color:#ffb570 ; height: 40px; ">
-      <p style="padding-left: 20px; font-size: 20px; margin:auto"> Edit Annotation <span id="close">x</span></p>
-    </div>
-    <div id="annotation-time">
-      <button id="repeat-button" style=" margin-left: 7px; border:none; background: none;"><i class="fa fa-repeat"
-          style=" color:black;font-size:16px;cursor:pointer;"></i> </button>
-      <span id="annotation-start" style="font-size: 16px;font-weight: 600;">
-        <input id="annotation-start-minute" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
-          max="59" onclick="" onchange="updateSegmentonTimeChange()" value="00">
-        :
-        <input id="annotation-start-seconds" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
-          max="59" oninput="" onchange="updateSegmentonTimeChange()" value="00">
-        .
-        <input id="annotation-start-milliseconds" class="annotation-time-ms-class disable-all-on-Submit" type="number"
-          min="0" max="999" oninput="" onchange="updateSegmentonTimeChange()" value="000">
-      </span>
-      <span style="font-size: 40px;">-</span>
-      <span id="annotation-end" style="font-size: 16px;font-weight: 600;">
-        <input id="annotation-end-minute" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
-          max="59" oninput="" onchange="updateSegmentonTimeChange()" value="00">
-        :
-        <input id="annotation-end-seconds" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
-          max="59" oninput="" onchange="updateSegmentonTimeChange()" value="00">
-        .
-        <input id="annotation-end-milliseconds" class="annotation-time-ms-class disable-all-on-Submit" type="number"
-          min="0" max="999" oninput="" onchange="updateSegmentonTimeChange()" value="000">
-      </span>
-    </div>
-
-    <div>
-      <select id="annotation-type" class="disable-all-on-Submit" onchange="displayArea()"
-        style="z-index: 3;font-size: 18px; padding: 10px;">
-        <option value="default" class="annotation-selections" selected="selected"></option>
-        <option value="Singing" class="annotation-selections">Singing</option>
-        <option value="Applause" class="annotation-selections">Applause</option>
-        <option value="DTMF" class="annotation-selections">DTMF</option>
-        <option value="Laughter" class="annotation-selections">Laughter</option>
-        <option value="Music" class="annotation-selections">Music</option>
-        <option value="Noise" class="annotation-selections">Noise</option>
-        <option value="Ringtone" class="annotation-selections">Ringtone</option>
-      </select>
-    </div>
-    <div id="speaker">
-      <input id="speaker-name" class="disable-all-on-Submit" placeholder="Select or enter a new speaker" type="text"
-        list="select-options" style="z-index: 3;font-size: 18px; padding: 10px;">
-      <datalist id="select-options">
-
-      </datalist>
-    </div>
-    <div>
-      <textarea id="transcription-area" class="disable-all-on-Submit" rows="8"></textarea>
-    </div>
-
-    <hr style="opacity: 0.5;">
-    <button id="annotation-remove" class="disable-all-on-Submit"
-      style="margin:10px;color:red; border:none;background: none;font-size: 18px; cursor:pointer;">REMOVE</button>
-    <button id="annotation-split" class="disable-all-on-Submit"
-      style="margin:5px 10px 20px 0px;color:black; border:none;background: none;font-size: 18px;">SPLIT</button>
-    <button id="annotation-save" class="disable-all-on-Submit"
-      style="padding:10px; margin:0px 10px 15px 50px;color:white; border-radius:4px;border:none;background: #2f84ba;font-size: 18px;cursor: pointer;">SAVE</button>
-  </div><!-- Ending tag for Annotation Box -->
-      
-  
-  
-
- 
-
-  {{!-- Div For Top Div Speakers --}}
-  <div id="top-div-speaker-control">
-    <section id="top-div-control-header">
-      <p id="top-div-control-lable" style="padding: 10px 11px;">SPEAKER</p>
-      <button id="top-div-control-close-button">X</button>
-    </section>
-    <input id="top-div-control-speaker-name"></input>
-    <section id="top-div-control-remove-save-section">
-      <button id="top-div-control-remove-button">REMOVE</button>
-      <button id="top-div-control-save-button">SAVE</button>
-    </section>
-    <section id="top-div-control-navigator">
-      <p id="navigator-label">Navigate Speaker Turn</p>
-      <button id="top-speaker-first-navigator-button"
-        style=" margin-left: 7px; border:none; background: none; float:right"><i class="fa fa-arrow-left"
-          style=" color:black;font-size:14px;cursor:pointer;"></i> </button>
-      <button id="top-speaker-last-navigator-button" style=" margin-left: 7px; border:none; background: none;"><i
-          class="fa fa-arrow-right" style=" color:black;font-size:14px;cursor:pointer;"></i> </button>
-    </section>
-  </div>
-  {{!-- Div For Top Div Speakers End --}}
-
-  <!-- Div For Confirmation Dialouge Box -->
-  <div id="confirmation-box">
-    <p>Pending Changes, Wish to discard Them?</p>
-    <button class="confirm-changes">Confirm</button>
-    <button class="discard-changes">Cancel</button>
-  </div>
-
-  <!-- Div For Top Speaker Editor Box -->
-  <div id="top-speaker-editor-box">
-    <span>Speaker</span>
-    <span id="close-top-speaker-div">x</span>
-  </div>
-
-  <!-- Div For Empty Speaker Name Dialouge Box -->
-  <div id="empty-speaker">
-    <p>Speaker is empty or invalid</p>
-    <button class="discard-changes">Ok</button>
-  </div>
-
-  {{!-- Div For hundredMilliseconds-gap Dialouge Box --}}
-  <div id="hundredMilliseconds-gap">
-    <p>Hundred Milliseconds Gap Not Matched</p>
-    <button class="discard-changes">Ok</button>
-  </div>
-
-  {{!-- Div For endTime-moreThanStartTime Dialouge Box --}}
-  <div id="endTime-moreThanStartTime">
-    <p>End Time Found Less Than Start Time</p>
-    <button class="discard-changes">Ok</button>
-  </div>
-
-  {{!-- Div For sameSpeaker-Overlapping Dialouge Box --}}
-  <div id="sameSpeaker-Overlapping">
-    <p>Same Speakers cannot be Overlapped.</p>
-    <button class="discard-changes">Ok</button>
-  </div>
-
-  {{!-- Div For top speakers Remove Dialouge Box --}}
-  <div id="top-speaker-remove-dialouge-box">
-    <p>Speaker is in use and can't be removed.</p>
-    <button class="discard-changes">Ok</button>
-  </div>
-
-  {{!-- Div For displaying guidelines-box --}}
-  <div id="guidelines-box">
-    <div>
-      <table class="keyboard-shortcuts">
-        <caption>Keyboard Shortcuts</caption>
-        <thead>
-          <tr>
-            <th>Action</th>
-            <th colspan="3">Shortcuts</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Toggle audio play/pause</td>
-            <td>space</td>
-            <td>0</td>
-            <td>ctrl+space</td>
-          </tr>
-          <tr>
-            <td>Copy current time to turn start time</td>
-            <td>ctrl+semicolon</td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td>Copy current time to turn end time</td>
-            <td>ctrl+single-quote</td>
-            <td></td>
-            <td></td>
-          </tr>
-          {{!--         
-          <tr>
-            <td>Page up</td>
-            <td>pg-up</td>
-            <td>alt+up</td>
-            <td></td>
-          </tr>
-          <tr>
-            <td>Page down</td>
-            <td>pg-down</td>
-            <td>alt+down</td>
-            <td></td>
-          </tr>
-           --}}
-          <tr>
-            <td>Jump to start</td>
-            <td>home</td>
-            <td></td>
-            <td></td>
-            <!--<td>alt+left</td>
-            <td></td>-->
-          </tr>
-          <tr>
-            <td>Jump to end</td>
-            <td>end</td>
-            <td></td>
-            <td></td>
-            <!--<td>alt+right</td>-->
-          </tr>
-          <tr>
-            <td>Create a new turn</td>
-            <td>ctrl+shift+a</td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td>Skip backward 500ms</td>
-            <td>8</td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td>Skip forward 500ms</td>
-            <td>5</td>
-            <td></td>
-            <td></td>
-          </tr>
-          {{!--           
-          <tr>
-            <td>Jump to largest gap in coverage</td>
-            <td>ctrl+shift+space</td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td>Skip to next gap in coverage</td>
-            <td>ctrl+alt+space</td>
-            <td></td>
-            <td></td>
-          </tr>
-           --}}
-          <tr>
-            <td>Play current turn or annotation</td>
-            <td>r</td>
-            <td>alt+r</td>
-            <td></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <button id="close-guidelines">OK</button>
-  </div>
-
-  {{!-- Submit button for review testing --}}
-  <button id="submit-button" class="disable-all-on-Submit">Submit</button>
-  <button id="profile-link-button">Go To My Profile</button>
-
-  <audio id="my-audio">
-    <source src="example.mp3">
-  </audio>
+  {{>body}}
 
   <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 
   <script src="local_modules/wavesurfer.js/dist/wavesurfer.js"></script>
   <script src="local_modules/wavesurfer.js/dist/plugin/wavesurfer.timeline.js"></script>
   <script src="local_modules/wavesurfer.js/dist/plugin/wavesurfer.regions.js"></script>
+  <script src="public/js/resize.js"></script>
   <!--<script src="wavesurfer.js/src/drawer.multicanvas.js"></script>-->
   <script>
     var user_id;
@@ -1142,7 +847,11 @@
         $("#play-button").find($(".fa")).toggleClass('fa-pause fa-play');
       }
       document.getElementById('total-timestamp').innerText = secondsToTimestamp(spectrum.getDuration());
-    })
+    });
+
+    if (navigator.userAgent.indexOf("Firefox") != -1) {
+      console.log("Mozilla here");
+    }
 
     //function on spectrum is ready 
     spectrum.on("ready", function () {
@@ -1249,7 +958,10 @@
       }
 
       //Making our canvas line visible 
-      $("#peaks-container > wave").css({ "overflow": "" });
+      $("#peaks-container > wave").css({ "overflow": "" });      
+      
+
+      //$("#peaks-container > wave").css({ "height": "65vw" });
       //Creating a Canvas straight Line
       var canvas = $("#peaks-container > wave canvas");
       var newCanvas = document.createElement("canvas");
@@ -1274,6 +986,29 @@
         context.stroke();
       }//Canvas Creation End      
     });//Function end for on ready spectrum
+
+    //Resize Window on ready
+    $(document).ready(function(){
+      resizeWindow();
+    });
+
+    window.onload = function(e){ 
+      resizeWindow();
+    }
+
+    window.addEventListener("resize",resizeWindow)
+
+    
+  //function to seek to set cookie
+    function seekToCookie(){
+          //Load Wave to previous time stamp from cookie
+            setTimeout(function(){
+              if (getCookie("current_time") > 0 && $("#peaks-container").children("div").length>1) {
+                spectrum.seekTo(parseFloat(getCookie("current_time")));
+              //spectrum.seekTo(0.0404);
+            };
+            },1500);
+    }
 
     //Function to set current time
     function updateTimer() {
@@ -1314,13 +1049,15 @@
 
     //function to convert seconds to minute, seconds and milliseconds
     function secondsToTimestamp(seconds) {
+      //console.log(seconds)
 
       var n = Math.floor(seconds);
       var ms = (seconds - n).toFixed(3);
+      
       seconds = Math.floor(seconds);
       var h = Math.floor(seconds / 3600);
       var m = Math.floor((seconds - (h * 3600)) / 60);
-      var s = seconds - (h * 3600) - (m * 60);
+      var s = Math.ceil(seconds) - (h * 3600) - (m * 60);
 
       m = m < 10 ? '0' + m : m;
       s = s < 10 ? '0' + s : s;
@@ -1458,11 +1195,7 @@
         })
       };
 
-      //Load Wave to previous time stamp from cookie
-      if (getCookie("current_time") > 0) {
-        spectrum.seekTo(parseFloat(getCookie("current_time")));
-        //spectrum.seekTo(0.0404);
-      };
+      
 
       //Hiding Annotation Div
       $("#annotation-box").hide();
@@ -1595,12 +1328,23 @@
                 is_submitted = response[0]["is_submitted"];
                 //Checking if already submitted
                 if (is_submitted == "TRUE") {
+                  //$("#display-training-segments").show();//Display Select Tag For Correct Segments
                   console.log("Euta log");
                   disableAllInterfaceOnSubmit();
                   ajaxReq();//Ajax Request to check correct incorrect segment
                   //displayHamburger();
                   $("#submit-button").hide();
                   $("#profile-link-button").show();
+                  if(!location.hash){
+                    $("#already-submitted-dialouge-box").show();
+                    $("body").not("#already-submitted-dialouge-box").css({
+                      backgroundColor: "#c2c1c0",
+                      opacity: "0.8"
+                    })
+                    //Boolean to stop user from using LT
+                    confirmChangesboxBool = true;
+                  }
+                  
                 }
               }
             }
@@ -1706,7 +1450,7 @@
       var getClickedIdClass = document.getElementById(topSpeakerClickedId).className;
       var speakerNameFound = false;
       var userInputTopSpeakerName = $("#top-div-control-speaker-name").val();
-      if (spellCheckSpeakerName(userInputTopSpeakerName)) {
+      if (spellCheckSpeakerName(userInputTopSpeakerName,"speaker")) {
         document.getElementById(topSpeakerClickedId).className = userInputTopSpeakerName.replace(/ /g, "-");
         document.getElementById(topSpeakerClickedId).querySelector("p").innerText = userInputTopSpeakerName;
         $("#peaks-container").children().each(function (index, value) {
@@ -1801,10 +1545,15 @@
       }
     });
 
+    var colorArr=[];
     //colorPicker
     function getRandomColor() {
-      var hue = Math.floor(Math.random() * 355);
-      return `hsl(${hue},100%,90%)`;
+      
+      var hue = Math.floor(Math.random() * 360);        
+      
+      
+    return `hsl(${hue},100%,90%)`;
+      
     }
 
     //function to create a div
@@ -1821,7 +1570,7 @@
       div.className = segmentClass.replace(/ /g, "-");
       div.title = segmentTitle;
       var p = document.createElement("p");
-      var colorArr = ["#f5d98c", "#f29363", "#b4ede9", "#a1edbc"];
+      
       var neededColor = getRandomColor();
       div.style.height = "250px";
       //if it is actual data from database, display correct or incorrect 
@@ -2182,17 +1931,20 @@
         segmentEnd = spectrum.regions.list[currentId].end;
         var annotationText = "";
         var speakerName = "";
+        var spellCheckSpeakerType="";
         var annotationType = "";
         var val = document.getElementById("annotation-type");
         if (val.value !== "default" && val.value !== "Singing") {
           annotationType = document.getElementById("annotation-type").value;
 
           speakerName = document.getElementById("annotation-type").value;
+          spellCheckSpeakerType="annotation";
 
           annotationText = val.value;
         } else {
           annotationType = document.getElementById("annotation-type").value;
           speakerName = document.getElementById("speaker-name").value;
+          spellCheckSpeakerType="speaker";
           if (val.value == "Singing" && $("#transcription-area").val().trim() !== "") {
             annotationText = $("#transcription-area").val();
           } else if (val.value == "default") {
@@ -2213,8 +1965,8 @@
           audio_id: audio_id
         }
         //console.log(checkOverlappingDiv(speakerName, segmentStart, segmentEnd));
-        if (speakerName.length > 0 && hundredMillisecSegmentCheck && !segmentEndingTimeMoreThanStartingTime && spellCheckSpeakerName(speakerName) && (!checkOverlappingDiv(speakerName, segmentStart, segmentEnd))) {
-          if (spellCheckSpeakerName(speakerName)) {
+        if (speakerName.length > 0 && hundredMillisecSegmentCheck && !segmentEndingTimeMoreThanStartingTime && spellCheckSpeakerName(speakerName,spellCheckSpeakerType) && (!checkOverlappingDiv(speakerName, segmentStart, segmentEnd))) {
+          if (spellCheckSpeakerName(speakerName,spellCheckSpeakerType)) {
             //Var to store id from database
             var segmentIdFromDatabase = 0;
 
@@ -2262,7 +2014,7 @@
             emptySpeaker();
           }
         } else {
-          if (speakerName.length == 0 || !spellCheckSpeakerName(speakerName)) {
+          if (speakerName.length == 0 || !spellCheckSpeakerName(speakerName,spellCheckSpeakerType)) {
             //console.log("Empty Speaker Name")
             emptySpeaker();
           } else if (!hundredMillisecSegmentCheck) {
@@ -2295,7 +2047,7 @@
           document.getElementById(segmentId).className = speakerName;
           annotationText = val.value;
           document.getElementById(segmentId).querySelector("p").innerText = annotationText;
-        } else if (segmentclass.length >= 1 /*&& segmentclass.split(" ").length <= 2*/ && spellCheckSpeakerName(segmentclass)) {
+        } else if (segmentclass.length >= 1 /*&& segmentclass.split(" ").length <= 2*/ && spellCheckSpeakerName(segmentclass,"speaker")) {
           //checking if speaker is already Available          
           if ($("#annotation-div").children().hasClass(segmentclass.replace(/ /g, "-"))) {
             $("#annotation-div").children().each(function (index, value) {
@@ -2350,7 +2102,7 @@
             document.getElementById(currentId).style.bottom = ((canvasHeight - 8) + leftSpeakerCategoryDivMargin * (($("#annotation-div").children("div").length))) + "px";
             topSpeakerDiv(speakerName, newColor);
           }
-        } else if (segmentclass.length == 0 || segmentclass.split(" ").length > 2 || spellCheckSpeakerName(segmentclass)) {
+        } else if (segmentclass.length == 0 || segmentclass.split(" ").length > 2 || spellCheckSpeakerName(segmentclass,"speaker")) {
           //console.log("Speaker Name not found");
           //console.log(speakerName);
           emptySpeaker();
@@ -2387,7 +2139,7 @@
 
         //console.log("20");
         //console.log(checkOverlappingDiv(speakerName, newStartTime, newEndTime));
-        if (speakerName.length > 0 && hundredMillisecSegmentCheck && !segmentEndingTimeMoreThanStartingTime && spellCheckSpeakerName(speakerName) && !checkOverlappingDiv(speakerName, newStartTime, newEndTime)) {
+        if (speakerName.length > 0 && hundredMillisecSegmentCheck && !segmentEndingTimeMoreThanStartingTime && spellCheckSpeakerName(speakerName,spellCheckSpeakerType) && !checkOverlappingDiv(speakerName, newStartTime, newEndTime)) {
           //console.log("Update vairako");
           $.ajax({
             method: "POST",
@@ -2406,7 +2158,7 @@
         } else {
           //console.log(speakerName);
           //console.log("annotation ma ya aako ho?");
-          if (speakerName.length < 0 || !spellCheckSpeakerName(speakerName)) {
+          if (speakerName.length < 0 || !spellCheckSpeakerName(speakerName,spellCheckSpeakerType)) {
             emptySpeaker();
           } else if (!hundredMillisecSegmentCheck) {
             //console.log("Less Than Hundred Milliseconds");
@@ -2888,12 +2640,13 @@
     }
 
     //Function to Check correct speakername
-    function spellCheckSpeakerName(speakerName) {
+    function spellCheckSpeakerName(speakerName,type) {
+      
       console.log(speakerName);
       var splitSpeakerName = speakerName.split(" ");
-      console.log(splitSpeakerName);
-      if (splitSpeakerName[0] != "speaker") {
-        if (splitSpeakerName[0] == "DTMF" || splitSpeakerName[0] == "Applause" || splitSpeakerName[0] == "Laughter" || splitSpeakerName[0] == "Music" || splitSpeakerName[0] == "Noise" || splitSpeakerName[0] == "Ringtone" || (splitSpeakerName[0] == "unidentifiable" && splitSpeakerName[1] == "speaker")) {
+      //console.log(splitSpeakerName);
+      if (splitSpeakerName[0] != "speaker" ) {
+        if (((type=="annotation") && (splitSpeakerName[0] == "DTMF" || splitSpeakerName[0] == "Applause" || splitSpeakerName[0] == "Laughter" || splitSpeakerName[0] == "Music" || splitSpeakerName[0] == "Noise" || splitSpeakerName[0] == "Ringtone")) || ((type=="speaker") && (splitSpeakerName[0] == "unidentifiable" && splitSpeakerName[1] == "speaker"))) {
           return true;
         } else if (splitSpeakerName[0] == "pre" && splitSpeakerName[1] == "recorded" && splitSpeakerName[2] == "speaker") {
           //Insert More Code Below if pre recorded speaker name is needed too!
@@ -3179,6 +2932,32 @@
         });
       }
     }//ajaxReq function end
+
+    $("#select-display-training-segments").on("change",function(){
+      displayCorrectSegment();
+    });
+
+  //Display Correct Training Segments 
+    function displayCorrectSegment(){
+      var selected=$("#select-display-training-segments").val();
+      console.log(selected);
+      if(selected=="on"){
+        $("#peaks-container").children().each(function (index, value) {
+          if (this.getAttribute("actual") == "true") {
+            $(this).show();
+          }
+          console.log(this.getAttribute("actual"));
+        });
+      }else if(selected=="off"){
+       $("#peaks-container").children().each(function (index, value) {
+          if (this.getAttribute("actual") == "true" ) {
+            $(this).hide();
+          }
+          console.log(this.getAttribute("actual"));
+        });
+      }
+    }
+
 
     //Function to Display Errors and hamburger icons
     function displayHamburger() {

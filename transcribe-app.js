@@ -192,7 +192,30 @@ app.get("/", (req, res) => {
                         });
                     }
                 } else {
-                    res.redirect(`/transcribe?user_id=${result[0].user_id}&audio_id=25`);
+                    if (
+                        req.query.type == "segmentation" ||
+                        typeof req.query.type == "undefined"
+                    ) {
+                        res.redirect(`/transcribe?user_id=${result[0].user_id}&audio_id=25`);
+                    } else if (req.query.type == "transcription") {
+                        var getAudioIdSQL = `SELECT * FROM audio WHERE Language_id=${req.query.language_id}`;
+                        pool.query(getAudioIdSQL, (err, result1) => {
+                            if (err) {
+                                console.error(err);
+                                res.status(400).send("Error in Language Id.");
+                            } else {
+                                if (result1.length > 0) {
+                                    res.redirect(
+                                        `/transcription?user_id=${result[0].user_id}&audio_id=${result1[0]["audio_id"]}`
+                                    );
+                                } else {
+                                    res.send(
+                                        "No projects exists for this language currently. We will inform you once projects are available"
+                                    );
+                                }
+                            }
+                        });
+                    }
                 }
             }
         });

@@ -232,7 +232,7 @@
                    console.log(response);
                     window.open(
                         //`http://localhost:3000/transcribe?user_id=${clicked_user_id}`,
-                        `${new URL(window.location).origin}/training?user_id=${response[0]["user_id"]}&audio_id=${response[0]["audio_id"]}`,
+                        `${new URL(window.location).origin}/training?user_id=${response[0]["user_id"]}&audio_id=${response[0]["audio_id"]}#review`,
                         '_blank' //New Tab
                     );
                 }
