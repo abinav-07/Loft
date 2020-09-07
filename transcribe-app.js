@@ -59,7 +59,7 @@ app.use(passport.session());
 // Global variables
 app.use(function (req, res, next) {
   res.locals.path = req.path.split("/")[1];
-  res.locals.sendgrid_api_key = process.env.SENDGRID_API_KEY;
+  res.locals.amplitude_api_key = process.env.AMPLITUDE_API_KEY;
   next();
 });
 hbs.registerPartials(partialPaths);
