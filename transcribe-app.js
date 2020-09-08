@@ -264,11 +264,12 @@ app.get("/transcribe", (req, res) => {
                 console.error(err);
                 res.status(400).send("error in get /transcribe query.");
             }
-            audio_url = result[0]["audio_url"];
+            audio_url = result[0]["audio_name"];
             ////console.log(audio_url);
             res.render("index", {
                 user_id: req.query.user_id,
                 audio_url: audio_url,
+                audio_name: result[0]["audio_name"],
                 audio_id: audioId,
             });
             ////console.log(result);
@@ -337,6 +338,7 @@ app.get("/training", (req, res) => {
                     user_id: req.query.user_id,
                     audio_url: audio_url,
                     audio_id: req.query.audio_id,
+                    audio_name: result[0]["audio_name"],
                     audio_order: audio_order,
                     user_name: user_name,
                 });
@@ -391,6 +393,7 @@ app.get("/transcription", async(req, res) => {
             res.render("transcription", {
                 user_id: req.query.user_id,
                 audio_url: audio_url,
+                audio_name: result[0]["audio_name"],
                 audio_id: req.query.audio_id,
             });
             ////console.log(result);
@@ -495,6 +498,7 @@ app.get("/transcription-review", async(req, res) => {
                     res.render("transcription-review", {
                         user_id: req.query.user_id,
                         audio_url: audio_url,
+                        audio_name: result[0]["audio_name"],
                         audio_id: req.query.audio_id,
                         language_name: language_name,
                         user_name: user_name,
@@ -584,6 +588,7 @@ app.get("/actual-data-admin", (req, res) => {
             ////console.log(audio_url);
             res.render("actual_data_insert", {
                 audio_url: audio_url,
+                audio_name: result[0]["audio_name"],
                 audio_id: audioId,
             });
             ////console.log(result);
