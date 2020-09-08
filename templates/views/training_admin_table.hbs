@@ -131,7 +131,7 @@
                 success: function (users_data) {
                     $("#users_table tbody").html("");
                     for (var i = 0; i < users_data.length; i++) {
-                        console.log(users_data[i]);
+                        //console.log(users_data[i]);
                         if (users_data[i].status == "PASS") {
                             $("#users_table tbody").append(
                                 `<tr data-user-id="${users_data[i].users_audio_id}">                                
@@ -227,7 +227,7 @@
 
         //Directing To Segmented Platform on Click
         $("body").on("click", ".user-name-class", function (event) {
-            //console.log("Here");
+            ////console.log("Here");
             var clicked_user_id = event.target.closest("tr").getAttribute("data-user-id");
             var params = {
                 clicked_user_id
@@ -250,7 +250,7 @@
         //Confirm Button PASS FAIL Changes
         $("#users_table").on("change", (event) => {
             var clicked_button_id = event.target.closest("tr").getAttribute("data-user-id");//This is equal to userId   
-            //console.log(clicked_button_id);         
+            ////console.log(clicked_button_id);         
             confirmButton(clicked_button_id);
         });
         //Displaying confirm button
@@ -270,15 +270,15 @@
                     data: params,
                     success: function () {
                         $(`button.${userId}`).hide();
-                        console.log("Pass Fail Saved");
-                       // console.log(userId);
+                        //console.log("Pass Fail Saved");
+                       // //console.log(userId);
                         $.ajax({
                             method: "POST",
                             url: "/get-web-app-id-for-hr",
                             data: { userId },
                             success: function (response) {
                                 var status;
-                                console.log(changedPassFailValue);
+                                //console.log(changedPassFailValue);
                                 if(changedPassFailValue=="PASS"){
                                     status=7;
                                 }else if(changedPassFailValue=="FAIL"){
@@ -291,14 +291,14 @@
                                     "status": status,
                                     "project_type_id": "4"
                                 }
-                                console.log(mailParams);
+                                //console.log(mailParams);
                                 /*
                                 $.ajax({
                                     method: "POST",
                                     url: "{{ webapp_basepath }}/api/set-user-language-project-type-status",
                                     data:mailParams,
                                     success:function(){
-                                        console.log("EMAIl Sent and web app status set");
+                                        //console.log("EMAIl Sent and web app status set");
                                     }
                                 });*/
                             }

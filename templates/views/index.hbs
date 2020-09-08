@@ -768,7 +768,7 @@
     var audio_id;
     audio_id = {{ audio_id }};
     user_id = {{ user_id }};
-    ////console.log(user_id);
+    //////console.log(user_id);
   </script>
   <script>
     var is_submitted = "FALSE";
@@ -851,7 +851,7 @@
     });
 
     if (navigator.userAgent.indexOf("Firefox") != -1) {
-      console.log("Mozilla here");
+      //console.log("Mozilla here");
     }
 
     //function on spectrum is ready 
@@ -885,7 +885,7 @@
 
         if (!updateTopDivSpeaker) {
           if (event.ctrlKey && event.shiftKey && event.which == 65) {
-            console.log("Pressed");
+            //console.log("Pressed");
             event.preventDefault();
             addRegion();
             if (addRegionBool == true && !updateAnnotationOnChange && !updateTopDivSpeaker) {
@@ -898,7 +898,7 @@
       //Replay Region on KeyDown
       $("html").on("keydown", function (event) {
         if (event.altKey && event.which == 82 || event.which == 82 && event.target.id != "speaker-name" && event.target.id != "transcription-area" && event.target.id != "top-div-control-speaker-name") {
-          //////console.log("Pressed");
+          ////////console.log("Pressed");
           event.preventDefault();
           repeatRegion();
         }
@@ -907,7 +907,7 @@
       //play pause on space bar
       $("html").on("keydown", function (event) {
         if ((event.which == 32 || event.which == 96 || event.which == 48 || (event.ctrlKey && event.which == 32)) && event.target.id != "speaker-name" && event.target.id != "transcription-area" && event.target.id != "annotation-start-minute" && event.target.id != "annotation-start-seconds" && event.target.id != "annotation-start-milliseconds" && event.target.id != "annotation-end-minute" && event.target.id != "annotation-end-seconds" && event.target.id != "annotation-end-milliseconds" && event.target.id != "top-div-control-speaker-name") {
-          //console.log(event.target);
+          ////console.log(event.target);
           event.preventDefault();
           if (spectrum.isPlaying()) {
             spectrum.pause();
@@ -1050,7 +1050,7 @@
 
     //function to convert seconds to minute, seconds and milliseconds
     function secondsToTimestamp(seconds) {
-      //console.log(seconds)
+      ////console.log(seconds)
 
       var n = Math.floor(seconds);
       var ms = (seconds - n).toFixed(3);
@@ -1101,7 +1101,7 @@
     window.onload = (function () {
       if (!confirmChangesboxBool) {
         $("#peaks-container,#top-div-for-scrolling-enabling").on("mousedown", function (e) {
-          //console.log("Touched");
+          ////console.log("Touched");
           if (spectrum.isPlaying()) {
             spectrum.pause();
             $("#play-button").find($(".fa")).toggleClass('fa-pause fa-play');
@@ -1218,7 +1218,7 @@
         async: true,
         success: function (response) {
 
-          ////console.log(response[0]["segment_id"]);
+          //////console.log(response[0]["segment_id"]);
           for (var i = 0; i < response.length; i++) {
             var segmentId = response[i]["segment_id"];
             var speakerName = response[i]["div_className"];
@@ -1257,7 +1257,7 @@
                 is_submitted = response[0]["is_submitted"];
                 //Checking if already submitted
                 if (is_submitted == "TRUE") {
-                  console.log("Euta log");
+                  //console.log("Euta log");
                   disableAllInterfaceOnSubmit();
                   ajaxReq();//Ajax Request to check correct incorrect segment
                   displayHamburger();
@@ -1290,7 +1290,7 @@
         async: true,
         success: function (response) {
 
-          ////console.log(response[0]["segment_id"]);
+          //////console.log(response[0]["segment_id"]);
           for (var i = 0; i < response.length; i++) {
             var segmentId = response[i]["segment_id"];
             var speakerName = response[i]["div_className"];
@@ -1330,7 +1330,7 @@
                 //Checking if already submitted
                 if (is_submitted == "TRUE") {
                   //$("#display-training-segments").show();//Display Select Tag For Correct Segments
-                  console.log("Euta log");
+                  //console.log("Euta log");
                   disableAllInterfaceOnSubmit();
                   ajaxReq();//Ajax Request to check correct incorrect segment
                   //displayHamburger();
@@ -1403,7 +1403,7 @@
           success: function () {
             //Hiding Annotation Div      
             $("#annotation-box").hide();
-            //console.log("Removed");
+            ////console.log("Removed");
             updateAnnotationOnChange = false;
             updateAnnotationOnClick = false;
             //Changed RegionId to CurrentId
@@ -1426,7 +1426,7 @@
     function removeTopDivSpeakers(topSpeakerClickedId) {
       //Getting the clicked Top Div Class
       var getClickedIdClass = document.getElementById(topSpeakerClickedId).className;
-      console.log(getClickedIdClass);
+      //console.log(getClickedIdClass);
       //Checking if the segments of the class still remain
       if ($("#peaks-container").children().hasClass(getClickedIdClass)) {
 
@@ -1437,7 +1437,7 @@
         $("#top-div-speaker-control").hide();
         updateTopDivSpeakerOnClick = false;
         updateTopDivSpeaker = false;
-        console.log("Class Not Found");
+        //console.log("Class Not Found");
       }
     }
 
@@ -1457,7 +1457,7 @@
         $("#peaks-container").children().each(function (index, value) {
           if (this.className == getClickedIdClass) {
             speakerNameFound = true;
-            console.log(this.className);
+            //console.log(this.className);
             this.className = userInputTopSpeakerName.replace(/ /g, "-");
           }
         });
@@ -1474,7 +1474,7 @@
             url: "/top-speaker-control-save-button",
             data: params,
             success: function (response) {
-              console.log("Top Speakers Name Updated");
+              //console.log("Top Speakers Name Updated");
               updateTopDivSpeaker = false;
               updateTopDivSpeakerOnClick = false;
             }
@@ -1483,7 +1483,7 @@
       } else {
         emptySpeaker();
       }
-      console.log(userInputTopSpeakerName);
+      //console.log(userInputTopSpeakerName);
     }
     //save top div speakers function end 
 
@@ -1538,7 +1538,7 @@
       }
       //Displaying submit button only if audio is played to last and 10 segements are created    
       if ((spectrum.getCurrentTime() > (spectrum.getDuration() - 0.1)) && ($("#peaks-container").children("div").length > 10)) {
-        console.log(is_submitted);
+        //console.log(is_submitted);
         if (is_submitted == "FALSE") {
           $("#submit-button").show();
         }
@@ -1679,7 +1679,7 @@
         if ((($("#annotation-div").children("div").length) * leftSpeakerCategoryDivMargin + leftSpeakerCategoryDivMargin) > $("#annotation-div").width()) {
 
           leftSpeakerCategoryDivMargin = ($("#annotation-div").width() - leftSpeakerCategoryDivMargin) / $("#annotation-div").children("div").length;
-          console.log(leftSpeakerCategoryDivMargin);
+          //console.log(leftSpeakerCategoryDivMargin);
           $("#annotation-div").children().each(function (index, value) {
             this.style.left = (leftSpeakerCategoryDivMargin * index + "px");
             //this.style.left = (this.style.left.replace("px","")-20)+"px";
@@ -1714,7 +1714,7 @@
       var ending = parseInt($("#annotation-end-minute").val() * 60) + parseInt($("#annotation-end-seconds").val()) + "." + ($("#annotation-end-milliseconds").val());
 
       if (spectrum.regions.list[currentId] != null) {
-        //console.log("Id" + currentId);
+        ////console.log("Id" + currentId);
         if ((parseFloat(ending) - parseFloat(starting)) < 0.100 && (parseFloat(ending) - parseFloat(starting)) >= 0) {
           spectrum.regions.list[currentId].update({
             start: starting,//-0.050,
@@ -1723,8 +1723,8 @@
           hundredMillisecSegmentCheck = false;
           segmentEndingTimeMoreThanStartingTime = false;
         } else if ((parseFloat(ending) - parseFloat(starting)) < 0) {
-          //console.log(ending);
-          //console.log(starting);
+          ////console.log(ending);
+          ////console.log(starting);
           spectrum.regions.list[currentId].update({
             end: starting,
             start: ending
@@ -1745,7 +1745,7 @@
 
         newStartTime = spectrum.regions.list[currentId].start;
         newEndTime = spectrum.regions.list[currentId].end;
-        //console.log(newStartTime);
+        ////console.log(newStartTime);
         var progress1 = newStartTime / spectrum.getDuration();
         var progress2 = (newEndTime - newStartTime) / spectrum.getDuration();
         var minPxDelta = 1 / spectrum.params.pixelRatio;
@@ -1777,7 +1777,7 @@
     }
 
     $(document).on("mousedown", "wave", function () {
-      //console.log("Okay");
+      ////console.log("Okay");
     });
 
     //function for annotation contents change on click
@@ -1796,7 +1796,7 @@
         //Changed currentId to clicked Id to check if it works, works until now 
         currentStartTime = spectrum.regions.list[clickedId].start;
         currentEndTime = spectrum.regions.list[clickedId].end;
-        //console.log(clickedId);
+        ////console.log(clickedId);
 
         //segment start variables
         var startMinute = secondsToMinutes(spectrum.regions.list[clickedId].start);
@@ -1896,7 +1896,7 @@
     //function to highlight current region
     function highlightRegion() {
       var highlightId = currentId;
-      ////console.log(spectrum.regions.list[highlightId].element);
+      //////console.log(spectrum.regions.list[highlightId].element);
 
       Object.keys(spectrum.regions.list).forEach(function (id) {
         var region = spectrum.regions.list[id];
@@ -1928,7 +1928,7 @@
     function saveClick() {
 
       if (updateSegments == false) {
-        //console.log("New Save Click");
+        ////console.log("New Save Click");
         segmentStart = spectrum.regions.list[currentId].start;
         segmentEnd = spectrum.regions.list[currentId].end;
         var annotationText = "";
@@ -1966,7 +1966,7 @@
           user_id,
           audio_id: audio_id
         }
-        //console.log(checkOverlappingDiv(speakerName, segmentStart, segmentEnd));
+        ////console.log(checkOverlappingDiv(speakerName, segmentStart, segmentEnd));
         if (speakerName.length > 0 && hundredMillisecSegmentCheck && !segmentEndingTimeMoreThanStartingTime && spellCheckSpeakerName(speakerName,spellCheckSpeakerType) && (!checkOverlappingDiv(speakerName, segmentStart, segmentEnd))) {
           if (spellCheckSpeakerName(speakerName,spellCheckSpeakerType)) {
             //Var to store id from database
@@ -1978,9 +1978,9 @@
               data: params,
               async: false,
               success: function (response) {
-                //console.log("Success");
+                ////console.log("Success");
                 segmentIdFromDatabase = response.insertId;
-                //console.log(segmentIdFromDatabase);
+                ////console.log(segmentIdFromDatabase);
                 $(`region[data-id=${currentId}]`).attr("data-id", segmentIdFromDatabase);
                 spectrum.regions.list[currentId].id = segmentIdFromDatabase;
                 spectrum.regions.list[segmentIdFromDatabase] = spectrum.regions.list[currentId];
@@ -1996,7 +1996,7 @@
 
             updateAnnotationOnChange = false;
             updateAnnotationOnClick = false;
-            //console.log(reqSpeakers);
+            ////console.log(reqSpeakers);
             var append = false;
             if (!reqSpeakers.includes(speakerName) && speakerName.includes("speaker")) {
               //adding to select options
@@ -2017,29 +2017,29 @@
           }
         } else {
           if (speakerName.length == 0 || !spellCheckSpeakerName(speakerName,spellCheckSpeakerType)) {
-            //console.log("Empty Speaker Name")
+            ////console.log("Empty Speaker Name")
             emptySpeaker();
           } else if (!hundredMillisecSegmentCheck) {
-            //console.log("Less Than Hundred Milliseconds");
+            ////console.log("Less Than Hundred Milliseconds");
             hundredMillisecondsSegmentGap();
           } else if (segmentEndingTimeMoreThanStartingTime) {
-            //console.log("End Time More Than Start Time");
+            ////console.log("End Time More Than Start Time");
             endTimeMoreThanStartTime();
           } else if ((checkOverlappingDiv(speakerName, segmentStart, segmentEnd))) {
-            //console.log("New Div for Overlapping");
+            ////console.log("New Div for Overlapping");
             sameSpeakerOverlappingDialougeBox();
           }
         }
       } else if (updateAnnotationOnChange == true) {
         var params;
-        //console.log("Old" + currentId);
+        ////console.log("Old" + currentId);
         //Updating Database        
         var segmentId = currentId;
         var annotationText = "";
         var speakerName = "";
         var annotationType = "";
         var segmentclass = document.getElementById("speaker-name").value;
-        //console.log(segmentclass.replace(" ", "-"));
+        ////console.log(segmentclass.replace(" ", "-"));
         var val = document.getElementById("annotation-type");
         if (val.value !== "default" && val.value !== "Singing") {
           document.getElementById(segmentId).style.top = "0px";
@@ -2054,10 +2054,10 @@
           if ($("#annotation-div").children().hasClass(segmentclass.replace(/ /g, "-"))) {
             $("#annotation-div").children().each(function (index, value) {
               if (value.className == (segmentclass.replace(/ /g, "-"))) {
-                //console.log("old")
-                //console.log(value);
+                ////console.log("old")
+                ////console.log(value);
                 speakerName = document.getElementById("speaker-name").value;
-                //console.log("2" + checkOverlappingDiv(speakerName, segmentStart, segmentEnd))
+                ////console.log("2" + checkOverlappingDiv(speakerName, segmentStart, segmentEnd))
                 if (!checkOverlappingDiv(speakerName, newStartTime, newEndTime)) {
                   annotationType = document.getElementById("annotation-type").value;
                   document.getElementById(segmentId).title = annotationType;
@@ -2074,7 +2074,7 @@
                   document.getElementById(segmentId).querySelector("p").innerText = annotationText;
                   document.getElementById(segmentId).style.background = value.style.backgroundColor;
                   //400=leftMargin
-                  //console.log(((canvasHeight - 8) + leftSpeakerCategoryDivMargin * (index)) + "px");
+                  ////console.log(((canvasHeight - 8) + leftSpeakerCategoryDivMargin * (index)) + "px");
                   // div.style.bottom = (leftMargin + leftSpeakerCategoryDivMargin * (index)) + "px";
                   document.getElementById(segmentId).style.bottom = ((canvasHeight - 8) + leftSpeakerCategoryDivMargin * (index)) + "px";
                   document.getElementById(segmentId).style.top = "inherit";
@@ -2082,7 +2082,7 @@
               }
             });
           } else {
-            //console.log("new");
+            ////console.log("new");
 
             //Changing segmentId to currentId
             var newColor = getRandomColor();
@@ -2105,8 +2105,8 @@
             topSpeakerDiv(speakerName, newColor);
           }
         } else if (segmentclass.length == 0 || segmentclass.split(" ").length > 2 || spellCheckSpeakerName(segmentclass,"speaker")) {
-          //console.log("Speaker Name not found");
-          //console.log(speakerName);
+          ////console.log("Speaker Name not found");
+          ////console.log(speakerName);
           emptySpeaker();
         }
 
@@ -2139,16 +2139,16 @@
         }
 
 
-        //console.log("20");
-        //console.log(checkOverlappingDiv(speakerName, newStartTime, newEndTime));
+        ////console.log("20");
+        ////console.log(checkOverlappingDiv(speakerName, newStartTime, newEndTime));
         if (speakerName.length > 0 && hundredMillisecSegmentCheck && !segmentEndingTimeMoreThanStartingTime && spellCheckSpeakerName(speakerName,spellCheckSpeakerType) && !checkOverlappingDiv(speakerName, newStartTime, newEndTime)) {
-          //console.log("Update vairako");
+          ////console.log("Update vairako");
           $.ajax({
             method: "POST",
             url: "/updatedatabase",
             data: params,
             success: function () {
-              //console.log("Updated");
+              ////console.log("Updated");
 
             }
           })
@@ -2158,18 +2158,18 @@
           updateAnnotationOnClick = false;
 
         } else {
-          //console.log(speakerName);
-          //console.log("annotation ma ya aako ho?");
+          ////console.log(speakerName);
+          ////console.log("annotation ma ya aako ho?");
           if (speakerName.length < 0 || !spellCheckSpeakerName(speakerName,spellCheckSpeakerType)) {
             emptySpeaker();
           } else if (!hundredMillisecSegmentCheck) {
-            //console.log("Less Than Hundred Milliseconds");
+            ////console.log("Less Than Hundred Milliseconds");
             hundredMillisecondsSegmentGap();
           } else if (segmentEndingTimeMoreThanStartingTime) {
-            //console.log("End Time More Than Start Time");
+            ////console.log("End Time More Than Start Time");
             endTimeMoreThanStartTime();
           } else if (checkOverlappingDiv(speakerName, newStartTime, newEndTime)) {
-            //console.log("Overlapping Speakser");
+            ////console.log("Overlapping Speakser");
             sameSpeakerOverlappingDialougeBox();
           }
         }
@@ -2208,7 +2208,7 @@
       $("html").on("keydown", function (event) {
         if (event.ctrlKey && event.which == 186) {
           event.preventDefault();
-          //console.log("Pressed");
+          ////console.log("Pressed");
           var currentTime = spectrum.getCurrentTime();
           updateAnnotationOnChange = true;
           updateAnnotationOnClick = true;
@@ -2397,7 +2397,7 @@
         url: "/update-on-split",
         data: updateParams,
         success: function () {
-          //console.log("Updated");
+          ////console.log("Updated");
         }
       })
 
@@ -2417,7 +2417,7 @@
         url: "/database",
         data: params,
         success: function () {
-          //console.log("Success");
+          ////console.log("Success");
         }
       })
     }//split Region Function end
@@ -2428,8 +2428,8 @@
       var reqText = $("#transcription-area").val();
       var textBeforeCursor = reqText.substring(0, firstLength);
       var textAfterCursor = reqText.substring(firstLength, reqText.length);
-      //console.log(reqText.substring(0, firstLength));
-      //console.log(reqText.substring(firstLength, reqText.length));
+      ////console.log(reqText.substring(0, firstLength));
+      ////console.log(reqText.substring(firstLength, reqText.length));
 
       splitRegion(textBeforeCursor, textAfterCursor);
       updateAnnotationOnChange = false;
@@ -2440,7 +2440,7 @@
     function confirmChanges() {
       //if changes were made in annotation box
       if (updateAnnotationOnChange) {
-        console.log("Update Annotation Cancel");
+        //console.log("Update Annotation Cancel");
         //Hiding Annotation Div      
         $("#annotation-box").hide();
         updateAnnotationOnChange = false;
@@ -2485,7 +2485,7 @@
         }
       } else if (updateTopDivSpeaker) {
         //Hiding Annotation Div    
-        console.log("Update Top Div Cancel");
+        //console.log("Update Top Div Cancel");
         $("#top-div-speaker-control").hide();
         updateTopDivSpeaker = false;
       }
@@ -2599,7 +2599,7 @@
     //function to check and create segments
     function createSegments(currentId, starting, ending) {
       if (spectrum.regions.list[currentId] != null) {
-        //console.log("Id" + currentId);
+        ////console.log("Id" + currentId);
         if ((parseFloat(ending) - parseFloat(starting)) < 0.100 && (parseFloat(ending) - parseFloat(starting)) >= 0) {
           spectrum.regions.list[currentId].update({
             start: starting,
@@ -2629,7 +2629,7 @@
 
       newStartTime = spectrum.regions.list[currentId].start;
       newEndTime = spectrum.regions.list[currentId].end;
-      //console.log(newStartTime);
+      ////console.log(newStartTime);
       var progress1 = newStartTime / spectrum.getDuration();
       var progress2 = (newEndTime - newStartTime) / spectrum.getDuration();
       var minPxDelta = 1 / spectrum.params.pixelRatio;
@@ -2644,25 +2644,25 @@
     //Function to Check correct speakername
     function spellCheckSpeakerName(speakerName,type) {
       
-      console.log(speakerName);
+      //console.log(speakerName);
       var splitSpeakerName = speakerName.split(" ");
-      //console.log(splitSpeakerName);
+      ////console.log(splitSpeakerName);
       if (splitSpeakerName[0] != "speaker" ) {
         if (((type=="annotation") && (splitSpeakerName[0] == "DTMF" || splitSpeakerName[0] == "Applause" || splitSpeakerName[0] == "Laughter" || splitSpeakerName[0] == "Music" || splitSpeakerName[0] == "Noise" || splitSpeakerName[0] == "Ringtone")) || ((type=="speaker") && (splitSpeakerName[0] == "unidentifiable" && splitSpeakerName[1] == "speaker"))) {
           return true;
         } else if (splitSpeakerName[0] == "pre" && splitSpeakerName[1] == "recorded" && splitSpeakerName[2] == "speaker") {
           //Insert More Code Below if pre recorded speaker name is needed too!
           if (splitSpeakerName.length != 4) {
-            console.log("HERE")
+            //console.log("HERE")
             return false;
           }
           if (isNaN(splitSpeakerName[3])) {
-            console.log("HERE")
+            //console.log("HERE")
             return false;
           }
           return true;
         }
-        console.log("HERE")
+        //console.log("HERE")
         return false;
       }
       if (isNaN(splitSpeakerName[1])) {
@@ -2719,7 +2719,7 @@
             }
             //var previousSpeakerName = document.getElementById(region).className;
             if (previousSpeakerName == speakerName.replace(/ /g, "-")) {
-              //console.log("herer2")
+              ////console.log("herer2")
               overlapping = true;
             }
           }
@@ -2730,7 +2730,7 @@
 
     //function for promises and ajax request on submit
     function ajaxReq() {
-      //console.log("Hawa ");
+      ////console.log("Hawa ");
       if (Object.keys(spectrum.regions.list).length == 0 || overallScore < 0) {
         overallScore = 100;
       } else {
@@ -2767,7 +2767,7 @@
                       segment_end: actualsegmentEnd,
                       annotation_text: actualannotationText
                     } = actualResponse[i];
-                    //console.log(actualsegmentId + " " + i);
+                    ////console.log(actualsegmentId + " " + i);
                     var color = "";
                     for (var j = 0; j < postResponse.length; j++) {
                       var {
@@ -2818,9 +2818,9 @@
                       ) {
                         //Correct Segment Created
                         correctSegmentCreated = true;
-                        //console.log("c" + parseFloat(actualsegmentStart));
-                        //console.log(actualspeakerName);
-                        //console.log(postsspeakerName);
+                        ////console.log("c" + parseFloat(actualsegmentStart));
+                        ////console.log(actualspeakerName);
+                        ////console.log(postsspeakerName);
                         break;
                       } else if (
                         parseFloat(actualsegmentStart) -
@@ -2838,9 +2838,9 @@
                         actualannotationType != "default"
                       ) {
                         //Correct Segment Created
-                        //console.log(actualspeakerName);
-                        //console.log("c" + parseFloat(actualsegmentStart));
-                        //console.log(postsspeakerName);
+                        ////console.log(actualspeakerName);
+                        ////console.log("c" + parseFloat(actualsegmentStart));
+                        ////console.log(postsspeakerName);
                         correctSegmentCreated = true;
                         break;
                       } else {
@@ -2862,9 +2862,9 @@
                         ) {
                           overallScore += 1;
                           wrongAnnotationScore += 1;
-                          //console.log(                            "score Incorrect Annotation " + wrongAnnotationScore                          );
-                          //console.log(postsspeakerName);
-                          //console.log(actualspeakerName);
+                          ////console.log(                            "score Incorrect Annotation " + wrongAnnotationScore                          );
+                          ////console.log(postsspeakerName);
+                          ////console.log(actualspeakerName);
                         }
                         if (
                           parseFloat(actualsegmentStart) -
@@ -2884,16 +2884,16 @@
                         ) {
                           overallScore += 1;
                           wrongSpeakerScore += 1;
-                          //console.log(                            "score Speaker Incorrect " + wrongSpeakerScore
+                          ////console.log(                            "score Speaker Incorrect " + wrongSpeakerScore
                           //);
-                          //console.log(postsspeakerName);
-                          //console.log(actualspeakerName);
+                          ////console.log(postsspeakerName);
+                          ////console.log(actualspeakerName);
                         }
                         //Incorrect Segement created
                         correctSegmentCreated = false;
                       }
                     }
-                    //console.log(correctSegmentCreated);
+                    ////console.log(correctSegmentCreated);
                     //creating Segments
                     spectrum.addRegion({
                       id: actualsegmentId + 100000,
@@ -2916,7 +2916,7 @@
                   unnecessarySegmentsErrors +=
                     Math.abs(actualResponseLength - postsResponseLength) * 2;
                   overallScore = overallScore + unnecessarySegmentsErrors;
-                  //console.log("Total Score " + (100 - overallScore));
+                  ////console.log("Total Score " + (100 - overallScore));
                   //Checking Pass or Fail
                   if (100 - overallScore > 60) {
                     passOrFail = "PASS";
@@ -2924,7 +2924,7 @@
                     passOrFail = "FAIL";
                   }
                   //Disallowing Clicking and Changing Values if the Submit request was successful
-                  //console.log("Submit Clicked");
+                  ////console.log("Submit Clicked");
                   disableAllInterfaceOnSubmit();
                   resolve();
                 }
@@ -2942,20 +2942,20 @@
   //Display Correct Training Segments 
     function displayCorrectSegment(){
       var selected=$("#select-display-training-segments").val();
-      console.log(selected);
+      //console.log(selected);
       if(selected=="on"){
         $("#peaks-container").children().each(function (index, value) {
           if (this.getAttribute("actual") == "true") {
             $(this).show();
           }
-          console.log(this.getAttribute("actual"));
+          //console.log(this.getAttribute("actual"));
         });
       }else if(selected=="off"){
        $("#peaks-container").children().each(function (index, value) {
           if (this.getAttribute("actual") == "true" ) {
             $(this).hide();
           }
-          console.log(this.getAttribute("actual"));
+          //console.log(this.getAttribute("actual"));
         });
       }
     }
@@ -2973,7 +2973,7 @@
     //function to display Errors Menu
     $("#displayErrorCB").on("click", function () {
       var isChecked = $("#displayErrorCB").is(":checked");
-      //console.log($("#displayErrorCB").is(":checked"));
+      ////console.log($("#displayErrorCB").is(":checked"));
       if (!$("#displayErrorCB").is(":checked")) {
         $("#errorMenu").not(".showHamburger").show();
         $(".showHamburger").hide();
@@ -2988,7 +2988,7 @@
 
     //Function to store scores in database Users Table
     function saveScores() {
-      //console.log(overallScore);
+      ////console.log(overallScore);
       var todayDate = new Date();
       params = {
         user_id,
@@ -3005,7 +3005,7 @@
         url: "/save-test-score-on-users_audio_table",
         data: params,
         success: function () {
-          //console.log("Success");
+          ////console.log("Success");
         }
       })
     };//Save Scores Function End
@@ -3042,7 +3042,7 @@
             url: "{{ webapp_basepath }}/api/set-user-language-project-type-status",
             data: mailParams,
             success: function () {
-              console.log("Web app status set");
+              //console.log("Web app status set");
             }
           });
         }
@@ -3133,7 +3133,7 @@
       r.src = "https://cdn.amplitude.com/libs/amplitude-6.2.0-min.gz.js";
       r.onload = function () {
         if (!e.amplitude.runQueuedFunctions) {
-          console.log("[Amplitude] Error: could not load SDK");
+          //console.log("[Amplitude] Error: could not load SDK");
         }
       };
       var i = t.getElementsByTagName("script")[0];
