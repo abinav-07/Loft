@@ -73,7 +73,7 @@ pool.getConnection((err, connect) => {
         console.error(err);
         //res.status(400).send("error in get /admin-review-table-datas query.");
     }
-    //console.log("Connected");
+    console.log("Connected");
     connect.release();
 });
 
@@ -82,7 +82,7 @@ audio_bee_pool.getConnection((err, connect) => {
         console.error(err);
         //res.status(400).send("error in get /admin-review-table-datas query.");
     }
-    //console.log("Connected");
+    console.log("Connected");
     connect.release();
 });
 //Database Connection End
@@ -264,7 +264,7 @@ app.get("/transcribe", (req, res) => {
                 console.error(err);
                 res.status(400).send("error in get /transcribe query.");
             }
-            audio_url = result[0]["audio_name"];
+            audio_url = result[0]["audio_url"];
             ////console.log(audio_url);
             res.render("index", {
                 user_id: req.query.user_id,
@@ -450,6 +450,38 @@ app.get("/transcription", async(req, res) => {
             ////console.log(insert_sql);
         }
     });
+});
+//Route for transcription end
+
+//Route for transcription
+app.get("/transcription-tasks", async(req, res) => {
+    var audio_url = "";
+    var audioId = req.query.audio_id;
+    if (typeof req.query.audio_id == "undefined") {
+        audioId = 4;
+        audio_url = "cryophile.wav";
+    } else {
+        audioId = req.query.audio_id;
+        var get_audio_url = `SELECT * FROM audio WHERE audio_id='${req.query.audio_id}'`;
+        await pool.query(get_audio_url, (err, result) => {
+            if (err) {
+                console.error(err);
+                res.status(400).send("error in get /transcription query.");
+            }
+            audio_url = result[0]["audio_url"];
+            ////console.log(audio_url);
+            res.render("transcription_tasks", {
+                audio_url: audio_url,
+                audio_name: result[0]["audio_name"],
+                audio_id: req.query.audio_id,
+            });
+
+        });
+    }
+
+
+
+
 });
 //Route for transcription end
 
@@ -893,6 +925,23 @@ app.post("/transcription-actual-segments", (req, res) => {
     });
 });
 //get segments route end
+
+app.post("/transcription-tasks-user-created-segments", (req, res) => {
+    let sql = `
+            Select * FROM transcription_tasks
+            WHERE           
+            transcription_tasks.audio_id = '${req.body.audio_id}'
+            ORDER BY segment_start
+            `;
+    pool.query(sql, (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(400).send("error in get /get-segments query.");
+        }
+        res.send(result);
+
+    });
+});
 
 //Get actual Values From actual table in Database
 app.post("/get-reviews", (req, res) => {
