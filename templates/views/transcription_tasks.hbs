@@ -16,7 +16,8 @@
   <meta charset="utf-8">
   <title></title>
   <link rel="stylesheet" type="text/css" href="/css/styles.css">
-  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <style>
     body {
       overflow: hidden;
@@ -203,11 +204,11 @@
 
     #top-div-for-scrolling-enabling {
       width: 50vw;
-      height: 60vh;
+      height: 30vh;
       position: absolute;
       z-index: 1;
       left: 0px;
-      top: 0px;
+      top: 150px;
     }
 
     #plus-button {
@@ -353,6 +354,45 @@
       font-size: 16px;
       font-family: Arial, Helvetica, sans-serif;
     }
+
+    #transcripted_text_paragraph {
+      display: none;
+      position: relative;
+      width: 320px;
+      height: 150px;
+      border: 1px solid;
+      overflow: auto;
+      margin: 10px;
+      border-radius: 15px;
+      flex-direction: row;
+      justify-content: space-between;
+      padding: 10px;
+      font-size: 16px;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    #transcripted_text_paragraph:after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      border-left: 2px solid black;
+      transform: translate(-50%);
+    }
+
+
+    /*.transcription_area_first_child:after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      border-left: 2px solid black;
+      transform: translate(-50%);
+    }*/
 
     .annotation-time-class:invalid {
       color: red;
@@ -694,6 +734,24 @@
 
     }
 
+    #already-submitted-dialouge-box{
+      background-color: white;
+      box-shadow: 0 0 12px black;
+      text-align: center;
+      font-size: 18px;
+      clear: both;
+      color: #333;
+      margin: 0 auto;
+      padding: 2em;
+      position: absolute;
+      width:20vw;
+      height: 10vh;
+      z-index: 10000;
+      top: 20vh;
+      left: 40vw;
+      display: none;
+    }
+
     #top-div-control-navigator {
       border-top: 1px solid #888888;
       display: flex;
@@ -702,6 +760,10 @@
       font-size: 16px;
       justify-content: space-around;
 
+    }
+
+    #display-training-segments{
+      display: none;
     }
 
     /* Chrome, Safari, Edge, Opera */
@@ -723,345 +785,174 @@
     {{>header}}
   </div>
 
-  <div id="top-block">
-    <div id="button">
-      <a class="btn" id="play-button" href="#">
-        <i class="fa fa-play" style="color:grey;font-size:30px"></i></a>
-    </div>
-    <div id="time">
-      <h3 class="audio_time_hours">00 h</h3>
-      <h2 id="start-timestamp">00:00.000 </h2>
-      <span id="audio-time-divider"></span>
-      <h3 class="audio_time_hours">00 h</h3>
-      <h3 id="total-timestamp">00:00.000</h3>
-    </div>
-    <div class="audio-button-top-container">
-      <div class="audio-button-top-row">
-
-      </div>
-      <div class="audio-button-bottom-row">
-        <label class="playback_speed">
-          Playback Speed:
-          <select id="play_back_rate" style="border-style: none; font-size: 1em; margin-left: .1em;">
-            <option value="0.5">0.5x</option>
-            <option value="0.75">0.75x</option>
-            <option value="1" selected>1x</option>
-            <option value="1.25">1.25x</option>
-            <option value="1.5">1.5x</option>
-          </select>
-        </label>
-      </div>
-    </div>
-    {{!-- div for hamburger Icons After Submit Click --}}
-    <div id="errorToggle">
-      <input type="checkbox" id="displayErrorCB" />
-      <span class="showHamburger"></span>
-      <span class="showHamburger"></span>
-      <span class="showHamburger"></span>
-      <p id="closeHamburger">X</p>
-      <ul id="errorMenu">
-        <a href="#">
-          <li id="speaker-labelling-error"></li>
-        </a>
-        <a href="#">
-          <li id="annotation-labelling-error"></li>
-        </a>
-        <a href="#">
-          <li id="unnecessary-segments-errors"></li>
-        </a>
-        <a href="#">
-          <li id="total-errors"></li>
-        </a>
-
-        {{!--<a href="#">
-          <li id="total-points">Total Points: 100%</li>
-        </a>
-        --}}
-      </ul>
-    </div>
-    {{!-- Hambuger Work Finish --}}
-    
-  </div>
-  <div id="top-div-for-scrolling-enabling">
-  </div>
-  <div id="annotation-div-head">
-    <div id="annotation-div">
-
-    </div>
-  </div>
-  <button id="plus-button">
-    <i class="fa fa-plus"></i>
-  </button>
-  <div id="v-container">
-    <div id="wave-container">
-      <div id="peaks-container">
-        <div id="time-line">
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="annotation-box">
-    <div class="annotation-editHeading" style=" background-color:#ffb570 ; height: 40px; ">
-      <p style="padding-left: 20px; font-size: 20px; margin:auto"> Edit Annotation <span id="close">x</span></p>
-    </div>
-    <div id="annotation-time">
-      <button id="repeat-button" style=" margin-left: 7px; border:none; background: none;"><i class="fa fa-repeat"
-          style=" color:black;font-size:16px;cursor:pointer;"></i> </button>
-      <span id="annotation-start" style="font-size: 16px;font-weight: 600;">
-        <input id="annotation-start-minute" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
-          max="59" onclick="" onchange="updateSegmentonTimeChange()" value="00">
-        :
-        <input id="annotation-start-seconds" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
-          max="59" oninput="" onchange="updateSegmentonTimeChange()" value="00">
-        .
-        <input id="annotation-start-milliseconds" class="annotation-time-ms-class disable-all-on-Submit" type="number"
-          min="0" max="999" oninput="" onchange="updateSegmentonTimeChange()" value="000">
-      </span>
-      <span style="font-size: 40px;">-</span>
-      <span id="annotation-end" style="font-size: 16px;font-weight: 600;">
-        <input id="annotation-end-minute" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
-          max="59" oninput="" onchange="updateSegmentonTimeChange()" value="00">
-        :
-        <input id="annotation-end-seconds" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
-          max="59" oninput="" onchange="updateSegmentonTimeChange()" value="00">
-        .
-        <input id="annotation-end-milliseconds" class="annotation-time-ms-class disable-all-on-Submit" type="number"
-          min="0" max="999" oninput="" onchange="updateSegmentonTimeChange()" value="000">
-      </span>
-    </div>
-
-    <div>
-      <select id="annotation-type" class="disable-all-on-Submit" onchange="displayArea()"
-        style="z-index: 3;font-size: 18px; padding: 10px;">
-        <option value="default" class="annotation-selections" selected="selected"></option>
-        <option value="Singing" class="annotation-selections">Singing</option>
-        <option value="Applause" class="annotation-selections">Applause</option>
-        <option value="DTMF" class="annotation-selections">DTMF</option>
-        <option value="Laughter" class="annotation-selections">Laughter</option>
-        <option value="Music" class="annotation-selections">Music</option>
-        <option value="Noise" class="annotation-selections">Noise</option>
-        <option value="Ringtone" class="annotation-selections">Ringtone</option>
-      </select>
-    </div>
-    <div id="speaker">
-      <input id="speaker-name" class="disable-all-on-Submit" placeholder="Select or enter a new speaker" type="text"
-        list="select-options" style="z-index: 3;font-size: 18px; padding: 10px;">
-      <datalist id="select-options">
-
-      </datalist>
-    </div>
-    <div>
-      <textarea id="transcription-area" class="disable-all-on-Submit" rows="8"></textarea>
-    </div>
-
-    <hr style="opacity: 0.5;">
-    <button id="annotation-remove" class="disable-all-on-Submit"
-      style="margin:10px;color:red; border:none;background: none;font-size: 18px; cursor:pointer;">REMOVE</button>
-    <button id="annotation-split" class="disable-all-on-Submit"
-      style="margin:5px 10px 20px 0px;color:black; border:none;background: none;font-size: 18px;">SPLIT</button>
-    <button id="annotation-save" class="disable-all-on-Submit"
-      style="padding:10px; margin:0px 10px 15px 50px;color:white; border-radius:4px;border:none;background: #2f84ba;font-size: 18px;cursor: pointer;">SAVE</button>
-  </div><!-- Ending tag for Annotation Box -->
-
-  {{!-- Div For Top Div Speakers --}}
-  <div id="top-div-speaker-control">
-    <section id="top-div-control-header">
-      <p id="top-div-control-lable" style="padding: 10px 11px;">SPEAKER</p>
-      <button id="top-div-control-close-button">X</button>
-    </section>
-    <input id="top-div-control-speaker-name"></input>
-    <section id="top-div-control-remove-save-section">
-      <button id="top-div-control-remove-button">REMOVE</button>
-      <button id="top-div-control-save-button">SAVE</button>
-    </section>
-    <section id="top-div-control-navigator">
-      <p id="navigator-label">Navigate Speaker Turn</p>
-      <button id="top-speaker-first-navigator-button"
-        style=" margin-left: 7px; border:none; background: none; float:right"><i class="fa fa-arrow-left"
-          style=" color:black;font-size:14px;cursor:pointer;"></i> </button>
-      <button id="top-speaker-last-navigator-button" style=" margin-left: 7px; border:none; background: none;"><i
-          class="fa fa-arrow-right" style=" color:black;font-size:14px;cursor:pointer;"></i> </button>
-    </section>
-  </div>
-  {{!-- Div For Top Div Speakers End --}}
-
-  <!-- Div For Confirmation Dialouge Box -->
-  <div id="confirmation-box">
-    <p>Pending Changes, Wish to discard Them?</p>
-    <button class="confirm-changes">Confirm</button>
-    <button class="discard-changes">Cancel</button>
-  </div>
-
-  <!-- Div For Top Speaker Editor Box -->
-  <div id="top-speaker-editor-box">
-    <span>Speaker</span>
-    <span id="close-top-speaker-div">x</span>
-  </div>
-
-  <!-- Div For Empty Speaker Name Dialouge Box -->
-  <div id="empty-speaker">
-    <p>Speaker is empty or invalid</p>
-    <button class="discard-changes">Ok</button>
-  </div>
-
-  {{!-- Div For hundredMilliseconds-gap Dialouge Box --}}
-  <div id="hundredMilliseconds-gap">
-    <p>Hundred Milliseconds Gap Not Matched</p>
-    <button class="discard-changes">Ok</button>
-  </div>
-
-  {{!-- Div For endTime-moreThanStartTime Dialouge Box --}}
-  <div id="endTime-moreThanStartTime">
-    <p>End Time Found Less Than Start Time</p>
-    <button class="discard-changes">Ok</button>
-  </div>
-
-  {{!-- Div For sameSpeaker-Overlapping Dialouge Box --}}
-  <div id="sameSpeaker-Overlapping">
-    <p>Same Speakers cannot be Overlapped.</p>
-    <button class="discard-changes">Ok</button>
-  </div>
-
-  {{!-- Div For top speakers Remove Dialouge Box --}}
-  <div id="top-speaker-remove-dialouge-box">
-    <p>Speaker is in use and can't be removed.</p>
-    <button class="discard-changes">Ok</button>
-  </div>
-
-  {{!-- Div For displaying guidelines-box --}}
-  <div id="guidelines-box">
-    <div>
-      <table class="keyboard-shortcuts">
-        <caption>Keyboard Shortcuts</caption>
-        <thead>
-          <tr>
-            <th>Action</th>
-            <th colspan="3">Shortcuts</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Toggle audio play/pause</td>
-            <td>space</td>
-            <td>0</td>
-            <td>ctrl+space</td>
-          </tr>
-          <tr>
-            <td>Copy current time to turn start time</td>
-            <td>ctrl+semicolon</td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td>Copy current time to turn end time</td>
-            <td>ctrl+single-quote</td>
-            <td></td>
-            <td></td>
-          </tr>
-          {{!--         
-          <tr>
-            <td>Page up</td>
-            <td>pg-up</td>
-            <td>alt+up</td>
-            <td></td>
-          </tr>
-          <tr>
-            <td>Page down</td>
-            <td>pg-down</td>
-            <td>alt+down</td>
-            <td></td>
-          </tr>
-           --}}
-          <tr>
-            <td>Jump to start</td>
-            <td>home</td>
-            <td></td>
-            <td></td>
-            <!--<td>alt+left</td>
-            <td></td>-->
-          </tr>
-          <tr>
-            <td>Jump to end</td>
-            <td>end</td>
-            <td></td>
-            <td></td>
-            <!--<td>alt+right</td>-->
-          </tr>
-          <tr>
-            <td>Create a new turn</td>
-            <td>ctrl+shift+a</td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td>Skip backward 500ms</td>
-            <td>8</td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td>Skip forward 500ms</td>
-            <td>5</td>
-            <td></td>
-            <td></td>
-          </tr>
-          {{!--           
-          <tr>
-            <td>Jump to largest gap in coverage</td>
-            <td>ctrl+shift+space</td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td>Skip to next gap in coverage</td>
-            <td>ctrl+alt+space</td>
-            <td></td>
-            <td></td>
-          </tr>
-           --}}
-          <tr>
-            <td>Play current turn or annotation</td>
-            <td>r</td>
-            <td>alt+r</td>
-            <td></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <button id="close-guidelines">OK</button>
-  </div>
-
-  {{!-- Submit button for review testing --}}
-  <button id="submit-button" class="disable-all-on-Submit">Submit</button>
-  <button id="profile-link-button">Go To My Profile</button>
-
-  <audio id="my-audio">
-    <source src="example.mp3">
-  </audio>
+  {{>body}}
 
   <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 
   <script src="local_modules/wavesurfer.js/dist/wavesurfer.js"></script>
   <script src="local_modules/wavesurfer.js/dist/plugin/wavesurfer.timeline.js"></script>
   <script src="local_modules/wavesurfer.js/dist/plugin/wavesurfer.regions.js"></script>
+  <script src="public/js/resize.js"></script>
   <!--<script src="wavesurfer.js/src/drawer.multicanvas.js"></script>-->
   <script>
-    var user_id;
+    //var user_id;
     var audio_id;
     audio_id = {{ audio_id }};
     //user_id = {{ user_id }};
-    ////console.log(user_id);
+
+
+    //////console.log(user_id);
+  </script>
+  {{!-- Amplitude --}}
+  <script type="text/javascript">
+    (function (e, t) {
+      var n = e.amplitude || {
+        _q: [],
+        _iq: {}
+      };
+      var r = t.createElement("script");
+      r.type = "text/javascript";
+      r.integrity =
+        "sha384-RsEu4WZflrqYcEacpfoGSib3qaSvdYwT4D+DrWqeBuDarSzjwUQR1jO8gDiXZd0E";
+      r.crossOrigin = "anonymous";
+      r.async = true;
+      r.src = "https://cdn.amplitude.com/libs/amplitude-6.2.0-min.gz.js";
+      r.onload = function () {
+        if (!e.amplitude.runQueuedFunctions) {
+          //console.log("[Amplitude] Error: could not load SDK");
+        }
+      };
+      var i = t.getElementsByTagName("script")[0];
+      i.parentNode.insertBefore(r, i);
+
+
+      function s(e, t) {
+        e.prototype[t] = function () {
+          this._q.push([t].concat(Array.prototype.slice.call(arguments, 0)));
+          return this;
+        };
+      }
+      var o = function () {
+        this._q = [];
+        return this;
+      };
+      var a = [
+        "add",
+        "append",
+        "clearAll",
+        "prepend",
+        "set",
+        "setOnce",
+        "unset",
+      ];
+      for (var u = 0; u < a.length; u++) {
+        s(o, a[u]);
+      }
+      n.Identify = o;
+      var c = function () {
+        this._q = [];
+        return this;
+      };
+      var l = [
+        "setProductId",
+        "setQuantity",
+        "setPrice",
+        "setRevenueType",
+        "setEventProperties",
+      ];
+      for (var p = 0; p < l.length; p++) {
+        s(c, l[p]);
+      }
+      n.Revenue = c;
+      var d = [
+        "init",
+        "logEvent",
+        "logRevenue",
+        "setUserId",
+        "setUserProperties",
+        "setOptOut",
+        "setVersionName",
+        "setDomain",
+        "setDeviceId",
+        "enableTracking",
+        "setGlobalUserProperties",
+        "identify",
+        "clearUserProperties",
+        "setGroup",
+        "logRevenueV2",
+        "regenerateDeviceId",
+        "groupIdentify",
+        "onInit",
+        "logEventWithTimestamp",
+        "logEventWithGroups",
+        "setSessionId",
+        "resetSessionId",
+      ];
+
+      function v(e) {
+        function t(t) {
+          e[t] = function () {
+            e._q.push([t].concat(Array.prototype.slice.call(arguments, 0)));
+          };
+        }
+        for (var n = 0; n < d.length; n++) {
+          t(d[n]);
+        }
+      }
+      v(n);
+      n.getInstance = function (e) {
+        e = (!e || e.length === 0 ? "$default_instance" : e).toLowerCase();
+        if (!n._iq.hasOwnProperty(e)) {
+          n._iq[e] = {
+            _q: []
+          };
+          v(n._iq[e]);
+        }
+        return n._iq[e];
+      };
+      e.amplitude = n;
+    })(window, document);
+    var reqAPIKey = "{{ amplitude_api_key }}";
+    var params = {
+      user_id
+    }
+    $.ajax({
+      method: "POST",
+      url: "/get-web-app-id",
+      data: params,
+      success: function (response) {
+        amplitude.getInstance().init(reqAPIKey, response[0].web_app_id.toString(), {
+          includeReferrer: true,
+          includeUtm: true,
+          includeGclid: true,
+        });
+        logEvent("Audio Test Screen Loaded - Trans");
+      }
+    });
+  </script>
+  <script>
+    function logEvent(ampEventName, ampEventProp) {
+      amplitude.getInstance().logEvent(ampEventName, ampEventProp);
+    }
+
+    function setUserProp(identifyObj) {
+      amplitude.getInstance().Identify(identifyObj);
+    }
+  </script>
+  <script>
   </script>
   <script>
     var is_submitted = "FALSE";
-
+    var diffCheckSubmit = false;//Checking diff checker
     var actualResponseLength = 0;//Assigns total response length
     var postsResponseLength = 0;//Assigns total posts length
     var wrongSpeakerScore = 0;
     var wrongAnnotationScore = 0;
     var unnecessarySegmentsErrors = 0;
     var overallScore = 0;//var to assign score
+    var scoreInPercentage = 0;
+    var rightWordsScore = 0;
+    var totalWordCount = 0;
     var passOrFail = ""//var to assign pass or fail
     var reqSpeakers = [];//var to check if speakers are already available  
     var addRegionBool = true;//Bool for adding region only one on click
@@ -1074,7 +965,7 @@
     var dragging = false;//allow dragging
     var temp, y, diff, segmentStart, segmentEnd = 0;
     var pressed = false;
-    var segmentId = 0;
+    var segmentId = 1;
     var currentId = "";
     var currentStartTime, currentEndTime = 0;
     var newStartTime, newEndTime = 0;
@@ -1159,15 +1050,18 @@
       totalDuration = spectrum.getDuration();
       document.getElementById('total-timestamp').innerText = secondsToTimestamp(totalDuration);
 
+      //Changes for top information 
+      $("#guide-for-submit-button-appearance").text("Press the SUBMIT button once you finish. The SUBMIT button will only appear after you finish transcribing all the speaker segments.");
+
       //Add Region on key down
       $("html").on("keydown", function (event) {
 
         if (!updateTopDivSpeaker) {
           if (event.ctrlKey && event.shiftKey && event.which == 65) {
-            console.log("Pressed");
-            addRegion();
+            //console.log("Pressed");
+            //addRegion();
             if (addRegionBool == true && !updateAnnotationOnChange && !updateTopDivSpeaker) {
-              renew();
+              //renew();
             }
           }
         }
@@ -1176,7 +1070,7 @@
       //Replay Region on KeyDown
       $("html").on("keydown", function (event) {
         if (event.altKey && event.which == 82 || event.which == 82 && event.target.id != "speaker-name" && event.target.id != "transcription-area" && event.target.id != "top-div-control-speaker-name") {
-          //////console.log("Pressed");
+          ////////console.log("Pressed");
           repeatRegion();
         }
       });//Replay Function end
@@ -1184,7 +1078,7 @@
       //play pause on space bar
       $("html").on("keydown", function (event) {
         if ((event.which == 32 || event.which == 96 || event.which == 48 || (event.ctrlKey && event.which == 32)) && event.target.id != "speaker-name" && event.target.id != "transcription-area" && event.target.id != "annotation-start-minute" && event.target.id != "annotation-start-seconds" && event.target.id != "annotation-start-milliseconds" && event.target.id != "annotation-end-minute" && event.target.id != "annotation-end-seconds" && event.target.id != "annotation-end-milliseconds" && event.target.id != "top-div-control-speaker-name") {
-          //console.log(event.target);
+          ////console.log(event.target);
 
           if (spectrum.isPlaying()) {
             spectrum.pause();
@@ -1271,83 +1165,12 @@
 
     window.addEventListener("resize",resizeWindow)
 
-    function resizeWindow(){
-        
-      if (window.matchMedia("(max-width: 1500px)").matches) {
-          $("#peaks-container > wave").css({ "height": "65vw" });
-          $("#annotation-box").css({
-             "box-shadow": "4px 4px 4px #888888",
-              "bottom": "6rem",
-              "right": "1rem",
-              "border": "1px solid grey",
-              "width": "370px",
-              "position": "fixed",
-              "z-index": "3",
-              "background-color": "white",
-              "overflow-x" :"hidden",
-              "overflow-y": "hidden",
-              "display": "none"
-          });
-
-          //canvas height to set the top speaker annotation div position from left 
-          canvasHeight = $("#peaks-container > wave canvas").height();
-
-            $("#plus-button").css({
-              "marginLeft": `65vw`
-            })
-
-            $("#plus-button").css({
-               "marginTop": `${$("#peaks-container").position().top}px`
-            })
-
-            $("#time-line").css({
-              "transform": `translate(0px,${$("wave").height() - 10}px)`
-            })
-            //$("#annotation-div-head").css({
-            //  "left": `${canvasHeight}px`
-            //})
-
-        
-            seekToCookie();
-             
-          /* The viewport is less than, or equal to, 1500 pixels wide */
-        } else if(window.matchMedia("(min-width: 1500px)").matches) {
-              $("#peaks-container > wave").css({ "height": "55vw" });
-              $("#annotation-box").css({
-                "box-shadow": "4px 4px 4px #888888",
-                  "bottom": "2rem",
-                  "right": "10rem",
-                  "border": "1px solid grey",
-                  
-                  "position": "fixed",
-                  "z-index": "3",
-                  "background-color": "white",
-                  "overflow-x" :"hidden",
-                  "overflow-y": "hidden",
-                  "display": "none"
-              });
-
-
-              //canvas height to set the top speaker annotation div position from left 
-              canvasHeight = $("#peaks-container > wave canvas").height();
-
-              $("#plus-button").css({
-                "marginLeft": `56vw`
-              })
-              $("#plus-button").css({
-               "marginTop": `${$("#peaks-container").position().top}px`
-            })
-              $("#time-line").css({
-                "transform": `translate(0px,${$("wave").height() - 10}px)`
-              });
-              seekToCookie();
-        }  
-    }
+  
   //function to seek to set cookie
     function seekToCookie(){
           //Load Wave to previous time stamp from cookie
             setTimeout(function(){
-              if (getCookie("current_time") > 0) {
+              if (getCookie("current_time") > 0 && $("#peaks-container").children("div").length>1) {
                 spectrum.seekTo(parseFloat(getCookie("current_time")));
               //spectrum.seekTo(0.0404);
             };
@@ -1443,7 +1266,7 @@
     window.onload = (function () {
       if (!confirmChangesboxBool) {
         $("#peaks-container,#top-div-for-scrolling-enabling").on("mousedown", function (e) {
-          //console.log("Touched");
+          ////console.log("Touched");
           if (spectrum.isPlaying()) {
             spectrum.pause();
             $("#play-button").find($(".fa")).toggleClass('fa-pause fa-play');
@@ -1539,7 +1362,7 @@
       }
 
       //Load Wave to previous time stamp from cookie
-      if (getCookie("current_time") > 0) {
+      if (getCookie("current_time") > 0 && $("#peaks-container").children("div").length>1) {
         spectrum.seekTo(parseFloat(getCookie("current_time")));
         //spectrum.seekTo(0.0404);
       };
@@ -1547,11 +1370,19 @@
       //Hiding Annotation Div
       $("#annotation-box").hide();
       //function on ctrl+quote key down and ctrl+colon
-      ctrlquote();
-      ctrlcolon();
+      //ctrlquote();
+      //ctrlcolon();
 
-
+      //getting actual data from actual table in database   
       getPreviousCreatedSegments();
+
+      const params = new URLSearchParams(window.location.search);
+      if (!(params.has('linguist_reviewer_test') && params.get('linguist_reviewer_test') == "true")) {
+
+        //disable unnecessary elemeats for transcription  
+        disableForTranscription()
+      }
+
       /*
       //ajax to create previously created segments by user on spectrum load
       $.ajax({
@@ -1564,7 +1395,7 @@
         async: true,
         success: function (response) {
 
-          ////console.log(response[0]["segment_id"]);
+          //////console.log(response[0]["segment_id"]);
           for (var i = 0; i < response.length; i++) {
             var segmentId = response[i]["segment_id"];
             var speakerName = response[i]["div_className"];
@@ -1603,7 +1434,7 @@
                 is_submitted = response[0]["is_submitted"];
                 //Checking if already submitted
                 if (is_submitted == "TRUE") {
-                  console.log("Euta log");
+                  //console.log("Euta log");
                   disableAllInterfaceOnSubmit();
                   ajaxReq();//Ajax Request to check correct incorrect segment
                   displayHamburger();
@@ -1619,24 +1450,23 @@
       //Creating a new region on plus button click
       $("#plus-button").on("click", function () {
         if (!updateTopDivSpeaker) {
-          addRegion();
+          //addRegion();
         }
       });
     });//spectrum on ready function end
 
     function getPreviousCreatedSegments() {
-      //ajax to create previously created segments by user on spectrum load
+      //ajax to create previously created segments by users on spectrum load
       $.ajax({
         method: "POST",
-        url: "/get-segments-from-actual-data-for-admin",
-        data: {
-          //user_id: user_id,
+        url: "/transcription-tasks-user-created-segments",
+        data: {          
           audio_id: audio_id
         },
         async: true,
         success: function (response) {
 
-          ////console.log(response[0]["segment_id"]);
+          //////console.log(response[0]["segment_id"]);
           for (var i = 0; i < response.length; i++) {
             var segmentId = response[i]["segment_id"];
             var speakerName = response[i]["div_className"];
@@ -1662,12 +1492,11 @@
           }
 
           //ajax to check if the user has already submitted
-          /*
           $.ajax({
             method: "POST",
-            url: "/get-submitted-or-not",
+            url: "/get-submitted-or-not-for-transcription",
             data: {
-              //user_id: user_id,
+              user_id: user_id,
               audio_id: audio_id
             },
             async: true,
@@ -1676,16 +1505,24 @@
                 is_submitted = response[0]["is_submitted"];
                 //Checking if already submitted
                 if (is_submitted == "TRUE") {
-                  console.log("Euta log");
-                  //disableAllInterfaceOnSubmit();
+                  disableAllInterfaceOnSubmit();
                   //ajaxReq();//Ajax Request to check correct incorrect segment
+                  //diffCheck();
                   //displayHamburger();
-                  //$("#submit-button").hide();
-                  //$("#profile-link-button").show();
+                  $("#submit-button").hide();
+                  $("#profile-link-button").show();
+                  
+                  $("#already-submitted-dialouge-box").show();
+                  $("body").not("#already-submitted-dialouge-box").css({
+                    backgroundColor: "#c2c1c0",
+                    opacity: "0.8"
+                  })
+                  //Boolean to stop user from using LT
+                  confirmChangesboxBool = true;
                 }
               }
             }
-          })*/
+          })
         }
       })
     }
@@ -1728,18 +1565,18 @@
       //ajax request to remove segments
       var params = {
         regionId,
-        //user_id,
+        user_id,
         audio_id: audio_id
       }
       if (regionId != null) {
         $.ajax({
           method: "POST",
-          url: "/remove-segments-from-actual",
+          url: "/remove-segments",
           data: params,
           success: function () {
             //Hiding Annotation Div      
             $("#annotation-box").hide();
-            //console.log("Removed");
+            ////console.log("Removed");
             updateAnnotationOnChange = false;
             updateAnnotationOnClick = false;
             //Changed RegionId to CurrentId
@@ -1762,7 +1599,6 @@
     function removeTopDivSpeakers(topSpeakerClickedId) {
       //Getting the clicked Top Div Class
       var getClickedIdClass = document.getElementById(topSpeakerClickedId).className;
-      console.log(getClickedIdClass);
       //Checking if the segments of the class still remain
       if ($("#peaks-container").children().hasClass(getClickedIdClass)) {
 
@@ -1773,7 +1609,7 @@
         $("#top-div-speaker-control").hide();
         updateTopDivSpeakerOnClick = false;
         updateTopDivSpeaker = false;
-        console.log("Class Not Found");
+        //console.log("Class Not Found");
       }
     }
 
@@ -1793,7 +1629,7 @@
         $("#peaks-container").children().each(function (index, value) {
           if (this.className == getClickedIdClass) {
             speakerNameFound = true;
-            console.log(this.className);
+            ////console.log(this.className);
             this.className = userInputTopSpeakerName.replace(/ /g, "-");
           }
         });
@@ -1801,16 +1637,16 @@
           params = {
             userInputTopSpeakerName: userInputTopSpeakerName,
             previousTopSpeakerName: getClickedIdClass.replace(/-/g, " "),
-            //user_id,
+            user_id,
             audio_id: audio_id
           }
 
           $.ajax({
             method: "POST",
-            url: "/top-speaker-control-save-button-for-actual",
+            url: "/top-speaker-control-save-button",
             data: params,
             success: function (response) {
-              console.log("Top Speakers Name Updated");
+              //console.log("Top Speakers Name Updated");
               updateTopDivSpeaker = false;
               updateTopDivSpeakerOnClick = false;
             }
@@ -1819,7 +1655,6 @@
       } else {
         emptySpeaker();
       }
-      console.log(userInputTopSpeakerName);
     }
     //save top div speakers function end 
 
@@ -1869,12 +1704,28 @@
     //Seeking Specturm
     spectrum.on("seek", function () {
       //Displaying Current Segments Contents in our Annotation Box      
+      //Var to check whether the user has filled segments
+      var checkTextsForSubmit = true;
       if (!updateTopDivSpeaker) {
         displayCurrentContents();
       }
       //Displaying submit button only if audio is played to last and 10 segements are created    
-      if ((spectrum.getCurrentTime() > (spectrum.getDuration() - 0.1)) && ($("#peaks-container").children("div").length > 10)) {
-        $("#submit-button").show();
+      if (is_submitted == "FALSE" && $("#peaks-container").children("div").length > 1) {
+        for (var i = 1; i < $("#peaks-container").children("div").length; i++) {
+          if ($("#peaks-container").children("div")[i].title == "default" || $("#peaks-container").children("div")[i].title == "Singing") {
+            if ($("#peaks-container").children("div")[i].innerText === "") {
+              //console.log("False");
+              checkTextsForSubmit = false;
+            }
+          }
+
+        }
+        if ((spectrum.getCurrentTime() > (spectrum.getDuration() / 2)) && checkTextsForSubmit) {
+          if (is_submitted == "FALSE") {
+            $("#submit-button").show();
+          }
+
+        }
       }
     });
 
@@ -1889,7 +1740,6 @@
     function createDiv(segmentId, segmentClass = "", segmentTitle = "", segmentStart, segmentEnd, annotationText, actual = false) {
       //leftMargin =400;
       //declaring the add region bool true to allow adding regions
-      //console.log("Is it this?");
       addRegionBool = true;
       var leftMargin = canvasHeight - 8;
       var div = document.createElement("div");
@@ -1916,12 +1766,25 @@
       div.style.background = neededColor;
       div.style.zIndex = zindexLoop + 1;
       p.innerHTML = annotationText;
+      /* p.style.transform = "translateX(0%) rotate(270deg)";
+      p.style.width = "350px";
+      p.style.height = "200px";
+      p.style.padding = "5px";
+      p.style.fontSize = "16px";
+      p.style.pointerEvents = "none";
+      p.style.display = "flex";
+      p.style.flexDirection = "row";
+      p.style.justifyContent = "space-between"
+      div.appendChild(p);
+      div.style.position = "absolute"; */
+
       p.style.transform = "translateX(0%) rotate(270deg)";
       p.style.width = "200px";
       p.style.height = "200px";
       p.style.padding = "5px";
       p.style.fontSize = "18px";
       p.style.pointerEvents = "none";
+      p.style.wordBreak="break-word";
       div.appendChild(p);
       div.style.position = "absolute";
       //div.style.top = "0px";
@@ -1944,11 +1807,13 @@
           p.style.width = "150px";
           p.style.height = "150px";
           $("#peaks-container").append(div);
+
         } else {
           $("#annotation-div").children().each(function (index, value) {
             if (value.className == segmentClass.replace(/ /g, "-")) {
               div.style.background = value.style.backgroundColor;
               div.style.bottom = (leftMargin + leftSpeakerCategoryDivMargin * (index)) + "px";
+              div.style.height = "250px";
               $("#peaks-container").append(div);
               return false;
             };
@@ -1957,13 +1822,14 @@
       } else if (segmentTitle !== "default" && segmentTitle !== "Singing") {
         div.style.top = "0px";
         div.style.height = "180px";
-          p.style.width = "150px";
-          p.style.height = "150px";
+        p.style.width = "150px";
+        p.style.height = "150px";
         $("#peaks-container").append(div);
       }
       else {
         //var topValue=$("#peaks-container").find("."+segmentClass.replace(" ","-")).position().top;
         div.style.bottom = (leftMargin + leftSpeakerCategoryDivMargin * (($("#annotation-div").children("div").length))) + "px";
+        div.style.height = "250px";
         $("#peaks-container").append(div);
         topSpeakerDiv(segmentClass, neededColor);
       }
@@ -2002,7 +1868,6 @@
         if ((($("#annotation-div").children("div").length) * leftSpeakerCategoryDivMargin + leftSpeakerCategoryDivMargin) > $("#annotation-div").width()) {
 
           leftSpeakerCategoryDivMargin = ($("#annotation-div").width() - leftSpeakerCategoryDivMargin) / $("#annotation-div").children("div").length;
-          console.log(leftSpeakerCategoryDivMargin);
           $("#annotation-div").children().each(function (index, value) {
             this.style.left = (leftSpeakerCategoryDivMargin * index + "px");
             //this.style.left = (this.style.left.replace("px","")-20)+"px";
@@ -2032,14 +1897,12 @@
     //function to update Segment Start on start time change
     function updateSegmentonTimeChange() {
       // if (updateSegments) {
-        console.log(segmentId);
-        console.log("Am i HEre");
       updateAnnotationOnChange = true;
       var starting = parseInt($("#annotation-start-minute").val() * 60) + parseInt($("#annotation-start-seconds").val()) + "." + ($("#annotation-start-milliseconds").val());
       var ending = parseInt($("#annotation-end-minute").val() * 60) + parseInt($("#annotation-end-seconds").val()) + "." + ($("#annotation-end-milliseconds").val());
 
       if (spectrum.regions.list[currentId] != null) {
-        //console.log("Id" + currentId);
+        ////console.log("Id" + currentId);
         if ((parseFloat(ending) - parseFloat(starting)) < 0.100 && (parseFloat(ending) - parseFloat(starting)) >= 0) {
           spectrum.regions.list[currentId].update({
             start: starting,//-0.050,
@@ -2048,8 +1911,8 @@
           hundredMillisecSegmentCheck = false;
           segmentEndingTimeMoreThanStartingTime = false;
         } else if ((parseFloat(ending) - parseFloat(starting)) < 0) {
-          //console.log(ending);
-          //console.log(starting);
+          ////console.log(ending);
+          ////console.log(starting);
           spectrum.regions.list[currentId].update({
             end: starting,
             start: ending
@@ -2070,7 +1933,7 @@
 
         newStartTime = spectrum.regions.list[currentId].start;
         newEndTime = spectrum.regions.list[currentId].end;
-        //console.log(newStartTime);
+        ////console.log(newStartTime);
         var progress1 = newStartTime / spectrum.getDuration();
         var progress2 = (newEndTime - newStartTime) / spectrum.getDuration();
         var minPxDelta = 1 / spectrum.params.pixelRatio;
@@ -2102,7 +1965,7 @@
     }
 
     $(document).on("mousedown", "wave", function () {
-      //console.log("Okay");
+      ////console.log("Okay");
     });
 
     //function for annotation contents change on click
@@ -2121,7 +1984,7 @@
         //Changed currentId to clicked Id to check if it works, works until now 
         currentStartTime = spectrum.regions.list[clickedId].start;
         currentEndTime = spectrum.regions.list[clickedId].end;
-        //console.log(clickedId);
+        ////console.log(clickedId);
 
         //segment start variables
         var startMinute = secondsToMinutes(spectrum.regions.list[clickedId].start);
@@ -2163,6 +2026,39 @@
             document.getElementById("annotation-type").value = segmentType;
             document.getElementById("speaker-name").value = segmentSpeaker;
             document.getElementById("transcription-area").value = segmentText;
+
+            //Checking if submitted or not
+            /* if (diffCheckSubmit) {
+               if (document.getElementById(clickedId).querySelector("p").childNodes.length > 0) {
+                 //Storing values from segment
+                 var p1_child_text = document.getElementById(clickedId).querySelector("p").childNodes[0].innerHTML;
+                 var p2_child_text = document.getElementById(clickedId).querySelector("p").childNodes[1].innerHTML;
+                 document.getElementById("transcripted_text_paragraph").style.display = "flex";
+                 //Clearing the tag value
+                 document.getElementById("transcripted_text_paragraph").innerHTML = "";
+                 document.getElementById("transcription-area").style.display = "none";
+                 ////console.log(p1_child_text);
+                 //Creating child tags to display text
+                 document.getElementById("transcripted_text_paragraph").appendChild(document.createElement("p")).innerHTML = p1_child_text;
+                 document.getElementById("transcripted_text_paragraph").appendChild(document.createElement("p")).innerHTML = p2_child_text;
+                 var p1_child = document.getElementById(`transcripted_text_paragraph`).childNodes[0];
+                 p1_child.className = "transcription_area_first_child";
+                 var p2_child = document.getElementById(`transcripted_text_paragraph`).childNodes[1];
+                 p1_child.style.width = "40%";
+ 
+                 p1_child.style.margin = "10px";
+ 
+                 p2_child.style.width = "40%";
+ 
+                 p2_child.style.margin = "10px";
+ 
+               } else {
+                 document.getElementById("transcripted_text_paragraph").style.display = "none";
+                 document.getElementById("transcription-area").style.display = "block";
+                 //Display Normal Text
+                 document.getElementById("transcription-area").value = segmentText;
+               }
+             }*/
           }
         }
       }
@@ -2221,7 +2117,7 @@
     //function to highlight current region
     function highlightRegion() {
       var highlightId = currentId;
-      ////console.log(spectrum.regions.list[highlightId].element);
+      //////console.log(spectrum.regions.list[highlightId].element);
 
       Object.keys(spectrum.regions.list).forEach(function (id) {
         var region = spectrum.regions.list[id];
@@ -2253,7 +2149,7 @@
     function saveClick() {
 
       if (updateSegments == false) {
-        //console.log("New Save Click");
+        ////console.log("New Save Click");
         segmentStart = spectrum.regions.list[currentId].start;
         segmentEnd = spectrum.regions.list[currentId].end;
         var annotationText = "";
@@ -2285,10 +2181,10 @@
           segmentStart,
           segmentEnd,
           annotationText,
-          //user_id,
+          user_id,
           audio_id: audio_id
         }
-        //console.log(checkOverlappingDiv(speakerName, segmentStart, segmentEnd));
+        ////console.log(checkOverlappingDiv(speakerName, segmentStart, segmentEnd));
         if (speakerName.length > 0 && hundredMillisecSegmentCheck && !segmentEndingTimeMoreThanStartingTime && spellCheckSpeakerName(speakerName) && (!checkOverlappingDiv(speakerName, segmentStart, segmentEnd))) {
           if (spellCheckSpeakerName(speakerName)) {
             //Var to store id from database
@@ -2296,13 +2192,13 @@
 
             $.ajax({
               method: "POST",
-              url: "/insert-into-actual-data",
+              url: "/database",
               data: params,
               async: false,
               success: function (response) {
-                //console.log("Success");
+                ////console.log("Success");
                 segmentIdFromDatabase = response.insertId;
-                //console.log(segmentIdFromDatabase);
+                ////console.log(segmentIdFromDatabase);
                 $(`region[data-id=${currentId}]`).attr("data-id", segmentIdFromDatabase);
                 spectrum.regions.list[currentId].id = segmentIdFromDatabase;
                 spectrum.regions.list[segmentIdFromDatabase] = spectrum.regions.list[currentId];
@@ -2318,7 +2214,7 @@
 
             updateAnnotationOnChange = false;
             updateAnnotationOnClick = false;
-            //console.log(reqSpeakers);
+            ////console.log(reqSpeakers);
             var append = false;
             if (!reqSpeakers.includes(speakerName) && speakerName.includes("speaker")) {
               //adding to select options
@@ -2339,29 +2235,29 @@
           }
         } else {
           if (speakerName.length == 0 || !spellCheckSpeakerName(speakerName)) {
-            //console.log("Empty Speaker Name")
+            ////console.log("Empty Speaker Name")
             emptySpeaker();
           } else if (!hundredMillisecSegmentCheck) {
-            //console.log("Less Than Hundred Milliseconds");
+            ////console.log("Less Than Hundred Milliseconds");
             hundredMillisecondsSegmentGap();
           } else if (segmentEndingTimeMoreThanStartingTime) {
-            //console.log("End Time More Than Start Time");
+            ////console.log("End Time More Than Start Time");
             endTimeMoreThanStartTime();
           } else if ((checkOverlappingDiv(speakerName, segmentStart, segmentEnd))) {
-            //console.log("New Div for Overlapping");
+            ////console.log("New Div for Overlapping");
             sameSpeakerOverlappingDialougeBox();
           }
         }
       } else if (updateAnnotationOnChange == true) {
         var params;
-        //console.log("Old" + currentId);
+        ////console.log("Old" + currentId);
         //Updating Database        
         var segmentId = currentId;
         var annotationText = "";
         var speakerName = "";
         var annotationType = "";
         var segmentclass = document.getElementById("speaker-name").value;
-        //console.log(segmentclass.replace(" ", "-"));
+        ////console.log(segmentclass.replace(" ", "-"));
         var val = document.getElementById("annotation-type");
         if (val.value !== "default" && val.value !== "Singing") {
           document.getElementById(segmentId).style.top = "0px";
@@ -2376,10 +2272,10 @@
           if ($("#annotation-div").children().hasClass(segmentclass.replace(/ /g, "-"))) {
             $("#annotation-div").children().each(function (index, value) {
               if (value.className == (segmentclass.replace(/ /g, "-"))) {
-                //console.log("old")
-                //console.log(value);
+                ////console.log("old")
+                ////console.log(value);
                 speakerName = document.getElementById("speaker-name").value;
-                //console.log("2" + checkOverlappingDiv(speakerName, segmentStart, segmentEnd))
+                ////console.log("2" + checkOverlappingDiv(speakerName, segmentStart, segmentEnd))
                 if (!checkOverlappingDiv(speakerName, newStartTime, newEndTime)) {
                   annotationType = document.getElementById("annotation-type").value;
                   document.getElementById(segmentId).title = annotationType;
@@ -2396,7 +2292,7 @@
                   document.getElementById(segmentId).querySelector("p").innerText = annotationText;
                   document.getElementById(segmentId).style.background = value.style.backgroundColor;
                   //400=leftMargin
-                  //console.log(((canvasHeight - 8) + leftSpeakerCategoryDivMargin * (index)) + "px");
+                  ////console.log(((canvasHeight - 8) + leftSpeakerCategoryDivMargin * (index)) + "px");
                   // div.style.bottom = (leftMargin + leftSpeakerCategoryDivMargin * (index)) + "px";
                   document.getElementById(segmentId).style.bottom = ((canvasHeight - 8) + leftSpeakerCategoryDivMargin * (index)) + "px";
                   document.getElementById(segmentId).style.top = "inherit";
@@ -2404,7 +2300,7 @@
               }
             });
           } else {
-            //console.log("new");
+            ////console.log("new");
 
             //Changing segmentId to currentId
             var newColor = getRandomColor();
@@ -2427,8 +2323,8 @@
             topSpeakerDiv(speakerName, newColor);
           }
         } else if (segmentclass.length == 0 || segmentclass.split(" ").length > 2 || spellCheckSpeakerName(segmentclass)) {
-          //console.log("Speaker Name not found");
-          //console.log(speakerName);
+          ////console.log("Speaker Name not found");
+          ////console.log(speakerName);
           emptySpeaker();
         }
 
@@ -2443,8 +2339,8 @@
             annotationType,
             segmentStart: newStartTime,
             segmentEnd: newEndTime,
-            annotationText:annotationText.replace("'", "''"),
-            //user_id,
+            annotationText,
+            user_id,
             audio_id: audio_id
           }
         } else {
@@ -2454,24 +2350,23 @@
             annotationType,
             segmentStart,
             segmentEnd,
-            annotationText:annotationText.replace("'", "''"),
-            //user_id,
+            annotationText,
+            user_id,
             audio_id: audio_id
           }
         }
 
 
-        //console.log("20");
-        //console.log(checkOverlappingDiv(speakerName, newStartTime, newEndTime));
+        ////console.log("20");
+        ////console.log(checkOverlappingDiv(speakerName, newStartTime, newEndTime));
         if (speakerName.length > 0 && hundredMillisecSegmentCheck && !segmentEndingTimeMoreThanStartingTime && spellCheckSpeakerName(speakerName) && !checkOverlappingDiv(speakerName, newStartTime, newEndTime)) {
-          //console.log("Update vairako");
-          console.log(JSON.stringify(params));
+          ////console.log("Update vairako");
           $.ajax({
             method: "POST",
-            url: "/update-actual-database",
-            data: (params),
+            url: "/update-transcription-table",
+            data: params,
             success: function () {
-              console.log("Updated");
+              ////console.log("Updated");
 
             }
           })
@@ -2481,18 +2376,18 @@
           updateAnnotationOnClick = false;
 
         } else {
-          //console.log(speakerName);
-          //console.log("annotation ma ya aako ho?");
+          ////console.log(speakerName);
+          ////console.log("annotation ma ya aako ho?");
           if (speakerName.length < 0 || !spellCheckSpeakerName(speakerName)) {
             emptySpeaker();
           } else if (!hundredMillisecSegmentCheck) {
-            //console.log("Less Than Hundred Milliseconds");
+            ////console.log("Less Than Hundred Milliseconds");
             hundredMillisecondsSegmentGap();
           } else if (segmentEndingTimeMoreThanStartingTime) {
-            //console.log("End Time More Than Start Time");
+            ////console.log("End Time More Than Start Time");
             endTimeMoreThanStartTime();
           } else if (checkOverlappingDiv(speakerName, newStartTime, newEndTime)) {
-            //console.log("Overlapping Speakser");
+            ////console.log("Overlapping Speakser");
             sameSpeakerOverlappingDialougeBox();
           }
         }
@@ -2531,7 +2426,7 @@
       $("html").on("keydown", function (event) {
         if (event.ctrlKey && event.which == 186) {
           event.preventDefault();
-          //console.log("Pressed");
+          ////console.log("Pressed");
           var currentTime = spectrum.getCurrentTime();
           updateAnnotationOnChange = true;
           updateAnnotationOnClick = true;
@@ -2711,16 +2606,16 @@
         segmentStart: regionStartTime,
         segmentEnd: spectrumCurrentTime - 0.010,
         annotationText: textBeforeCursor,
-        //user_id,
+        user_id,
         audio_id: audio_id
       }
 
       $.ajax({
         method: "POST",
-        url: "/update-actual-data-on-split",
+        url: "/update-on-split",
         data: updateParams,
         success: function () {
-          //console.log("Updated");
+          ////console.log("Updated");
         }
       })
 
@@ -2731,16 +2626,16 @@
         segmentStart: spectrumCurrentTime + 0.010,
         segmentEnd: regionEndTime,
         annotationText: textAfterCursor,
-        //user_id,
+        user_id,
         audio_id: audio_id
       }
 
       $.ajax({
         method: "POST",
-        url: "/insert-into-actual-data",
+        url: "/database",
         data: params,
         success: function () {
-          //console.log("Success");
+          ////console.log("Success");
         }
       })
     }//split Region Function end
@@ -2751,8 +2646,8 @@
       var reqText = $("#transcription-area").val();
       var textBeforeCursor = reqText.substring(0, firstLength);
       var textAfterCursor = reqText.substring(firstLength, reqText.length);
-      //console.log(reqText.substring(0, firstLength));
-      //console.log(reqText.substring(firstLength, reqText.length));
+      ////console.log(reqText.substring(0, firstLength));
+      ////console.log(reqText.substring(firstLength, reqText.length));
 
       splitRegion(textBeforeCursor, textAfterCursor);
       updateAnnotationOnChange = false;
@@ -2763,7 +2658,7 @@
     function confirmChanges() {
       //if changes were made in annotation box
       if (updateAnnotationOnChange) {
-        console.log("Update Annotation Cancel");
+        //console.log("Update Annotation Cancel");
         //Hiding Annotation Div      
         $("#annotation-box").hide();
         updateAnnotationOnChange = false;
@@ -2808,7 +2703,7 @@
         }
       } else if (updateTopDivSpeaker) {
         //Hiding Annotation Div    
-        console.log("Update Top Div Cancel");
+        //console.log("Update Top Div Cancel");
         $("#top-div-speaker-control").hide();
         updateTopDivSpeaker = false;
       }
@@ -2922,7 +2817,7 @@
     //function to check and create segments
     function createSegments(currentId, starting, ending) {
       if (spectrum.regions.list[currentId] != null) {
-        //console.log("Id" + currentId);
+        ////console.log("Id" + currentId);
         if ((parseFloat(ending) - parseFloat(starting)) < 0.100 && (parseFloat(ending) - parseFloat(starting)) >= 0) {
           spectrum.regions.list[currentId].update({
             start: starting,
@@ -2952,7 +2847,7 @@
 
       newStartTime = spectrum.regions.list[currentId].start;
       newEndTime = spectrum.regions.list[currentId].end;
-      //console.log(newStartTime);
+      ////console.log(newStartTime);
       var progress1 = newStartTime / spectrum.getDuration();
       var progress2 = (newEndTime - newStartTime) / spectrum.getDuration();
       var minPxDelta = 1 / spectrum.params.pixelRatio;
@@ -2966,25 +2861,25 @@
 
     //Function to Check correct speakername
     function spellCheckSpeakerName(speakerName) {
-      console.log(speakerName);
+      ////console.log(speakerName); --} }
       var splitSpeakerName = speakerName.split(" ");
-      console.log(splitSpeakerName);
+      ////console.log(splitSpeakerName); --} }
       if (splitSpeakerName[0] != "speaker") {
         if (splitSpeakerName[0] == "DTMF" || splitSpeakerName[0] == "Applause" || splitSpeakerName[0] == "Laughter" || splitSpeakerName[0] == "Music" || splitSpeakerName[0] == "Noise" || splitSpeakerName[0] == "Ringtone" || (splitSpeakerName[0] == "unidentifiable" && splitSpeakerName[1] == "speaker")) {
           return true;
         } else if (splitSpeakerName[0] == "pre" && splitSpeakerName[1] == "recorded" && splitSpeakerName[2] == "speaker") {
           //Insert More Code Below if pre recorded speaker name is needed too!
           if (splitSpeakerName.length != 4) {
-            console.log("HERE")
+            ////console.log("HERE") --} }
             return false;
           }
           if (isNaN(splitSpeakerName[3])) {
-            console.log("HERE")
+            ////console.log("HERE") --} }
             return false;
           }
           return true;
         }
-        console.log("HERE")
+        ////console.log("HERE") --} }
         return false;
       }
       if (isNaN(splitSpeakerName[1])) {
@@ -3022,7 +2917,7 @@
       console.trace(1);
       var overlapping = false;
       var sameSpeakerParams = {
-        //user_id,
+        user_id,
         speakerName
       }
 
@@ -3030,13 +2925,14 @@
       Object.keys(spectrum.regions.list).forEach(function (region) {
         var previousSpeakerStart = spectrum.regions.list[region].start;
         var previousSpeakerEnd = spectrum.regions.list[region].end;
+
         if ((segmentStart > previousSpeakerStart && segmentStart < previousSpeakerEnd) ||
           (segmentEnd > previousSpeakerStart && segmentEnd < previousSpeakerEnd) || (previousSpeakerStart > segmentStart && previousSpeakerStart < segmentEnd)) {
-          //console.log("herer1")
+          ////console.log("herer1")
           var previousSpeakerName = document.getElementById(region).className;
           if (speakerName != "DTMF" && speakerName != "Applause" && speakerName != "Laughter" && speakerName != "Music" && speakerName != "Noise" && speakerName != "Ringtone") {
             if (previousSpeakerName == speakerName.replace(/ /g, "-")) {
-              //console.log("herer2")
+              ////console.log("herer2")
               overlapping = true;
             }
           }
@@ -3047,7 +2943,7 @@
 
     //function for promises and ajax request on submit
     function ajaxReq() {
-      //console.log("Hawa ");
+      ////console.log("Hawa ");
       if (Object.keys(spectrum.regions.list).length == 0) {
         overallScore = 100;
       } else {
@@ -3062,7 +2958,7 @@
                 method: "POST",
                 url: "/get-segments",
                 data: {
-                  //user_id: user_id,
+                  user_id: user_id,
                   audio_id: audio_id
                 },
 
@@ -3084,7 +2980,7 @@
                       segment_end: actualsegmentEnd,
                       annotation_text: actualannotationText
                     } = actualResponse[i];
-                    //console.log(actualsegmentId + " " + i);
+                    ////console.log(actualsegmentId + " " + i);
                     var color = "";
                     for (var j = 0; j < postResponse.length; j++) {
                       var {
@@ -3135,9 +3031,9 @@
                       ) {
                         //Correct Segment Created
                         correctSegmentCreated = true;
-                        //console.log("c" + parseFloat(actualsegmentStart));
-                        //console.log(actualspeakerName);
-                        //console.log(postsspeakerName);
+                        ////console.log("c" + parseFloat(actualsegmentStart));
+                        ////console.log(actualspeakerName);
+                        ////console.log(postsspeakerName);
                         break;
                       } else if (
                         parseFloat(actualsegmentStart) -
@@ -3155,9 +3051,9 @@
                         actualannotationType != "default"
                       ) {
                         //Correct Segment Created
-                        //console.log(actualspeakerName);
-                        //console.log("c" + parseFloat(actualsegmentStart));
-                        //console.log(postsspeakerName);
+                        ////console.log(actualspeakerName);
+                        ////console.log("c" + parseFloat(actualsegmentStart));
+                        ////console.log(postsspeakerName);
                         correctSegmentCreated = true;
                         break;
                       } else {
@@ -3179,9 +3075,9 @@
                         ) {
                           overallScore += 1;
                           wrongAnnotationScore += 1;
-                          //console.log(                            "score Incorrect Annotation " + wrongAnnotationScore                          );
-                          //console.log(postsspeakerName);
-                          //console.log(actualspeakerName);
+                          ////console.log(                            "score Incorrect Annotation " + wrongAnnotationScore                          );
+                          ////console.log(postsspeakerName);
+                          ////console.log(actualspeakerName);
                         }
                         if (
                           parseFloat(actualsegmentStart) -
@@ -3201,16 +3097,16 @@
                         ) {
                           overallScore += 1;
                           wrongSpeakerScore += 1;
-                          //console.log(                            "score Speaker Incorrect " + wrongSpeakerScore
+                          ////console.log(                            "score Speaker Incorrect " + wrongSpeakerScore
                           //);
-                          //console.log(postsspeakerName);
-                          //console.log(actualspeakerName);
+                          ////console.log(postsspeakerName);
+                          ////console.log(actualspeakerName);
                         }
                         //Incorrect Segement created
                         correctSegmentCreated = false;
                       }
                     }
-                    //console.log(correctSegmentCreated);
+                    ////console.log(correctSegmentCreated);
                     //creating Segments
                     spectrum.addRegion({
                       id: actualsegmentId + 100000,
@@ -3233,7 +3129,7 @@
                   unnecessarySegmentsErrors +=
                     Math.abs(actualResponseLength - postsResponseLength) * 2;
                   overallScore = overallScore + unnecessarySegmentsErrors;
-                  //console.log("Total Score " + (100 - overallScore));
+                  ////console.log("Total Score " + (100 - overallScore));
                   //Checking Pass or Fail
                   if (100 - overallScore > 60) {
                     passOrFail = "PASS";
@@ -3241,7 +3137,7 @@
                     passOrFail = "FAIL";
                   }
                   //Disallowing Clicking and Changing Values if the Submit request was successful
-                  //console.log("Submit Clicked");
+                  ////console.log("Submit Clicked");
                   disableAllInterfaceOnSubmit();
                   resolve();
                 }
@@ -3255,16 +3151,14 @@
     //Function to Display Errors and hamburger icons
     function displayHamburger() {
       $("#errorToggle").show();
-      $("#speaker-labelling-error").text(`Speaker Labelling Error: ` + wrongSpeakerScore);
-      $("#annotation-labelling-error").text(`Annotation Labelling Error: ` + wrongAnnotationScore);
-      $("#unnecessary-segments-errors").text(`Unnecessary Segments Error: ` + unnecessarySegmentsErrors);
-      $("#total-errors").text(`Your Overall Score: ${100 - overallScore}%`);
+
+      $("#total-errors").text(`Your Overall Score: ${scoreInPercentage}%`);
     }//display Hamburger End
 
     //function to display Errors Menu
     $("#displayErrorCB").on("click", function () {
       var isChecked = $("#displayErrorCB").is(":checked");
-      //console.log($("#displayErrorCB").is(":checked"));
+      ////console.log($("#displayErrorCB").is(":checked"));
       if (!$("#displayErrorCB").is(":checked")) {
         $("#errorMenu").not(".showHamburger").show();
         $(".showHamburger").hide();
@@ -3277,43 +3171,168 @@
     });//Display Error Menu Close
 
 
+
+    //Function to call on submit click
+    $("#submit-button").on("click", function () {
+      /*
+      
+      
+      disableAllInterfaceOnSubmit();
+      //submitClick();      
+      //ajaxReq();
+      displayHamburger();
+
+      $("#submit-button").hide();
+      $("#profile-link-button").show();
+      */
+      diffCheck();
+      saveScores();
+      $("#profile-link-button").show();
+      getWebAppId();
+      logEvent("Audio Test Submitted - Trans")
+    });//Submit Button Click Function End
+
+    function getWebAppId() {
+      $.ajax({
+        method: "POST",
+        url: "/get-web-app-id",
+        data: {
+          user_id: user_id
+        },
+        success: function (data) {
+          var webapp_id = data[0].web_app_id;
+          $.ajax({
+            method: "POST",
+            url: "/get-language-id",
+            data: {
+              audio_id
+            },
+            success: function (data1) {
+              var language_id = data1[0].Language_id;
+              var mailParams = {
+                "user_id": `${webapp_id}`,
+                "status": "3",
+                "project_type_id": "2",
+                "language_id": `${language_id}`
+              }
+              //console.log(mailParams);
+              $.ajax({
+                method: "POST",
+                url: "{{ webapp_basepath }}/api/set-user-language-project-type-status",
+                data: mailParams,
+                success: function () {
+                  //console.log("Web app status set");
+                }
+              });
+            }
+          })
+
+
+        }
+      });
+    }
+
+    //function for diffCheck 
+    function diffCheck() {
+      var replaced_actual_text, replaced_annotation_text = "";
+      params = {
+        user_id,
+        audio_id: audio_id
+      }
+      $.ajax({
+        method: "POST",
+        url: "/route-for-diff-check",
+        data: params,
+        async: false,
+        success: function (response) {
+          diffCheckSubmit = true;
+          //console.log("Diff Checker Success");
+
+          for (var i = 0; i < response.length; i++) {
+            if (response[i]["difference"] != null) {
+              var transcription_id = response[i]["segment_id"];
+              var differences = response[i]["difference"];
+              var regexToReplace = /[\s_.,!"'&?/$]*/g;
+              ////console.log(response[i]);
+              ////console.log(differences);
+              var actual_text = "", annotation_text = "";
+              differences.forEach(difference => {
+                if (difference.removed) {
+                  replaced_annotation_text = difference.value.replace(regexToReplace, " . ").split(" ");
+                  annotation_text += `<span style="background-color:#FF8983">` + difference.value + `</span>`;
+                  totalWordCount += replaced_annotation_text.length;
+                } else if (difference.added) {
+                  actual_text += `<span style="background-color:#6BDFB8">` + difference.value + `</span>`
+                  replaced_actual_text = difference.value.replace(regexToReplace, " .").split(" ");
+
+                } else {
+                  actual_text += difference.value + "";
+                  annotation_text += difference.value + "";
+                  replaced_annotation_text = difference.value.replace(regexToReplace, " .").split(" ");
+                  replaced_actual_text = difference.value.replace(regexToReplace, " .").split(" ");
+                  rightWordsScore += replaced_annotation_text.length;
+                  ////console.log(replaced_annotation_text); --} }
+
+                  totalWordCount += replaced_actual_text.length;
+                }
+              })
+
+              ////console.log(document.getElementById(`${transcription_id}`).innerHTML);
+              //document.getElementById(`${transcription_id}`).querySelector("p").innerText = "";
+              //document.getElementById(`${transcription_id}`).querySelector("p").appendChild(document.createElement("p")).innerHTML = actual_text;
+              //document.getElementById(`${transcription_id}`).querySelector("p").appendChild(document.createElement("p")).innerHTML = annotation_text;
+              //var p1_child = document.getElementById(`${transcription_id}`).querySelector("p").childNodes[0];
+
+              //var p2_child = document.getElementById(`${transcription_id}`).querySelector("p").childNodes[1];
+              //p1_child.style.width = "40%";
+              //p1_child.style.height = "150px";
+              //p1_child.style.margin = "10px";
+              //p1_child.style.border = "1px solid black";
+              //p2_child.style.width = "40%";
+              //p2_child.style.height = "150px";
+              //p2_child.style.margin = "10px";
+              //p2_child.style.border = "1px solid black";
+
+            }
+
+          }
+          scoreInPercentage = Math.round((rightWordsScore / totalWordCount) * 100);
+          ////console.log(totalWordCount);
+          ////console.log(wrongWordsScore);
+        }
+      })
+    };
+    //Diff Check Function end
+
     //Function to store scores in database Users Table
     function saveScores() {
-      //console.log(overallScore);
+      ////console.log(overallScore);
       var todayDate = new Date();
+      ////console.log(rightWordsScore); --} }
+
+      ////console.log(scoreInPercentage); --} }
       params = {
         user_id,
         audio_id: audio_id,
-        wrongSpeakerScore,
-        wrongAnnotationScore,
-        unnecessarySegmentsErrors,
-        overallScore: 100 - (overallScore),
-        passOrFail,
+        total_score: scoreInPercentage,
         is_submitted: "TRUE"
       }
       $.ajax({
         method: "POST",
-        url: "/save-test-score-on-users_audio_table",
+        url: "/save-test-score-on-users_audio_table-for-transcription",
         data: params,
         success: function () {
-          //console.log("Success");
+          ////console.log("Success");
         }
       })
     };//Save Scores Function End
 
-    //Function to call on submit click
-    $("#submit-button").on("click", function () {
-      //submitClick();      
-      //ajaxReq();
-      //displayHamburger();
-      //saveScores();
-      //$("#submit-button").hide();
-      //$("#profile-link-button").show();
-    });//Submit Button Click Function End
 
     //clicking in profile link button
     $("#profile-link-button").on("click", () => {
-      window.location.href = "{{ webapp_basepath }}/sample";
+      window.location.href = "{{ webapp_basepath }}/sample#transcription";
+      //window.location.href = "http://localhost:5000/sample#transcription";
+      //localStorage.setItem("goToTab","#transcription");
     });//Profile Link Button function End
 
     //function to display current div content in annotation box
@@ -3358,6 +3377,7 @@
           $(".annotation-editHeading").css("backgroundColor", divColor);
           if (segmentType !== "default" && segmentType !== "Singing") {
             document.getElementById("transcription-area").style.display = "none";
+            document.getElementById("transcripted_text_paragraph").style.display = "none";
             document.getElementById("speaker-name").style.display = "none";
             //$("#annotation-box").css("height", 250 + "px");
             document.getElementById("annotation-type").value = segmentType;
@@ -3369,7 +3389,42 @@
             //$("#annotation-box").css("height", 32 + "rem");
             document.getElementById("annotation-type").value = segmentType;
             document.getElementById("speaker-name").value = segmentSpeaker;
-            document.getElementById("transcription-area").value = segmentText;
+
+            //Checking if submitted or not
+            if (diffCheckSubmit) {
+              if (document.getElementById(segmentId).querySelector("p").childNodes.length > 0) {
+                //Storing values from segment
+                var p1_child_text = document.getElementById(segmentId).querySelector("p").childNodes[0].innerHTML;
+                var p2_child_text = document.getElementById(segmentId).querySelector("p").childNodes[1].innerHTML;
+                document.getElementById("transcripted_text_paragraph").style.display = "flex";
+                //Clearing the tag value
+                document.getElementById("transcripted_text_paragraph").innerHTML = "";
+                document.getElementById("transcription-area").style.display = "none";
+
+                ////console.log(p1_child_text);
+                //Creating child tags to display text
+                document.getElementById("transcripted_text_paragraph").appendChild(document.createElement("p")).innerHTML = p1_child_text;
+                document.getElementById("transcripted_text_paragraph").appendChild(document.createElement("p")).innerHTML = p2_child_text;
+                var p1_child = document.getElementById(`transcripted_text_paragraph`).childNodes[0];
+                var p2_child = document.getElementById(`transcripted_text_paragraph`).childNodes[1];
+                p1_child.className = "transcription_area_first_child";
+                p1_child.style.width = "40%";
+
+                p1_child.style.margin = "10px";
+
+                p2_child.style.width = "40%";
+
+                p2_child.style.margin = "10px";
+
+              } else {
+                document.getElementById("transcripted_text_paragraph").style.display = "none";
+                document.getElementById("transcription-area").style.display = "block";
+                //Display Normal Text
+                document.getElementById("transcription-area").value = segmentText;
+              }
+            } else {
+              document.getElementById("transcription-area").value = segmentText;
+            }
           }
         }
       }
@@ -3380,6 +3435,18 @@
       $(".disable-all-on-Submit").prop('disabled', true);
       $(".disable-all-on-Submit").css({ "cursor": "not-allowed" });
     }//disable all interface on submit end
+
+    //function to disable times for transcription
+    function disableForTranscription() {
+      $(".annotation-time-class").prop('disabled', true);
+      $("#annotation-remove").prop('disabled', true);
+      $("#annotation-remove").css({ "cursor": "not-allowed" });
+      $("#annotation-split").prop("disabled", true);
+      $("#annotation-split").css({ "cursor": "not-allowed" });
+      $(".annotation-time-ms-class").prop("disabled", true);
+      $("#annotation-type").prop("disabled", true);
+      $("#speaker-name").prop("disabled", true);
+    }//disable times for transcription 
 
   </script>
 </body>

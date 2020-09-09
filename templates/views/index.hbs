@@ -16,8 +16,9 @@
   <meta charset="utf-8">
   <title></title>
   <link rel="stylesheet" type="text/css" href="/css/styles.css">
-  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  
+  <link rel="stylesheet" type="text/css"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
   <style>
     body {
       overflow: hidden;
@@ -1538,10 +1539,10 @@
       //Displaying submit button only if audio is played to last and 10 segements are created    
       if ((spectrum.getCurrentTime() > (spectrum.getDuration() - 0.1)) && ($("#peaks-container").children("div").length > 10)) {
         console.log(is_submitted);
-        if(is_submitted=="FALSE"){
+        if (is_submitted == "FALSE") {
           $("#submit-button").show();
         }
-        
+
       }
     });
 
@@ -1614,7 +1615,7 @@
           div.style.height = "180px";
           p.style.width = "150px";
           p.style.height = "150px";
-      
+
           $("#peaks-container").append(div);
         } else {
           $("#annotation-div").children().each(function (index, value) {
@@ -1632,7 +1633,7 @@
         div.style.height = "180px";
         p.style.width = "150px";
         p.style.height = "150px";
-      
+
         $("#peaks-container").append(div);
       }
       else {
@@ -2706,14 +2707,14 @@
       Object.keys(spectrum.regions.list).forEach(function (region) {
         var previousSpeakerStart = spectrum.regions.list[region].start;
         var previousSpeakerEnd = spectrum.regions.list[region].end;
-        
+
         //|| (segmentStart == previousSpeakerStart && segmentEnd == previousSpeakerEnd)
         if ((segmentStart > previousSpeakerStart && segmentStart < previousSpeakerEnd) || //(segmentStart == previousSpeakerStart && segmentEnd == previousSpeakerEnd)||
           (segmentEnd > previousSpeakerStart && segmentEnd < previousSpeakerEnd) || (previousSpeakerStart > segmentStart && previousSpeakerStart < segmentEnd)) {
-          
+
           if (speakerName != "DTMF" && speakerName != "Applause" && speakerName != "Laughter" && speakerName != "Music" && speakerName != "Noise" && speakerName != "Ringtone") {
-            if(document.getElementById(region)!=null){
-              var previousSpeakerName = document.getElementById(region).className;  
+            if (document.getElementById(region) != null) {
+              var previousSpeakerName = document.getElementById(region).className;
             }
             //var previousSpeakerName = document.getElementById(region).className;
             if (previousSpeakerName == speakerName.replace(/ /g, "-")) {
@@ -2729,7 +2730,7 @@
     //function for promises and ajax request on submit
     function ajaxReq() {
       //console.log("Hawa ");
-      if (Object.keys(spectrum.regions.list).length == 0 || overallScore<0) {
+      if (Object.keys(spectrum.regions.list).length == 0 || overallScore < 0) {
         overallScore = 100;
       } else {
         var promise = new Promise((resolve, reject) => {
@@ -3010,7 +3011,7 @@
 
     //Function to call on submit click
     $("#submit-button").on("click", function () {
-      
+
       //submitClick();      
       ajaxReq();
       displayHamburger();
@@ -3021,35 +3022,35 @@
       getWebAppId();
     });//Submit Button Click Function End
 
-    function getWebAppId(){
+    function getWebAppId() {
       $.ajax({
-        method:"POST",
-        url:"/get-web-app-id",
-        data:{
-          user_id:user_id
+        method: "POST",
+        url: "/get-web-app-id",
+        data: {
+          user_id: user_id
         },
-        success:function(data){
-          
-           var mailParams = {
-                "user_id": `${data[0].web_app_id}`,
-                "status": "3",
-                "project_type_id": "4"
+        success: function (data) {
+
+          var mailParams = {
+            "user_id": `${data[0].web_app_id}`,
+            "status": "3",
+            "project_type_id": "4"
           }
-               $.ajax({
-                  method: "POST",
-                  url: "https://webapp.theaudiobee.com/api/set-user-language-project-type-status",
-                  data: mailParams,
-                  success: function () {
-                      console.log("Web app status set");
-                  }
-              });
+          $.ajax({
+            method: "POST",
+            url: "{{ webapp_basepath }}/api/set-user-language-project-type-status",
+            data: mailParams,
+            success: function () {
+              console.log("Web app status set");
+            }
+          });
         }
       });
     }
 
     //clicking in profile link button
     $("#profile-link-button").on("click", () => {
-      window.location.href = "https://webapp.theaudiobee.com/sample#segmentation";
+      window.location.href = "{{ webapp_basepath }}/sample#segmentation";
     });//Profile Link Button function End
 
     //function to display current div content in annotation box
@@ -3219,7 +3220,7 @@
       };
       e.amplitude = n;
     })(window, document);
-    var reqAPIKey = "534517ca15b0c94bfebf670795e2850d";
+    var reqAPIKey = "{{ amplitude_api_key }}";
     var params = {
       user_id
     }
@@ -3228,8 +3229,7 @@
       url: "/get-web-app-id",
       data: params,
       success: function (response) {
-        
-        amplitude.getInstance().init(reqAPIKey, response.web_app_id, {
+        amplitude.getInstance().init(reqAPIKey, response[0].web_app_id.toString(), {
           includeReferrer: true,
           includeUtm: true,
           includeGclid: true,

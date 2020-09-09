@@ -874,7 +874,7 @@
         
       //User Information On Top
       $("#training-userId").text("User Name: " + "{{user_name}}");
-      $("#training-audioName").text("Audio: " + "{{audio_url}}" + ` (${audio_order})`)
+      $("#training-audioName").text("Audio: " + "{{audio_name}}" + ` (${audio_order})`)
 
       //Total Duration Of the Audio
       totalDuration = spectrum.getDuration();
@@ -1220,7 +1220,7 @@
       $("#guide-for-submit-button-appearance").text("Press the SUBMIT button once you finish. The SUBMIT button will only appear if you finish playing the entire audio creating at least 5 segments.")
 
       //Load Wave to previous time stamp from cookie
-      if (getCookie("current_time") > 0) {
+      if (getCookie("current_time") > 0 && $("#peaks-container").children("div").length>1) {
         spectrum.seekTo(parseFloat(getCookie("current_time")));
         //spectrum.seekTo(0.0404);
       };
@@ -3052,7 +3052,7 @@
 
     //clicking in profile link button
     $("#profile-link-button").on("click", () => {
-      window.location.href = "https://webapp.theaudiobee.com/sample";
+      window.location.href = "{{ webapp_basepath }}/sample";
     });//Profile Link Button function End
 
     //function to display current div content in annotation box
@@ -3230,7 +3230,7 @@
       };
       e.amplitude = n;
     })(window, document);
-    var reqAPIKey = "534517ca15b0c94bfebf670795e2850d";
+    var reqAPIKey = "{{ amplitude_api_key }}";
     var params = {
       user_id
     }
