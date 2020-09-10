@@ -928,9 +928,9 @@ app.post("/transcription-actual-segments", (req, res) => {
 
 app.post("/transcription-tasks-user-created-segments", (req, res) => {
     let sql = `
-            Select * FROM transcription_tasks
+            Select * FROM transcription_task_segments
             WHERE           
-            transcription_tasks.audio_id = '${req.body.audio_id}'
+            transcription_task_segments.audio_id = '${req.body.audio_id}'
             ORDER BY segment_start
             `;
     pool.query(sql, (err, result) => {
