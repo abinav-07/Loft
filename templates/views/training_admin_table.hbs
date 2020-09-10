@@ -144,7 +144,7 @@
                                 <td>${users_data[i].reviewer_email}</td>                                       
                                 <td>${getNepaliTimeNow(users_data[i].status_changed_time)}</td>
                                 <td>${users_data[i].overall_score<0?0:users_data[i].overall_score}</td>
-                                <td><select class="${users_data[i].users_audio_id}"><option>${users_data[i].status}</option><option>FAIL</option></select>
+                                <td><select class="${users_data[i].users_audio_id}"><option>${users_data[i].status}</option><option>FAIL</option><option>RETRY</option></select>
                                     <button class="${users_data[i].users_audio_id} confirm-button">Confirm</button>
                                 </td>
                             </tr>`);
@@ -160,7 +160,7 @@
                                  <td>${users_data[i].reviewer_email}</td>                                       
                                  <td>${getNepaliTimeNow(users_data[i].status_changed_time)}</td>
                                  <td>${users_data[i].overall_score<0?0:users_data[i].overall_score}</td>
-                                 <td><select class="${users_data[i].users_audio_id}"><option>${users_data[i].status}</option><option>PASS</option></select>
+                                 <td><select class="${users_data[i].users_audio_id}"><option>${users_data[i].status}</option><option>PASS</option><option>RETRY</option></select>
                                     <button class="${users_data[i].users_audio_id} confirm-button">Confirm</button>
                                  </td>
                             </tr>`);

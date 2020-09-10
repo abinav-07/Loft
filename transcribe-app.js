@@ -454,34 +454,37 @@ app.get("/transcription", async(req, res) => {
 //Route for transcription end
 
 //Route for transcription
-app.get("/transcription-tasks", async(req, res) => {
+app.get("/transcription-task", async(req, res) => {
     var audio_url = "";
-    var audioId = req.query.audio_id;
-    if (typeof req.query.audio_id == "undefined") {
-        audioId = 4;
-        audio_url = "cryophile.wav";
+    var audioId = req.query.audio_name;
+
+    // if (typeof req.query.user_id != "undefined") {
+    if (typeof req.query.audio_name == "undefined") {
+        res.send("Audio Name Not Found");
     } else {
-        audioId = req.query.audio_id;
-        var get_audio_url = `SELECT * FROM audio WHERE audio_id='${req.query.audio_id}'`;
+
+        var get_audio_url = `SELECT * FROM audio WHERE audio_name='${req.query.audio_name}'`;
         await pool.query(get_audio_url, (err, result) => {
             if (err) {
                 console.error(err);
                 res.status(400).send("error in get /transcription query.");
             }
+            audioId = result[0]["audio_id"];
             audio_url = result[0]["audio_url"];
             ////console.log(audio_url);
             res.render("transcription_tasks", {
                 audio_url: audio_url,
+                //user_id: req.query.user_id,
                 audio_name: result[0]["audio_name"],
-                audio_id: req.query.audio_id,
+                audio_id: result[0]["audio_id"],
             });
 
         });
     }
 
-
-
-
+    /* } else {
+         res.send("Error in URL. Please use webapp to access this location.");
+     }*/
 });
 //Route for transcription end
 
@@ -662,6 +665,23 @@ app.post("/insert-into-actual-data", (req, res) => {
 });
 //Insert Into actual Table Database End
 
+//Insert Segments Into transcription_task_segments Table Database
+app.post("/insert-into-transcription-tasks-segments", (req, res) => {
+    let sql = `
+            INSERT INTO transcription_task_segments(div_className, div_title, segment_start, segment_end, annotation_text, audio_id) VALUES('${req.body.speakerName}', '${req.body.annotationType}', '${req.body.segmentStart}', '${req.body.segmentEnd}', '${req.body.annotationText}', '${req.body.audio_id}')
+            `;
+    // //console.log(sql);
+    pool.query(sql, (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(400).send("error in get /insert-into- transcription_task_segments query.");
+        }
+        // //console.log("Data Inserted Into Actual Table");
+        res.send(result);
+    });
+});
+//Insert Into actual Table Database End
+
 //Insert Segments Into POST Table Database
 app.post("/insert-into-transcription-table", (req, res) => {
     let sql = `
@@ -706,16 +726,11 @@ app.post("/updatedatabase", (req, res) => {
 app.post("/update-actual-database", (req, res) => {
     let sql = `
             Update actual
-            SET div_className = '${req.body.speakerName}', div_title = '${
-    req.body.annotationType
-  }', segment_start = '${req.body.segmentStart}', segment_end = '${
-    req.body.segmentEnd
-  }', 
-            annotation_text = '${
-              req.body.annotationText != "undefined"
+            SET div_className = '${req.body.speakerName}', div_title = '${req.body.annotationType}',
+             segment_start = '${req.body.segmentStart}', segment_end = '${req.body.segmentEnd}', 
+            annotation_text = '${req.body.annotationText != "undefined"
                 ? req.body.annotationText.replace(/'/g, "\\'")
-                : ""
-            }'
+                : ""}'
             WHERE segment_id = '${req.body.segmentId}'            
             AND audio_id = '${req.body.audio_id}'
             `;
@@ -724,6 +739,30 @@ app.post("/update-actual-database", (req, res) => {
         if (err) {
             console.error(err);
             res.status(400).send("error in get /updatedatabase query.");
+        }
+        //  //console.log("Updated");
+    });
+});
+
+//update Segments in Actual Table end
+
+//Update Segments in transcription-task Table of Database
+app.post("/update-transcription-task-segment-table", (req, res) => {
+    let sql = `
+            Update transcription_task_segments
+            SET div_className = '${req.body.speakerName}', div_title = '${req.body.annotationType}',
+             segment_start = '${req.body.segmentStart}', segment_end = '${req.body.segmentEnd}', 
+            annotation_text = '${req.body.annotationText != "undefined"
+                ? req.body.annotationText.replace(/'/g, "\\'")
+                : ""}'
+            WHERE segment_id = '${req.body.segmentId}'            
+            AND audio_id = '${req.body.audio_id}'
+            `;
+    // //console.log(sql);
+    pool.query(sql, (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(400).send("error in get /update-transcription-task-segment-table query.");
         }
         //  //console.log("Updated");
     });
@@ -784,6 +823,25 @@ app.post("/update-actual-data-on-split", (req, res) => {
         if (err) {
             console.error(err);
             res.status(400).send("error in get /update-on-split query.");
+        }
+        ////console.log("Updated");
+    });
+});
+
+//Update Segments in transcription-task Table of Database On Split
+app.post("/update-transcription-task-segments-on-split", (req, res) => {
+    let sql = `
+            Update transcription_task_segments
+            SET div_className = '${req.body.speakerName}', div_title = '${req.body.annotationType}', segment_start = '${req.body.segmentStart}', segment_end = '${req.body.segmentEnd}', annotation_text = '${req.body.annotationText}'
+            WHERE segment_id = '${req.body.segmentId}'            
+            AND audio_id = '${req.body.audio_id}'
+            `;
+    ////console.log(sql);
+    ////console.log(sql);
+    pool.query(sql, (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(400).send("error in get /update-transcription-task-segments-on-split query.");
         }
         ////console.log("Updated");
     });
@@ -928,9 +986,9 @@ app.post("/transcription-actual-segments", (req, res) => {
 
 app.post("/transcription-tasks-user-created-segments", (req, res) => {
     let sql = `
-            Select * FROM transcription_tasks
+            Select * FROM transcription_task_segments
             WHERE           
-            transcription_tasks.audio_id = '${req.body.audio_id}'
+            transcription_task_segments.audio_id = '${req.body.audio_id}'
             ORDER BY segment_start
             `;
     pool.query(sql, (err, result) => {
@@ -984,6 +1042,24 @@ app.post("/remove-segments", (req, res) => {
 app.post("/remove-segments-from-actual", (req, res) => {
     let sql = `
             DELETE FROM actual WHERE
+            segment_id = '${req.body.regionId}'            
+            AND audio_id = '${req.body.audio_id}'
+            `;
+    ////console.log(sql);
+    pool.query(sql, (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(400).send("error in get /remove-segments-from-actual query.");
+        }
+        res.send(result);
+    });
+});
+//remove segments route end
+
+//remove segments from posts table in database
+app.post("/remove-segments-from-transcription-task-segment", (req, res) => {
+    let sql = `
+            DELETE FROM transcription_task_segments WHERE
             segment_id = '${req.body.regionId}'            
             AND audio_id = '${req.body.audio_id}'
             `;
@@ -1097,6 +1173,26 @@ app.post("/top-speaker-control-save-button", (req, res) => {
 app.post("/top-speaker-control-save-button-for-actual", (req, res) => {
     let sql = `
             Update actual
+            Set div_className = "${req.body.userInputTopSpeakerName}"
+            WHERE audio_id = "${req.body.audio_id}"
+            AND div_className = "${req.body.previousTopSpeakerName}"
+            `;
+    pool.query(sql, (err, result) => {
+        if (err) {
+            console.error(err);
+            res
+                .status(400)
+                .send("error in get /get-segments-with-same-speaker query.");
+        }
+        res.send(result);
+        ////console.log(result);
+    });
+});
+
+//API For Top Speaker Control Save Button For transcription-task-segments
+app.post("/top-speaker-control-save-button-for-transcription-task-segments", (req, res) => {
+    let sql = `
+            Update transcription_task_segments
             Set div_className = "${req.body.userInputTopSpeakerName}"
             WHERE audio_id = "${req.body.audio_id}"
             AND div_className = "${req.body.previousTopSpeakerName}"
