@@ -20,7 +20,7 @@ function resizeWindow() {
         canvasHeight = $("#peaks-container > wave canvas").height();
 
         $("#plus-button").css({
-            "marginLeft": `60vw`
+            "marginLeft": `65vw`
         })
 
         $("#submit-button").css({

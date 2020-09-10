@@ -705,7 +705,10 @@ app.post("/insert-into-transcription-table", (req, res) => {
 app.post("/updatedatabase", (req, res) => {
     let sql = `
             Update posts
-            SET div_className = '${req.body.speakerName}', div_title = '${req.body.annotationType}', segment_start = '${req.body.segmentStart}', segment_end = '${req.body.segmentEnd}', annotation_text = '${req.body.annotationText}'
+            SET div_className = '${req.body.speakerName}', div_title = '${req.body.annotationType}', segment_start = '${req.body.segmentStart}', segment_end = '${req.body.segmentEnd}', 
+            annotation_text = "${req.body.annotationText != "undefined"
+                ? req.body.annotationText.replace(/'/g, "\\'")
+                : ""}"
             WHERE segment_id = '${req.body.segmentId}'
             AND user_id = '${req.body.user_id}'
             AND audio_id = '${req.body.audio_id}'
@@ -729,7 +732,7 @@ app.post("/update-actual-database", (req, res) => {
             SET div_className = '${req.body.speakerName}', div_title = '${req.body.annotationType}',
              segment_start = '${req.body.segmentStart}', segment_end = '${req.body.segmentEnd}', 
             annotation_text = '${req.body.annotationText != "undefined"
-                ? req.body.annotationText.replace(/'/g, "\\'")
+                ? req.body.annotationText.replace(/'/g, "\/'")
                 : ""}'
             WHERE segment_id = '${req.body.segmentId}'            
             AND audio_id = '${req.body.audio_id}'
