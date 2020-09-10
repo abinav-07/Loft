@@ -906,9 +906,19 @@
 
       //play pause on space bar
       $("html").on("keydown", function (event) {
-        if ((event.which == 32 || event.which == 96 || event.which == 48 || (event.ctrlKey && event.which == 32)) && event.target.id != "speaker-name" && event.target.id != "transcription-area" && event.target.id != "annotation-start-minute" && event.target.id != "annotation-start-seconds" && event.target.id != "annotation-start-milliseconds" && event.target.id != "annotation-end-minute" && event.target.id != "annotation-end-seconds" && event.target.id != "annotation-end-milliseconds" && event.target.id != "top-div-control-speaker-name") {
+       if ((event.which == 32 || event.which == 96 || event.which == 48) && event.target.id != "speaker-name" && event.target.id != "transcription-area" && event.target.id != "annotation-start-minute" && event.target.id != "annotation-start-seconds" && event.target.id != "annotation-start-milliseconds" && event.target.id != "annotation-end-minute" && event.target.id != "annotation-end-seconds" && event.target.id != "annotation-end-milliseconds" && event.target.id != "top-div-control-speaker-name") {
           ////console.log(event.target);
-          event.preventDefault();
+
+          if (spectrum.isPlaying()) {
+            spectrum.pause();
+            $("#play-button").find($(".fa")).toggleClass('fa-pause fa-play');
+          }
+          else {
+            spectrum.play();
+            $("#play-button").find($(".fa")).toggleClass('fa-play fa-pause');
+            highlightRegion();
+          }
+        }else if( (event.ctrlKey && event.which == 32) && (event.target.id == "speaker-name" || event.target.id == "transcription-area" || event.target.id == "annotation-start-minute" || event.target.id == "annotation-start-seconds" || event.target.id == "annotation-start-milliseconds" || event.target.id == "annotation-end-minute" || event.target.id == "annotation-end-seconds" || event.target.id == "annotation-end-milliseconds" || event.target.id == "top-div-control-speaker-name") ){
           if (spectrum.isPlaying()) {
             spectrum.pause();
             $("#play-button").find($(".fa")).toggleClass('fa-pause fa-play');

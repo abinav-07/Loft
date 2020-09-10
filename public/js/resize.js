@@ -20,10 +20,13 @@ function resizeWindow() {
         canvasHeight = $("#peaks-container > wave canvas").height();
 
         $("#plus-button").css({
-            "marginLeft": `65vw`
+            "marginLeft": `60vw`
         })
 
         $("#submit-button").css({
+            "bottom": `0.5rem`
+        });
+        $("#profile-link-button").css({
             "bottom": `0.5rem`
         })
 
@@ -67,6 +70,9 @@ function resizeWindow() {
         })
         $("#submit-button").css({
             "bottom": `2rem`
+        });
+        $("#profile-link-button").css({
+            "bottom": `1rem`
         })
         $("#plus-button").css({
             "marginTop": `${$("#peaks-container").position().top}px`
