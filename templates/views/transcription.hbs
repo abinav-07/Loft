@@ -734,7 +734,7 @@
 
     }
 
-    #already-submitted-dialouge-box{
+    #already-submitted-dialouge-box {
       background-color: white;
       box-shadow: 0 0 12px black;
       text-align: center;
@@ -744,7 +744,7 @@
       margin: 0 auto;
       padding: 2em;
       position: absolute;
-      width:20vw;
+      width: 20vw;
       height: 10vh;
       z-index: 10000;
       top: 20vh;
@@ -762,7 +762,7 @@
 
     }
 
-    #display-training-segments{
+    #display-training-segments {
       display: none;
     }
 
@@ -928,7 +928,9 @@
           includeUtm: true,
           includeGclid: true,
         });
-        logEvent("Audio Test Screen Loaded - Trans");
+        logEvent("Audio Test Screen Loaded - Trans", {
+          type: "Single Audio"
+        });
       }
     });
   </script>
@@ -1092,7 +1094,7 @@
             $("#play-button").find($(".fa")).toggleClass('fa-play fa-pause');
             highlightRegion();
           }
-        }else if( (event.ctrlKey && event.which == 32) && (event.target.id == "speaker-name" || event.target.id == "transcription-area" || event.target.id == "annotation-start-minute" || event.target.id == "annotation-start-seconds" || event.target.id == "annotation-start-milliseconds" || event.target.id == "annotation-end-minute" || event.target.id == "annotation-end-seconds" || event.target.id == "annotation-end-milliseconds" || event.target.id == "top-div-control-speaker-name") ){
+        } else if ((event.ctrlKey && event.which == 32) && (event.target.id == "speaker-name" || event.target.id == "transcription-area" || event.target.id == "annotation-start-minute" || event.target.id == "annotation-start-seconds" || event.target.id == "annotation-start-milliseconds" || event.target.id == "annotation-end-minute" || event.target.id == "annotation-end-seconds" || event.target.id == "annotation-end-milliseconds" || event.target.id == "top-div-control-speaker-name")) {
           if (spectrum.isPlaying()) {
             spectrum.pause();
             $("#play-button").find($(".fa")).toggleClass('fa-pause fa-play');
@@ -1166,28 +1168,28 @@
       }//Canvas Creation End      
     });//Function end for on ready spectrum
 
-    
+
     //Resize Window on ready
-    $(document).ready(function(){
+    $(document).ready(function () {
       resizeWindow();
     });
 
-    window.onload = function(e){ 
+    window.onload = function (e) {
       resizeWindow();
     }
 
-    window.addEventListener("resize",resizeWindow)
+    window.addEventListener("resize", resizeWindow)
 
-  
-  //function to seek to set cookie
-    function seekToCookie(){
-          //Load Wave to previous time stamp from cookie
-            setTimeout(function(){
-              if (getCookie("current_time") > 0 && $("#peaks-container").children("div").length>1) {
-                spectrum.seekTo(parseFloat(getCookie("current_time")));
-              //spectrum.seekTo(0.0404);
-            };
-            },1500);
+
+    //function to seek to set cookie
+    function seekToCookie() {
+      //Load Wave to previous time stamp from cookie
+      setTimeout(function () {
+        if (getCookie("current_time") > 0 && $("#peaks-container").children("div").length > 1) {
+          spectrum.seekTo(parseFloat(getCookie("current_time")));
+          //spectrum.seekTo(0.0404);
+        };
+      }, 1500);
     }
 
 
@@ -1525,7 +1527,7 @@
                   //displayHamburger();
                   $("#submit-button").hide();
                   $("#profile-link-button").show();
-                  
+
                   $("#already-submitted-dialouge-box").show();
                   $("body").not("#already-submitted-dialouge-box").css({
                     backgroundColor: "#c2c1c0",
@@ -1788,7 +1790,7 @@
       p.style.padding = "5px";
       p.style.fontSize = "18px";
       p.style.pointerEvents = "none";
-      p.style.wordBreak="break-word";
+      p.style.wordBreak = "break-word";
       div.appendChild(p);
       div.style.position = "absolute";
       //div.style.top = "0px";
@@ -3138,7 +3140,9 @@
       saveScores();
       $("#profile-link-button").show();
       getWebAppId();
-      logEvent("Audio Test Submitted - Trans")
+      logEvent("Audio Test Submitted - Trans", {
+        type: "Single Audio"
+      })
     });//Submit Button Click Function End
 
     function getWebAppId() {
