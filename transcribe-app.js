@@ -469,16 +469,20 @@ app.get("/transcription-task", async(req, res) => {
                 console.error(err);
                 res.status(400).send("error in get /transcription query.");
             }
-            audioId = result[0]["audio_id"];
-            audio_url = result[0]["audio_url"];
-            ////console.log(audio_url);
-            res.render("transcription_tasks", {
-                audio_url: audio_url,
-                //user_id: req.query.user_id,
-                audio_name: result[0]["audio_name"],
-                audio_id: result[0]["audio_id"],
-            });
+            if (typeof result[0] != "undefined" || result.length != 0) {
+                audioId = result[0]["audio_id"];
+                audio_url = result[0]["audio_url"];
+                ////console.log(audio_url);
+                res.render("transcription_tasks", {
+                    audio_url: audio_url,
+                    //user_id: req.query.user_id,
+                    audio_name: result[0]["audio_name"],
+                    audio_id: result[0]["audio_id"],
+                });
 
+            } else {
+                res.send("Audio File Not Found");
+            }
         });
     }
 
@@ -1361,7 +1365,13 @@ app.post("/training-hr-review-table-datas", (req, res) => {
 //get data from users-table to transcription hr review table
 app.post("/transcription-hr-review-table-datas", (req, res) => {
     let sql = `
-    Select audio.audio_id,audio.Language_id, audio.audio_name, users_audio.users_audio_id, users_audio.user_id, users_audio.audio_id, CONVERT_TZ(users_audio.start_time, '+00:00', '+05:45') start_time,
+    Select audio.audio_id,
+    audio.Language_id,
+    audio.audio_name, 
+    users_audio.users_audio_id,
+    users_audio.user_id,
+    users_audio.audio_id,
+    CONVERT_TZ(users_audio.start_time, '+00:00', '+05:45') start_time,
     CONVERT_TZ(users_audio.end_time, '+00:00', '+05:45') end_time, users_audio.transcription_score, users.name,users.email, users_audio.status
     from users_audio, users , audio WHERE
     users_audio.user_id = users.user_id
@@ -1568,6 +1578,7 @@ app.post("/transcription-admin-review-table-datas", (req, res) => {
     let sql = `
     Select audio.audio_id, 
     audio.audio_name, 
+    audio.Language_id,
     users_audio.users_audio_id, 
     users_audio.user_id, 
     users_audio.audio_id, CONVERT_TZ(users_audio.start_time, '+00:00', '+05:45') start_time,

@@ -5,7 +5,7 @@ function resizeWindow() {
         $("#annotation-box").css({
             "box-shadow": "4px 4px 4px #888888",
             "bottom": "3rem",
-            "right": "1rem",
+            "right": "0.1rem",
             "border": "1px solid grey",
             "width": "370px",
             "position": "fixed",
@@ -35,11 +35,16 @@ function resizeWindow() {
         })
 
         $("#time-line").css({
-                "transform": `translate(0px,${$("wave").height() - 10}px)`
-            })
-            //$("#annotation-div-head").css({
-            //  "left": `${canvasHeight}px`
-            //})
+            "transform": `translate(0px,${$("wave").height() - 10}px)`
+        })
+
+        $("#top-div-speaker-control").css({
+            "right": "0.1rem",
+            "width": "300px"
+        });
+        //$("#annotation-div-head").css({
+        //  "left": `${canvasHeight}px`
+        //})
 
 
         seekToCookie();
@@ -79,6 +84,11 @@ function resizeWindow() {
         })
         $("#time-line").css({
             "transform": `translate(0px,${$("wave").height() - 10}px)`
+        });
+
+        $("#top-div-speaker-control").css({
+            "right": "2rem",
+            "width": "300px"
         });
         seekToCookie();
     }

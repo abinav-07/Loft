@@ -778,6 +778,7 @@
   <script src="local_modules/wavesurfer.js/dist/plugin/wavesurfer.timeline.js"></script>
   <script src="local_modules/wavesurfer.js/dist/plugin/wavesurfer.regions.js"></script>
     <script src="public/js/resize.js"></script>
+     <script src="public/js/create-top-speaker-div.js"></script>
   <!--<script src="wavesurfer.js/src/drawer.multicanvas.js"></script>-->
   <script>
     var user_id;
@@ -1608,7 +1609,7 @@
       var p = document.createElement("p");
       var colorArr = ["#f5d98c", "#f29363", "#b4ede9", "#a1edbc"];
       var neededColor = getRandomColor();
-      div.style.height = "200px";
+      div.style.height = "180px";
       //if it is actual data from database, display correct or incorrect 
       if (actual) {
         div.style.zIndex=800;
@@ -1628,10 +1629,10 @@
       
       p.innerHTML = annotationText;
       p.style.transform = "translateX(0%) rotate(270deg)";
-      p.style.width = "200px";
-      p.style.height = "200px";
+      p.style.width = "150px";
+      p.style.height = "140px";
       p.style.padding = "5px";
-      p.style.fontSize = "18px";
+      p.style.fontSize = "16px";
       p.style.wordBreak="break-word";
       p.style.pointerEvents = "none";
       div.appendChild(p);
@@ -1686,63 +1687,7 @@
 
 
     var leftSpeakerCategoryDivMargin = 120;
-    //function to create top speaker annotation divs
-    function topSpeakerDiv(segmentClass = "", neededColor) {
-      var totalWidth = 0;
-
-      var totalDivs = 1;//$("#annotation-div").has("div").length
-
-      if ($("#annotation-div").children().hasClass(segmentClass.replace(/ /g, "-").toString())) {
-
-      } else {
-        var div2 = document.createElement("div");
-        var p2 = document.createElement("p");
-        div2.className = segmentClass.replace(/ /g, "-");
-        div2.id = `top-${segmentClass.replace(/ /g, "-")}`;
-        div2.style.backgroundColor = neededColor;
-        div2.style.border = `2px groove ${neededColor}`;
-        div2.style.boxShadow = "2px 2px 10px";
-        p2.innerHTML = segmentClass;
-        p2.style.height = "30px";
-        p2.style.fontSize = "16px";
-        p2.style.margin = "9px";
-        div2.style.position = "absolute";
-        div2.style.zIndex = "3";
-        div2.style.width = "120px";
-        div2.style.height = "35px";
-        p2.style.pointerEvents = "none";
-        div2.appendChild(p2);
-        div2.addEventListener("click", changeTopSpeakerDivControlOnClick);
-        div2.style.left = ($("#annotation-div").children("div").length) * leftSpeakerCategoryDivMargin + "px";
-        if ((($("#annotation-div").children("div").length) * leftSpeakerCategoryDivMargin + leftSpeakerCategoryDivMargin) > $("#annotation-div").width()) {
-
-          leftSpeakerCategoryDivMargin = ($("#annotation-div").width() - leftSpeakerCategoryDivMargin) / $("#annotation-div").children("div").length;
-          //console.log(leftSpeakerCategoryDivMargin);
-          $("#annotation-div").children().each(function (index, value) {
-            this.style.left = (leftSpeakerCategoryDivMargin * index + "px");
-            //this.style.left = (this.style.left.replace("px","")-20)+"px";
-            div2.style.left = ($("#annotation-div").children("div").length) * leftSpeakerCategoryDivMargin + "px";
-
-            //Decreasing the width size of segments
-            decreaseDivWidth();
-          });
-        } else {
-          //div2.style.left = ($("#annotation-div").children("div").length) * leftSpeakerCategoryDivMargin + "px";          
-        }
-        $("#annotation-div").append(div2);
-      }
-    };
-
-    function decreaseDivWidth() {
-      $("#peaks-container").children("div").each(function (index, value) {
-        //this.style.left = (leftSpeakerCategoryDivMargin * index + "px");
-        //div2.style.left = ($("#annotation-div").children("div").length) * leftSpeakerCategoryDivMargin + "px";            
-        this.style.height = (180 + "px");
-        if (this.title != "default" && this.title != "Singing") {
-          this.style.height = (150 + "px");
-        }
-      });
-    };
+  
 
     //function to update Segment Start on start time change
     function updateSegmentonTimeChange() {
@@ -2378,6 +2323,10 @@
 
     //function for split
     function splitRegion(textBeforeCursor = "", textAfterCursor = "") {
+      if(spectrum.isPlaying()){
+        spectrum.pause();
+      }
+      var getCurrentIdForSplit=currentId;
       var spectrumCurrentTime = spectrum.getCurrentTime();
       var regionStartTime = spectrum.regions.list[currentId].start;
       var regionEndTime = spectrum.regions.list[currentId].end;
@@ -2402,20 +2351,12 @@
         document.getElementById(currentId).style.width = pos1 + "px";
       }
 
-      //creating new Segment on Split 
-      spectrum.addRegion({
-        id: segmentId++,
-        start: spectrumCurrentTime + 0.010,
-        end: regionEndTime,
-        drag: false,
-        color: "rgba(0,0,0,0)"
-      })
-
+ 
       //previous Div text 
       document.getElementById(currentId).querySelector("p").innerText = textBeforeCursor;
 
       //createDiv(divId,divClass,divTitle,segmentStart,segmentEnd,annotationText) 
-      createDiv(segmentId - 1, prevDivClassName, prevDivTitle, spectrumCurrentTime, regionEndTime, textAfterCursor);
+      //createDiv(segmentId - 1, prevDivClassName, prevDivTitle, spectrumCurrentTime, regionEndTime, textAfterCursor);
 
       //ajax Request to Update Previous Division 
       var updateParams = {
@@ -2453,8 +2394,29 @@
         method: "POST",
         url: "/database",
         data: params,
-        success: function () {
+        success: function (response) {
           ////console.log("Success");
+          //creating new Segment on Split 
+          spectrum.addRegion({
+            id: response.insertId,
+            start: spectrumCurrentTime + 0.010,
+            end: regionEndTime,
+            drag: false,
+            color: "rgba(0,0,0,0)"
+            })
+              //$(`region[data-id=${getCurrentIdForSplit}]`).attr("data-id", response.insertId);
+              // spectrum.regions.list[getCurrentIdForSplit].id = response.insertId;
+                //spectrum.regions.list[response.insertId] = spectrum.regions.list[getCurrentIdForSplit];
+                //delete spectrum.regions.list[getCurrentIdForSplit];
+
+                //createDiv(divId,divClass,divTitle,segmentStart,segmentEnd,annotationText) 
+          createDiv(response.insertId, prevDivClassName, prevDivTitle, spectrumCurrentTime, regionEndTime, textAfterCursor);
+            if (!updateAnnotationOnChange) {//Only if new segment is created
+                
+                  window.currentId = response.insertId;
+                  window.segment_id = response.insertId;
+            //  console.log(currentId);
+            }
         }
       })
     }//split Region Function end

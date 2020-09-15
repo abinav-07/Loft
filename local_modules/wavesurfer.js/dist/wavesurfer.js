@@ -1801,6 +1801,7 @@
                                 });
                                 // console.log(position);
                                 //$("#peaks-container").css("margin-top", position * (-1) + "px");
+                                //Manual Codes
                                 $("#peaks-container").css({
 
                                     "-moz-transform": `translateX(0%) rotate(90deg) translateX(${position * (-1) }px)`,
