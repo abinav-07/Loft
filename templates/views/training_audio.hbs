@@ -1038,6 +1038,7 @@
             setTimeout(function(){
               if (getCookie("current_time") > 0 && $("#peaks-container").children("div").length>1) {
                 spectrum.seekTo(parseFloat(getCookie("current_time")));
+                 updateTimer();
               //spectrum.seekTo(0.0404);
             };
             },1500);
@@ -2429,10 +2430,11 @@
       var textAfterCursor = reqText.substring(firstLength, reqText.length);
       ////console.log(reqText.substring(0, firstLength));
       ////console.log(reqText.substring(firstLength, reqText.length));
-
-      splitRegion(textBeforeCursor, textAfterCursor);
-      updateAnnotationOnChange = false;
-      updateAnnotationOnClick = false;
+      if(spectrum.regions.getCurrentRegion()){
+        splitRegion(textBeforeCursor, textAfterCursor);
+        updateAnnotationOnChange = false;
+        updateAnnotationOnClick = false;
+      }
     })
 
     //function for confirming changes on close click

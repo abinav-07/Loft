@@ -139,7 +139,7 @@
                                 <td>${getNepaliTimeNow(users_data[i].start_time)}</td>
                                 <td>${getNepaliTimeNow(users_data[i].end_time)}</td>
                                 <td>${users_data[i].transcription_score}</td>
-                                <td><select class="${users_data[i].users_audio_id}"><option>${users_data[i].status}</option><option>FAIL</option></select>
+                                <td><select class="${users_data[i].users_audio_id}"><option>${users_data[i].status}</option><option>FAIL</option><option>RETRY</option></select>
                                     <button class="${users_data[i].users_audio_id} confirm-button">Confirm</button>
                                 </td>
                             </tr>`);
@@ -152,7 +152,7 @@
                                  <td>${getNepaliTimeNow(users_data[i].start_time)}</td>
                                  <td>${getNepaliTimeNow(users_data[i].end_time)}</td>
                                  <td>${users_data[i].transcription_score}</td>
-                                 <td><select class="${users_data[i].users_audio_id}"><option>${users_data[i].status}</option><option>PASS</option></select>
+                                 <td><select class="${users_data[i].users_audio_id}"><option>${users_data[i].status}</option><option>PASS</option><option>RETRY</option></select>
                                     <button class="${users_data[i].users_audio_id} confirm-button">Confirm</button>
                                  </td>
                             </tr>`);
@@ -290,63 +290,136 @@
                             url: "/get-web-app-id-for-hr",
                             data: { userId },
                             success: function (response) {
+                                var mailParams;
                                 var status;
                                 //console.log(response);
-                                if(changedPassFailValue=="PASS"){
-                                    status=7;
-                                }else if(changedPassFailValue=="FAIL"){
-                                    status=6;
-                                }else if(changedPassFailValue=="RETRY"){
-                                    status=4;
-                                }
-                                var mailParams = {
-                                    "user_id": `${response[0].web_app_id}`,
-                                    "status": status,
-                                    "project_type_id": "2",
-                                    "language_id":languageId
-                                }
-                                //console.log(mailParams);
+
+                                if(changedPassFailValue=="PASS"){                                    
                                 
-                                $.ajax({
-                                    method: "POST",
-                                    url: "{{ webapp_basepath }}/api/set-user-language-project-type-status",
-                                    data:mailParams,
-                                    success:function(){
-                                        //console.log(status);
-                                        if(status==4){
-                                            
-                                            //console.log("Here");
-                                            $.ajax({
-                                            method:"POST",
-                                            url:"/reset-transcription-data-for-retry",
-                                            data:{user_id:userId,audio_id:audioId},
-                                            success:function(){
-                                                //console.log("EMAIl Sent and web app status set and transcription reset");
-                                                recreatingHRTable();
+                                      $.ajax({
+                                        method: "GET",
+                                        url: `{{ webapp_basepath }}/api/tcp/test/status?user_id=${response[0].web_app_id}&language_id=${languageId}`,                                      
+                                        success:function(quizResponse){
+                                            //console.log(quizResponse);
+                                            if(quizResponse && quizResponse.result=="Not Submitted"){
+                                                status=2;
+                                                mailParams = {
+                                                    "user_id": `${response[0].web_app_id}`,
+                                                    "status": status,
+                                                    "project_type_id": "2",
+                                                    "language_id":languageId
+                                                }
+                                                //sendEmailWebapp(mailParams);
+                                            }else if(quizResponse && quizResponse.result=="Failed"){
+                                                status=6;
+                                                mailParams = {
+                                                    "user_id": `${response[0].web_app_id}`,
+                                                    "status": status,
+                                                    "project_type_id": "2",
+                                                    "language_id":languageId
+                                                }
+                                                //sendEmailWebapp(mailParams);
+                                            }else if(quizResponse && quizResponse.result=="Retry"){
+                                                status=4;
+                                                mailParams = {
+                                                    "user_id": `${response[0].web_app_id}`,
+                                                    "status": status,
+                                                    "project_type_id": "2",
+                                                    "language_id":languageId
+                                                }
+                                            }else if(quizResponse && quizResponse.result=="Passed"){
+                                                status=5;
+                                                mailParams = {
+                                                    "user_id": `${response[0].web_app_id}`,
+                                                    "status": status,
+                                                    "project_type_id": "2",
+                                                    "language_id":languageId
+                                                }
+                                                 //sendEmailWebapp(mailParams);
                                             }
-                                        })
-                                        }else{
-                                             //console.log("EMAIl Sent and web app status set");
-                                         recreatingHRTable();
+                                            //console.log(mailParams)
+                                              $.ajax({
+                                                    method: "POST",
+                                                    url: "{{ webapp_basepath }}/api/set-user-language-project-type-status",
+                                                    data:mailParams,
+                                                    success:function(){
+                                                        console.log("EMAIl Sent and web app status set");
+                                                        //recreatingHRTable();
+                                                    }
+                                            });                                            
                                         }
-                                       
+                                    });                                   
+
+                                } else if(changedPassFailValue=="FAIL"){
+
+                                    status=6;
+                                    mailParams = {
+                                        "user_id": `${response[0].web_app_id}`,
+                                        "status": status,
+                                        "project_type_id": "2",
+                                        "language_id":languageId
                                     }
-                                });
+                                    //console.log(mailParams);
+                                
+                                    $.ajax({
+                                        method: "POST",
+                                        url: "{{ webapp_basepath }}/api/set-user-language-project-type-status",
+                                        data:mailParams,
+                                        success:function(){
+                                            console.log("EMAIl Sent and web app status set");
+                                            //recreatingHRTable();
+                                        }
+                                    });
+                                } else if(changedPassFailValue=="RETRY"){
+
+                                    status=4;
+
+                                    mailParams = {
+                                        "user_id": `${response[0].web_app_id}`,
+                                        "status": status,
+                                        "project_type_id": "2",
+                                        "language_id":languageId
+                                    }
+                                    //console.log(mailParams);
+                                
+                                    $.ajax({
+                                        method: "POST",
+                                        url: "{{ webapp_basepath }}/api/set-user-language-project-type-status",
+                                        data:mailParams,
+                                        success:function(){
+                                            
+                                            if(status==4){
+                                                                                                
+                                                $.ajax({
+                                                    method:"POST",
+                                                    url:"/reset-transcription-data-for-retry",
+                                                    data:{user_id:userId,audio_id:audioId},
+                                                    success:function(){
+                                                        console.log("EMAIl Sent and web app status set and transcription reset");
+                                                       // recreatingHRTable();
+                                                    }
+                                                })
+                                            } else{
+
+                                                console.log("EMAIl Sent and web app status set");
+                                                //recreatingHRTable();
+                                            }
+                                        
+                                        }
+                                    });
+
+                                }                                
                             }
                         })
                             }
                         });
-                        
-
-                        
-
                     }
                 });                
                // recreatingHRTable();
             });
         }
 
-
+       
         //Function to export data to csv file
         function download_csvFile(csv, fileName) {
             var csvFile;

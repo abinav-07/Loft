@@ -42,6 +42,11 @@ function resizeWindow() {
             "right": "0.1rem",
             "width": "300px"
         });
+
+        $("#v-container").css({
+            "margin-top": "-65vh"
+        })
+
         //$("#annotation-div-head").css({
         //  "left": `${canvasHeight}px`
         //})
@@ -90,6 +95,9 @@ function resizeWindow() {
             "right": "2rem",
             "width": "300px"
         });
+        $("#v-container").css({
+            "margin-top": "-50vh"
+        })
         seekToCookie();
     }
 }
