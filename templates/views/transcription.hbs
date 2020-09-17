@@ -1742,7 +1742,10 @@
             $("#submit-button").show();
           }
 
+        }else{
+            $("#submit-button").hide();
         }
+
       }
     });
 
@@ -3176,7 +3179,7 @@
                 url: "{{ webapp_basepath }}/api/set-user-language-project-type-status",
                 data: mailParams,
                 success: function () {
-                  //console.log("Web app status set");
+                  console.log("Web app status set");
                 }
               });
             }

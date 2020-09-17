@@ -119,10 +119,8 @@ app.get("/", (req, res) => {
                 )          
                     AND audio_id = '${req.query.audio_id}' AND users_audio.type= 'segmentation' `;
         } else if (req.query.type == "transcription") {
-            check_sql = `SELECT * FROM users_audio WHERE user_id IN (
-                    SELECT user_id from users WHERE web_app_id='${req.query.user_id}'                
-                )          
-                    AND audio_id in (SELECT audio_id from audio where Language_id =${req.query.language_id} ) AND users_audio.type= '${req.query.type}' `;
+            check_sql = `SELECT * FROM users WHERE web_app_id='${req.query.user_id}' `;
+
         }
 
         pool.query(check_sql, (err, result) => {
@@ -638,7 +636,7 @@ app.get("/actual-data-admin", (req, res) => {
 //Insert Segments Into POST Table Database
 app.post("/database", (req, res) => {
     let sql = `
-            INSERT INTO posts(div_className, div_title, segment_start, segment_end, annotation_text, user_id, audio_id) VALUES('${req.body.speakerName}', '${req.body.annotationType}', '${req.body.segmentStart}', '${req.body.segmentEnd}', '${req.body.annotationText}', '${req.body.user_id}', '${req.body.audio_id}')
+            INSERT INTO posts(div_className, div_title, segment_start, segment_end, annotation_text, user_id, audio_id) VALUES('${req.body.speakerName}', '${req.body.annotationType}', '${req.body.segmentStart}', '${req.body.segmentEnd}', '${req.body.annotationText.replace(/'/g, "\\'")}', '${req.body.user_id}', '${req.body.audio_id}')
             `;
     // //console.log(sql);
     pool.query(sql, (err, result) => {
@@ -655,7 +653,7 @@ app.post("/database", (req, res) => {
 //Insert Segments Into actual Table Database
 app.post("/insert-into-actual-data", (req, res) => {
     let sql = `
-            INSERT INTO actual(div_className, div_title, segment_start, segment_end, annotation_text, audio_id) VALUES('${req.body.speakerName}', '${req.body.annotationType}', '${req.body.segmentStart}', '${req.body.segmentEnd}', '${req.body.annotationText}', '${req.body.audio_id}')
+            INSERT INTO actual(div_className, div_title, segment_start, segment_end, annotation_text, audio_id) VALUES('${req.body.speakerName}', '${req.body.annotationType}', '${req.body.segmentStart}', '${req.body.segmentEnd}', '${req.body.annotationText.replace(/'/g, "\\'")}', '${req.body.audio_id}')
             `;
     // //console.log(sql);
     pool.query(sql, (err, result) => {
@@ -672,7 +670,7 @@ app.post("/insert-into-actual-data", (req, res) => {
 //Insert Segments Into transcription_task_segments Table Database
 app.post("/insert-into-transcription-tasks-segments", (req, res) => {
     let sql = `
-            INSERT INTO transcription_task_segments(div_className, div_title, segment_start, segment_end, annotation_text, audio_id) VALUES('${req.body.speakerName}', '${req.body.annotationType}', '${req.body.segmentStart}', '${req.body.segmentEnd}', '${req.body.annotationText}', '${req.body.audio_id}')
+            INSERT INTO transcription_task_segments(div_className, div_title, segment_start, segment_end, annotation_text, audio_id) VALUES('${req.body.speakerName}', '${req.body.annotationType}', '${req.body.segmentStart}', '${req.body.segmentEnd}', '${req.body.annotationText.replace(/'/g, "\\'")}', '${req.body.audio_id}')
             `;
     // //console.log(sql);
     pool.query(sql, (err, result) => {
@@ -689,7 +687,7 @@ app.post("/insert-into-transcription-tasks-segments", (req, res) => {
 //Insert Segments Into POST Table Database
 app.post("/insert-into-transcription-table", (req, res) => {
     let sql = `
-            INSERT INTO transcription(div_className, div_title, segment_start, segment_end, annotation_text, user_id, audio_id) VALUES('${req.body.speakerName}', '${req.body.annotationType}', '${req.body.segmentStart}', '${req.body.segmentEnd}', '${req.body.annotationText}', '${req.body.user_id}', '${req.body.audio_id}')
+            INSERT INTO transcription(div_className, div_title, segment_start, segment_end, annotation_text, user_id, audio_id) VALUES('${req.body.speakerName}', '${req.body.annotationType}', '${req.body.segmentStart}', '${req.body.segmentEnd}', '${req.body.annotationText.replace(/'/g, "\\'")}', '${req.body.user_id}', '${req.body.audio_id}')
             `;
     ////console.log(sql);
     pool.query(sql, (err, result) => {
@@ -736,7 +734,7 @@ app.post("/update-actual-database", (req, res) => {
             SET div_className = '${req.body.speakerName}', div_title = '${req.body.annotationType}',
              segment_start = '${req.body.segmentStart}', segment_end = '${req.body.segmentEnd}', 
             annotation_text = '${req.body.annotationText != "undefined"
-                ? req.body.annotationText.replace(/'/g, "\/'")
+                ? req.body.annotationText.replace(/'/g, "\\'")
                 : ""}'
             WHERE segment_id = '${req.body.segmentId}'            
             AND audio_id = '${req.body.audio_id}'
@@ -781,7 +779,7 @@ app.post("/update-transcription-task-segment-table", (req, res) => {
 app.post("/update-transcription-table", (req, res) => {
     let sql = `
             Update transcription
-            SET  annotation_text = '${req.body.annotationText}',div_className = '${req.body.speakerName}',div_title = '${req.body.annotationType}'
+            SET  annotation_text = '${req.body.annotationText.replace(/'/g, "\\'")}',div_className = '${req.body.speakerName}',div_title = '${req.body.annotationType}'
             WHERE segment_id = '${req.body.segmentId}'
             AND user_id = '${req.body.user_id}'
             AND audio_id = '${req.body.audio_id}'
@@ -800,7 +798,7 @@ app.post("/update-transcription-table", (req, res) => {
 app.post("/update-on-split", (req, res) => {
     let sql = `
             Update posts
-            SET div_className = '${req.body.speakerName}', div_title = '${req.body.annotationType}', segment_start = '${req.body.segmentStart}', segment_end = '${req.body.segmentEnd}', annotation_text = '${req.body.annotationText}'
+            SET div_className = '${req.body.speakerName}', div_title = '${req.body.annotationType}', segment_start = '${req.body.segmentStart}', segment_end = '${req.body.segmentEnd}', annotation_text = '${req.body.annotationText.replace(/'/g, "\\'")}'
             WHERE segment_id = '${req.body.segmentId}'
             AND user_id = '${req.body.user_id}'
             AND audio_id = '${req.body.audio_id}'
@@ -820,7 +818,7 @@ app.post("/update-on-split", (req, res) => {
 app.post("/update-actual-data-on-split", (req, res) => {
     let sql = `
             Update actual
-            SET div_className = '${req.body.speakerName}', div_title = '${req.body.annotationType}', segment_start = '${req.body.segmentStart}', segment_end = '${req.body.segmentEnd}', annotation_text = '${req.body.annotationText}'
+            SET div_className = '${req.body.speakerName}', div_title = '${req.body.annotationType}', segment_start = '${req.body.segmentStart}', segment_end = '${req.body.segmentEnd}', annotation_text = '${req.body.annotationText.replace(/'/g, "\\'")}'
             WHERE segment_id = '${req.body.segmentId}'            
             AND audio_id = '${req.body.audio_id}'
             `;
@@ -839,7 +837,7 @@ app.post("/update-actual-data-on-split", (req, res) => {
 app.post("/update-transcription-task-segments-on-split", (req, res) => {
     let sql = `
             Update transcription_task_segments
-            SET div_className = '${req.body.speakerName}', div_title = '${req.body.annotationType}', segment_start = '${req.body.segmentStart}', segment_end = '${req.body.segmentEnd}', annotation_text = '${req.body.annotationText}'
+            SET div_className = '${req.body.speakerName}', div_title = '${req.body.annotationType}', segment_start = '${req.body.segmentStart}', segment_end = '${req.body.segmentEnd}', annotation_text = '${req.body.annotationText.replace(/'/g, "\\'")}'
             WHERE segment_id = '${req.body.segmentId}'            
             AND audio_id = '${req.body.audio_id}'
             `;

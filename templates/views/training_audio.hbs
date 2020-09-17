@@ -1583,8 +1583,9 @@
       if ((spectrum.getCurrentTime() > (spectrum.getDuration() - 0.1)) && ($("#peaks-container").children("div").length > 5)) {
         if(is_submitted=="FALSE"){
             $("#submit-button").show();
-        }
-      
+        }      
+      }else{
+         $("#submit-button").hide();
       }
     });
 

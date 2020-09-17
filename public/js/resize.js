@@ -30,9 +30,6 @@ function resizeWindow() {
             "bottom": `0.5rem`
         })
 
-        $("#plus-button").css({
-            "marginTop": `${$("#peaks-container").position().top}px`
-        })
 
         $("#time-line").css({
             "transform": `translate(0px,${$("wave").height() - 10}px)`
@@ -46,6 +43,11 @@ function resizeWindow() {
         $("#v-container").css({
             "margin-top": "-65vh"
         })
+
+        $("#plus-button").css({
+            "marginTop": `${$("#peaks-container").position().top}px`
+        })
+
 
         //$("#annotation-div-head").css({
         //  "left": `${canvasHeight}px`
@@ -84,9 +86,7 @@ function resizeWindow() {
         $("#profile-link-button").css({
             "bottom": `1rem`
         })
-        $("#plus-button").css({
-            "marginTop": `${$("#peaks-container").position().top}px`
-        })
+
         $("#time-line").css({
             "transform": `translate(0px,${$("wave").height() - 10}px)`
         });
@@ -97,6 +97,10 @@ function resizeWindow() {
         });
         $("#v-container").css({
             "margin-top": "-50vh"
+        })
+
+        $("#plus-button").css({
+            "marginTop": `${$("#peaks-container").position().top}px`
         })
         seekToCookie();
     }
