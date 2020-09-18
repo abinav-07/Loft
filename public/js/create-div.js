@@ -25,6 +25,7 @@ function createDiv(segmentId, segmentClass = "", segmentTitle = "", segmentStart
     }
     //div.style.boxShadow = "1px 1px 5px";
     div.style.background = neededColor;
+    div.style.overflow = "hidden";
     div.style.zIndex = zindexLoop + 1;
     p.innerHTML = annotationText;
     /* p.style.transform = "translateX(0%) rotate(270deg)";

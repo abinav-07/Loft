@@ -1487,14 +1487,15 @@ app.post("/get-web-app-id-for-hr", (req, res) => {
 
 //get web app id of the user
 app.post("/get-web-app-id", (req, res) => {
-    var sql = `Select web_app_id FROM users 
-             WHERE user_id="${req.body.user_id}"
-    `;
+    var sql = `SELECT * FROM users 
+    WHERE user_id=${req.body.user_id}`;
+    //console.log(sql);
     pool.query(sql, (err, result) => {
         if (err) {
             console.error(err);
             res.status(400).send("error in post /get-web-app-id");
         }
+        //console.log(result);
         res.send(result);
     });
 });
