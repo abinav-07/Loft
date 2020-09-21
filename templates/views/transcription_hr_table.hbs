@@ -96,7 +96,7 @@
             <th>Start Time</th>
             <th>End Time</th>
             <th>Score</th>
-            <th>Status 
+            <th>Status
                 {{!-- <span id="export-work" style="display: none;">&emsp; &emsp;<button id="export-button">EXPORT</button></span> --}}
             </th>
         </thead>
@@ -113,13 +113,13 @@
 <script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.print.min.js"></script>
 
 <script>
-    var reviewerId={{reviewerId}};
-    var reviewerEmail=`{{reviewerEmail}}`;
+    var reviewerId = {{ reviewerId }};
+    var reviewerEmail = `{{reviewerEmail}}`;
     $(document).ready(function () {
 
-          //Button To Log Out From Table
-        $("#logOutHR").on("click",function(){
-            window.location.href= `${new URL(window.location).origin}/hr-logout`;  
+        //Button To Log Out From Table
+        $("#logOutHR").on("click", function () {
+            window.location.href = `${new URL(window.location).origin}/hr-logout`;
         });
 
         function recreatingHRTable() {
@@ -129,7 +129,7 @@
                 success: function (users_data) {
                     $("#users_table tbody").html("");
                     for (var i = 0; i < users_data.length; i++) {
-                        
+
                         if (users_data[i].status == "PASS") {
                             $("#users_table tbody").append(
                                 `<tr data-user-id="${users_data[i].users_audio_id}" data-user-name="${users_data[i].name}"  data-language-id="${users_data[i].Language_id}" data-audio-id="${users_data[i].audio_id}">
@@ -179,25 +179,25 @@
                         dom: 'Bfrtip',
                         buttons: [{
                             extend: 'excel',
-                            filename:'transcription',
-                            title:"",
+                            filename: 'transcription',
+                            title: "",
                             text: 'Export to excel',
                             exportOptions: {
-                                columns: [0, 1, 2, 3,4,5,6],
+                                columns: [0, 1, 2, 3, 4, 5, 6],
                                 modifier: {
                                     order: 'current',
                                     page: 'all'
                                 },
                                 format: {
-                                    body:function(data,row,col,node){
-                                        if(col==6){
+                                    body: function (data, row, col, node) {
+                                        if (col == 6) {
                                             return table
-                                                    .cell({row:row,column:col})
-                                                    .nodes()
-                                                    .to$()
-                                                    .find(':selected')
-                                                    .text()
-                                        }else{
+                                                .cell({ row: row, column: col })
+                                                .nodes()
+                                                .to$()
+                                                .find(':selected')
+                                                .text()
+                                        } else {
                                             return data;
                                         }
                                     }
@@ -227,19 +227,19 @@
                 data: params,
                 success: function (response) {
                     //console.log(response[0]["is_submitted"]);
-                   if(response[0]["is_submitted"]=="TRUE"){
-                       window.open(
-                        //`http://localhost:3000/transcribe?user_id=${clicked_user_id}`,
-                        `${new URL(window.location).origin}/transcription-review?user_id=${response[0]["user_id"]}&audio_id=${response[0]["audio_id"]}`,
-                        '_blank' //New Tab
-                    );
-                   }else{
-                       window.open(
-                        //`http://localhost:3000/transcribe?user_id=${clicked_user_id}`,
-                        `${new URL(window.location).origin}/transcription?user_id=${response[0]["user_id"]}&audio_id=${response[0]["audio_id"]}`,
-                        '_blank' //New Tab
-                    );
-                   }                      
+                    if (response[0]["is_submitted"] == "TRUE") {
+                        window.open(
+                            //`http://localhost:3000/transcribe?user_id=${clicked_user_id}`,
+                            `${new URL(window.location).origin}/transcription-review?user_id=${response[0]["user_id"]}&audio_id=${response[0]["audio_id"]}`,
+                            '_blank' //New Tab
+                        );
+                    } else {
+                        window.open(
+                            //`http://localhost:3000/transcribe?user_id=${clicked_user_id}`,
+                            `${new URL(window.location).origin}/transcription?user_id=${response[0]["user_id"]}&audio_id=${response[0]["audio_id"]}`,
+                            '_blank' //New Tab
+                        );
+                    }
                 }
             })
 
@@ -249,22 +249,22 @@
         $("#users_table").on("change", (event) => {
             var clicked_button_id = event.target.closest("tr").getAttribute("data-user-id");//This is equal to userId   
             var clicked_language_id = event.target.closest("tr").getAttribute("data-language-id");//This is equal to language id
-            var clicked_audio_id= event.target.closest("tr").getAttribute("data-audio-id");//This is equal to language id
+            var clicked_audio_id = event.target.closest("tr").getAttribute("data-audio-id");//This is equal to language id
             ////console.log(clicked_button_id);         
-            confirmButton(clicked_button_id,clicked_language_id,clicked_audio_id);
+            confirmButton(clicked_button_id, clicked_language_id, clicked_audio_id);
         });
         //Displaying confirm button
-        function confirmButton(userId,languageId,audioId) {
+        function confirmButton(userId, languageId, audioId) {
             $(`button.${userId}`).show();
             var clickedUserName = event.target.closest("tr").getAttribute("data-user-name");//This is equal to user name   
             //On Confirm Click
-            $(`button.${userId}`).on("click", async() => {
+            $(`button.${userId}`).on("click", async () => {
                 var changedPassFailValue = $(`select.${userId}`).val();
                 params = {
                     userId,
                     changedPassFailValue
                 }
-                
+
                 await $.ajax({
                     method: "POST",
                     url: "/confirm-pass-fail-hr-review",
@@ -272,154 +272,161 @@
                     success: function () {
                         $(`button.${userId}`).hide();
                         //console.log("Pass Fail Saved");
-                       // //console.log(userId);
+                        // //console.log(userId);
 
                         $.ajax({
-                            method:"POST",
-                            url:"/save-hr-transcription-logs",
-                            data:{
-                                reviewerId,
-                                user_id:userId,
-                                user_name:clickedUserName,
-                                user_status:changedPassFailValue,
-                                type:"transcription"
-                                },
-                            success:function(){
-                                $.ajax({
                             method: "POST",
-                            url: "/get-web-app-id-for-hr",
-                            data: { userId },
-                            success: function (response) {
-                                var mailParams;
-                                var status;
-                                //console.log(response);
+                            url: "/save-hr-transcription-logs",
+                            data: {
+                                reviewerId,
+                                user_id: userId,
+                                user_name: clickedUserName,
+                                user_status: changedPassFailValue,
+                                type: "transcription"
+                            },
+                            success: function () {
+                                $.ajax({
+                                    method: "POST",
+                                    url: "/get-web-app-id-for-hr",
+                                    data: { userId },
+                                    success: function (response) {
+                                        var web_app_id = response[0].web_app_id;
+                                        amplitude.regenerateDeviceId();
+                                        amplitude.setUserId(web_app_id);
+                                        var eventProperties = {
+                                            status: changedPassFailValue
+                                        }
+                                        logEvent("Sample Reviewed - Trans", eventProperties);
+                                        var mailParams;
+                                        var status;
+                                        //console.log(response);
 
-                                if(changedPassFailValue=="PASS"){                                    
-                                
-                                      $.ajax({
-                                        method: "GET",
-                                        url: `{{ webapp_basepath }}/api/tcp/test/status?user_id=${response[0].web_app_id}&language_id=${languageId}`,                                      
-                                        success:function(quizResponse){
-                                            //console.log(quizResponse);
-                                            if(quizResponse && quizResponse.result=="Not Submitted"){
-                                                status=2;
-                                                mailParams = {
-                                                    "user_id": `${response[0].web_app_id}`,
-                                                    "status": status,
-                                                    "project_type_id": "2",
-                                                    "language_id":languageId
+                                        if (changedPassFailValue == "PASS") {
+
+                                            $.ajax({
+                                                method: "GET",
+                                                url: `{{ webapp_basepath }}/api/tcp/test/status?user_id=${response[0].web_app_id}&language_id=${languageId}`,
+                                                success: function (quizResponse) {
+                                                    //console.log(quizResponse);
+                                                    if (quizResponse && quizResponse.result == "Not Submitted") {
+                                                        status = 2;
+                                                        mailParams = {
+                                                            "user_id": `${response[0].web_app_id}`,
+                                                            "status": status,
+                                                            "project_type_id": "2",
+                                                            "language_id": languageId
+                                                        }
+                                                        //sendEmailWebapp(mailParams);
+                                                    } else if (quizResponse && quizResponse.result == "Failed") {
+                                                        status = 6;
+                                                        mailParams = {
+                                                            "user_id": `${response[0].web_app_id}`,
+                                                            "status": status,
+                                                            "project_type_id": "2",
+                                                            "language_id": languageId
+                                                        }
+                                                        //sendEmailWebapp(mailParams);
+                                                    } else if (quizResponse && quizResponse.result == "Retry") {
+                                                        status = 4;
+                                                        mailParams = {
+                                                            "user_id": `${response[0].web_app_id}`,
+                                                            "status": status,
+                                                            "project_type_id": "2",
+                                                            "language_id": languageId
+                                                        }
+                                                    } else if (quizResponse && quizResponse.result == "Passed") {
+                                                        status = 5;
+                                                        mailParams = {
+                                                            "user_id": `${response[0].web_app_id}`,
+                                                            "status": status,
+                                                            "project_type_id": "2",
+                                                            "language_id": languageId
+                                                        }
+                                                        //sendEmailWebapp(mailParams);
+                                                    }
+                                                    //console.log(mailParams)
+                                                    $.ajax({
+                                                        method: "POST",
+                                                        url: "{{ webapp_basepath }}/api/set-user-language-project-type-status",
+                                                        data: mailParams,
+                                                        success: function () {
+                                                            console.log("EMAIl Sent and web app status set");
+                                                            //recreatingHRTable();
+                                                        }
+                                                    });
                                                 }
-                                                //sendEmailWebapp(mailParams);
-                                            }else if(quizResponse && quizResponse.result=="Failed"){
-                                                status=6;
-                                                mailParams = {
-                                                    "user_id": `${response[0].web_app_id}`,
-                                                    "status": status,
-                                                    "project_type_id": "2",
-                                                    "language_id":languageId
-                                                }
-                                                //sendEmailWebapp(mailParams);
-                                            }else if(quizResponse && quizResponse.result=="Retry"){
-                                                status=4;
-                                                mailParams = {
-                                                    "user_id": `${response[0].web_app_id}`,
-                                                    "status": status,
-                                                    "project_type_id": "2",
-                                                    "language_id":languageId
-                                                }
-                                            }else if(quizResponse && quizResponse.result=="Passed"){
-                                                status=5;
-                                                mailParams = {
-                                                    "user_id": `${response[0].web_app_id}`,
-                                                    "status": status,
-                                                    "project_type_id": "2",
-                                                    "language_id":languageId
-                                                }
-                                                 //sendEmailWebapp(mailParams);
+                                            });
+
+                                        } else if (changedPassFailValue == "FAIL") {
+
+                                            status = 6;
+                                            mailParams = {
+                                                "user_id": `${response[0].web_app_id}`,
+                                                "status": status,
+                                                "project_type_id": "2",
+                                                "language_id": languageId
                                             }
-                                            //console.log(mailParams)
-                                              $.ajax({
-                                                    method: "POST",
-                                                    url: "{{ webapp_basepath }}/api/set-user-language-project-type-status",
-                                                    data:mailParams,
-                                                    success:function(){
+                                            //console.log(mailParams);
+
+                                            $.ajax({
+                                                method: "POST",
+                                                url: "{{ webapp_basepath }}/api/set-user-language-project-type-status",
+                                                data: mailParams,
+                                                success: function () {
+                                                    console.log("EMAIl Sent and web app status set");
+                                                    //recreatingHRTable();
+                                                }
+                                            });
+                                        } else if (changedPassFailValue == "RETRY") {
+
+                                            status = 4;
+
+                                            mailParams = {
+                                                "user_id": `${response[0].web_app_id}`,
+                                                "status": status,
+                                                "project_type_id": "2",
+                                                "language_id": languageId
+                                            }
+                                            //console.log(mailParams);
+
+                                            $.ajax({
+                                                method: "POST",
+                                                url: "{{ webapp_basepath }}/api/set-user-language-project-type-status",
+                                                data: mailParams,
+                                                success: function () {
+
+                                                    if (status == 4) {
+
+                                                        $.ajax({
+                                                            method: "POST",
+                                                            url: "/reset-transcription-data-for-retry",
+                                                            data: { user_id: userId, audio_id: audioId },
+                                                            success: function () {
+                                                                console.log("EMAIl Sent and web app status set and transcription reset");
+                                                                // recreatingHRTable();
+                                                            }
+                                                        })
+                                                    } else {
+
                                                         console.log("EMAIl Sent and web app status set");
                                                         //recreatingHRTable();
                                                     }
-                                            });                                            
+
+                                                }
+                                            });
+
                                         }
-                                    });                                   
-
-                                } else if(changedPassFailValue=="FAIL"){
-
-                                    status=6;
-                                    mailParams = {
-                                        "user_id": `${response[0].web_app_id}`,
-                                        "status": status,
-                                        "project_type_id": "2",
-                                        "language_id":languageId
                                     }
-                                    //console.log(mailParams);
-                                
-                                    $.ajax({
-                                        method: "POST",
-                                        url: "{{ webapp_basepath }}/api/set-user-language-project-type-status",
-                                        data:mailParams,
-                                        success:function(){
-                                            console.log("EMAIl Sent and web app status set");
-                                            //recreatingHRTable();
-                                        }
-                                    });
-                                } else if(changedPassFailValue=="RETRY"){
-
-                                    status=4;
-
-                                    mailParams = {
-                                        "user_id": `${response[0].web_app_id}`,
-                                        "status": status,
-                                        "project_type_id": "2",
-                                        "language_id":languageId
-                                    }
-                                    //console.log(mailParams);
-                                
-                                    $.ajax({
-                                        method: "POST",
-                                        url: "{{ webapp_basepath }}/api/set-user-language-project-type-status",
-                                        data:mailParams,
-                                        success:function(){
-                                            
-                                            if(status==4){
-                                                                                                
-                                                $.ajax({
-                                                    method:"POST",
-                                                    url:"/reset-transcription-data-for-retry",
-                                                    data:{user_id:userId,audio_id:audioId},
-                                                    success:function(){
-                                                        console.log("EMAIl Sent and web app status set and transcription reset");
-                                                       // recreatingHRTable();
-                                                    }
-                                                })
-                                            } else{
-
-                                                console.log("EMAIl Sent and web app status set");
-                                                //recreatingHRTable();
-                                            }
-                                        
-                                        }
-                                    });
-
-                                }                                
-                            }
-                        })
+                                })
                             }
                         });
                     }
-                });                
-               // recreatingHRTable();
+                });
+                // recreatingHRTable();
             });
         }
 
-       
+
         //Function to export data to csv file
         function download_csvFile(csv, fileName) {
             var csvFile;
@@ -470,15 +477,15 @@
 
         //Function to get GTM to Nepali Time
         function getNepaliTimeNow(datetime) {
-            
+
             if (datetime == null) {
                 return null;
-               
+
             } else {
-                   var time = new Date(datetime);
+                var time = new Date(datetime);
                 var time_in_nepal = time.toLocaleString("en-US", {
                     timeZone: "Asia/Kathmandu",
-                    hour12:false
+                    hour12: false
                 });
                 return time_in_nepal;
 
