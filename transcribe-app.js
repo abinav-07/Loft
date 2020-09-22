@@ -1408,7 +1408,7 @@ app.post("/reset-transcription-data-for-retry", (req, res) => {
             console.error(err);
             //res.status(400).send("error in get /reset-transcription-data-for-retry.");
         }
-        var setStatusNull = `Update users_audio SET status=NULL WHERE users_audio_id=${req.body.user_id} AND type="transcription"`;
+        var setStatusNull = `Update users_audio SET status=NULL AND end_time=NULL WHERE users_audio_id=${req.body.user_id} AND type="transcription"`;
         //console.log(setStatusNull);
         pool.query(setStatusNull, (resetErr, resetResult) => {
             if (resetErr) {
@@ -1767,6 +1767,6 @@ function run_query(sql) {
     });
 }
 
-app.listen(3000, () => {
-    //console.log("Listening on 3000");
+app.listen(5000, () => {
+    console.log("Listening on 5000");
 });
