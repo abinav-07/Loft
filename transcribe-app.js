@@ -1132,6 +1132,7 @@ app.post(
         let sql = `
             Update users_audio
             Set transcription_score="${req.body.total_score}",
+                status=NULL,
                 end_time = Now(),
                 is_submitted = "${req.body.is_submitted}"
             WHERE user_id = "${req.body.user_id}"
@@ -1408,7 +1409,7 @@ app.post("/reset-transcription-data-for-retry", (req, res) => {
             console.error(err);
             //res.status(400).send("error in get /reset-transcription-data-for-retry.");
         }
-        var setStatusNull = `Update users_audio SET status=RETRY, end_time=NULL WHERE users_audio_id=${req.body.user_id} AND type="transcription"`;
+        var setStatusNull = `Update users_audio SET status="RETRY", end_time=NULL WHERE users_audio_id=${req.body.user_id} AND type="transcription"`;
         //console.log(setStatusNull);
         pool.query(setStatusNull, (resetErr, resetResult) => {
             if (resetErr) {
