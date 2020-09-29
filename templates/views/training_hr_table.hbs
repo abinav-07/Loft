@@ -426,6 +426,18 @@
                                             "status": status,
                                             "project_type_id": "4"
                                         }
+
+                                         if(status==4){
+                                                    $.ajax({
+                                                        method:"POST",
+                                                        url:"/set-endtime-null-on-retry",
+                                                        data:{user_id: userId},
+                                                         success: function () {
+                                                             //   console.log("EMAIl Sent and web app status set and transcription reset");
+                                                                // recreatingHRTable();
+                                                            }
+                                                    })
+                                                }
                                         //console.log(mailParams);
                                         /*
                                         $.ajax({

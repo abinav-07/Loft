@@ -444,6 +444,17 @@
                                             url: "{{ webapp_basepath }}/api/set-user-language-project-type-status",
                                             data: mailParams,
                                             success: function () {
+                                                if(status==4){
+                                                    $.ajax({
+                                                        method:"POST",
+                                                        url:"/set-endtime-null-on-retry",
+                                                        data:{user_id: userId},
+                                                         success: function () {
+                                                             //   console.log("EMAIl Sent and web app status set and transcription reset");
+                                                                // recreatingHRTable();
+                                                            }
+                                                    })
+                                                }
                                                 console.log("EMAIl Sent and web app status set");
                                                 //recreatingHRTable();
                                             }

@@ -1467,6 +1467,18 @@ app.post("/confirm-pass-fail-hr-review", (req, res) => {
     });
 });
 
+app.post("/set-endtime-null-on-retry", (req, res) => {
+    var setStatusNull = `Update users_audio SET status="RETRY", end_time=NULL WHERE users_audio_id=${req.body.user_id}`;
+    pool.query(setStatusNull, (resetErr, resetResult) => {
+        if (resetErr) {
+            console.error(resetErr);
+            res.status(400).send("error in get /reset-transcription-data-for-retry.");
+        }
+        //console.log(resetResult)
+    })
+})
+
+
 app.post("/hr-click-get-user-id", (req, res) => {
     let sql = `
                         Select users_audio.user_id, users_audio.audio_id, users_audio.is_submitted FROM users_audio
