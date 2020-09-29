@@ -1118,6 +1118,7 @@ app.post("/save-test-score-on-users_audio_table", (req, res) => {
                 annotation_labelling_error = "${req.body.wrongAnnotationScore}",
                 unnecessary_segments_error = "${req.body.unnecessarySegmentsErrors}",
                 overall_score = "${req.body.overallScore}",
+                status=NULL,
                 end_time = Now(),
                 is_submitted = "${req.body.is_submitted}"
             WHERE user_id = "${req.body.user_id}"
