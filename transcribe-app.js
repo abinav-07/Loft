@@ -65,6 +65,9 @@ app.use(function(req, res, next) {
 });
 hbs.registerPartials(partialPaths);
 
+
+
+
 //Database Connection
 const pool = require("./config/pool");
 const audio_bee_pool = require("./config/audiobee-db");

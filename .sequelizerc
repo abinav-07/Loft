@@ -1,0 +1,8 @@
+const path = require('path');
+
+module.exports = {
+  'config': path.resolve( 'database', 'transcribe-db', 'config', 'config.js'),
+  'models-path': path.resolve( 'database', 'transcribe-db', 'models'),
+  'seeders-path': path.resolve( 'database', 'transcribe-db', 'seeders'),
+  'migrations-path': path.resolve( 'database', 'transcribe-db', 'migrations')
+};
