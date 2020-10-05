@@ -1,645 +1,681 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Segmentation Guideline</title>
-    <!-- CSS -->
-    <link href="style.css" rel="stylesheet" type="text/css" />
-  </head>
-  <body>
-    <div class="calibre" id="calibre_link-0">
-      <p id="calibre_link-1" class="block_">Introduction</p>
-      <ol class="list_">
-        <li id="calibre_link-2" class="block_1">
-          <b class="calibre1">What is Long Transcription (LT)?</b>
-        </li>
-      </ol>
-      <p class="block_2">
-        It is a system which contains longer conversation audio clips, either
-        one-sided or including multiple speakers which must be transcribed as
-        per the rules and regulations of Guideline along with the Instruction
-        manual.
-      </p>
-      <p class="block_2"></p>
-      <p class="block_2">
-        You will be listening to the dialogue that will likely contain multiple
-        speakers. Your job is to identify and mark when each speaker is speaking
-        and segment the corresponding audio.
-      </p>
-      <p class="block_2"></p>
-      <p class="block_2">
-        Some of the audio will contain background noise, background music, and
-        ringtones; this must be marked too.
-      </p>
-      <p class="block_2"></p>
-      <ol class="list_">
-        <li id="calibre_link-3" value="2" class="block_1">
-          <b class="calibre1"
-            >What are the key points I need to remember to work on the project?
-          </b>
-        </li>
-      </ol>
-      <p class="block_2">
-        <b class="calibre1">The key points are as follows </b
-        ><span class="text_"
-          >(Please refer to FAQs/video guide below for details)</span
-        ><b class="calibre1">:</b>
-      </p>
-      <ol class="list_">
-        <li class="block_3">
-          You will need to create speaker segments (box) and annotations
-          following the rules of the system.
-        </li>
-        <li class="block_3">
-          Speaker types are commonly categorized into three:
-        </li>
-      </ol>
-      <div class="calibre2">
-        <div class="block_4">
-          <span class="bullet_">●&nbsp;</span
-          ><span class="calibre3"
-            >Normal Speakers (Labelled as speaker 1, speaker 2, and so on)</span
-          >
-        </div>
-        <div class="block_4">
-          <span class="bullet_">●&nbsp;</span
-          ><span class="calibre3"
-            >Unidentifiable Speakers (Labelled as unidentifiable speaker)</span
-          >
-        </div>
-        <div class="block_4">
-          <span class="bullet_">●&nbsp;</span
-          ><span class="calibre3"
-            >Pre-Recorded Speakers (Labelled as pre recorded speaker 1, and so
-            on)</span
-          >
-        </div>
-      </div>
-      <ol class="list_">
-        <li value="3" class="block_3">
-          Annotation types are commonly categorized into following:
-        </li>
-      </ol>
-      <div class="calibre2">
-        <div class="block_4">
-          <span class="bullet_">●&nbsp;</span
-          ><span class="calibre3"
-            >Noise (Labelled for noises and background unintelligible speech of
-            multiple users)</span
-          >
-        </div>
-        <div class="block_4">
-          <span class="bullet_">●&nbsp;</span
-          ><span class="calibre3">Music (Labelled for music)</span>
-        </div>
-        <div class="block_4">
-          <span class="bullet_">●&nbsp;</span
-          ><span class="calibre3"
-            >DTMF (Dial Tone Multi Frequency- used when you hear a key tone of
-            phone) (For example: You hear “beep” sound of key when you are in a
-            phone call)</span
-          >
-        </div>
-        <div class="block_4">
-          <span class="bullet_">●&nbsp;</span
-          ><span class="calibre3"
-            >Applause (Labelled when crowd applauses/claps/cheers)</span
-          >
-        </div>
-        <div class="block_4">
-          <span class="bullet_">●&nbsp;</span
-          ><span class="calibre3"
-            >Foreign Speech (Labelled when foreign speech occurs rather than the
-            language you are working on)</span
-          >
-        </div>
-        <div class="block_4">
-          <span class="bullet_">●&nbsp;</span
-          ><span class="calibre3"
-            >Laughter (Labelled when laughter is heard)</span
-          >
-        </div>
-        <div class="block_4">
-          <span class="bullet_">●&nbsp;</span
-          ><span class="calibre3"
-            >RingTone (Labelled when incoming or outgoing ringtone is
-            heard)</span
-          >
-        </div>
-        <div class="block_4">
-          <span class="bullet_">●&nbsp;</span
-          ><span class="calibre3"
-            >Singing (Labelled when speaker is singing. *Note that songs should
-            also be labelled under “pre recorded speaker” and annotated under
-            “singing”.)</span
-          >
-        </div>
-        <div class="block_5">
-          <span class="bullet_">●&nbsp;</span
-          ><span class="calibre3"
-            >Unintelligible (Labelled when transcriber cannot transcribe the
-            word heard)</span
-          >
-        </div>
-        <div class="block_5">
-          <span class="bullet_">●&nbsp;</span
-          ><span class="calibre3"
-            >PII (Labelled when transcriber finds any personal information)<br
-              class="calibre4"
-            />**Do not focus on the above two points, work on these points only
-            if confident of unintelligible and PII parts. (Please refer to the
-            prefill text for gaining confidence.)</span
-          >
-        </div>
-      </div>
-      <p class="block_6"></p>
-      <ol class="list_">
-        <li value="4" class="block_3">100 ms segment rule</li>
-      </ol>
-      <p class="block_7">
-        This rule indicates that you will need to keep extra 85-100ms segment at
-        start and end of each segment where possible to avoid cutting off words
-        outside segments
-      </p>
-      <p class="block_7"></p>
-      <ol class="list_">
-        <li value="5" class="block_3">30 second split rule</li>
-      </ol>
-      <p class="block_7">
-        This rule indicates that no speaker segment should exceed 30 second. If
-        a speaker speaks continuously for more than 30 seconds, a separate
-        speaker segment needs to be created for speech after 30 seconds, and so
-        on. >
-      </p>
-      <p class="block_7"></p>
-      <ol class="list_">
-        <li value="6" class="block_3">500 ms split rule</li>
-      </ol>
-      <p class="block_7">
-        This rule indicates that if there is a gap of 0.5 second between words,
-        separate segments need to be created for those two words.
-      </p>
-      <p class="block_7"></p>
-      <p class="block_8">
-        **Note that 30 seconds, 100 ms, and 500 ms rule does not apply to
-        annotations.
-      </p>
-      <p id="calibre_link-4" class="block_9">
-        <span class="text_1">Screenshot references of interface of system</span>
-      </p>
-      <ol class="list_">
-        <li id="calibre_link-5" class="block_10">
-          Audio UI screenshot:<br class="calibre4" /><img
-            src="images/000015.png"
-            alt="Image"
-            class="calibre6"
-          /><br class="calibre4" />&nbsp;
-        </li>
-        <li id="calibre_link-6" class="block_11">
-          Speaker/Annotation UI screenshot:<br class="calibre4" />`<img
-            src="images/000003.png"
-            alt="Image"
-            class="calibre7"
-          />
-        </li>
-      </ol>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Segmentation Guideline</title>
+		<!-- CSS -->
+		<link href="style.css" rel="stylesheet" type="text/css" />
+	</head>
+	<body>
+		<div class="calibre" id="calibre_link-0">
+			<p id="calibre_link-1" class="block_">Introduction</p>
+			<ol class="list_">
+				<li id="calibre_link-2" class="block_1">
+					<b class="calibre1">What is Long Transcription (LT)?</b>
+				</li>
+			</ol>
+			<p class="block_2">
+				It is a system which contains longer conversation audio clips,
+				either one-sided or including multiple speakers which must be
+				transcribed as per the rules and regulations of Guideline along
+				with the Instruction manual.
+			</p>
+			<p class="block_2"></p>
+			<p class="block_2">
+				You will be listening to the dialogue that will likely contain
+				multiple speakers. Your job is to identify and mark when each
+				speaker is speaking and segment the corresponding audio.
+			</p>
+			<p class="block_2"></p>
+			<p class="block_2">
+				Some of the audio will contain background noise, background
+				music, and ringtones; this must be marked too.
+			</p>
+			<p class="block_2"></p>
+			<ol class="list_">
+				<li id="calibre_link-3" value="2" class="block_1">
+					<b class="calibre1"
+						>What are the key points I need to remember to work on
+						the project?
+					</b>
+				</li>
+			</ol>
+			<p class="block_2">
+				<b class="calibre1">The key points are as follows </b
+				><span class="text_"
+					>(Please refer to FAQs/video guide below for details)</span
+				><b class="calibre1">:</b>
+			</p>
+			<ol class="list_">
+				<li class="block_3">
+					You will need to create speaker segments (box) and
+					annotations following the rules of the system.
+				</li>
+				<li class="block_3">
+					Speaker types are commonly categorized into three:
+				</li>
+			</ol>
+			<div class="calibre2">
+				<div class="block_4">
+					<span class="bullet_">●&nbsp;</span
+					><span class="calibre3"
+						>Normal Speakers (Labelled as speaker 1, speaker 2, and
+						so on)</span
+					>
+				</div>
+				<div class="block_4">
+					<span class="bullet_">●&nbsp;</span
+					><span class="calibre3"
+						>Unidentifiable Speakers (Labelled as unidentifiable
+						speaker)</span
+					>
+				</div>
+				<div class="block_4">
+					<span class="bullet_">●&nbsp;</span
+					><span class="calibre3"
+						>Pre-Recorded Speakers (Labelled as pre recorded speaker
+						1, and so on)</span
+					>
+				</div>
+			</div>
+			<ol class="list_">
+				<li value="3" class="block_3">
+					Annotation types are commonly categorized into following:
+				</li>
+			</ol>
+			<div class="calibre2">
+				<div class="block_4">
+					<span class="bullet_">●&nbsp;</span
+					><span class="calibre3"
+						>Noise (Labelled for noises and background
+						unintelligible speech of multiple users)</span
+					>
+				</div>
+				<div class="block_4">
+					<span class="bullet_">●&nbsp;</span
+					><span class="calibre3">Music (Labelled for music)</span>
+				</div>
+				<div class="block_4">
+					<span class="bullet_">●&nbsp;</span
+					><span class="calibre3"
+						>DTMF (Dial Tone Multi Frequency- used when you hear a
+						key tone of phone) (For example: You hear “beep” sound
+						of key when you are in a phone call)</span
+					>
+				</div>
+				<div class="block_4">
+					<span class="bullet_">●&nbsp;</span
+					><span class="calibre3"
+						>Applause (Labelled when crowd
+						applauses/claps/cheers)</span
+					>
+				</div>
+				<div class="block_4">
+					<span class="bullet_">●&nbsp;</span
+					><span class="calibre3"
+						>Foreign Speech (Labelled when foreign speech occurs
+						rather than the language you are working on)</span
+					>
+				</div>
+				<div class="block_4">
+					<span class="bullet_">●&nbsp;</span
+					><span class="calibre3"
+						>Laughter (Labelled when laughter is heard)</span
+					>
+				</div>
+				<div class="block_4">
+					<span class="bullet_">●&nbsp;</span
+					><span class="calibre3"
+						>RingTone (Labelled when incoming or outgoing ringtone
+						is heard)</span
+					>
+				</div>
+				<div class="block_4">
+					<span class="bullet_">●&nbsp;</span
+					><span class="calibre3"
+						>Singing (Labelled when speaker is singing. *Note that
+						songs should also be labelled under “pre recorded
+						speaker” and annotated under “singing”.)</span
+					>
+				</div>
+				<div class="block_5">
+					<span class="bullet_">●&nbsp;</span
+					><span class="calibre3"
+						>Unintelligible (Labelled when transcriber cannot
+						transcribe the word heard)</span
+					>
+				</div>
+				<div class="block_5">
+					<span class="bullet_">●&nbsp;</span
+					><span class="calibre3"
+						>PII (Labelled when transcriber finds any personal
+						information)<br class="calibre4" />**Do not focus on the
+						above two points, work on these points only if confident
+						of unintelligible and PII parts. (Please refer to the
+						prefill text for gaining confidence.)</span
+					>
+				</div>
+			</div>
+			<p class="block_6"></p>
+			<ol class="list_">
+				<li value="4" class="block_3">100 ms segment rule</li>
+			</ol>
+			<p class="block_7">
+				This rule indicates that you will need to keep extra 85-100ms
+				segment at start and end of each segment where possible to avoid
+				cutting off words outside segments
+			</p>
+			<p class="block_7"></p>
+			<ol class="list_">
+				<li value="5" class="block_3">30 second split rule</li>
+			</ol>
+			<p class="block_7">
+				This rule indicates that no speaker segment should exceed 30
+				second. If a speaker speaks continuously for more than 30
+				seconds, a separate speaker segment needs to be created for
+				speech after 30 seconds, and so on. >
+			</p>
+			<p class="block_7"></p>
+			<ol class="list_">
+				<li value="6" class="block_3">500 ms split rule</li>
+			</ol>
+			<p class="block_7">
+				This rule indicates that if there is a gap of 0.5 second between
+				words, separate segments need to be created for those two words.
+			</p>
+			<p class="block_7"></p>
+			<p class="block_8">
+				**Note that 30 seconds, 100 ms, and 500 ms rule does not apply
+				to annotations.
+			</p>
+			<p id="calibre_link-4" class="block_9">
+				<span class="text_1"
+					>Screenshot references of interface of system</span
+				>
+			</p>
+			<ol class="list_">
+				<li id="calibre_link-5" class="block_10">
+					Audio UI screenshot:<br class="calibre4" /><img
+						src="images/000015.png"
+						alt="Image"
+						class="calibre6"
+					/><br class="calibre4" />&nbsp;
+				</li>
+				<li id="calibre_link-6" class="block_11">
+					Speaker/Annotation UI screenshot:<br
+						class="calibre4"
+					/>`<img
+						src="images/000003.png"
+						alt="Image"
+						class="calibre7"
+					/>
+				</li>
+			</ol>
 
-      <p id="calibre_link-7" class="block_13">
-        Step-wise description of the procedure to work on the system of LT
-      </p>
-      <p class="block_2">
-        Here is the screenshot of the LT UI (User Interface).<br
-          class="calibre4"
-        />&nbsp;
-      </p>
-      <p class="block_2">
-        <img src="images/000014.png" alt="Image" class="calibre8" />
-      </p>
-      <p class="block_2"></p>
-      <p class="block_2"></p>
-      <p class="block_2"><b class="calibre1">LEGENDS:</b></p>
-      <p class="text">
-        1. Play/Pause Button: Use this button to play or pause the clip.
-      </p>
-      <p class="text">
-        2. Running time(seek): Indicates run time at particular point of the
-        clip.
-      </p>
-      <p class="text">
-        3. Total Length: Indicates the total length time of the task
-      </p>
-      <p class="text">
-        4. Playback Speed: Select the speed from the drop down to vary the speed
-        according to need for clear understanding of the speech.
-      </p>
-      <p class="text">5. Shortcut Keys: Use shortcut keys.</p>
-      <p class="text">
-        6. Guidelines: Use this to access the Guideline and the Instructions on
-        how to use the system UI.
-      </p>
-      <p class="text">7. Audio wave: You can see audio wake here</p>
-      <p class="text">
-        8. Speaker Identification Tab: This tab displays the added speaker by
-        the transcriber. Indicates how many different speakers have been
-        created.
-      </p>
-      <p class="text">
-        9. Created Segment: Use the + button [See Legend#7] to add the speaker
-        and create a segment for the speech to be transcribed. Refer to
-        Guideline/Instructions for further assistance.
-      </p>
-      <p class="text">
-        10. Add Button: Use this button to create the segments for speakers and
-        annotations. Regular speaker, prerecorded speaker, unidentifiable
-        speaker. Refer to Guideline/Instructions on how to add and use the
-        annotations.
-      </p>
-      <p class="text">
-        11. Submit: Click submit button after you complete task.
-      </p>
+			<p id="calibre_link-7" class="block_13">
+				Step-wise description of the procedure to work on the system of
+				LT
+			</p>
+			<p class="block_2">
+				Here is the screenshot of the LT UI (User Interface).<br
+					class="calibre4"
+				/>&nbsp;
+			</p>
+			<p class="block_2">
+				<img src="images/000014.png" alt="Image" class="calibre8" />
+			</p>
+			<p class="block_2"></p>
+			<p class="block_2"></p>
+			<p class="block_2"><b class="calibre1">LEGENDS:</b></p>
+			<p class="text">
+				1. Play/Pause Button: Use this button to play or pause the clip.
+			</p>
+			<p class="text">
+				2. Running time(seek): Indicates run time at particular point of
+				the clip.
+			</p>
+			<p class="text">
+				3. Total Length: Indicates the total length time of the task
+			</p>
+			<p class="text">
+				4. Playback Speed: Select the speed from the drop down to vary
+				the speed according to need for clear understanding of the
+				speech.
+			</p>
+			<p class="text">5. Shortcut Keys: Use shortcut keys.</p>
+			<p class="text">
+				6. Guidelines: Use this to access the Guideline and the
+				Instructions on how to use the system UI.
+			</p>
+			<p class="text">7. Audio wave: You can see audio wake here</p>
+			<p class="text">
+				8. Speaker Identification Tab: This tab displays the added
+				speaker by the transcriber. Indicates how many different
+				speakers have been created.
+			</p>
+			<p class="text">
+				9. Created Segment: Use the + button [See Legend#7] to add the
+				speaker and create a segment for the speech to be transcribed.
+				Refer to Guideline/Instructions for further assistance.
+			</p>
+			<p class="text">
+				10. Add Button: Use this button to create the segments for
+				speakers and annotations. Regular speaker, prerecorded speaker,
+				unidentifiable speaker. Refer to Guideline/Instructions on how
+				to add and use the annotations.
+			</p>
+			<p class="text">
+				11. Submit: Click submit button after you complete task.
+			</p>
 
-      <h1 id="calibre_link-8" class="block_14">Working on the system</h1>
-      <br />
-      <p class="block_12">
-        <b class="calibre1">Creating a Turn:</b> Press the + button to create a
-        segment. If any pre-filled segments are present, do not edit the
-        segments, they are there for assistance in transcribing. Create a new
-        segment for each case.
-      </p>
-      <p class="block_12">
-        <b class="calibre1">Task Info&gt;&gt;Instructions:</b> Follow the rules
-        for tagging and transcribing speaker segments for long-form audio.
-        Transcribe ALL speech that is heard, this includes pre-recorded and
-        synthesized speech. For speech that is unintelligible, foreign, or
-        singing, please refer to the relevant section(s).
-      </p>
-      <br />
-      <p class="block_12">
-        <img src="images/000012.png" alt="Image" class="calibre9" />
-      </p>
-      <br />
-      <p class="block_12">
-        <img src="images/000017.png" alt="Image" class="calibre10" />
-      </p>
-      <br />
-      <p class="block_12">
-        <img src="images/000007.png" alt="Image" class="calibre11" />
-      </p>
-      <br />
-      <p class="block_12">
-        <img src="images/000009.png" alt="Image" class="calibre12" />
-      </p>
-      <br />
+			<h1 id="calibre_link-8" class="block_14">Working on the system</h1>
+			<br />
+			<p class="block_12">
+				<b class="calibre1">Creating a Turn:</b> Press the + button to
+				create a segment. If any pre-filled segments are present, do not
+				edit the segments, they are there for assistance in
+				transcribing. Create a new segment for each case.
+			</p>
+			<p class="block_12">
+				<b class="calibre1">Task Info&gt;&gt;Instructions:</b> Follow
+				the rules for tagging and transcribing speaker segments for
+				long-form audio. Transcribe ALL speech that is heard, this
+				includes pre-recorded and synthesized speech. For speech that is
+				unintelligible, foreign, or singing, please refer to the
+				relevant section(s).
+			</p>
+			<br />
+			<p class="block_12">
+				<img src="images/000012.png" alt="Image" class="calibre9" />
+			</p>
+			<br />
+			<p class="block_12">
+				<img src="images/000017.png" alt="Image" class="calibre10" />
+			</p>
+			<br />
+			<p class="block_12">
+				<img src="images/000007.png" alt="Image" class="calibre11" />
+			</p>
+			<br />
+			<p class="block_12">
+				<img src="images/000009.png" alt="Image" class="calibre12" />
+			</p>
+			<br />
 
-      <h3 id="calibre_link-9" class="block_15"></h3>
-      <h3 id="calibre_link-10" class="block_15"></h3>
-      <br /><br />
-      <h3 id="calibre_link-11" class="block_16">Segmentation</h3>
-      <p class="block_12">
-        If overlapping speech is occurring: the segment boundaries should be
-        accurate with at least 100milliseconds precision, if possible.
-      </p>
-      <p class="block_12">
-        If overlapping speech is NOT occurring, the segment boundaries do not
-        have to be 100% precise but should start and end within
-        85-100milliseconds from when the speaker begins/ends their speech. The
-        boundaries should not overlap with the same speaker turn next to the
-        segment. Speaker turns should not contain pauses in speech that are
-        longer than 0.5 seconds. If a speaker does pause their speech for longer
-        than 0.5 seconds, end the speaker turn before the pause then create a
-        new turn for when the speaker resumes talking.
-      </p>
+			<h3 id="calibre_link-9" class="block_15"></h3>
+			<h3 id="calibre_link-10" class="block_15"></h3>
+			<br /><br />
+			<h3 id="calibre_link-11" class="block_16">Segmentation</h3>
+			<p class="block_12">
+				If overlapping speech is occurring: the segment boundaries
+				should be accurate with at least 100milliseconds precision, if
+				possible.
+			</p>
+			<p class="block_12">
+				If overlapping speech is NOT occurring, the segment boundaries
+				do not have to be 100% precise but should start and end within
+				85-100milliseconds from when the speaker begins/ends their
+				speech. The boundaries should not overlap with the same speaker
+				turn next to the segment. Speaker turns should not contain
+				pauses in speech that are longer than 0.5 seconds. If a speaker
+				does pause their speech for longer than 0.5 seconds, end the
+				speaker turn before the pause then create a new turn for when
+				the speaker resumes talking.
+			</p>
 
-      <h3 id="calibre_link-12" class="block_16">Speaker Labelling</h3>
-      <p class="block_12">
-        All speaker labels should be consistently formatted. Speaker labels
-        should always: be in all lowercase, be spelled correctly, and should not
-        contain underscores or hyphens. A validator within the tool will prevent
-        you from submitting incorrect formats.
-      </p>
+			<h3 id="calibre_link-12" class="block_16">Speaker Labelling</h3>
+			<p class="block_12">
+				All speaker labels should be consistently formatted. Speaker
+				labels should always: be in all lowercase, be spelled correctly,
+				and should not contain underscores or hyphens. A validator
+				within the tool will prevent you from submitting incorrect
+				formats.
+			</p>
 
-      <p class="block_12">Correct: speaker 1</p>
-      <p class="block_12">Incorrect: Speaker 1<br class="calibre4" />&nbsp;</p>
-      <p class="block_12">Correct: pre recorded speaker 1</p>
-      <p class="block_12">
-        Incorrect: pre-recorded speaker_1<br class="calibre4" />&nbsp;
-      </p>
-      <p class="block_12">
-        Correct: unidentifiable speaker<br class="calibre4" />&nbsp;
-      </p>
-      <p class="block_12">
-        'speaker #' Used for different speakers in the audio. Includes a number
-        that corresponds to each different speaker.
-      </p>
-      <p class="block_12">
-        'pre recorded speaker #' Used when there is speech coming from a
-        machine. Includes a number that corresponds to each different pre
-        recorded speaker.
-      </p>
-      <p class="block_12">
-        'unidentifiable speaker' Used when you cannot identify who the speaker
-        is. Does not ever include numbers.
-      </p>
-      <p class="block_12">
-        'speaker Tom' Used when the name of a speaker becomes known. The names
-        of speakers should always be capitalized. You can use first and last
-        names. (Note: adding speaker names will be allowed for some projects but
-        not others. In tool validators will indicate whether or not you can
-        submit a speaker name.)
-      </p>
+			<p class="block_12">Correct: speaker 1</p>
+			<p class="block_12">
+				Incorrect: Speaker 1<br class="calibre4" />&nbsp;
+			</p>
+			<p class="block_12">Correct: pre recorded speaker 1</p>
+			<p class="block_12">
+				Incorrect: pre-recorded speaker_1<br class="calibre4" />&nbsp;
+			</p>
+			<p class="block_12">
+				Correct: unidentifiable speaker<br class="calibre4" />&nbsp;
+			</p>
+			<p class="block_12">
+				'speaker #' Used for different speakers in the audio. Includes a
+				number that corresponds to each different speaker.
+			</p>
+			<p class="block_12">
+				'pre recorded speaker #' Used when there is speech coming from a
+				machine. Includes a number that corresponds to each different
+				pre recorded speaker.
+			</p>
+			<p class="block_12">
+				'unidentifiable speaker' Used when you cannot identify who the
+				speaker is. Does not ever include numbers.
+			</p>
+			<p class="block_12">
+				'speaker Tom' Used when the name of a speaker becomes known. The
+				names of speakers should always be capitalized. You can use
+				first and last names. (Note: adding speaker names will be
+				allowed for some projects but not others. In tool validators
+				will indicate whether or not you can submit a speaker name.)
+			</p>
 
-      <h3 id="calibre_link-13" class="block_16">Speaker Formatting</h3>
-      <br />
-      <p class="block_12">
-        <img src="images/000006.png" alt="Image" class="calibre13" />
-      </p>
+			<h3 id="calibre_link-13" class="block_16">Speaker Formatting</h3>
+			<br />
+			<p class="block_12">
+				<img src="images/000006.png" alt="Image" class="calibre13" />
+			</p>
 
-      <p id="calibre_link-14" class="block_17">***FAQs</p>
-      <ol class="list_">
-        <li class="block_18">
-          <b class="calibre1"
-            >The segment beginning/end must contain a 100MS gap.
-          </b>
-        </li>
-      </ol>
-      <p class="block_2">
-        Please be sure that the beginning and end of each segment contains a
-        100MS gap at most. Do not exceed 100MS. It can lay somewhere in between
-        85-100MS, but should not exceed 100MS. Be more precise on this rule in
-        every created segment and note to apply the 100MS rule accordingly in
-        each created segment. Do not use this for annotations.
-      </p>
-      <p class="block_2">
-        <img src="images/000002.png" alt="Image" class="calibre14" />Here, the
-        speaker has started speaking from 00:00.090 and the segment has begun
-        from 0:00.000 which lies in between 85-100MS. Please use this rule at
-        the segmentation end as well.
-      </p>
-      <p class="block_2">
-        <img src="images/000001.png" alt="Image" class="calibre15" />
-      </p>
-      <p class="block_2">
-        Here, the speaker stops speaking at 00:19.202 thus the segment ends at
-        00:19.299, which is approximately a 100MS gap.
-      </p>
-      <p class="block_2"></p>
-      <br /><br />
-      <ol class="list_">
-        <li value="2" class="block_18">
-          <b class="calibre1"
-            >0.5-sec pause between two utterances must be split into two
-            segments.</b
-          >
-        </li>
-      </ol>
-      <p class="block_2">
-        Whenever the speaker pauses for 0.5 sec/500MS between the previous and
-        next utterance, then the segment must be split into two parts.
-      </p>
-      <p class="block_2">
-        <img src="images/000000.png" alt="Image" class="calibre16" />
-      </p>
-      <p class="block_2">
-        Here the speaker stops speaking at 00:03.219 and again begins speaking
-        at 00:04.080 which clearly has a gap/pause of greater than 0.5 seconds
-        or 500MS. Thus, in these cases, two separate segments must be created.
-      </p>
-      <br /><br />
-      <ol class="list_">
-        <li value="3" class="block_18">
-          <b class="calibre1">Use of annotation</b>
-        </li>
-      </ol>
-      <p class="block_2">
-        Be precise on the timestamp of the annotation. Annotation must run only
-        up to the required mark, not more or not less.
-      </p>
-      <p class="block_2">
-        <img src="images/000010.png" alt="Image" class="calibre17" />
-      </p>
-      <p class="block_2">
-        Make sure that the created annotation covers the intended sound of the
-        audio. Be precise on the use of annotation, it should not contain 100MS
-        gap as per the segmentation rules.
-      </p>
-      <p class="block_2"></p>
-      <p class="block_2"></p>
-      <br /><br />
-      <ol class="list_">
-        <li value="4" class="block_18">
-          <b class="calibre1">30-second split rule</b>
-        </li>
-      </ol>
-      <p class="block_2">
-        If a segment runs longer than 30 seconds then please split the turn at
-        the 30-second mark and create a next segment to transcribe after 30
-        seconds. Create new segments each at the 30-second mark. Make sure if a
-        word lies at the 30-second mark then omit the word at first segment and
-      </p>
-      <p class="block_2">
-        include it in the next segment so that the word is not split into two
-        segments.
-      </p>
-      <p class="block_2">
-        <img src="images/000008.png" alt="Image" class="calibre18" />
-      </p>
-      <p class="block_2">
-        Here, the speaker speaks from 12:58.004 to 13:28.580 which is greater
-        than 30-seconds. Create a segment upto 30-second mark, i.e. 13:28.004
-        and create a new segment from 13:28.005. Thus, at every 30-second mark a
-        new segment must be created if a single segment intends to run for
-        longer than 30 seconds.
-      </p>
-      <p class="block_2"></p>
-      <br /><br />
-      <ol class="list_">
-        <li value="5" class="block_18">
-          <b class="calibre1"
-            >Make sure that the sound for the intended segments/annotations are
-            covered up.</b
-          >
-        </li>
-      </ol>
-      <p class="block_2">
-        Also, do not miss any transcription. Instances where the segment does
-        not cover up the audio must be avoided.
-      </p>
-      <p class="block_2">
-        <img src="images/000013.png" alt="Image" class="calibre19" />
-      </p>
-      <p class="block_2">
-        Here the music runs upto 13:29.814 but the annotation runs only upto
-        13:29.605, thus this must be avoided. The music annotation must run upto
-        13:29.606 at least in order to cover up the required sound in the audio.
-      </p>
-      <p class="block_2"></p>
-      <p class="block_2"></p>
-      <br /><br />
-      <ol class="list_">
-        <li value="6" class="block_18">
-          <b class="calibre1"
-            >At least 1MS gap between multiple segments on a constant flow of
-            speech</b
-          >
-        </li>
-      </ol>
-      <p class="block_2">
-        <b class="calibre1"
-          ><img src="images/000004.png" alt="Image" class="calibre20"
-        /></b>
-      </p>
-      <p class="block_2"></p>
-      <p class="block_19">
-        **Please be cautious that multiple segments of the same speaker must
-        contain at least a gap of 1MS so that it does not overlap the previous
-        segment. If a segment ends at 00:03.579 and PII begins, then the start
-        time of PII must be 00:03.580 and so on.
-      </p>
-      <p class="block_2"></p>
-      <br /><br /><br /><br />
-      <ol class="list_">
-        <li value="7" class="block_18">
-          <b class="calibre1"
-            >As soon as you click the “+” button within a Loft task the new Edit
-            Annotation window will appear. The view of the Edit Annotation
-            window will change based on which you label you select.</b
-          >
-        </li>
-      </ol>
-      <p class="block_2"></p>
-      <p class="block_2">
-        Please see the 3 scenarios below for how the Edit Annotation window
-        could change and what you should do in each case.
-      </p>
-      <p class="block_2"></p>
-      <p class="block_2"></p>
-      <p class="block_2"></p>
-      <p class="block_2"></p>
-      <p class="block_2"></p>
-      <div class="calibre21">
-        <div class="block_4">
-          <span class="bullet_">●&nbsp;</span
-          ><span class="calibre3"><b class="calibre1">Scenario 1</b></span>
-        </div>
-      </div>
-      <p class="block_7">
-        ○ Action: Choose label: no label (blank), or Singing.
-      </p>
-      <p class="block_7">○ View: The Edit Annotation window stays the same.</p>
-      <p class="block_7">
-        ○ Follow-up action: Transcribe the audio and assign the appropriate
-        speaker. Set the appropriate turn start and end time and hit “Save.”
-      </p>
-      <p class="block_7">○ Tip:</p>
-      <p class="block_6">
-        Do not use bracket tags in the transcription box [unintelligible]
-        [foreign speech] [singing].
-      </p>
-      <p class="block_7">
-        <img src="images/000016.png" alt="Image" class="calibre22" />
-      </p>
-      <p class="block_7"></p>
-      <p class="block_7"></p>
-      <p class="block_7"></p>
-      <p class="block_7"></p>
-      <br /><br />
-      <div class="calibre21">
-        <div class="block_4">
-          <span class="bullet_">●&nbsp;</span
-          ><b class="calibre1">Scenario 2<br class="calibre4" /></b>
-        </div>
-      </div>
-      <p class="block_7">
-        ○ Action: Choose label: PII/Foreign Speech/Unintelligible.
-      </p>
-      <p class="block_7">○ View: The Transcription box disappears.</p>
-      <p class="block_7">
-        ○ Follow-up action: Assign to the appropriate speaker. Set the
-        appropriate turn start and end time and hit “Save.”
-      </p>
-      <p class="block_7">○ Tip:</p>
-      <p class="block_6">
-        The transcription box disappears because PII, Foreign Speech, and
-        Unintelligible speech should not be transcribed.
-      </p>
-      <p class="block_6"></p>
-      <p class="block_6">
-        PII, Foreign Speech and Unintelligible labels will automatically appear
-        in the turn in all caps.
-      </p>
-      <p class="block_7">
-        <img src="images/000005.png" alt="Image" class="calibre23" />
-      </p>
-      <p class="block_7"></p>
-      <p class="block_7"></p>
-      <p class="block_7"></p>
-      <p class="block_7"></p>
-      <p class="block_7"></p>
-      <p class="block_7"></p>
-      <p class="block_7"></p>
-      <p class="block_7"></p>
-      <p class="block_7"></p>
-      <br /><br />
-      <div class="calibre21">
-        <div class="block_4">
-          <span class="bullet_">●&nbsp;</span
-          ><span class="calibre3"><b class="calibre1">Scenario 3</b></span>
-        </div>
-      </div>
-      <p class="block_7">
-        ○ Action: Choose label: Applause, DTMF, Laughter, Music, Noise,
-        RingTone, or Unknown.
-      </p>
-      <p class="block_7">
-        ○ View: The Transcription box and Speaker box will disappear.
-      </p>
-      <p class="block_7">
-        Follow-up action: Set the appropriate turn start and end time and hit
-        “Save.”
-      </p>
-      <p class="block_7">○ Tip:</p>
-      <p class="block_21">These labels do not require transcription.</p>
-      <p class="block_21">
-        <img src="images/000011.png" alt="Image" class="calibre24" />
-      </p>
+			<p id="calibre_link-14" class="block_17">***FAQs</p>
+			<ol class="list_">
+				<li class="block_18">
+					<b class="calibre1"
+						>The segment beginning/end must contain a 100MS gap.
+					</b>
+				</li>
+			</ol>
+			<p class="block_2">
+				Please be sure that the beginning and end of each segment
+				contains a 100MS gap at most. Do not exceed 100MS. It can lay
+				somewhere in between 85-100MS, but should not exceed 100MS. Be
+				more precise on this rule in every created segment and note to
+				apply the 100MS rule accordingly in each created segment. Do not
+				use this for annotations.
+			</p>
+			<p class="block_2">
+				<img
+					src="images/000002.png"
+					alt="Image"
+					class="calibre14"
+				/>Here, the speaker has started speaking from 00:00.090 and the
+				segment has begun from 0:00.000 which lies in between 85-100MS.
+				Please use this rule at the segmentation end as well.
+			</p>
+			<p class="block_2">
+				<img src="images/000001.png" alt="Image" class="calibre15" />
+			</p>
+			<p class="block_2">
+				Here, the speaker stops speaking at 00:19.202 thus the segment
+				ends at 00:19.299, which is approximately a 100MS gap.
+			</p>
+			<p class="block_2"></p>
+			<br /><br />
+			<ol class="list_">
+				<li value="2" class="block_18">
+					<b class="calibre1"
+						>0.5-sec pause between two utterances must be split into
+						two segments.</b
+					>
+				</li>
+			</ol>
+			<p class="block_2">
+				Whenever the speaker pauses for 0.5 sec/500MS between the
+				previous and next utterance, then the segment must be split into
+				two parts.
+			</p>
+			<p class="block_2">
+				<img src="images/000000.png" alt="Image" class="calibre16" />
+			</p>
+			<p class="block_2">
+				Here the speaker stops speaking at 00:03.219 and again begins
+				speaking at 00:04.080 which clearly has a gap/pause of greater
+				than 0.5 seconds or 500MS. Thus, in these cases, two separate
+				segments must be created.
+			</p>
+			<br /><br />
+			<ol class="list_">
+				<li value="3" class="block_18">
+					<b class="calibre1">Use of annotation</b>
+				</li>
+			</ol>
+			<p class="block_2">
+				Be precise on the timestamp of the annotation. Annotation must
+				run only up to the required mark, not more or not less.
+			</p>
+			<p class="block_2">
+				<img src="images/000010.png" alt="Image" class="calibre17" />
+			</p>
+			<p class="block_2">
+				Make sure that the created annotation covers the intended sound
+				of the audio. Be precise on the use of annotation, it should not
+				contain 100MS gap as per the segmentation rules.
+			</p>
+			<p class="block_2"></p>
+			<p class="block_2"></p>
+			<br /><br />
+			<ol class="list_">
+				<li value="4" class="block_18">
+					<b class="calibre1">30-second split rule</b>
+				</li>
+			</ol>
+			<p class="block_2">
+				If a segment runs longer than 30 seconds then please split the
+				turn at the 30-second mark and create a next segment to
+				transcribe after 30 seconds. Create new segments each at the
+				30-second mark. Make sure if a word lies at the 30-second mark
+				then omit the word at first segment and
+			</p>
+			<p class="block_2">
+				include it in the next segment so that the word is not split
+				into two segments.
+			</p>
+			<p class="block_2">
+				<img src="images/000008.png" alt="Image" class="calibre18" />
+			</p>
+			<p class="block_2">
+				Here, the speaker speaks from 12:58.004 to 13:28.580 which is
+				greater than 30-seconds. Create a segment upto 30-second mark,
+				i.e. 13:28.004 and create a new segment from 13:28.005. Thus, at
+				every 30-second mark a new segment must be created if a single
+				segment intends to run for longer than 30 seconds.
+			</p>
+			<p class="block_2"></p>
+			<br /><br />
+			<ol class="list_">
+				<li value="5" class="block_18">
+					<b class="calibre1"
+						>Make sure that the sound for the intended
+						segments/annotations are covered up.</b
+					>
+				</li>
+			</ol>
+			<p class="block_2">
+				Also, do not miss any transcription. Instances where the segment
+				does not cover up the audio must be avoided.
+			</p>
+			<p class="block_2">
+				<img src="images/000013.png" alt="Image" class="calibre19" />
+			</p>
+			<p class="block_2">
+				Here the music runs upto 13:29.814 but the annotation runs only
+				upto 13:29.605, thus this must be avoided. The music annotation
+				must run upto 13:29.606 at least in order to cover up the
+				required sound in the audio.
+			</p>
+			<p class="block_2"></p>
+			<p class="block_2"></p>
+			<br /><br />
+			<ol class="list_">
+				<li value="6" class="block_18">
+					<b class="calibre1"
+						>At least 1MS gap between multiple segments on a
+						constant flow of speech</b
+					>
+				</li>
+			</ol>
+			<p class="block_2">
+				<b class="calibre1"
+					><img src="images/000004.png" alt="Image" class="calibre20"
+				/></b>
+			</p>
+			<p class="block_2"></p>
+			<p class="block_19">
+				**Please be cautious that multiple segments of the same speaker
+				must contain at least a gap of 1MS so that it does not overlap
+				the previous segment. If a segment ends at 00:03.579 and PII
+				begins, then the start time of PII must be 00:03.580 and so on.
+			</p>
+			<p class="block_2"></p>
+			<br /><br /><br /><br />
+			<ol class="list_">
+				<li value="7" class="block_18">
+					<b class="calibre1"
+						>As soon as you click the “+” button within a Loft task
+						the new Edit Annotation window will appear. The view of
+						the Edit Annotation window will change based on which
+						you label you select.</b
+					>
+				</li>
+			</ol>
+			<p class="block_2"></p>
+			<p class="block_2">
+				Please see the 3 scenarios below for how the Edit Annotation
+				window could change and what you should do in each case.
+			</p>
+			<p class="block_2"></p>
+			<p class="block_2"></p>
+			<p class="block_2"></p>
+			<p class="block_2"></p>
+			<p class="block_2"></p>
+			<div class="calibre21">
+				<div class="block_4">
+					<span class="bullet_">●&nbsp;</span
+					><span class="calibre3"
+						><b class="calibre1">Scenario 1</b></span
+					>
+				</div>
+			</div>
+			<p class="block_7">
+				○ Action: Choose label: no label (blank), or Singing.
+			</p>
+			<p class="block_7">
+				○ View: The Edit Annotation window stays the same.
+			</p>
+			<p class="block_7">
+				○ Follow-up action: Transcribe the audio and assign the
+				appropriate speaker. Set the appropriate turn start and end time
+				and hit “Save.”
+			</p>
+			<p class="block_7">○ Tip:</p>
+			<p class="block_6">
+				Do not use bracket tags in the transcription box
+				[unintelligible] [foreign speech] [singing].
+			</p>
+			<p class="block_7">
+				<img src="images/000016.png" alt="Image" class="calibre22" />
+			</p>
+			<p class="block_7"></p>
+			<p class="block_7"></p>
+			<p class="block_7"></p>
+			<p class="block_7"></p>
+			<br /><br />
+			<div class="calibre21">
+				<div class="block_4">
+					<span class="bullet_">●&nbsp;</span
+					><b class="calibre1">Scenario 2<br class="calibre4" /></b>
+				</div>
+			</div>
+			<p class="block_7">
+				○ Action: Choose label: PII/Foreign Speech/Unintelligible.
+			</p>
+			<p class="block_7">○ View: The Transcription box disappears.</p>
+			<p class="block_7">
+				○ Follow-up action: Assign to the appropriate speaker. Set the
+				appropriate turn start and end time and hit “Save.”
+			</p>
+			<p class="block_7">○ Tip:</p>
+			<p class="block_6">
+				The transcription box disappears because PII, Foreign Speech,
+				and Unintelligible speech should not be transcribed.
+			</p>
+			<p class="block_6"></p>
+			<p class="block_6">
+				PII, Foreign Speech and Unintelligible labels will automatically
+				appear in the turn in all caps.
+			</p>
+			<p class="block_7">
+				<img src="images/000005.png" alt="Image" class="calibre23" />
+			</p>
+			<p class="block_7"></p>
+			<p class="block_7"></p>
+			<p class="block_7"></p>
+			<p class="block_7"></p>
+			<p class="block_7"></p>
+			<p class="block_7"></p>
+			<p class="block_7"></p>
+			<p class="block_7"></p>
+			<p class="block_7"></p>
+			<br /><br />
+			<div class="calibre21">
+				<div class="block_4">
+					<span class="bullet_">●&nbsp;</span
+					><span class="calibre3"
+						><b class="calibre1">Scenario 3</b></span
+					>
+				</div>
+			</div>
+			<p class="block_7">
+				○ Action: Choose label: Applause, DTMF, Laughter, Music, Noise,
+				RingTone, or Unknown.
+			</p>
+			<p class="block_7">
+				○ View: The Transcription box and Speaker box will disappear.
+			</p>
+			<p class="block_7">
+				Follow-up action: Set the appropriate turn start and end time
+				and hit “Save.”
+			</p>
+			<p class="block_7">○ Tip:</p>
+			<p class="block_21">These labels do not require transcription.</p>
+			<p class="block_21">
+				<img src="images/000011.png" alt="Image" class="calibre24" />
+			</p>
 
-      <p id="calibre_link-15" class="block_22">***Video Guides for LT system</p>
+			<p id="calibre_link-15" class="block_22">
+				***Video Guides for LT system
+			</p>
 
-      <p class="block_12">
-        Please go to this link. This video covers the following topics listed
-        below:
-      </p>
+			<p class="block_12">
+				Please go to this link. This video covers the following topics
+				listed below:
+			</p>
 
-      <p class="block_12">
-        <a
-          target="_blank"
-          href="https://slack-redir.net/link?url=https%3A%2F%2Fwww.youtube.com%2Fplaylist%3Flist%3DPLzicDqm9vmqbzq5a0-5rU9Aoy711PhyiP&amp;v=3"
-          class="text_3"
-          >https://www.youtube.com/playlist?list=PLzicDqm9vmqbzq5a0-5rU9Aoy711PhyiP</a
-        >
-      </p>
+			<p class="block_12">
+				<a
+					target="_blank"
+					href="https://www.youtube.com/playlist?list=PLzicDqm9vmqbzq5a0-5rU9Aoy711PhyiP"
+					class="text_3"
+					>View Video Tutorial</a
+				>
+			</p>
 
-      <ol class="list_">
-        <li class="block_18"><b class="calibre1">30 seconds rule</b></li>
-        <li class="block_18"><b class="calibre1">500ms rule</b></li>
-        <li class="block_18">
-          <b class="calibre1">Creating speaker turn and 100ms rule</b>
-        </li>
-        <li class="block_18">
-          <b class="calibre1">Add music/noise annotation</b>
-        </li>
-        <li class="block_18">
-          <b class="calibre1">Labelling known Speaker</b>
-        </li>
-        <li class="block_18"><b class="calibre1">Non-PII</b></li>
-        <li class="block_18">
-          <b class="calibre1"
-            >PII/unintelligible segment/ formatting/1ms rule<br
-              class="calibre4" /></b
-          ><br class="calibre4" />&nbsp;
-        </li>
-      </ol>
-    </div>
-  </body>
+			<ol class="list_">
+				<li class="block_18">
+					<b class="calibre1">30 seconds rule</b>
+				</li>
+				<li class="block_18"><b class="calibre1">500ms rule</b></li>
+				<li class="block_18">
+					<b class="calibre1">Creating speaker turn and 100ms rule</b>
+				</li>
+				<li class="block_18">
+					<b class="calibre1">Add music/noise annotation</b>
+				</li>
+				<li class="block_18">
+					<b class="calibre1">Labelling known Speaker</b>
+				</li>
+				<li class="block_18"><b class="calibre1">Non-PII</b></li>
+				<li class="block_18">
+					<b class="calibre1"
+						>PII/unintelligible segment/ formatting/1ms rule<br
+							class="calibre4" /></b
+					><br class="calibre4" />&nbsp;
+				</li>
+			</ol>
+		</div>
+	</body>
 </html>
