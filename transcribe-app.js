@@ -545,7 +545,7 @@ app.get("/transcription-review", async(req, res) => {
                         res.status(400).send("error in get /get_user_name query.");
                     }
 
-                    if (typeof userName_result[0]["name"] != "undefined") {
+                    if (userName_result.length > 0 && typeof userName_result[0]["name"] != "undefined") {
                         user_name = userName_result[0]["name"];
                     }
 
@@ -557,17 +557,24 @@ app.get("/transcription-review", async(req, res) => {
                             console.error(err);
                             res.status(400).send("error in get /get_language_id query.");
                         }
-                        language_name = data[0]["Language_name"];
-                        res.render("transcription-review", {
-                            user_id: req.query.user_id,
-                            audio_url: audio_url,
-                            audio_name: result[0]["audio_name"],
-                            audio_id: req.query.audio_id,
-                            language_name: language_name,
-                            user_name: user_name,
-                        });
+                        if (data.length > 0) {
+                            language_name = data[0]["Language_name"];
+                            res.render("transcription-review", {
+                                user_id: req.query.user_id,
+                                audio_url: audio_url,
+                                audio_name: result[0]["audio_name"],
+                                audio_id: req.query.audio_id,
+                                language_name: language_name,
+                                user_name: user_name,
+                            });
+                        } else {
+                            res.send("Language Not Found");
+                        }
+
                     });
                 });
+            } else {
+                res.send("Audio Not Found.");
             }
 
             ////console.log(audio_url);
