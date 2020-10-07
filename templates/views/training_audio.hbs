@@ -744,6 +744,7 @@
       margin-top: 4rem;
       margin-left: 1rem;
       display: none;
+      
     }
 
     #already-submitted-div{
@@ -922,7 +923,7 @@
 
       //Replay Region on KeyDown
       $("html").on("keydown", function (event) {
-        if (event.altKey && event.which == 82 || event.which == 82 && event.target.id != "speaker-name" && event.target.id != "transcription-area" && event.target.id != "top-div-control-speaker-name") {
+        if (event.altKey && event.which == 82 || event.which == 82 && event.target.id != "speaker-name" && event.target.id != "transcription-area" && event.target.id != "top-div-control-speaker-name" && event.target.id !="feedback-textarea") {
           ////////console.log("Pressed");
           event.preventDefault();
           repeatRegion();
@@ -931,7 +932,7 @@
 
       //play pause on space bar
       $("html").on("keydown", function (event) {
-       if ((event.which == 32 || event.which == 96 || event.which == 48) && event.target.id != "speaker-name" && event.target.id != "transcription-area" && event.target.id != "annotation-start-minute" && event.target.id != "annotation-start-seconds" && event.target.id != "annotation-start-milliseconds" && event.target.id != "annotation-end-minute" && event.target.id != "annotation-end-seconds" && event.target.id != "annotation-end-milliseconds" && event.target.id != "top-div-control-speaker-name") {
+       if ((event.which == 32 || event.which == 96 || event.which == 48) && event.target.id != "speaker-name" && event.target.id != "transcription-area" && event.target.id != "annotation-start-minute" && event.target.id != "annotation-start-seconds" && event.target.id != "annotation-start-milliseconds" && event.target.id != "annotation-end-minute" && event.target.id != "annotation-end-seconds" && event.target.id != "annotation-end-milliseconds" && event.target.id != "top-div-control-speaker-name" && event.target.id !="feedback-textarea") {
           ////console.log(event.target);
 
           if (spectrum.isPlaying()) {
@@ -1376,7 +1377,7 @@
                   disableAllInterfaceOnSubmit();
 
                   $("#display-training-segments").show();//Display Select Tag For Correct Segments
-
+                  
                   ajaxReq();//Ajax Request to check correct incorrect segment
                   //displayHamburger();
                   $("#submit-button").hide();

@@ -1799,6 +1799,19 @@ app.use("/signature", checkNotAuthenticated, require("./routes/signature.js"));
 
 //admin server side end
 
+//Feedback Routes
+app.post("/insert-feedback-lt", (req, res) => {
+
+    let sql = `INSERT INTO feedbackLT (feedback,audio_id,feedbackCreatedAt,user_id) VALUES ("${req.body.feedback.replace(/'/g, "\\'")}","${req.body.audio_id}",Now(),"${req.body.user_id}")`
+    pool.query(sql, (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(400).send("error in get /insert-feedback-lt.");
+        }
+        res.send(result);
+    })
+})
+
 //checking authentication
 function checkNotAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {

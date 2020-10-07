@@ -34,12 +34,20 @@
     #read-guidelines-header {
         font-size: 20px;
         float: right;
-        margin-right: 60px;
+        margin-right: 10rem;
+        color: #888888;
+        /*margin-right: 16px;*/
+        text-decoration: none;
+        font-weight: 300;
+        color: #444;
+        display: inline-block;
+        margin-top: 3rem;
     }
     
     #help-icon {
         float: right;
-        margin-top: 0.8em;
+        margin-top: 3rem;
+        margin-right: 2rem;
         font-size: 24px;
         color: grey;
         cursor: pointer;
@@ -57,8 +65,7 @@
     }
     
     #top-block {
-        display: flex;
-        flex-direction: row;
+        display: block;
     }
     
     #time {
@@ -91,4 +98,69 @@
         top: 50vh;
         left: 40vw;
         display: block;
+    }
+    
+    #feedback-btn {
+        text-align: center;
+        font-size: 14px;
+        /*width: 680px;*/
+        color: #fff;
+        float: right;
+        font-weight: bold;
+        padding: 5px;
+        margin-top: 1rem;
+        background: #3e97e6;
+        display: inline-block;
+        border-radius: 4%;
+        list-style-type: none;
+        -webkit-font-smoothing: antialiased;
+        white-space: normal;
+        margin-right: 20px;
+    }
+    
+    #display-training-segments {
+        float: left;
+    }
+    
+    #feedback-modal {
+        background-color: white;
+        box-shadow: 0 0 12px black;
+        clear: both;
+        text-align: center;
+        font-size: 18px;
+        color: #333;
+        margin: 0 auto;
+        padding: 2.5rem;
+        border: 1px solid black;
+        border-radius: 1rem;
+        position: absolute;
+        width: 30vw;
+        height: 40vh;
+        z-index: 10000;
+        top: 20vh;
+        left: 30vw;
+        display: none;
+    }
+    
+    #feedback-textarea {
+        width: 30vw;
+        height: 25vh;
+    }
+    
+    #feedback-close-button {
+        background: none;
+        border: none;
+        font-size: 1.1rem;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+    
+    #feedback-submit-btn {
+        right: 0.1rem;
+        height: 2rem;
+        margin-top: 1rem;
+        background-color: blue;
+        color: #fff;
+        font-size: 18px;
+        border-radius: 10%;
+        cursor: pointer;
     }
