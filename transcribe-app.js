@@ -1415,7 +1415,7 @@ app.post("/transcription-hr-review-table-datas", (req, res) => {
     from users_audio, users , audio WHERE
     users_audio.user_id = users.user_id
     AND users_audio.audio_id = audio.audio_id
-   
+    AND (users_audio.status IS NULL OR users_audio.status = 'RETRY')
     AND users_audio.type="transcription"    
     ORDER BY users_audio.start_time DESC`;
 

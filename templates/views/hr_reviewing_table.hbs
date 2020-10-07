@@ -322,12 +322,7 @@
                                 format: {
                                     body: function (data, row, col, node) {
                                         if (col == 6) {
-                                            return table
-                                                .cell({ row: row, column: col })
-                                                .nodes()
-                                                .to$()
-                                                .find(':selected')
-                                                .text()
+                                            return $(data).find("option:selected").text()
                                         } else {
                                             return data;
                                         }
