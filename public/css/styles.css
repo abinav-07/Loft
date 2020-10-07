@@ -78,3 +78,17 @@
         flex-direction: column;
         min-height: 100vh;
     }
+    
+    #loading_flag {
+        position: absolute;
+        display: block;
+        top: 150px;
+        left: 2vw;
+        width: auto;
+        padding: 20px;
+        color: grey;
+        font-size: 3rem;
+        text-align: center;
+        font-family: Verdana, Geneva, sans-serif;
+        height: auto;
+    }
