@@ -285,7 +285,7 @@ app.get("/transcribe", (req, res) => {
                             console.error(err);
                             res.status(400).send("error in get /transcribe query.");
                         }
-                        if (result.length == 0) {
+                        if (result && result.length == 0) {
                             var sql = `INSERT INTO users_audio(user_id, audio_id, start_time) VALUES('${req.query.user_id}', '${audioId}', Now())`;
                             pool.query(sql, (err, result) => {
                                 if (err) {
@@ -362,7 +362,7 @@ app.get("/training", (req, res) => {
                         console.error(err);
                         res.status(400).send("error in get /transcribe query.");
                     }
-                    if (result.length == 0) {
+                    if (result && result.length == 0) {
                         var sql = `INSERT INTO users_audio(user_id, audio_id, start_time) VALUES('${req.query.user_id}', '${audioId}', Now())`;
                         pool.query(sql, (err, result) => {
                             if (err) {
@@ -424,7 +424,7 @@ app.get("/transcription", async(req, res) => {
                         console.error(err);
                         res.status(400).send("error in get /transcription query.");
                     }
-                    if (result.length == 0) {
+                    if (result && result.length == 0) {
                         var sql = `INSERT INTO users_audio(user_id, audio_id, start_time,type) VALUES('${req.query.user_id}', '${audioId}', Now(),"transcription")`;
                         pool.query(sql, (err, result) => {
                             if (err) {
@@ -443,7 +443,7 @@ app.get("/transcription", async(req, res) => {
                         console.error(err);
                         res.status(400).send("error in get /transcription-check-actual query");
                     }
-                    if (result.length == 0) {
+                    if (result && result.length == 0) {
                         //Inserting actual data from actual table to transcription table
                         var insert_sql = `INSERT INTO transcription (audio_id,user_id,div_className,div_title,segment_start,segment_end,actual_text)  
                                   SELECT ac.audio_id,${req.query.user_id},ac.div_className,ac.div_title,ac.segment_start,ac.segment_end,ac.annotation_text FROM actual ac WHERE audio_id='${audioId}'
@@ -557,7 +557,7 @@ app.get("/transcription-review", async(req, res) => {
                             console.error(err);
                             res.status(400).send("error in get /get_language_id query.");
                         }
-                        if (data.length > 0) {
+                        if (data && data.length > 0) {
                             language_name = data[0]["Language_name"];
                             res.render("transcription-review", {
                                 user_id: req.query.user_id,
