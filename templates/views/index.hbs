@@ -765,6 +765,7 @@
   <script src="public/js/create-div.js"></script>
   <script src="public/js/create-top-speaker-div.js"></script>
   <script src="public/js/repeat-region.js"></script>
+  <script src="public/js/loadingScreen.js"></script>
   <!--<script src="wavesurfer.js/src/drawer.multicanvas.js"></script>-->
   <script>
     var user_id;
@@ -839,6 +840,7 @@
     });
     spectrum.zoom(96);
 
+    displayWaveSurferLoading();
 
     //handle play button
     buttons.play.addEventListener("click", function (event) {

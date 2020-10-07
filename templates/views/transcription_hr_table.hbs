@@ -436,8 +436,8 @@
                                                 method: "GET",
                                                 url: `{{ webapp_basepath }}/api/tcp/test/status?user_id=${response[0].web_app_id}&language_id=${languageId}`,
                                                 success: function (quizResponse) {
-                                                    //console.log(quizResponse);
-                                                    if (quizResponse && quizResponse.result == "Not Submitted") {
+                                                    console.log(quizResponse);
+                                                    if (quizResponse && (quizResponse.audioTestResult && quizResponse.audioTestResult == "Not Submitted") ) {
                                                         status = 2;
                                                         mailParams = {
                                                             "user_id": `${response[0].web_app_id}`,
@@ -446,7 +446,7 @@
                                                             "language_id": languageId
                                                         }
                                                         //sendEmailWebapp(mailParams);
-                                                    } else if (quizResponse && quizResponse.result == "Failed") {
+                                                    } else if (quizResponse && (quizResponse.audioTestResult == "Failed" || quizResponse.quizResult=="Failed")) {
                                                         status = 6;
                                                         mailParams = {
                                                             "user_id": `${response[0].web_app_id}`,
@@ -455,7 +455,7 @@
                                                             "language_id": languageId
                                                         }
                                                         //sendEmailWebapp(mailParams);
-                                                    } else if (quizResponse && quizResponse.result == "Retry") {
+                                                    } else if (quizResponse && (quizResponse.audioTestResult == "Retry" || quizResponse.quizResult=="Retry" )) {
                                                         status = 4;
                                                         mailParams = {
                                                             "user_id": `${response[0].web_app_id}`,
@@ -463,7 +463,8 @@
                                                             "project_type_id": "2",
                                                             "language_id": languageId
                                                         }
-                                                    } else if (quizResponse && quizResponse.result == "Passed") {
+                                                    } else if ((quizResponse && quizResponse.quizResult=="Passed" && !quizResponse.audioTestResult ) || 
+                                                    (quizResponse && quizResponse.audioTestResult == "Passed" && quizResponse.quizResult=="Passed" )) {
                                                         status = 5;
                                                         mailParams = {
                                                             "user_id": `${response[0].web_app_id}`,
@@ -473,7 +474,8 @@
                                                         }
                                                         //sendEmailWebapp(mailParams);
                                                     }
-                                                    //console.log(mailParams)
+                                                    //console.log(mailParams);
+                                                    
                                                     $.ajax({
                                                         method: "POST",
                                                         url: "{{ webapp_basepath }}/api/set-user-language-project-type-status",
@@ -483,6 +485,7 @@
                                                             //recreatingHRTable();
                                                         }
                                                     });
+                                                    
                                                 }
                                             });
 

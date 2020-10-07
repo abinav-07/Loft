@@ -65,6 +65,9 @@ app.use(function(req, res, next) {
 });
 hbs.registerPartials(partialPaths);
 
+
+
+
 //Database Connection
 const pool = require("./config/pool");
 const audio_bee_pool = require("./config/audiobee-db");
@@ -253,7 +256,7 @@ app.get("/transcribe", (req, res) => {
     var audioId = req.query.audio_id;
     var audio_url = "";
 
-    if (!audioId || audioId == "undefined") {
+    if (!audioId || !req.query.user_id) {
         res.send("Error in URL. Please redirect again.")
     } else {
         if (audioId) {
@@ -264,46 +267,45 @@ app.get("/transcribe", (req, res) => {
                     res.status(400).send("error in get /transcribe query.");
                 }
 
-                audio_url = result[0]["audio_url"];
-                ////console.log(audio_url);
-                res.render("index", {
-                    user_id: req.query.user_id,
-                    audio_url: audio_url,
-                    audio_name: result[0]["audio_name"],
-                    audio_id: audioId,
-                });
-                ////console.log(result);
-            });
+                if (result && result.length > 0) {
+                    audio_url = result[0]["audio_url"];
+                    ////console.log(audio_url);
+                    res.render("index", {
+                        user_id: req.query.user_id,
+                        audio_url: audio_url,
+                        audio_name: result[0]["audio_name"],
+                        audio_id: audioId,
+                    });
 
 
-            var check_sql = `SELECT * FROM users_audio WHERE user_id = '${req.query.user_id}'
-                             AND audio_id = '${audioId}'`;
-            pool.query(check_sql, (err, result) => {
-                if (err) {
-                    console.error(err);
-                    res.status(400).send("error in get /transcribe query.");
-                }
-                if (result.length == 0) {
-                    var sql = `INSERT INTO users_audio(user_id, audio_id, start_time) VALUES('${req.query.user_id}', '${audioId}', Now())`;
-                    pool.query(sql, (err, result) => {
+                    var check_sql = `SELECT * FROM users_audio WHERE user_id = '${req.query.user_id}'
+                                    AND audio_id = '${audioId}'`;
+                    pool.query(check_sql, (err, result) => {
                         if (err) {
                             console.error(err);
                             res.status(400).send("error in get /transcribe query.");
                         }
+                        if (result.length == 0) {
+                            var sql = `INSERT INTO users_audio(user_id, audio_id, start_time) VALUES('${req.query.user_id}', '${audioId}', Now())`;
+                            pool.query(sql, (err, result) => {
+                                if (err) {
+                                    console.error(err);
+                                    res.status(400).send("error in get /transcribe query.");
+                                }
+                            });
+                        }
                     });
+                } else {
+                    res.send("Audio Not Found. Please redirect again.")
                 }
+
+
+                ////console.log(result);
             });
 
         }
 
     }
-
-    ////console.log(req.query);
-    // res.render("index", {
-    //     user_id: req.query.user_id,
-    //     audio_url: audio_url
-    // });
-    //Checking if user is already in database
 
 
 });
@@ -315,7 +317,7 @@ app.get("/training", (req, res) => {
     var audio_order;
     var audioId = req.query.audio_id;
     var user_name = "";
-    if (!audioId || audioId == "undefined") {
+    if (!audioId || !req.query.user_id) {
         res.send("Error in URL. Please redirect again.")
     } else {
         audioId = req.query.audio_id;
@@ -326,29 +328,55 @@ app.get("/training", (req, res) => {
                 res.status(400).send("error in get /transcribe query.");
             }
             //Audio Name
-            audio_url = result[0]["audio_url"];
-            //Getting audio order for training
-            if (result[0]["audio_order"] != null) {
+            if (result && result.length > 0 && result[0]["audio_order"] != null) {
+                audio_url = result[0]["audio_url"];
+                //Getting audio order for training                
                 audio_order = result[0]["audio_order"];
+
+
+                //SQL to get user name
+                var get_user_name = `SELECT * FROM users WHERE user_id='${req.query.user_id}'`;
+                pool.query(get_user_name, (err, userName_result) => {
+                    if (err) {
+                        console.error(err);
+                        res.status(400).send("error in get /get_user_name query.");
+                    }
+
+                    user_name = userName_result[0] ? userName_result[0]["name"] : "Not Found";
+                    res.render("training_audio", {
+                        user_id: req.query.user_id,
+                        audio_url: audio_url,
+                        audio_id: req.query.audio_id,
+                        audio_name: result[0]["audio_name"],
+                        audio_order: audio_order,
+                        user_name: user_name,
+                    });
+                });
+
+                //Checking if user is already in database
+
+                var check_sql = `SELECT * FROM users_audio WHERE user_id = '${req.query.user_id}'
+                                         AND audio_id = '${audioId}'`;
+                pool.query(check_sql, (err, result) => {
+                    if (err) {
+                        console.error(err);
+                        res.status(400).send("error in get /transcribe query.");
+                    }
+                    if (result.length == 0) {
+                        var sql = `INSERT INTO users_audio(user_id, audio_id, start_time) VALUES('${req.query.user_id}', '${audioId}', Now())`;
+                        pool.query(sql, (err, result) => {
+                            if (err) {
+                                console.error(err);
+                                res.status(400).send("error in get /transcribe query.");
+                            }
+                        });
+                    }
+                });
+
+            } else {
+                res.send("Audio Not Found. Please redirect again.")
             }
 
-            //SQL to get user name
-            var get_user_name = `SELECT * FROM users WHERE user_id='${req.query.user_id}'`;
-            pool.query(get_user_name, (err, userName_result) => {
-                if (err) {
-                    console.error(err);
-                    res.status(400).send("error in get /get_user_name query.");
-                }
-                user_name = userName_result[0]["name"];
-                res.render("training_audio", {
-                    user_id: req.query.user_id,
-                    audio_url: audio_url,
-                    audio_id: req.query.audio_id,
-                    audio_name: result[0]["audio_name"],
-                    audio_order: audio_order,
-                    user_name: user_name,
-                });
-            });
             ////console.log(audio_url);
         });
     }
@@ -358,26 +386,7 @@ app.get("/training", (req, res) => {
     //     user_id: req.query.user_id,
     //     audio_url: audio_url
     // });
-    //Checking if user is already in database
-    if (audioId && audioId != "undefined") {
-        var check_sql = `SELECT * FROM users_audio WHERE user_id = '${req.query.user_id}'
-    AND audio_id = '${audioId}'`;
-        pool.query(check_sql, (err, result) => {
-            if (err) {
-                console.error(err);
-                res.status(400).send("error in get /transcribe query.");
-            }
-            if (result.length == 0) {
-                var sql = `INSERT INTO users_audio(user_id, audio_id, start_time) VALUES('${req.query.user_id}', '${audioId}', Now())`;
-                pool.query(sql, (err, result) => {
-                    if (err) {
-                        console.error(err);
-                        res.status(400).send("error in get /transcribe query.");
-                    }
-                });
-            }
-        });
-    }
+
 
 });
 //Route for training end
@@ -386,24 +395,74 @@ app.get("/training", (req, res) => {
 app.get("/transcription", async(req, res) => {
     var audio_url = "";
     var audioId = req.query.audio_id;
-    if (!audioId || audioId == "undefined") {
+    if (!audioId || !req.query.user_id) {
         res.send("Error in URL. Please redirect again.")
     } else {
         audioId = req.query.audio_id;
         var get_audio_url = `SELECT * FROM audio WHERE audio_id='${req.query.audio_id}'`;
-        await pool.query(get_audio_url, (err, result) => {
+        pool.query(get_audio_url, (err, result) => {
             if (err) {
                 console.error(err);
                 res.status(400).send("error in get /transcription query.");
             }
-            audio_url = result[0]["audio_url"];
-            ////console.log(audio_url);
-            res.render("transcription", {
-                user_id: req.query.user_id,
-                audio_url: audio_url,
-                audio_name: result[0]["audio_name"],
-                audio_id: req.query.audio_id,
-            });
+            if (result && result.length > 0) {
+                audio_url = result[0]["audio_url"];
+                ////console.log(audio_url);
+                res.render("transcription", {
+                    user_id: req.query.user_id,
+                    audio_url: audio_url,
+                    audio_name: result[0]["audio_name"],
+                    audio_id: req.query.audio_id,
+                });
+
+                //Checking if user is already in database
+
+                var check_sql = `SELECT * FROM users_audio WHERE user_id = '${req.query.user_id}'
+        AND audio_id = '${audioId}' AND type="transcription"`;
+                pool.query(check_sql, (err, result) => {
+                    if (err) {
+                        console.error(err);
+                        res.status(400).send("error in get /transcription query.");
+                    }
+                    if (result.length == 0) {
+                        var sql = `INSERT INTO users_audio(user_id, audio_id, start_time,type) VALUES('${req.query.user_id}', '${audioId}', Now(),"transcription")`;
+                        pool.query(sql, (err, result) => {
+                            if (err) {
+                                console.error(err);
+                                res.status(400).send("error in get /transcribe query.");
+                            }
+                        });
+                    }
+                });
+
+                //Checking if user is already in database
+                var check_actual_data_in_transcription = `SELECT * FROM transcription WHERE user_id = '${req.query.user_id}'
+                        AND audio_id = '${audioId}'`;
+                pool.query(check_actual_data_in_transcription, (err, result) => {
+                    if (err) {
+                        console.error(err);
+                        res.status(400).send("error in get /transcription-check-actual query");
+                    }
+                    if (result.length == 0) {
+                        //Inserting actual data from actual table to transcription table
+                        var insert_sql = `INSERT INTO transcription (audio_id,user_id,div_className,div_title,segment_start,segment_end,actual_text)  
+                                  SELECT ac.audio_id,${req.query.user_id},ac.div_className,ac.div_title,ac.segment_start,ac.segment_end,ac.annotation_text FROM actual ac WHERE audio_id='${audioId}'
+                                  AND NOT(ac.div_className = "Noise" OR ac.div_className = "DTMF" OR ac.div_className = "Laughter" OR ac.div_className = "Applause" OR ac.div_className = "Music" OR ac.div_className = "Ringtone") 
+                                  `;
+
+                        pool.query(insert_sql, (err, result) => {
+                            if (err) {
+                                console.error(err);
+                                res.status(400).send("error in get /transcription query");
+                            }
+                        });
+                    }
+                });
+
+            } else {
+                res.send("Audio Not Found. Please redirect again.")
+            }
+
             ////console.log(result);
         });
     }
@@ -413,53 +472,7 @@ app.get("/transcription", async(req, res) => {
     //     user_id: req.query.user_id,
     //     audio_url: audio_url
     // });
-    //Checking if user is already in database
-    if (audioId && audioId != "undefined") {
-        var check_sql = `SELECT * FROM users_audio WHERE user_id = '${req.query.user_id}'
-    AND audio_id = '${audioId}' AND type="transcription"`;
-        await pool.query(check_sql, (err, result) => {
-            if (err) {
-                console.error(err);
-                res.status(400).send("error in get /transcription query.");
-            }
-            if (result.length == 0) {
-                var sql = `INSERT INTO users_audio(user_id, audio_id, start_time,type) VALUES('${req.query.user_id}', '${audioId}', Now(),"transcription")`;
-                pool.query(sql, (err, result) => {
-                    if (err) {
-                        console.error(err);
-                        res.status(400).send("error in get /transcribe query.");
-                    }
-                });
-            }
-        });
 
-        //Checking if user is already in database
-        var check_actual_data_in_transcription = `SELECT * FROM transcription WHERE user_id = '${req.query.user_id}'
-                    AND audio_id = '${audioId}'`;
-        await pool.query(check_actual_data_in_transcription, (err, result) => {
-            if (err) {
-                console.error(err);
-                res.status(400).send("error in get /transcription-check-actual query");
-            }
-            if (result.length == 0) {
-                //Inserting actual data from actual table to transcription table
-                var insert_sql = `INSERT INTO transcription (audio_id,user_id,div_className,div_title,segment_start,segment_end,actual_text)  
-                              SELECT ac.audio_id,${req.query.user_id},ac.div_className,ac.div_title,ac.segment_start,ac.segment_end,ac.annotation_text FROM actual ac WHERE audio_id='${audioId}'
-                              AND NOT(ac.div_className = "Noise" OR ac.div_className = "DTMF" OR ac.div_className = "Laughter" OR ac.div_className = "Applause" OR ac.div_className = "Music" OR ac.div_className = "Ringtone") 
-                              `;
-
-                pool.query(insert_sql, (err, result) => {
-                    if (err) {
-                        console.error(err);
-                        res.status(400).send("error in get /transcription query");
-                    }
-                });
-                ////console.log("HERE");
-                ////console.log(result.length);
-                ////console.log(insert_sql);
-            }
-        });
-    }
 
 });
 //Route for transcription end
@@ -480,7 +493,7 @@ app.get("/transcription-task", async(req, res) => {
                 console.error(err);
                 res.status(400).send("error in get /transcription query.");
             }
-            if (typeof result[0] != "undefined" || result.length != 0) {
+            if (typeof result[0] != "undefined" || result.length > 0) {
                 audioId = result[0]["audio_id"];
                 audio_url = result[0]["audio_url"];
                 ////console.log(audio_url);
@@ -503,16 +516,15 @@ app.get("/transcription-task", async(req, res) => {
 });
 //Route for transcription end
 
-//Route for transcription review
+//Route for transcription review check here
 app.get("/transcription-review", async(req, res) => {
     var audio_url = "";
     var user_name = "";
     var audioId = req.query.audio_id;
     var language_name = "";
     var languageId = "";
-    if (typeof req.query.audio_id == "undefined") {
-        audioId = 4;
-        audio_url = "cryophile.wav";
+    if (!audioId || !req.query.user_id) {
+        res.send("Error in URL. Please redirect again.")
     } else {
         audioId = req.query.audio_id;
         var get_audio_url = `SELECT * FROM audio WHERE audio_id='${req.query.audio_id}'`;
@@ -521,40 +533,50 @@ app.get("/transcription-review", async(req, res) => {
                 console.error(err);
                 res.status(400).send("error in get /transcription query.");
             }
-            audio_url = result[0]["audio_url"];
-            languageId = result[0]["Language_id"];
+            if (result && result.length > 0) {
+                audio_url = result[0]["audio_url"];
+                languageId = result[0]["Language_id"];
 
-            //SQL to get user name
-            var get_user_name = `SELECT * FROM users WHERE user_id='${req.query.user_id}'`;
-            pool.query(get_user_name, async(err, userName_result) => {
-                if (err) {
-                    console.error(err);
-                    res.status(400).send("error in get /get_user_name query.");
-                }
-
-                if (typeof userName_result[0]["name"] != "undefined") {
-                    user_name = userName_result[0]["name"];
-                }
-
-                var get_language_id = `SELECT * FROM languages WHERE Language_id=${languageId}`;
-
-                await audio_bee_pool.query(get_language_id, (err, data) => {
-                    ////console.log(data);
+                //SQL to get user name
+                var get_user_name = `SELECT * FROM users WHERE user_id='${req.query.user_id}'`;
+                pool.query(get_user_name, async(err, userName_result) => {
                     if (err) {
                         console.error(err);
-                        res.status(400).send("error in get /get_language_id query.");
+                        res.status(400).send("error in get /get_user_name query.");
                     }
-                    language_name = data[0]["Language_name"];
-                    res.render("transcription-review", {
-                        user_id: req.query.user_id,
-                        audio_url: audio_url,
-                        audio_name: result[0]["audio_name"],
-                        audio_id: req.query.audio_id,
-                        language_name: language_name,
-                        user_name: user_name,
+
+                    if (userName_result.length > 0 && typeof userName_result[0]["name"] != "undefined") {
+                        user_name = userName_result[0]["name"];
+                    }
+
+                    var get_language_id = `SELECT * FROM languages WHERE Language_id=${languageId}`;
+
+                    await audio_bee_pool.query(get_language_id, (err, data) => {
+                        ////console.log(data);
+                        if (err) {
+                            console.error(err);
+                            res.status(400).send("error in get /get_language_id query.");
+                        }
+                        if (data.length > 0) {
+                            language_name = data[0]["Language_name"];
+                            res.render("transcription-review", {
+                                user_id: req.query.user_id,
+                                audio_url: audio_url,
+                                audio_name: result[0]["audio_name"],
+                                audio_id: req.query.audio_id,
+                                language_name: language_name,
+                                user_name: user_name,
+                            });
+                        } else {
+                            res.send("Language Not Found");
+                        }
+
                     });
                 });
-            });
+            } else {
+                res.send("Audio Not Found.");
+            }
+
             ////console.log(audio_url);
 
             ////console.log(result);
@@ -607,15 +629,14 @@ app.post("/route-for-diff-check", (req, res) => {
 app.get("/guided-audio", (req, res) => {
     var audio_url = "";
     var audioId = req.query.audio_id;
-    if (typeof req.query.audio_id == "undefined") {
+    if (!audioId) {
         audioId = 4;
-        audio_url = "cryophile.wav";
     } else {
         audioId = 4;
     }
     res.render("guidedAudio", {
         user_id: req.query.user_id,
-        audio_url: "cryophile.wav",
+        audio_url: "https://audiobee-production-user-files.s3.eu-north-1.amazonaws.com/transcription/cryophile.wav",
         audio_id: 4,
     });
 });
@@ -624,7 +645,7 @@ app.get("/guided-audio", (req, res) => {
 app.get("/actual-data-admin", (req, res) => {
     var audioId = req.query.audio_id;
     var audio_url = "";
-    if (!audioId || audioId == "undefined") {
+    if (!audioId) {
         res.send("Error in URL. Please redirect again.");
     } else {
         var get_audio_url = `SELECT * FROM audio WHERE audio_id='${req.query.audio_id}'`;
@@ -633,13 +654,18 @@ app.get("/actual-data-admin", (req, res) => {
                 console.error(err);
                 res.status(400).send("error in get /transcribe query.");
             }
-            audio_url = result[0]["audio_url"];
-            ////console.log(audio_url);
-            res.render("actual_data_insert", {
-                audio_url: audio_url,
-                audio_name: result[0]["audio_name"],
-                audio_id: audioId,
-            });
+            if (result && result.length > 0) {
+                audio_url = result[0]["audio_url"];
+                ////console.log(audio_url);
+                res.render("actual_data_insert", {
+                    audio_url: audio_url,
+                    audio_name: result[0]["audio_name"],
+                    audio_id: audioId,
+                });
+            } else {
+                res.send("Audio Not Found.");
+            }
+
             ////console.log(result);
         });
     }

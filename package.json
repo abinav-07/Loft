@@ -19,6 +19,7 @@
     "lodash": "^4.17.20",
     "morgan": "^1.10.0",
     "mysql": "^2.18.1",
+    "mysql2": "^2.2.5",
     "node-fetch": "^2.6.0",
     "node-google-drive-new": "^1.1.4",
     "passport": "^0.4.1",
@@ -27,6 +28,7 @@
     "promise": "^8.0.3",
     "require": "^2.4.20",
     "rotating-file-stream": "^2.1.3",
+    "sequelize": "^6.3.5",
     "waveform-data": "^3.1.0",
     "wavesurfer.js": "^3.3.1",
     "web-audio-api": "^0.2.2"

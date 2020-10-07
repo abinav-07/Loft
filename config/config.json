@@ -1,6 +1,23 @@
 {
-    "accessKeyId":"AKIAWOGIX3WQ3BVTRDPG",
-    "secretAccessKey":"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",
-    "region":"us-east-2",
-    "version":"2006-03-01"
+  "development": {
+    "username": "root",
+    "password": null,
+    "database": "database_development",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "root",
+    "password": null,
+    "database": "database_test",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "root",
+    "password": null,
+    "database": "database_production",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
 }
