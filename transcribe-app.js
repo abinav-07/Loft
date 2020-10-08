@@ -132,7 +132,7 @@ app.get("/", (req, res) => {
                 res.status(400).send(err);
             }
             ////console.log(result);
-            if (result.length == 0) {
+            if (result && result.length == 0) {
                 var sql = `INSERT INTO users(name, email, web_app_id) VALUES('${req.query.full_name}', '${req.query.email}', '${req.query.user_id}')`;
                 pool.query(sql, (err, result) => {
                     if (err) {
@@ -156,7 +156,7 @@ app.get("/", (req, res) => {
                                     console.error(err);
                                     res.status(400).send("Error in Language Id.");
                                 } else {
-                                    if (result1.length > 0) {
+                                    if (result1 && result1.length > 0) {
                                         res.redirect(
                                             `/transcription?user_id=${result.insertId}&audio_id=${result1[0]["audio_id"]}`
                                         );
@@ -189,7 +189,7 @@ app.get("/", (req, res) => {
                                 console.error(err);
                                 res.status(400).send("Error in Language Id.");
                             } else {
-                                if (result1.length > 0) {
+                                if (result1 && result1.length > 0) {
                                     res.redirect(
                                         `/transcription?user_id=${result[0].user_id}&audio_id=${result1[0]["audio_id"]}`
                                     );
@@ -214,7 +214,7 @@ app.get("/", (req, res) => {
                                 console.error(err);
                                 res.status(400).send("Error in Language Id.");
                             } else {
-                                if (result1.length > 0) {
+                                if (result1 && result1.length > 0) {
                                     res.redirect(
                                         `/transcription?user_id=${result[0].user_id}&audio_id=${result1[0]["audio_id"]}`
                                     );
@@ -493,7 +493,7 @@ app.get("/transcription-task", async(req, res) => {
                 console.error(err);
                 //res.status(400).send("error in get /transcription query.");
             }
-            if (typeof result[0] != "undefined" || result.length > 0) {
+            if (result && result.length > 0) {
                 audioId = result[0]["audio_id"];
                 audio_url = result[0]["audio_url"];
                 ////console.log(audio_url);
@@ -545,8 +545,10 @@ app.get("/transcription-review", async(req, res) => {
                         res.status(400).send("error in get /get_user_name query.");
                     }
 
-                    if (userName_result.length > 0 && typeof userName_result[0]["name"] != "undefined") {
+                    if (userName_result && userName_result.length > 0 && typeof userName_result[0]["name"] != "undefined") {
                         user_name = userName_result[0]["name"];
+                    } else {
+                        user_name = "Not Found"
                     }
 
                     var get_language_id = `SELECT * FROM languages WHERE Language_id=${languageId}`;
@@ -1269,7 +1271,7 @@ app.post("/register-hr", async(req, res) => {
         let checkSql = `SELECT * FROM reviewers 
                     WHERE reviewer_email='${req.body.email}'`;
         pool.query(checkSql, (err, result) => {
-            if (result.length > 0) {
+            if (result && result.length > 0) {
                 ////console.log("Already Registered");
                 res.redirect("/hr-login-form");
             } else {
