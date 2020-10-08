@@ -814,6 +814,8 @@
     spectrum.zoom(96);
 
     displayWaveSurferLoading();
+    //Hiding the feedback button for admins
+    $("#feedback-btn").hide();
 
     //handle play button
     buttons.play.addEventListener("click", function (event) {
