@@ -693,7 +693,8 @@ app.post("/database", (req, res) => {
 //Insert Segments Into actual Table Database
 app.post("/insert-into-actual-data", (req, res) => {
     let sql = `
-            INSERT INTO actual(div_className, div_title, segment_start, segment_end, annotation_text, audio_id) VALUES('${req.body.speakerName}', '${req.body.annotationType}', '${req.body.segmentStart}', '${req.body.segmentEnd}', '${req.body.annotationText.replace(/'/g, "\\'")}', '${req.body.audio_id}')
+            INSERT INTO actual(div_className, div_title, segment_start, segment_end, annotation_text, audio_id) VALUES('${req.body.speakerName}', '${req.body.annotationType}', '${req.body.segmentStart}', '${req.body.segmentEnd}',
+             '${req.body.annotationText.replace(/'/g, "\\'")}', '${req.body.audio_id}')
             `;
     // //console.log(sql);
     pool.query(sql, (err, result) => {
