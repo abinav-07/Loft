@@ -493,7 +493,7 @@ app.get("/transcription-task", async(req, res) => {
                 console.error(err);
                 //res.status(400).send("error in get /transcription query.");
             }
-            if (typeof result[0] != "undefined" || result.length > 0) {
+            if (result && result.length > 0) {
                 audioId = result[0]["audio_id"];
                 audio_url = result[0]["audio_url"];
                 ////console.log(audio_url);
