@@ -1580,7 +1580,7 @@ app.post("/set-endtime-null-on-retry", (req, res) => {
                     console.error(resetErr);
                     res.status(400).send("error in get /reset-transcription-data-for-retry.");
                 }
-                var insert_into_users_logs_sql = `INSERT INTO users_audio_logs(users_audio_id) VALUES (${req.body.user_id})`;
+                var insert_into_users_logs_sql = `INSERT INTO users_audio_logs(users_audio_id,status) VALUES (${req.body.user_id},"RETRY")`;
                 pool.query(insert_into_users_logs_sql, (err1, result1) => {
                         if (err1) {
                             console.error(resetErr);
@@ -1605,7 +1605,7 @@ app.post("/set-endtime-null-on-retry", (req, res) => {
                     console.error(resetErr);
                     res.status(400).send("error in get /reset-transcription-data-for-retry.");
                 }
-                var insert_into_users_logs_sql = `INSERT INTO users_audio_logs(users_audio_id) VALUES (${req.body.user_id})`;
+                var insert_into_users_logs_sql = `INSERT INTO users_audio_logs(users_audio_id,status) VALUES (${req.body.user_id},"RETRY")`;
                 pool.query(insert_into_users_logs_sql, (err1, result1) => {
                         if (err1) {
                             console.error(err1);
@@ -1652,7 +1652,7 @@ app.post("/reset-transcription-data-for-retry", (req, res) => {
                         console.error(resetErr);
                         res.status(400).send("error in get /reset-transcription-data-for-retry.");
                     }
-                    var insert_into_users_logs_sql = `INSERT INTO users_audio_logs(users_audio_id) VALUES (${req.body.user_id})`;
+                    var insert_into_users_logs_sql = `INSERT INTO users_audio_logs(users_audio_id,status) VALUES (${req.body.user_id},"RETRY")`;
                     pool.query(insert_into_users_logs_sql, (err1, result1) => {
                             if (err1) {
                                 console.error(resetErr);
@@ -1698,7 +1698,14 @@ app.post("/reset-transcription-data-for-retry", (req, res) => {
                         console.error(resetErr);
                         res.status(400).send("error in get /reset-transcription-data-for-retry.");
                     }
-                    //console.log(resetResult)
+                    var insert_into_users_logs_sql = `INSERT INTO users_audio_logs(users_audio_id,status) VALUES (${req.body.user_id},"RETRY")`;
+                    pool.query(insert_into_users_logs_sql, (err1, result1) => {
+                            if (err1) {
+                                console.error(resetErr);
+                                res.status(400).send("error in get /insert-users_audio_logs-data-for-retry-transcription.");
+                            }
+                        })
+                        //console.log(resetResult)
                 })
                 res.send(result);
             });
@@ -1722,6 +1729,20 @@ app.post("/confirm-pass-fail-hr-review", (req, res) => {
             console.error(err);
             res.status(400).send("error in get /confirm-pass-fail-hr-review query.");
         }
+        var check_in_users_audio_logs = `SELECT * FROM users_audio_logs WHERE users_audio_id=${req.body.userId}`;
+        pool.query(check_in_users_audio_logs, (err1, result1) => {
+            if (err1) {
+                console.log(err1);
+            }
+            if (result1 && result1.length > 0) {
+                var setStatusLog = `UPDATE users_audio_logs SET status=${req.body.changedPassFailValue} WHERE users_audio_id=${req.body.userId} AND id=${result1[result1.length-1].id}`
+                pool.query(setStatusLog, (err2, result2) => {
+                    if (err2) {
+                        console.log(err2);
+                    }
+                })
+            }
+        });
 
         let update_sql_on_retry = `
         UPDATE users_audio

@@ -12,15 +12,15 @@ module.exports = {
                     type: Sequelize.DataTypes.INTEGER,
                     allowNull: false,
                 },
-                audio_id: {
-                    type: Sequelize.DataTypes.INTEGER,
-                    allowNull: true,
+                // audio_id: {
+                //     type: Sequelize.DataTypes.INTEGER,
+                //     allowNull: true,
 
-                },
-                user_id: {
-                    type: Sequelize.DataTypes.INTEGER,
-                    allowNull: true,
-                },
+                // },
+                // user_id: {
+                //     type: Sequelize.DataTypes.INTEGER,
+                //     allowNull: true,
+                // },
 
                 status: {
                     type: Sequelize.DataTypes.STRING,
