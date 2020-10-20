@@ -1627,7 +1627,7 @@ app.post("/reset-transcription-data-for-retry", (req, res) => {
             console.error(err1);
             res.status(400).send("error in get /select-users_audio_logs-data-for-retry.");
         }
-        console.log(checkResult);
+        //console.log(checkResult);
         if (checkResult && checkResult.length < 2) {
             var reset_sql = `Update transcription 
                     SET annotation_text=""
@@ -1735,7 +1735,7 @@ app.post("/confirm-pass-fail-hr-review", (req, res) => {
                 console.log(err1);
             }
             if (result1 && result1.length > 0) {
-                var setStatusLog = `UPDATE users_audio_logs SET status=${req.body.changedPassFailValue} WHERE users_audio_id=${req.body.userId} AND id=${result1[result1.length-1].id}`
+                var setStatusLog = `UPDATE users_audio_logs SET status="${req.body.changedPassFailValue}" WHERE users_audio_id=${req.body.userId} AND id=${result1[result1.length-1].id}`
                 pool.query(setStatusLog, (err2, result2) => {
                     if (err2) {
                         console.log(err2);
