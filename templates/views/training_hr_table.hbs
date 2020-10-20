@@ -375,7 +375,7 @@
             var clickedUserName = event.target.closest("tr").getAttribute("data-user-name");//This is equal to user name   
 
             //On Confirm Click
-            $(`button.${userId}`).on("click", async () => {
+            $(`button.${userId}`).unbind("click").bind("click", async () => {
                 var changedPassFailValue = $(`select.${userId}`).val();
                 params = {
                     userId,
