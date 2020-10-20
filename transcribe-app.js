@@ -280,6 +280,7 @@ app.get("/transcribe", (req, res) => {
 
                     var check_sql = `SELECT * FROM users_audio WHERE user_id = '${req.query.user_id}'
                                     AND audio_id = '${audioId}'`;
+
                     pool.query(check_sql, (err, result) => {
                         if (err) {
                             console.error(err);
@@ -292,8 +293,40 @@ app.get("/transcribe", (req, res) => {
                                     console.error(err);
                                     res.status(400).send("error in get /transcribe query.");
                                 }
+
+                            });
+                        } else if (result && result.length > 0) { //In case of Retry 
+                            var check_in_users_audio_logs = `SELECT * FROM users_audio_logs WHERE users_audio_id IN (SELECT users_audio_id FROM users_audio WHERE 
+                                    user_id='${req.query.user_id}' 
+                                    AND audio_id='${audioId}' 
+                                    AND type="segmentation"
+                                )`;
+                            pool.query(check_in_users_audio_logs, (err, result1) => {
+                                if (err) {
+                                    console.error(err);
+                                    res.status(400).send("error in get /transcribe check_users_audio_logs query.");
+                                }
+                                if (result1 && result1.length > 0) {
+                                    var update_start_time_in_users_logs = `UPDATE users_audio_logs SET start_time=NOW() WHERE start_time IS NULL AND users_audio_id=${result1[0].users_audio_id}`;
+                                    pool.query(update_start_time_in_users_logs, (err2, result2) => {
+                                        if (err2) {
+                                            console.error(err);
+                                            res.status(400).send("error in get /transcribe update_users_audio_logs query.");
+                                        }
+                                    });
+                                }
+                                // else if (result1 && result1.length === 0) {
+                                //     var insert_into_users_logs_sql = `INSERT INTO users_audio_logs(users_audio_id,audio_id,user_id,start_time) VALUES (${result1.users_audio_id},${audioId},${req.query.user_id},NOW())`
+                                //     pool.query(insert_into_users_logs_sql, (err, result) => {
+                                //         if (err) {
+                                //             console.error(err);
+                                //             res.status(400).send("error in get /transcribe users_audio_logs query.");
+                                //         }
+                                //     })
+                                // }
                             });
                         }
+
                     });
                 } else {
                     res.send("Audio Not Found. Please redirect again.")
@@ -369,6 +402,34 @@ app.get("/training", (req, res) => {
                                 console.error(err);
                                 res.status(400).send("error in get /transcribe query.");
                             }
+                            // var insert_into_users_logs_sql = `INSERT INTO users_audio_logs(users_audio_id,audio_id,user_id,start_time) VALUES (${result.insertId},${audioId},${req.query.user_id},NOW())`
+                            // pool.query(insert_into_users_logs_sql, (err, result) => {
+                            //     if (err) {
+                            //         console.error(err);
+                            //         res.status(400).send("error in get /training users_audio_logs query.");
+                            //     }
+                            // })
+                        });
+                    } else if (result && result.length > 0) {
+                        var check_in_users_audio_logs = `SELECT * FROM users_audio_logs WHERE users_audio_id IN (SELECT users_audio_id FROM users_audio WHERE 
+                                user_id='${req.query.user_id}' 
+                                AND audio_id='${audioId}' 
+                                AND type="segmentation"
+                            )`;
+                        pool.query(check_in_users_audio_logs, (err, result1) => {
+                            if (err) {
+                                console.error(err);
+                                res.status(400).send("error in get /training check_users_audio_logs query.");
+                            }
+                            if (result1 && result1.length > 0) {
+                                var update_start_time_in_users_logs = `UPDATE users_audio_logs SET start_time=NOW() WHERE start_time IS NULL AND users_audio_id=${result1[0].users_audio_id}`;
+                                pool.query(update_start_time_in_users_logs, (err2, result2) => {
+                                    if (err2) {
+                                        console.error(err);
+                                        res.status(400).send("error in get /training update_users_audio_logs query.");
+                                    }
+                                });
+                            }
                         });
                     }
                 });
@@ -430,6 +491,37 @@ app.get("/transcription", async(req, res) => {
                             if (err) {
                                 console.error(err);
                                 res.status(400).send("error in get /transcribe query.");
+                            }
+                            // var insert_into_users_logs_sql = `INSERT INTO users_audio_logs(users_audio_id,audio_id,user_id,start_time) VALUES (${result.insertId},${audioId},${req.query.user_id},NOW())`
+                            // pool.query(insert_into_users_logs_sql, (err, result) => {
+                            //     if (err) {
+                            //         console.error(err);
+                            //         res.status(400).send("error in get /transcribe users_audio_logs query.");
+                            //     }
+                            // })
+                        });
+                    } else if (result && result.length > 0) {
+                        var check_in_users_audio_logs = `SELECT * FROM users_audio_logs WHERE users_audio_id IN (SELECT users_audio_id FROM users_audio WHERE 
+                                user_id='${req.query.user_id}' 
+                                AND audio_id='${audioId}' 
+                                AND type="transcription"
+                            )`;
+                        //console.log(check_in_users_audio_logs);
+                        pool.query(check_in_users_audio_logs, (err1, result1) => {
+                            if (err1) {
+                                console.error(err);
+                                //res.status(400).send("error in get /training check_users_audio_logs query.");
+                            }
+                            if (result1 && result1.length > 0) {
+                                // console.log(result1[0].users_audio_id);
+                                var update_start_time_in_users_logs = `UPDATE users_audio_logs SET start_time=NOW() WHERE start_time IS NULL AND users_audio_id=${result1[0].users_audio_id}`;
+                                console.log(update_start_time_in_users_logs);
+                                pool.query(update_start_time_in_users_logs, (err2, result2) => {
+                                    if (err2) {
+                                        console.error(err);
+                                        //res.status(400).send("error in get /training update_users_audio_logs query.");
+                                    }
+                                });
                             }
                         });
                     }
@@ -1161,6 +1253,28 @@ app.post("/save-test-score-on-users_audio_table", (req, res) => {
                 .status(400)
                 .send("error in get /get-segments-with-same-speaker query.");
         }
+        var check_in_users_audio_logs = `SELECT * FROM users_audio_logs WHERE users_audio_id IN 
+                                                (SELECT users_audio_id FROM users_audio WHERE
+                                                 user_id = "${req.body.user_id}"
+                                                AND audio_id = ${req.body.audio_id}
+                                                AND type="segmentation")
+                                                `;
+        pool.query(check_in_users_audio_logs, (err1, result1) => {
+            if (err1) {
+                console.log(err1);
+            }
+            if (result1 && result1.length > 0) {
+                var update_end_time_in_users_logs = `UPDATE users_audio_logs SET end_time=NOW() WHERE end_time IS NULL users_audio_id IN (SELECT users_audio_id FROM users_audio WHERE
+                    user_id = "${req.body.user_id}"
+                   AND audio_id = ${req.body.audio_id}
+                   AND type="segmentation")`;
+                pool.query(update_end_time_in_users_logs, (err2, result2) => {
+                    if (err2) {
+                        console.log(err2);
+                    }
+                })
+            }
+        });
         ////console.log(result);
         res.send(result);
     });
@@ -1188,9 +1302,30 @@ app.post(
                 console.error(err);
                 res
                     .status(400)
-                    .send("error in get /get-segments-with-same-speaker query.");
+                    .send("error in get /save-test-on-transcription query.");
             }
-            ////console.log(result);
+            //console.log(result);
+            var check_in_users_audio_logs = `SELECT * FROM users_audio_logs WHERE users_audio_id IN (SELECT users_audio_id FROM users_audio WHERE
+                    user_id = "${req.body.user_id}"
+                    AND audio_id = "${req.body.audio_id}"
+                    AND type="transcription" )`;
+            pool.query(check_in_users_audio_logs, (err1, result1) => {
+                if (err1) {
+                    console.log(err1);
+                }
+                if (result1 && result1.length > 0) {
+                    var update_end_time_in_users_logs = `UPDATE users_audio_logs SET end_time=NOW() WHERE end_time IS NULL AND users_audio_id IN (SELECT users_audio_id FROM users_audio WHERE
+                                user_id = "${req.body.user_id}"
+                               AND audio_id = ${req.body.audio_id}
+                               AND type="transcription")`;
+                    pool.query(update_end_time_in_users_logs, (err2, result2) => {
+                        if (err2) {
+                            console.log(err2);
+                        }
+                    })
+                }
+            });
+
             res.send(result);
         });
     }
@@ -1435,8 +1570,112 @@ app.post("/transcription-hr-review-table-datas", (req, res) => {
     });
 });
 
+app.post("/set-endtime-null-on-retry", (req, res) => {
+    var check_in_users_audio_logs = `SELECT * FROM users_audio_logs WHERE users_audio_id=${req.body.user_id}`;
+    pool.query(check_in_users_audio_logs, (err, result) => {
+        if (result && result.length < 2) {
+            var setStatusNull = `Update users_audio SET status="RETRY", end_time=NULL WHERE users_audio_id=${req.body.user_id}`;
+            pool.query(setStatusNull, (resetErr, resetResult) => {
+                if (resetErr) {
+                    console.error(resetErr);
+                    res.status(400).send("error in get /reset-transcription-data-for-retry.");
+                }
+                var insert_into_users_logs_sql = `INSERT INTO users_audio_logs(users_audio_id) VALUES (${req.body.user_id})`;
+                pool.query(insert_into_users_logs_sql, (err1, result1) => {
+                        if (err1) {
+                            console.error(resetErr);
+                            res.status(400).send("error in get /insert-users_audio_logs-data-for-retry.");
+                        }
+                    })
+                    //console.log(resetResult)
+            })
+        } else if (result && result.length >= 2) {
+            //Set Fail if more than 2 retries
+            var setStatusFail = `Update users_audio SET status="FAIL" WHERE users_audio_id=${req.body.user_id}`;
+            pool.query(setStatusFail, (err, result3) => {
+                if (err) {
+                    console.error(err);
+                    res.status(400).send("error in get /update-users_audio-data-for-retry.");
+                }
+            })
+        } else {
+            var setStatusNull = `Update users_audio SET status="RETRY", end_time=NULL WHERE users_audio_id=${req.body.user_id}`;
+            pool.query(setStatusNull, (resetErr, resetResult) => {
+                if (resetErr) {
+                    console.error(resetErr);
+                    res.status(400).send("error in get /reset-transcription-data-for-retry.");
+                }
+                var insert_into_users_logs_sql = `INSERT INTO users_audio_logs(users_audio_id) VALUES (${req.body.user_id})`;
+                pool.query(insert_into_users_logs_sql, (err1, result1) => {
+                        if (err1) {
+                            console.error(err1);
+                            res.status(400).send("error in get /insert-users_audio_logs-data-for-retry.");
+                        }
+                    })
+                    //console.log(resetResult)
+            })
+        }
+    })
+
+})
+
+
 app.post("/reset-transcription-data-for-retry", (req, res) => {
-    var reset_sql = `Update transcription 
+    var check_in_users_audio_logs = `SELECT * FROM users_audio_logs WHERE users_audio_id=${req.body.user_id}`;
+    pool.query(check_in_users_audio_logs, (err1, checkResult) => {
+        if (err1) {
+            console.error(err1);
+            res.status(400).send("error in get /select-users_audio_logs-data-for-retry.");
+        }
+        console.log(checkResult);
+        if (checkResult && checkResult.length < 2) {
+            var reset_sql = `Update transcription 
+                    SET annotation_text=""
+                    WHERE user_id IN (
+                        SELECT users_audio.user_id FROM users_audio
+                        WHERE users_audio_id = "${req.body.user_id}"
+                    ) AND audio_id IN (
+                        SELECT users_audio.audio_id FROM users_audio
+                        WHERE users_audio_id = "${req.body.user_id}"
+                    )
+                `;
+
+            pool.query(reset_sql, (err, result) => {
+                if (err) {
+                    console.error(err);
+                    //res.status(400).send("error in get /reset-transcription-data-for-retry.");
+                }
+                var setStatusNull = `Update users_audio SET status="RETRY", end_time=NULL WHERE users_audio_id=${req.body.user_id} AND type="transcription"`;
+                //console.log(setStatusNull);
+                pool.query(setStatusNull, (resetErr, resetResult) => {
+                    if (resetErr) {
+                        console.error(resetErr);
+                        res.status(400).send("error in get /reset-transcription-data-for-retry.");
+                    }
+                    var insert_into_users_logs_sql = `INSERT INTO users_audio_logs(users_audio_id) VALUES (${req.body.user_id})`;
+                    pool.query(insert_into_users_logs_sql, (err1, result1) => {
+                            if (err1) {
+                                console.error(resetErr);
+                                res.status(400).send("error in get /insert-users_audio_logs-data-for-retry-transcription.");
+                            }
+                        })
+                        //console.log(resetResult)
+                })
+                res.send(result);
+            });
+        } else if (checkResult && checkResult.length >= 2) {
+
+            //Set Fail if more than 2 retries
+            var setStatusFail = `Update users_audio SET status="FAIL" WHERE users_audio_id=${req.body.user_id}`;
+            pool.query(setStatusFail, (err, result3) => {
+                if (err) {
+                    console.error(err);
+                    res.status(400).send("error in get /update-users_audio-data-for-retry.");
+                }
+            })
+
+        } else {
+            var reset_sql = `Update transcription 
                     SET annotation_text=""
                     WHERE user_id IN (
                         SELECT users_audio.user_id FROM users_audio
@@ -1447,22 +1686,25 @@ app.post("/reset-transcription-data-for-retry", (req, res) => {
                     )
     `;
 
-    pool.query(reset_sql, (err, result) => {
-        if (err) {
-            console.error(err);
-            //res.status(400).send("error in get /reset-transcription-data-for-retry.");
+            pool.query(reset_sql, (err, result) => {
+                if (err) {
+                    console.error(err);
+                    //res.status(400).send("error in get /reset-transcription-data-for-retry.");
+                }
+                var setStatusNull = `Update users_audio SET status="RETRY", end_time=NULL WHERE users_audio_id=${req.body.user_id} AND type="transcription"`;
+                //console.log(setStatusNull);
+                pool.query(setStatusNull, (resetErr, resetResult) => {
+                    if (resetErr) {
+                        console.error(resetErr);
+                        res.status(400).send("error in get /reset-transcription-data-for-retry.");
+                    }
+                    //console.log(resetResult)
+                })
+                res.send(result);
+            });
         }
-        var setStatusNull = `Update users_audio SET status="RETRY", end_time=NULL WHERE users_audio_id=${req.body.user_id} AND type="transcription"`;
-        //console.log(setStatusNull);
-        pool.query(setStatusNull, (resetErr, resetResult) => {
-            if (resetErr) {
-                console.error(resetErr);
-                res.status(400).send("error in get /reset-transcription-data-for-retry.");
-            }
-            //console.log(resetResult)
-        })
-        res.send(result);
-    });
+    })
+
     ////console.log(reset_sql);
 });
 
@@ -1496,17 +1738,6 @@ app.post("/confirm-pass-fail-hr-review", (req, res) => {
         res.send(result);
     });
 });
-
-app.post("/set-endtime-null-on-retry", (req, res) => {
-    var setStatusNull = `Update users_audio SET status="RETRY", end_time=NULL WHERE users_audio_id=${req.body.user_id}`;
-    pool.query(setStatusNull, (resetErr, resetResult) => {
-        if (resetErr) {
-            console.error(resetErr);
-            res.status(400).send("error in get /reset-transcription-data-for-retry.");
-        }
-        //console.log(resetResult)
-    })
-})
 
 
 app.post("/hr-click-get-user-id", (req, res) => {
