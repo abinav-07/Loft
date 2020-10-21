@@ -1591,7 +1591,7 @@ app.post("/set-endtime-null-on-retry", (req, res) => {
             })
         } else if (result && result.length >= 2) {
             //Set Fail if more than 2 retries
-            var setStatusFail = `Update users_audio SET status="FAIL" WHERE users_audio_id=${req.body.user_id}`;
+            var setStatusFail = `Update users_audio SET status="FAIL" AND is_submitted="TRUE" WHERE users_audio_id=${req.body.user_id}`;
             pool.query(setStatusFail, (err, result3) => {
                 if (err) {
                     console.error(err);
@@ -1666,7 +1666,7 @@ app.post("/reset-transcription-data-for-retry", (req, res) => {
         } else if (checkResult && checkResult.length >= 2) {
 
             //Set Fail if more than 2 retries
-            var setStatusFail = `Update users_audio SET status="FAIL" WHERE users_audio_id=${req.body.user_id}`;
+            var setStatusFail = `Update users_audio SET status="FAIL" AND is_submitted="TRUE" WHERE users_audio_id=${req.body.user_id}`;
             pool.query(setStatusFail, (err, result3) => {
                 if (err) {
                     console.error(err);
