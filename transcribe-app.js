@@ -509,16 +509,16 @@ app.get("/transcription", async(req, res) => {
                         //console.log(check_in_users_audio_logs);
                         pool.query(check_in_users_audio_logs, (err1, result1) => {
                             if (err1) {
-                                console.error(err);
+                                console.error(err1);
                                 //res.status(400).send("error in get /training check_users_audio_logs query.");
                             }
                             if (result1 && result1.length > 0) {
                                 // console.log(result1[0].users_audio_id);
                                 var update_start_time_in_users_logs = `UPDATE users_audio_logs SET start_time=NOW() WHERE start_time IS NULL AND users_audio_id=${result1[0].users_audio_id}`;
-                                console.log(update_start_time_in_users_logs);
+                                //console.log(update_start_time_in_users_logs);
                                 pool.query(update_start_time_in_users_logs, (err2, result2) => {
                                     if (err2) {
-                                        console.error(err);
+                                        console.error(err2);
                                         //res.status(400).send("error in get /training update_users_audio_logs query.");
                                     }
                                 });
@@ -1573,6 +1573,9 @@ app.post("/transcription-hr-review-table-datas", (req, res) => {
 app.post("/set-endtime-null-on-retry", (req, res) => {
     var check_in_users_audio_logs = `SELECT * FROM users_audio_logs WHERE users_audio_id=${req.body.user_id}`;
     pool.query(check_in_users_audio_logs, (err, result) => {
+        if (err) {
+            console.error(err);
+        }
         if (result && result.length < 2) {
             var setStatusNull = `Update users_audio SET status="RETRY", end_time=NULL WHERE users_audio_id=${req.body.user_id}`;
             pool.query(setStatusNull, (resetErr, resetResult) => {
