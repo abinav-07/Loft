@@ -60,10 +60,13 @@ app.use(passport.session());
 app.use(function(req, res, next) {
     if (req.hostname === process.env.VENDOR_WEBSITE) {
         req.isVendorWebsite = res.locals.isVendorWebsite = true;
+      }else{
+        req.isVendorWebsite = res.locals.isVendorWebsite = false;
       }
     res.locals.path = req.path.split("/")[1];
     res.locals.amplitude_api_key = process.env.AMPLITUDE_API_KEY;
     res.locals.webapp_basepath = process.env.WEBAPP_BASEPATH;
+    res.locals.VENDOR_WEBSITE=process.env.VENDOR_WEBSITE;
     next();
 });
 hbs.registerPartials(partialPaths);
@@ -271,13 +274,14 @@ app.get("/transcribe", (req, res) => {
                 }
 
                 if (result && result.length > 0) {
+                    
                     audio_url = result[0]["audio_url"];
                     ////console.log(audio_url);
                     res.render("index", {
                         user_id: req.query.user_id,
                         audio_url: audio_url,
                         audio_name: result[0]["audio_name"],
-                        audio_id: audioId,
+                        audio_id: audioId                        
                     });
 
 

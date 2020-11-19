@@ -803,7 +803,8 @@
     var audio_id;
     audio_id = {{ audio_id }};
     user_id = {{ user_id }};
-
+    var VENDOR_WEBSITE;
+    VENDOR_WEBSITE={{isVendorWebsite}};
 
     //////console.log(user_id);
   </script>
@@ -3289,7 +3290,13 @@
 
     //clicking in profile link button
     $("#profile-link-button").on("click", () => {
-      window.location.href = "{{ webapp_basepath }}/sample#transcription";
+      if(VENDOR_WEBSITE){
+        
+        window.location.href = "{{ VENDOR_WEBSITE }}/sample#transcription";
+      }else{
+        window.location.href = "{{ webapp_basepath }}/sample#transcription";
+      }
+      
       //window.location.href = "http://localhost:5000/sample#transcription";
       //localStorage.setItem("goToTab","#transcription");
     });//Profile Link Button function End

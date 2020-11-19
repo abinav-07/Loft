@@ -790,6 +790,8 @@
     user_id = {{ user_id }};
     var audio_order;
     audio_order = {{ audio_order }};
+    var VENDOR_WEBSITE;
+    VENDOR_WEBSITE={{isVendorWebsite}};
     //////console.log(user_id);
   </script>
   <script>
@@ -3025,8 +3027,13 @@
     });//Submit Button Click Function End
 
     //clicking in profile link button
-    $("#profile-link-button").on("click", () => {
-      window.location.href = "{{ webapp_basepath }}/sample#segmentation";
+    $("#profile-link-button").on("click", () => {      
+      if(VENDOR_WEBSITE){
+        window.location.href = "{{ VENDOR_WEBSITE }}/sample#segmentation";
+        
+      }else{
+        window.location.href = "{{ webapp_basepath }}/sample#segmentation";
+      }
     });//Profile Link Button function End
 
     //function to display current div content in annotation box

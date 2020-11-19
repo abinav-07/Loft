@@ -772,7 +772,9 @@
     var audio_id;
     audio_id = {{ audio_id }};
     user_id = {{ user_id }};
-    //////console.log(user_id);
+    var VENDOR_WEBSITE;
+    VENDOR_WEBSITE={{isVendorWebsite}};
+    
   </script>
   <script>
     var is_submitted = "FALSE";
@@ -2993,7 +2995,7 @@
     //Function to call on submit click
     $("#submit-button").on("click", function () {
 
-      //submitClick();      
+      //submitClick();    
       ajaxReq();
       displayHamburger();
       saveScores();
@@ -3031,7 +3033,14 @@
 
     //clicking in profile link button
     $("#profile-link-button").on("click", () => {
-      window.location.href = "{{ webapp_basepath }}/sample#segmentation";
+      if(VENDOR_WEBSITE){
+        window.location.href = "{{ VENDOR_WEBSITE }}/sample#segmentation";
+        
+      }else{
+        window.location.href = "{{ webapp_basepath }}/sample#segmentation";
+      }
+        
+      
     });//Profile Link Button function End
 
     //function to display current div content in annotation box
