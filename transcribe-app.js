@@ -133,7 +133,7 @@ app.get("/", (req, res) => {
             }
             ////console.log(result);
             if (result && result.length == 0) {
-                var sql = `INSERT INTO users(name, email, web_app_id) VALUES('${req.query.full_name}', '${req.query.email}', '${req.query.user_id}')`;
+                var sql = `INSERT INTO users(name, email, web_app_id) VALUES('${req.query.full_name.replace(/'/g, "\\'")}', '${req.query.email}', '${req.query.user_id}')`;
                 pool.query(sql, (err, result) => {
                     if (err) {
                         console.error(err);
@@ -1381,6 +1381,7 @@ app.post("/top-speaker-control-save-button-for-transcription-task-segments", (re
             WHERE audio_id = "${req.body.audio_id}"
             AND div_className = "${req.body.previousTopSpeakerName}"
             `;
+            
     pool.query(sql, (err, result) => {
         if (err) {
             console.error(err);
@@ -1388,6 +1389,7 @@ app.post("/top-speaker-control-save-button-for-transcription-task-segments", (re
                 .status(400)
                 .send("error in get /get-segments-with-same-speaker query.");
         }
+        //console.log(sql);
         res.send(result);
         ////console.log(result);
     });
@@ -1510,7 +1512,7 @@ app.post("/hr-review-table-datas", (req, res) => {
             console.error(err);
             res.status(400).send("error in get /hr-review-table-datas query.");
         }
-        ////console.log(result[0]);
+        //console.log(result);
         res.send(result);
     });
 });
