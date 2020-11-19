@@ -395,6 +395,7 @@
             var clicked_language_id = event.target.closest("tr").getAttribute("data-language-id");//This is equal to language id
             var clicked_audio_id = event.target.closest("tr").getAttribute("data-audio-id");//This is equal to language id
             ////console.log(clicked_button_id);         
+            console.log(clicked_button_id)
             confirmButton(clicked_button_id, clicked_language_id, clicked_audio_id);
         });
         //Displaying confirm button
@@ -402,13 +403,13 @@
             $(`button.${userId}`).show();
             var clickedUserName = event.target.closest("tr").getAttribute("data-user-name");//This is equal to user name   
             //On Confirm Click
-            $(`button.${userId}`).on("click", async () => {
+            $(`button.${userId}`).unbind("click").bind("click", async () => {
                 var changedPassFailValue = $(`select.${userId}`).val();
                 params = {
                     userId,
                     changedPassFailValue
                 }
-
+                console.log(params);
                 await $.ajax({
                     method: "POST",
                     url: "/confirm-pass-fail-hr-review",
@@ -534,14 +535,14 @@
                                                 "project_type_id": "2",
                                                 "language_id": languageId
                                             }
-                                            
+                                            console.log(mailParams);
 
                                             $.ajax({
                                                 method: "POST",
                                                 url: "{{ webapp_basepath }}/api/set-user-language-project-type-status",
                                                 data: mailParams,
                                                 success: function () {
-                                                    //console.log(mailParams);
+                                                    console.log(mailParams);
                                                     if (status == 4) {
 
                                                         $.ajax({
