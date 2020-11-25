@@ -63,10 +63,11 @@ app.use(function(req, res, next) {
       }else{
         req.isVendorWebsite = res.locals.isVendorWebsite = false;
       }
+    
     res.locals.path = req.path.split("/")[1];
     res.locals.amplitude_api_key = process.env.AMPLITUDE_API_KEY;
     res.locals.webapp_basepath = process.env.WEBAPP_BASEPATH;
-    res.locals.VENDOR_WEBSITE=process.env.VENDOR_WEBSITE;
+    res.locals.VENDOR_WEBSITE_URL=process.env.VENDOR_WEBSITE_URL;
     next();
 });
 hbs.registerPartials(partialPaths);
@@ -862,6 +863,7 @@ app.post("/updatedatabase", (req, res) => {
             res.status(400).send("error in get /updatedatabase query.");
         }
         // //console.log("Updated");
+        res.send(result);
     });
 });
 
@@ -885,6 +887,7 @@ app.post("/update-actual-database", (req, res) => {
             console.error(err);
             res.status(400).send("error in get /updatedatabase query.");
         }
+        res.send(result)
         //  //console.log("Updated");
     });
 });
@@ -910,6 +913,7 @@ app.post("/update-transcription-task-segment-table", (req, res) => {
             res.status(400).send("error in get /update-transcription-task-segment-table query.");
         }
         //  //console.log("Updated");
+        res.send(result)
     });
 });
 
@@ -930,6 +934,7 @@ app.post("/update-transcription-table", (req, res) => {
             console.error(err);
             res.status(400).send("error in get /updatedatabase query.");
         }
+        res.send(result);
         ////console.log("Updated");
     });
 });
@@ -950,6 +955,7 @@ app.post("/update-on-split", (req, res) => {
             console.error(err);
             res.status(400).send("error in get /update-on-split query.");
         }
+        res.send(result)
         // //console.log("Updated");
     });
 });
@@ -969,6 +975,7 @@ app.post("/update-actual-data-on-split", (req, res) => {
             console.error(err);
             res.status(400).send("error in get /update-on-split query.");
         }
+        res.send(result);
         ////console.log("Updated");
     });
 });
@@ -988,6 +995,7 @@ app.post("/update-transcription-task-segments-on-split", (req, res) => {
             console.error(err);
             res.status(400).send("error in get /update-transcription-task-segments-on-split query.");
         }
+        res.send(result);
         ////console.log("Updated");
     });
 });
@@ -1598,6 +1606,7 @@ app.post("/set-endtime-null-on-retry", (req, res) => {
                             console.error(resetErr);
                             res.status(400).send("error in get /insert-users_audio_logs-data-for-retry.");
                         }
+                        res.send(result1)
                     })
                     //console.log(resetResult)
             })
@@ -1609,6 +1618,7 @@ app.post("/set-endtime-null-on-retry", (req, res) => {
                     console.error(err);
                     res.status(400).send("error in get /update-users_audio-data-for-retry.");
                 }
+                res.send(result3);
             })
         } else {
             var setStatusNull = `Update users_audio SET status="RETRY", end_time=NULL WHERE users_audio_id=${req.body.user_id}`;
@@ -1623,6 +1633,7 @@ app.post("/set-endtime-null-on-retry", (req, res) => {
                             console.error(err1);
                             res.status(400).send("error in get /insert-users_audio_logs-data-for-retry.");
                         }
+                        res.send(result1);
                     })
                     //console.log(resetResult)
             })

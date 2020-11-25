@@ -805,6 +805,7 @@
     user_id = {{ user_id }};
     var VENDOR_WEBSITE;
     VENDOR_WEBSITE={{isVendorWebsite}};
+    console.log({{VENDOR_WEBSITE}});
 
     //////console.log(user_id);
   </script>
@@ -3292,7 +3293,7 @@
     $("#profile-link-button").on("click", () => {
       if(VENDOR_WEBSITE){
         //Vendor Website 
-        window.location.href = "{{ VENDOR_WEBSITE }}/sample#transcription";
+        window.location.href = "{{ VENDOR_WEBSITE_URL }}/sample#transcription";
       }else{
         window.location.href = "{{ webapp_basepath }}/sample#transcription";
       }
