@@ -14,7 +14,7 @@
           div2.style.backgroundColor = neededColor;
           div2.style.border = `2px groove ${neededColor}`;
           div2.style.boxShadow = "2px 2px 10px";
-          p2.innerHTML = segmentClass;
+          p2.innerHTML = segmentClass.replace(/\-/," ");
           p2.style.height = "30px";
           p2.style.fontSize = "14px";
           p2.style.margin = "9px";

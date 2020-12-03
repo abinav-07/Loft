@@ -254,6 +254,7 @@
         });
 
         function recreatingHRTable() {
+            
             $.ajax({
                 method: "POST",
                 url: "/hr-review-table-datas",
@@ -331,10 +332,67 @@
                             }
                         }
 
-                        ]
+                        ],
+                    
                     });
                 }
             });
+            
+            /*
+            //New Server Side Code Here
+            //DataTable
+            var table = $("#users_table").DataTable();
+            table.destroy();
+            $("#users_table").DataTable({
+                paging: true,
+                pageLength: 10,
+                "lengthMenu": [ 10, 25, 50, 75, 100 ],
+                "order": [[2, "desc"]],
+                dom: 'Bfrtip',
+                buttons: [{
+                    extend: 'excel',
+                    filename: 'test',
+                    title: "",
+                    text: 'Export to excel',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6],
+                        modifier: {
+                            order: 'current',
+                            page: 'all'
+                        },
+                        format: {
+                            body: function (data, row, col, node) {
+                                if (col == 6) {
+                                    return $(data).find("option:selected").text()
+                                } else {
+                                    return data;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                ],
+                
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: '/hr-review-table-datas',
+                    type: 'POST',
+                    dataSrc:""
+                },
+
+                columns: [
+                    { data: "name" },
+                    { data: "email" },
+                    { data: "audio_name" },
+                    { data: "start_time" },
+                    { data: "end_time" },
+                    { data: "overall_score" },
+                    { data: "status" }
+                ]
+            });
+            */
         }
 
         //calling the function for creating table
@@ -439,15 +497,15 @@
                                             url: "{{ webapp_basepath }}/api/set-user-language-project-type-status",
                                             data: mailParams,
                                             success: function () {
-                                                if(status==4){
+                                                if (status == 4) {
                                                     $.ajax({
-                                                        method:"POST",
-                                                        url:"/set-endtime-null-on-retry",
-                                                        data:{user_id: userId},
-                                                         success: function () {
-                                                             //   console.log("EMAIl Sent and web app status set and transcription reset");
-                                                                // recreatingHRTable();
-                                                            }
+                                                        method: "POST",
+                                                        url: "/set-endtime-null-on-retry",
+                                                        data: { user_id: userId },
+                                                        success: function () {
+                                                            //   console.log("EMAIl Sent and web app status set and transcription reset");
+                                                            // recreatingHRTable();
+                                                        }
                                                     })
                                                 }
                                                 console.log("EMAIl Sent and web app status set");
