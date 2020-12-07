@@ -47,6 +47,7 @@ app.use(morgan(jsonFormat, { stream: accessLogStream }));
 app.use(
     session({ secret: "WmXgIlMOFQ", resave: true, saveUninitialized: true })
 );
+//Modified Here from false to true
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.set("views", viewPath);
@@ -78,14 +79,6 @@ hbs.registerPartials(partialPaths);
 //Database Connection
 const pool = require("./config/pool");
 const audio_bee_pool = require("./config/audiobee-db");
-pool.getConnection((err, connect) => {
-    if (err) {
-        console.error(err);
-        //res.status(400).send("error in get /admin-review-table-datas query.");
-    }
-    console.log("Connected");
-    connect.release();
-});
 
 audio_bee_pool.getConnection((err, connect) => {
     if (err) {
@@ -97,25 +90,11 @@ audio_bee_pool.getConnection((err, connect) => {
 });
 //Database Connection End
 
+
+//Routes for APIS
+app.use("/",require("./routes/transcribe_routes"));
+
 app.get("/", (req, res) => {
-    /*//console.log(req.query);
-
-            if (typeof req.session.user_id == "undefined") {
-                var sql = `INSERT INTO users (name,email,web_app_id) VALUES ('${req.query.full_name}','${req.query.email}','${req.query.user_id}')`;
-                pool.query(sql, (err, result) => {
-                    if (err) throw err;
-                    req.session.user_id = result.insertId;
-                    req.session.user = req.query.full_name;
-                    //   res.redirect("/review");
-                    res.redirect(`/guided-audio?user_id=${req.session.user_id}`);
-                });
-
-            } else {
-                res.redirect(`/guided-audio?user_id=${req.session.user_id}`);
-            }
-            //   res.render("index");*/
-
-    ////console.log(req.query);
 
     // if (typeof req.session.user_id == "undefined") {
     if (typeof req.query.user_id != "undefined") {
@@ -138,7 +117,7 @@ app.get("/", (req, res) => {
                 console.error(err);
                 res.status(400).send(err);
             }
-            ////console.log(result);
+            
             if (result && result.length == 0) {
                 var sql = `INSERT INTO users(name, email, web_app_id) VALUES('${req.query.full_name.replace(/'/g, "\\'")}', '${req.query.email}', '${req.query.user_id}')`;
                 pool.query(sql, (err, result) => {
@@ -152,7 +131,7 @@ app.get("/", (req, res) => {
                             req.query.type == "segmentation" ||
                             typeof req.query.type == "undefined"
                         ) {
-                            ////console.log(1);
+                            
                             res.redirect(
                                 `/transcribe?user_id=${result.insertId}&audio_id=${req.query.audio_id}`
                             );
@@ -174,13 +153,11 @@ app.get("/", (req, res) => {
                                     }
                                 }
                             });
-                        }
-
-                        //   res.redirect("/review");
+                        }                        
                     }
                 });
             } else {
-                //console.log(2);
+                
                 if (result[0].status != "RETRY") {
                     if (
                         req.query.type == "segmentation" ||
@@ -238,25 +215,10 @@ app.get("/", (req, res) => {
         });
     } else {
         res.send("Error in URL. Please use webapp to access this location.");
-        // res.redirect(`/guided-audio?user_id=${req.session.user_id}`);
+        
     }
 
-    // }
-    // else {
-    //     res.redirect(`/guided-audio?user_id=${req.session.user_id}`);
-    // }
 });
-/*app.get("/transcribe", (req, res) => {
-    //console.log(req.query);
-    res.render("index", {
-        user_id: req.query.user_id,
-        audio_url: "cryophile.wav"
-    });
-    var sql = `INSERT INTO users_audio (user_id,audio_id,start_time) VALUES ('${req.query.user_id}','${audioId}',Now())`;
-    pool.query(sql, (err, result) => {
-        if (err) throw err;
-    });
-});*/
 
 //Route for actual test
 app.get("/transcribe", (req, res) => {
@@ -271,7 +233,7 @@ app.get("/transcribe", (req, res) => {
             pool.query(get_audio_url, (err, result) => {
                 if (err) {
                     console.error(err);
-                    //res.status(400).send("error in get /transcribe query.");
+                    
                 }
 
                 if (result && result.length > 0) {
@@ -340,15 +302,11 @@ app.get("/transcribe", (req, res) => {
                     res.send("Audio Not Found. Please redirect again.")
                 }
 
-
-                ////console.log(result);
             });
 
         }
 
     }
-
-
 });
 //Route for actual test end
 
@@ -371,9 +329,9 @@ app.get("/training", (req, res) => {
             //Audio Name
             if (result && result.length > 0 && result[0]["audio_order"] != null) {
                 audio_url = result[0]["audio_url"];
+
                 //Getting audio order for training                
                 audio_order = result[0]["audio_order"];
-
 
                 //SQL to get user name
                 var get_user_name = `SELECT * FROM users WHERE user_id='${req.query.user_id}'`;
@@ -395,7 +353,6 @@ app.get("/training", (req, res) => {
                 });
 
                 //Checking if user is already in database
-
                 var check_sql = `SELECT * FROM users_audio WHERE user_id = '${req.query.user_id}'
                                          AND audio_id = '${audioId}'`;
                 pool.query(check_sql, (err, result) => {
@@ -409,14 +366,7 @@ app.get("/training", (req, res) => {
                             if (err) {
                                 console.error(err);
                                 res.status(400).send("error in get /transcribe query.");
-                            }
-                            // var insert_into_users_logs_sql = `INSERT INTO users_audio_logs(users_audio_id,audio_id,user_id,start_time) VALUES (${result.insertId},${audioId},${req.query.user_id},NOW())`
-                            // pool.query(insert_into_users_logs_sql, (err, result) => {
-                            //     if (err) {
-                            //         console.error(err);
-                            //         res.status(400).send("error in get /training users_audio_logs query.");
-                            //     }
-                            // })
+                            }                            
                         });
                     } else if (result && result.length > 0) {
                         var check_in_users_audio_logs = `SELECT * FROM users_audio_logs WHERE users_audio_id IN (SELECT users_audio_id FROM users_audio WHERE 
@@ -773,460 +723,6 @@ app.get("/actual-data-admin", (req, res) => {
     }
 });
 
-//Insert Segments Into POST Table Database
-app.post("/database", (req, res) => {
-    let sql = `
-            INSERT INTO posts(div_className, div_title, segment_start, segment_end, annotation_text, user_id, audio_id) VALUES('${req.body.speakerName}', '${req.body.annotationType}', '${req.body.segmentStart}', '${req.body.segmentEnd}', '${req.body.annotationText.replace(/'/g, "\\'")}', '${req.body.user_id}', '${req.body.audio_id}')
-            `;
-    // //console.log(sql);
-    pool.query(sql, (err, result) => {
-        if (err) {
-            console.error(err);
-            res.status(400).send("error in get /database query.");
-        }
-        ////console.log("Data Inserted");
-        res.send(result);
-    });
-});
-//Insert Into Post Table Database End
-
-//Insert Segments Into actual Table Database
-app.post("/insert-into-actual-data", (req, res) => {
-    let sql = `
-            INSERT INTO actual(div_className, div_title, segment_start, segment_end, annotation_text, audio_id) VALUES('${req.body.speakerName}', '${req.body.annotationType}', '${req.body.segmentStart}', '${req.body.segmentEnd}',
-             '${req.body.annotationText.replace(/'/g, "\\'")}', '${req.body.audio_id}')
-            `;
-    // //console.log(sql);
-    pool.query(sql, (err, result) => {
-        if (err) {
-            console.error(err);
-            res.status(400).send("error in get /insert-into-actual-data query.");
-        }
-        // //console.log("Data Inserted Into Actual Table");
-        res.send(result);
-    });
-});
-//Insert Into actual Table Database End
-
-//Insert Segments Into transcription_task_segments Table Database
-app.post("/insert-into-transcription-tasks-segments", (req, res) => {
-    let sql = `
-            INSERT INTO transcription_task_segments(div_className, div_title, segment_start, segment_end, annotation_text, audio_id) VALUES('${req.body.speakerName}', '${req.body.annotationType}', '${req.body.segmentStart}', '${req.body.segmentEnd}', '${req.body.annotationText.replace(/'/g, "\\'")}', '${req.body.audio_id}')
-            `;
-    // //console.log(sql);
-    pool.query(sql, (err, result) => {
-        if (err) {
-            console.error(err);
-            res.status(400).send("error in get /insert-into- transcription_task_segments query.");
-        }
-        // //console.log("Data Inserted Into Actual Table");
-        res.send(result);
-    });
-});
-//Insert Into actual Table Database End
-
-//Insert Segments Into POST Table Database
-app.post("/insert-into-transcription-table", (req, res) => {
-    let sql = `
-            INSERT INTO transcription(div_className, div_title, segment_start, segment_end, annotation_text, user_id, audio_id) VALUES('${req.body.speakerName}', '${req.body.annotationType}', '${req.body.segmentStart}', '${req.body.segmentEnd}', '${req.body.annotationText.replace(/'/g, "\\'")}', '${req.body.user_id}', '${req.body.audio_id}')
-            `;
-    ////console.log(sql);
-    pool.query(sql, (err, result) => {
-        if (err) {
-            console.error(err);
-            res
-                .status(400)
-                .send("error in get /insert-into-transcription-table query.");
-        }
-        ////console.log("Data Inserted");
-        res.send(result);
-    });
-});
-//Insert Into Post Table Database End
-
-//Update Segments in Posts Table of Database
-app.post("/updatedatabase", (req, res) => {
-    let sql = `
-            Update posts
-            SET div_className = '${req.body.speakerName}', div_title = '${req.body.annotationType}', segment_start = '${req.body.segmentStart}', segment_end = '${req.body.segmentEnd}', 
-            annotation_text = "${req.body.annotationText != "undefined"
-                ? req.body.annotationText.replace(/'/g, "\\'")
-                : ""}"
-            WHERE segment_id = '${req.body.segmentId}'
-            AND user_id = '${req.body.user_id}'
-            AND audio_id = '${req.body.audio_id}'
-            `;
-    ////console.log(sql);
-    pool.query(sql, (err, result) => {
-        if (err) {
-            console.error(err);
-            res.status(400).send("error in get /updatedatabase query.");
-        }
-        // //console.log("Updated");
-        res.send(result);
-    });
-});
-
-//update Segments in posts end
-
-//Update Segments in Actual Table of Database
-app.post("/update-actual-database", (req, res) => {
-    let sql = `
-            Update actual
-            SET div_className = '${req.body.speakerName}', div_title = '${req.body.annotationType}',
-             segment_start = '${req.body.segmentStart}', segment_end = '${req.body.segmentEnd}', 
-            annotation_text = '${req.body.annotationText != "undefined"
-                ? req.body.annotationText.replace(/'/g, "\\'")
-                : ""}'
-            WHERE segment_id = '${req.body.segmentId}'            
-            AND audio_id = '${req.body.audio_id}'
-            `;
-    // //console.log(sql);
-    pool.query(sql, (err, result) => {
-        if (err) {
-            console.error(err);
-            res.status(400).send("error in get /updatedatabase query.");
-        }
-        res.send(result)
-        //  //console.log("Updated");
-    });
-});
-
-//update Segments in Actual Table end
-
-//Update Segments in transcription-task Table of Database
-app.post("/update-transcription-task-segment-table", (req, res) => {
-    let sql = `
-            Update transcription_task_segments
-            SET div_className = '${req.body.speakerName}', div_title = '${req.body.annotationType}',
-             segment_start = '${req.body.segmentStart}', segment_end = '${req.body.segmentEnd}', 
-            annotation_text = '${req.body.annotationText != "undefined"
-                ? req.body.annotationText.replace(/'/g, "\\'")
-                : ""}'
-            WHERE segment_id = '${req.body.segmentId}'            
-            AND audio_id = '${req.body.audio_id}'
-            `;
-    // //console.log(sql);
-    pool.query(sql, (err, result) => {
-        if (err) {
-            console.error(err);
-            res.status(400).send("error in get /update-transcription-task-segment-table query.");
-        }
-        //  //console.log("Updated");
-        res.send(result)
-    });
-});
-
-//update Segments in Actual Table end
-
-//update-transcription-table server start
-app.post("/update-transcription-table", (req, res) => {
-    let sql = `
-            Update transcription
-            SET  annotation_text = '${req.body.annotationText.replace(/'/g, "\\'")}',div_className = '${req.body.speakerName}',div_title = '${req.body.annotationType}'
-            WHERE segment_id = '${req.body.segmentId}'
-            AND user_id = '${req.body.user_id}'
-            AND audio_id = '${req.body.audio_id}'
-            `;
-    ////console.log(sql);
-    pool.query(sql, (err, result) => {
-        if (err) {
-            console.error(err);
-            res.status(400).send("error in get /updatedatabase query.");
-        }
-        res.send(result);
-        ////console.log("Updated");
-    });
-});
-
-//Update Segments in Posts Table of Database On Split
-app.post("/update-on-split", (req, res) => {
-    let sql = `
-            Update posts
-            SET div_className = '${req.body.speakerName}', div_title = '${req.body.annotationType}', segment_start = '${req.body.segmentStart}', segment_end = '${req.body.segmentEnd}', annotation_text = '${req.body.annotationText.replace(/'/g, "\\'")}'
-            WHERE segment_id = '${req.body.segmentId}'
-            AND user_id = '${req.body.user_id}'
-            AND audio_id = '${req.body.audio_id}'
-            `;
-    ////console.log(sql);
-    // //console.log(sql);
-    pool.query(sql, (err, result) => {
-        if (err) {
-            console.error(err);
-            res.status(400).send("error in get /update-on-split query.");
-        }
-        res.send(result)
-        // //console.log("Updated");
-    });
-});
-
-//Update Segments in Actual Table of Database On Split
-app.post("/update-actual-data-on-split", (req, res) => {
-    let sql = `
-            Update actual
-            SET div_className = '${req.body.speakerName}', div_title = '${req.body.annotationType}', segment_start = '${req.body.segmentStart}', segment_end = '${req.body.segmentEnd}', annotation_text = '${req.body.annotationText.replace(/'/g, "\\'")}'
-            WHERE segment_id = '${req.body.segmentId}'            
-            AND audio_id = '${req.body.audio_id}'
-            `;
-    ////console.log(sql);
-    ////console.log(sql);
-    pool.query(sql, (err, result) => {
-        if (err) {
-            console.error(err);
-            res.status(400).send("error in get /update-on-split query.");
-        }
-        res.send(result);
-        ////console.log("Updated");
-    });
-});
-
-//Update Segments in transcription-task Table of Database On Split
-app.post("/update-transcription-task-segments-on-split", (req, res) => {
-    let sql = `
-            Update transcription_task_segments
-            SET div_className = '${req.body.speakerName}', div_title = '${req.body.annotationType}', segment_start = '${req.body.segmentStart}', segment_end = '${req.body.segmentEnd}', annotation_text = '${req.body.annotationText.replace(/'/g, "\\'")}'
-            WHERE segment_id = '${req.body.segmentId}'            
-            AND audio_id = '${req.body.audio_id}'
-            `;
-    ////console.log(sql);
-    ////console.log(sql);
-    pool.query(sql, (err, result) => {
-        if (err) {
-            console.error(err);
-            res.status(400).send("error in get /update-transcription-task-segments-on-split query.");
-        }
-        res.send(result);
-        ////console.log("Updated");
-    });
-});
-
-//Route to check if the user has  already submitted or not
-app.post("/get-submitted-or-not", (req, res) => {
-    var audioId = req.query.audio_id;
-    ////console.log("HEre");
-    ////console.log(req.query);
-    let sql = `
-            Select users_audio.is_submitted FROM users_audio
-            WHERE
-            user_id = '${req.body.user_id}'
-            AND audio_id = '${req.body.audio_id}'
-            AND type="segmentation"
-            `;
-    ////console.log(sql);
-    pool.query(sql, (err, result) => {
-        if (err) {
-            console.error(err);
-            res.status(400).send("error in get /get-submitted-or-not query.");
-        }
-        // //console.log("Checking Submitted Or not");
-
-        res.send(result);
-        ////console.log(result);
-    });
-});
-
-//Route to check if the user for transcription has  already submitted or not
-app.post("/get-submitted-or-not-for-transcription", (req, res) => {
-    var audioId = req.query.audio_id;
-    ////console.log("HEre");
-    ////console.log(req.query);
-    let sql = `
-            Select users_audio.is_submitted FROM users_audio
-            WHERE
-            user_id = '${req.body.user_id}'
-            AND audio_id = '${req.body.audio_id}'
-            AND type="transcription"
-            `;
-    ////console.log(sql);
-    pool.query(sql, (err, result) => {
-        if (err) {
-            console.error(err);
-            res.status(400).send("error in get /get-submitted-or-not query.");
-        }
-        ////console.log("Checking Submitted Or not");
-
-        res.send(result);
-        ////console.log(result);
-    });
-});
-
-//Get Segments From Posts Table in Database
-app.post("/get-segments", (req, res) => {
-    /*let sql = `
-                    Select posts.*, users_audio.is_submitted FROM posts
-                    JOIN users_audio
-                    ON users_audio.user_id = posts.user_id
-                    WHERE
-                    posts.user_id = $ { req.body.user_id }
-                    AND posts.audio_id = $ { audioId }
-                    `;*/
-    let sql = `
-            Select * FROM posts
-            WHERE
-            posts.user_id = '${req.body.user_id}'
-            AND posts.audio_id = '${req.body.audio_id}'
-            ORDER BY segment_start
-                `;
-    pool.query(sql, (err, result) => {
-        if (err) {
-            console.error(err);
-            res.status(400).send("error in get /get-segments query.");
-        }
-        res.send(result);
-        ////console.log(result);
-    });
-});
-//get segments route end
-
-//Get Segments From Actual Table in Database
-app.post("/get-segments-from-actual-data-for-admin", (req, res) => {
-    /*let sql = `
-                    Select posts.*, users_audio.is_submitted FROM posts
-                    JOIN users_audio
-                    ON users_audio.user_id = posts.user_id
-                    WHERE
-                    posts.user_id = $ { req.body.user_id }
-                    AND posts.audio_id = $ { audioId }
-                    `;*/
-    let sql = `
-            Select * FROM actual
-            WHERE            
-            actual.audio_id = '${req.body.audio_id}'
-            ORDER BY segment_start
-                `;
-    pool.query(sql, (err, result) => {
-        if (err) {
-            console.error(err);
-            res
-                .status(400)
-                .send("error in get /get-segments-from-actual-data-for-admin query.");
-        }
-        res.send(result);
-        ////console.log(result);
-    });
-});
-//get segments from actual table route end
-
-//Get Segments From Actual Table in Database
-app.post("/transcription-actual-segments", (req, res) => {
-    /*let sql = `
-                    Select posts.*, users_audio.is_submitted FROM posts
-                    JOIN users_audio
-                    ON users_audio.user_id = posts.user_id
-                    WHERE
-                    posts.user_id = $ { req.body.user_id }
-                    AND posts.audio_id = $ { audioId }
-                    `;*/
-
-    let sql = `
-            Select * FROM transcription
-            WHERE
-            transcription.user_id = '${req.body.user_id}'
-            AND
-            transcription.audio_id = '${req.body.audio_id}'
-            ORDER BY segment_start
-                `;
-    pool.query(sql, (err, result) => {
-        if (err) {
-            console.error(err);
-            res.status(400).send("error in get /get-segments query.");
-        }
-        res.send(result);
-        ////console.log(result);
-    });
-});
-//get segments route end
-
-app.post("/transcription-tasks-user-created-segments", (req, res) => {
-    let sql = `
-            Select * FROM transcription_task_segments
-            WHERE           
-            transcription_task_segments.audio_id = '${req.body.audio_id}'
-            ORDER BY segment_start
-            `;
-    pool.query(sql, (err, result) => {
-        if (err) {
-            console.error(err);
-            res.status(400).send("error in get /get-segments query.");
-        }
-        res.send(result);
-
-    });
-});
-
-//Get actual Values From actual table in Database
-app.post("/get-reviews", (req, res) => {
-    let sql = `
-            Select * FROM actual WHERE
-            audio_id = '${req.body.audio_id}'
-            `;
-    pool.query(sql, (err, result) => {
-        if (err) {
-            console.error(err);
-            res.status(400).send("error in get /ger-reviews query.");
-        }
-        ////console.log("result");
-        ////console.log(result);
-        res.send(result);
-    });
-});
-//get reviews route end
-
-//remove segments from posts table in database
-app.post("/remove-segments", (req, res) => {
-    let sql = `
-            DELETE FROM posts WHERE
-            segment_id = '${req.body.regionId}'
-            AND user_id = '${req.body.user_id}'
-            AND audio_id = '${req.body.audio_id}'
-            `;
-    ////console.log(sql);
-    pool.query(sql, (err, result) => {
-        if (err) {
-            console.error(err);
-            res.status(400).send("error in get /remove-segments query.");
-        }
-        res.send(result);
-    });
-});
-//remove segments route end
-
-//remove segments from posts table in database
-app.post("/remove-segments-from-actual", (req, res) => {
-    let sql = `
-            DELETE FROM actual WHERE
-            segment_id = '${req.body.regionId}'            
-            AND audio_id = '${req.body.audio_id}'
-            `;
-    ////console.log(sql);
-    pool.query(sql, (err, result) => {
-        if (err) {
-            console.error(err);
-            res.status(400).send("error in get /remove-segments-from-actual query.");
-        }
-        res.send(result);
-    });
-});
-//remove segments route end
-
-//remove segments from posts table in database
-app.post("/remove-segments-from-transcription-task-segment", (req, res) => {
-    let sql = `
-            DELETE FROM transcription_task_segments WHERE
-            segment_id = '${req.body.regionId}'            
-            AND audio_id = '${req.body.audio_id}'
-            `;
-    ////console.log(sql);
-    pool.query(sql, (err, result) => {
-        if (err) {
-            console.error(err);
-            res.status(400).send("error in get /remove-segments-from-actual query.");
-        }
-        res.send(result);
-    });
-});
-//remove segments route end
-
 //for same speaker route. Not Used Yet!
 app.post("/get-segments-with-same-speaker", (req, res) => {
     let sql = `
@@ -1346,69 +842,6 @@ app.post(
     }
 );
 //save testscore end for transcription
-
-//API For Top Speaker Control Save Button
-app.post("/top-speaker-control-save-button", (req, res) => {
-    let sql = `
-            Update posts
-            Set div_className = "${req.body.userInputTopSpeakerName}"
-            WHERE user_id = "${req.body.user_id}"
-            AND audio_id = "${req.body.audio_id}"
-            AND div_className = "${req.body.previousTopSpeakerName}"
-            `;
-    pool.query(sql, (err, result) => {
-        if (err) {
-            console.error(err);
-            res
-                .status(400)
-                .send("error in get /get-segments-with-same-speaker query.");
-        }
-        res.send(result);
-        ////console.log(result);
-    });
-});
-
-//API For Top Speaker Control Save Button For Actual
-app.post("/top-speaker-control-save-button-for-actual", (req, res) => {
-    let sql = `
-            Update actual
-            Set div_className = "${req.body.userInputTopSpeakerName}"
-            WHERE audio_id = "${req.body.audio_id}"
-            AND div_className = "${req.body.previousTopSpeakerName}"
-            `;
-    pool.query(sql, (err, result) => {
-        if (err) {
-            console.error(err);
-            res
-                .status(400)
-                .send("error in get /get-segments-with-same-speaker query.");
-        }
-        res.send(result);
-        ////console.log(result);
-    });
-});
-
-//API For Top Speaker Control Save Button For transcription-task-segments
-app.post("/top-speaker-control-save-button-for-transcription-task-segments", (req, res) => {
-    let sql = `
-            Update transcription_task_segments
-            Set div_className = "${req.body.userInputTopSpeakerName}"
-            WHERE audio_id = "${req.body.audio_id}"
-            AND div_className = "${req.body.previousTopSpeakerName}"
-            `;
-            
-    pool.query(sql, (err, result) => {
-        if (err) {
-            console.error(err);
-            res
-                .status(400)
-                .send("error in get /get-segments-with-same-speaker query.");
-        }
-        //console.log(sql);
-        res.send(result);
-        ////console.log(result);
-    });
-});
 
 //Routes Below Are For HR Team
 // app.get("/hr-register-form", (req, res) => {
