@@ -48,7 +48,7 @@ router.post("/react-api/get-submitted-or-not-for-transcription",transcriptionTab
 router.post("/transcription-actual-segments",transcriptionTable.getTranscriptionSegments);
 router.post("/react-api/transcription-actual-segments",transcriptionTable.getTranscriptionSegments);
 
-//Transcription Task Segments Table APIs
+//Transcription Task Segment Table APIs
 router.post("/insert-into-transcription-tasks-segments",transcriptionTaskSegmentsTable.insertIntoTranscriptionTasksTable);
 router.post("/react-api/insert-into-transcription-tasks-segments",transcriptionTaskSegmentsTable.insertIntoTranscriptionTasksTable);
 router.post("/update-transcription-task-segment-table",transcriptionTaskSegmentsTable.updateTranscriptionTasksTable);
