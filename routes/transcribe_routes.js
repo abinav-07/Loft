@@ -1,10 +1,24 @@
 const express=require("express");
+const landingAPIs=require("../services/landing_APIs");
+const segmentationLandingAPIs=require("../services/segmentation_landing_APIs");
+const trainingLandingAPIs=require("../services/training_landing_APIs");
 const postsTable =require('../services/posts_table_queries');
 const actualTable=require("../services/actual_table_queries");
 const transcriptionTable=require("../services/transcription_table_queries");
 const transcriptionTaskSegmentsTable=require("../services/transcription_tasks_table_queries");
 const router=express.Router();
 
+//Landing Route APIs
+router.get("/",landingAPIs.getLandingRoute);
+router.get("/react-api/",landingAPIs.getLandingRouteForReactLT);
+
+//Segmentation Landing Route APIs
+router.get("/transcribe",segmentationLandingAPIs.getSegmentationLandingRoute);
+router.get("/react-api/transcribe",segmentationLandingAPIs.getSegmentationLandingRouteForReactLT);
+
+//Training Landing Route APIs
+router.get("/training",trainingLandingAPIs.getTrainingLandingRoute);
+router.get("/react-api/training",trainingLandingAPIs.getTrainingLandingRouteReactLT);
 
 //Posts Table APIs
 router.post("/database",postsTable.insertIntoPosts);
