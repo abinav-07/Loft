@@ -1,11 +1,17 @@
 const express=require("express");
+
 const landingAPIs=require("../services/landing_APIs");
 const segmentationLandingAPIs=require("../services/segmentation_landing_APIs");
 const trainingLandingAPIs=require("../services/training_landing_APIs");
+const transcriptionLandingAPIs=require("../services/transcription_landing_APIs");
+const transcriptionTaskLandingAPIs=require("../services/transcription_task_landing_APIs");
+
 const postsTable =require('../services/posts_table_queries');
 const actualTable=require("../services/actual_table_queries");
 const transcriptionTable=require("../services/transcription_table_queries");
 const transcriptionTaskSegmentsTable=require("../services/transcription_tasks_table_queries");
+const transcription_landing_APIs = require("../services/transcription_landing_APIs");
+
 const router=express.Router();
 
 //Landing Route APIs
@@ -19,6 +25,14 @@ router.get("/react-api/transcribe",segmentationLandingAPIs.getSegmentationLandin
 //Training Landing Route APIs
 router.get("/training",trainingLandingAPIs.getTrainingLandingRoute);
 router.get("/react-api/training",trainingLandingAPIs.getTrainingLandingRouteReactLT);
+
+//Transcription Landing Route APIs
+router.get("/transcription",transcription_landing_APIs.getTranscriptionLandingRoute);
+router.get("/react-api/transcription",transcriptionLandingAPIs.getTranscriptionLandingRouteReactLT);
+
+//Transcription Tasks Landing Route APIs
+router.get("/transcription-task",transcriptionTaskLandingAPIs.getTranscriptionTaskLandingRoute);
+router.get("/react-api/transcription-task",transcriptionTaskLandingAPIs.getTranscriptionTaskLandingRouteReactLT);
 
 //Posts Table APIs
 router.post("/database",postsTable.insertIntoPosts);
