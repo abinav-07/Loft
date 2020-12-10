@@ -12,6 +12,7 @@ const transcriptionTable=require("../services/transcription_table_queries");
 const transcriptionTaskSegmentsTable=require("../services/transcription_tasks_table_queries");
 
 const segmentationCourseAPIs=require("../services/segmentation_course_menu_queries");
+const segmentationQuizQuestionsAPIs=require("../services/segmentation_quiz_queries");
 
 const router=express.Router();
 
@@ -37,6 +38,7 @@ router.get("/react-api/transcription-task",transcriptionTaskLandingAPIs.getTrans
 
 //Segmentation Course APIs
 router.get("/react-api/segmentation-course",segmentationCourseAPIs.getSegmentationCourseMenu);
+router.get("/react-api/segmentation-quiz-questions",segmentationQuizQuestionsAPIs.getQuizQuestion);
 
 //Posts Table APIs
 router.post("/database",postsTable.insertIntoPosts);

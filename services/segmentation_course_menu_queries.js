@@ -113,6 +113,11 @@ const getSegmentationCourseMenu = async (req, res) => {
     }
 }
 
+const updateSegmentationCourseUserDetail=(req,res)=>{
+    
+}
+
 module.exports = {
-    getSegmentationCourseMenu
+    getSegmentationCourseMenu,
+    updateSegmentationCourseUserDetail
 }
