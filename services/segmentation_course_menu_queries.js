@@ -326,7 +326,7 @@ const updateSegmentationCourseUserFunction = async (user_id, menu_id, sub_menu_i
                     //Update Previous Menu
                     sql=`UPDATE segmentation_course_sub_menu_detail 
                         set is_active=0
-                        AND status="completed"
+                        ,status="completed"
                         WHERE 
                         user_id=${user_id} AND NOT sub_menu_id=${sub_menu_id}
                     `
@@ -344,7 +344,7 @@ const updateSegmentationCourseUserFunction = async (user_id, menu_id, sub_menu_i
                             }
                             let updateSql=`UPDATE segmentation_course_sub_menu_detail 
                             set is_active=0
-                            AND status="completed"
+                            ,status="completed"
                             WHERE 
                             user_id=${user_id} AND NOT sub_menu_id=${sub_menu_id}
                         `;
@@ -382,7 +382,7 @@ const updateSegmentationCourseUserFunction = async (user_id, menu_id, sub_menu_i
                     //Update Previous Menu
                     sql=`UPDATE segmentation_course_sub_sub_menu_detail 
                         set is_active=0
-                        AND status="completed"
+                        ,status="completed"
                         WHERE 
                         user_id=${user_id} AND NOT sub_sub_menu_id=${sub_sub_menu_id}
                     `
@@ -400,7 +400,7 @@ const updateSegmentationCourseUserFunction = async (user_id, menu_id, sub_menu_i
                             }
                             let updateSql=`UPDATE segmentation_course_sub_sub_menu_detail 
                             set is_active=0
-                            AND status="completed"
+                            ,status="completed"
                             WHERE 
                             user_id=${user_id} AND NOT sub_sub_menu_id=${sub_sub_menu_id}
                         `;
