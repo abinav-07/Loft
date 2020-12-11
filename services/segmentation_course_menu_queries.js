@@ -238,7 +238,7 @@ const getSegmentationCourseMenu = async (req, res) => {
 //Update Course Details
 const updateSegmentationCourseUserDetail =  async (req, res) => {
     if(req.body.user_id && req.body.menu_id ){
-       const value= await updateSegmentationCourseUserFunction(req.body.user_id,req.body.menu_id,req.body.sub_menu_id,req.body.sub_sub_menu_id);
+       const value= await updateSegmentationCourseUserFunction(req.body.user_id,req.body.menu_id,req.body.sub_menu_id,req.body.sub_sub_menu_id,req.body.duration);
        
        if(value=="OK"){
            getSegmentationCourseMenu(req,res);
@@ -266,6 +266,7 @@ const updateSegmentationCourseUserFunction = async (user_id, menu_id, sub_menu_i
                 }
                 let sql;
                 if (result && result.length > 0) {
+                    //Update Previous Menu 
                     sql=`UPDATE segmentation_course_menu_detail 
                         set is_active=0
                         WHERE 
@@ -274,6 +275,7 @@ const updateSegmentationCourseUserFunction = async (user_id, menu_id, sub_menu_i
                     
                     resolve(sql);
                 }else if(result && !result.length > 0){
+                    //Insert New Menu
                     sql=`INSERT INTO segmentation_course_menu_detail
                         (user_id,menu_id,is_active) 
                         VALUES (${user_id},${menu_id},1);
@@ -283,6 +285,7 @@ const updateSegmentationCourseUserFunction = async (user_id, menu_id, sub_menu_i
                             if(err1){
                                 console.log(err1);
                             }
+                            //Update Previous After Inserting New
                             let updateSql=`UPDATE segmentation_course_menu_detail 
                             set is_active=0
                             WHERE 
@@ -320,6 +323,7 @@ const updateSegmentationCourseUserFunction = async (user_id, menu_id, sub_menu_i
                 }
                 let sql;
                 if (result && result.length > 0) {
+                    //Update Previous Menu
                     sql=`UPDATE segmentation_course_sub_menu_detail 
                         set is_active=0
                         AND status="completed"
@@ -328,6 +332,7 @@ const updateSegmentationCourseUserFunction = async (user_id, menu_id, sub_menu_i
                     `
                     resolve(sql);
                 }else if(result && !result.length > 0){
+                    //Insert New And Update Previous
                     sql=`INSERT INTO segmentation_course_sub_menu_detail
                         (user_id,sub_menu_id,is_active,duration,status) 
                         VALUES (${user_id},${sub_menu_id},1,${duration},"in progress");
@@ -374,6 +379,7 @@ const updateSegmentationCourseUserFunction = async (user_id, menu_id, sub_menu_i
                 }
                 let sql;
                 if (result && result.length > 0) {
+                    //Update Previous Menu
                     sql=`UPDATE segmentation_course_sub_sub_menu_detail 
                         set is_active=0
                         AND status="completed"
@@ -382,6 +388,7 @@ const updateSegmentationCourseUserFunction = async (user_id, menu_id, sub_menu_i
                     `
                     resolve(sql);
                 }else if(result && !result.length > 0){
+                    //Insert New and Update Previous
                     sql=`INSERT INTO segmentation_course_sub_sub_menu_detail
                         (user_id,sub_sub_menu_id,is_active,duration,status) 
                         VALUES (${user_id},${sub_sub_menu_id},1,${duration},"in progress");
@@ -425,7 +432,7 @@ const updateSegmentationCourseUserFunction = async (user_id, menu_id, sub_menu_i
 }
 
 
-//Insert INto Segmentation Course Tables
+//Insert Into Segmentation Course Tables 
 const insertIntoSegmentationCourse = (user_id, type, menu_type_id, duration = 0) => {//User ID, Menu Type, Menu_Type Primary Key,Duration For menu
     let sql;
     if (type == "menu") {

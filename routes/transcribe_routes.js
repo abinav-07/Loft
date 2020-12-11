@@ -41,6 +41,7 @@ router.get("/react-api/transcription-task",transcriptionTaskLandingAPIs.getTrans
 router.get("/react-api/segmentation-course",segmentationCourseAPIs.getSegmentationCourseMenu);
 router.get("/react-api/segmentation-quiz-questions",segmentationQuizQuestionsAPIs.getQuizQuestion);
 router.post("/react-api/update-segmentation-course-detail",segmentation_course_menu_queries.updateSegmentationCourseUserDetail);
+router.post("/react-api/save-segmentation-quiz-result",segmentationQuizQuestionsAPIs.saveUserStatus);
 
 //Posts Table APIs
 router.post("/database",postsTable.insertIntoPosts);
