@@ -1,5 +1,4 @@
 //Database Connection
-const { reject, update } = require("lodash");
 const { resolve } = require("promise");
 const pool = require("../config/pool");
 
@@ -242,7 +241,8 @@ const updateSegmentationCourseUserDetail =  async (req, res) => {
        const value= await updateSegmentationCourseUserFunction(req.body.user_id,req.body.menu_id,req.body.sub_menu_id,req.body.sub_sub_menu_id);
        
        if(value=="OK"){
-           res.status(200).send("Updated");
+           getSegmentationCourseMenu(req,res);
+        //res.status(200).send("Updated");
        }else{
            res.status(400).send("Error");
        }
@@ -252,7 +252,7 @@ const updateSegmentationCourseUserDetail =  async (req, res) => {
     
 }
 
-
+//Must send Menu Ids of the next menu
 const updateSegmentationCourseUserFunction = async (user_id, menu_id, sub_menu_id = null, sub_sub_menu_id = null, duration = 0) => {//User ID, Menu Type, Menu_Type Primary Key,Duration For menu
     let menuPromise,subMenuPromise,subSubMenuPromise
     if (menu_id) {
@@ -295,7 +295,7 @@ const updateSegmentationCourseUserFunction = async (user_id, menu_id, sub_menu_i
                 }
             })
         }).then(async (value)=>{
-            console.log(value);
+            
             return await new Promise((resolve1,reject)=>{
                 pool.query(value,(err,result)=>{
                     if(err){
@@ -330,40 +330,45 @@ const updateSegmentationCourseUserFunction = async (user_id, menu_id, sub_menu_i
                 }else if(result && !result.length > 0){
                     sql=`INSERT INTO segmentation_course_sub_menu_detail
                         (user_id,sub_menu_id,is_active,duration,status) 
-                        VALUES (${user_id},${menu_id},1,${duration},"in progress");
+                        VALUES (${user_id},${sub_menu_id},1,${duration},"in progress");
                     `;
                     await new Promise ((resolve1,reject)=>{
                         pool.query(sql,(err1,result)=>{
                             if(err1){
                                 console.log(err1);
                             }
-                            let updateSql=`INSERT INTO segmentation_course_sub_menu_detail
-                            (user_id,sub_menu_id,is_active,duration,status) 
-                            VALUES (${user_id},${menu_id},1,${duration},"in progress");
-                            `;
+                            let updateSql=`UPDATE segmentation_course_sub_menu_detail 
+                            set is_active=0
+                            AND status="completed"
+                            WHERE 
+                            user_id=${user_id} AND NOT sub_menu_id=${sub_menu_id}
+                        `;
                             resolve(updateSql);
                         })
                     })
                     
                 }
             })
-        }).then((value)=>{            
-            return pool.query(value,(err,result)=>{
-                console.log(value);
-                if(err){
-                    console.log(err);
-                    resolve("Error");
-                }
-                resolve("OK");
+        }).then(async (value)=>{            
+            
+            return await new Promise((resolve1,reject)=>{
+                pool.query(value,(err,result)=>{
+                    
+                    if(err){
+                        console.log(err);
+                        resolve1("Error");
+                    }
+                    resolve1("OK");
+                })
             })
         });
     }
     if (sub_sub_menu_id) {
         subSubMenuPromise= await new Promise((resolve, reject) => {
-            let check_user_data_sql = `SELECT * FROM segmentation_course_sub_menu_detail 
+            let check_user_data_sql = `SELECT * FROM segmentation_course_sub_sub_menu_detail 
                             WHERE user_id=${user_id} AND sub_sub_menu_id=${sub_sub_menu_id}                    
         `;
-            pool.query(check_user_data_sql, (err, result) => {
+            pool.query(check_user_data_sql, async (err, result) => {
                 if (err) {
                     console.log(err)
                 }
@@ -381,32 +386,36 @@ const updateSegmentationCourseUserFunction = async (user_id, menu_id, sub_menu_i
                         (user_id,sub_sub_menu_id,is_active,duration,status) 
                         VALUES (${user_id},${sub_sub_menu_id},1,${duration},"in progress");
                     `;
-                    pool.query(sql,(err1,result)=>{
-                        if(err1){
-                            console.log(err1);
-                        }
-                        let updateSql=`INSERT INTO segmentation_course_sub_sub_menu_detail
-                        (user_id,sub_sub_menu_id,is_active,duration,status) 
-                        VALUES (${user_id},${sub_sub_menu_id},1,${duration},"in progress");
+                    await new Promise((resolve1,reject)=>{
+                        pool.query(sql,(err1,result)=>{
+                            if(err1){
+                                console.log(err1);
+                            }
+                            let updateSql=`UPDATE segmentation_course_sub_sub_menu_detail 
+                            set is_active=0
+                            AND status="completed"
+                            WHERE 
+                            user_id=${user_id} AND NOT sub_sub_menu_id=${sub_sub_menu_id}
                         `;
-                        resolve(updateSql);
-                    })                    
+                            resolve(updateSql);
+                        })    
+                    })                
                 }
             })
-        }).then((value)=>{
-            pool.query(value,(err,result)=>{
-                if(err){
-                    console.log(err);
-                }
-                return ("Ok");
+        }).then(async (value)=>{
+            
+            return await new Promise((resolve1,reject)=>{
+                pool.query(value,(err,result)=>{
+                    if(err){
+                        console.log(err);
+                        resolve1("Error");
+                    }
+                    resolve1("OK");
+                })
             })
         });
     }
-
-    console.log(menuPromise)
-    console.log(subMenuPromise)
-    console.log(subSubMenuPromise)
-    console.log(menuPromise && menuPromise.length>0);
+    
     if(menuPromise && menuPromise.length > 0 ){
         return ("OK");
     }else{
