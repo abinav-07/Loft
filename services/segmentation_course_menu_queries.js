@@ -191,16 +191,20 @@ const getSegmentationCourseMenu = async (req, res) => {
             }
         }
 
-        if (segmentation_course_sub_menu_user_details && segmentation_course_sub_menu_user_details.length > 0) {
+        if (segmentation_course_sub_menu_user_details && segmentation_course_sub_menu_user_details.length > 0) {            
             for (var i = 0; i < segmentation_course_sub_menu_user_details.length; i++) {
                 segmentation_course_menu_details["menu"].filter((menu, menuindex) => {
                     menu["sub_menu"].filter((submenu, submenuindex) => {
+                        
                         if (submenu.sub_menu_id === segmentation_course_sub_menu_user_details[i]["sub_menu_id"]) {
+                            
                             segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["is_active"] = segmentation_course_sub_menu_user_details[i]["is_active"];
                             segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["status"] = segmentation_course_sub_menu_user_details[i]["status"];
+                        
+                        //Uncommenting this will set is_active and status empty for all other menus
                         } else {
                             segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["is_active"] = "0";
-                            segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["status"] = "";
+                            // segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["status"] = "";
                         }
                     })
                 })
@@ -216,9 +220,11 @@ const getSegmentationCourseMenu = async (req, res) => {
                                 if (subsubmenu.sub_sub_menu_id === segmentation_course_sub_sub_menu_user_details[i]["sub_sub_menu_id"]) {
                                     segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["sub_sub_menu"][subsubmenuindex]["is_active"] = segmentation_course_sub_sub_menu_user_details[i]["is_active"];
                                     segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["sub_sub_menu"][subsubmenuindex]["status"] = segmentation_course_sub_sub_menu_user_details[i]["status"];
-                                } else {
+                                
+                                //Uncommenting this will set is_active and status empty for all other menus
+                                }else {
                                     segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["sub_sub_menu"][subsubmenuindex]["is_active"] = "0";
-                                    segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["sub_sub_menu"][subsubmenuindex]["status"] = "";
+                                    // segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["sub_sub_menu"][subsubmenuindex]["status"] = "";
                                 }
                             })
                         }
@@ -226,9 +232,7 @@ const getSegmentationCourseMenu = async (req, res) => {
                 })
             }
         }
-
-
-
+        
         res.status(200).send(segmentation_course_menu_details);
     } else {
         res.status(400).send("User Id Not Found");

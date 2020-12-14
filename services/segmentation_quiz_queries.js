@@ -34,7 +34,7 @@ const getQuizQuestion = async (req, res) => {
                     `;
                     pool.query(checkSql, (err1, result1) => {
                         if (err1) {
-                            console.log(err1);                            
+                            console.log(err1);
                         }
                         if (result1 && result1.length > 0) {
                             return;
@@ -52,7 +52,7 @@ const getQuizQuestion = async (req, res) => {
                             })
                         }
                     });
-                    
+
                     //Inserting Initial Status End
 
                     //Return Quiz Answers
@@ -102,35 +102,60 @@ const getQuizQuestion = async (req, res) => {
 }
 
 const saveUserStatus = async (req, res) => {
-    
-    const {quizData}=req.body;    
-    if(quizData.length > 0){
+
+    const { quizData } = req.body;
+    if (quizData.length > 0) {
+
+        let questions = [];
+
+        //Pushing Questions
+        for (var i = 0; i < quizData.length; i++) {            
+            var questionObj = {
+                question_id: quizData[i].question_id,
+                answers: []
+            }
+            questions.push(questionObj);
+        }
+        
         //Get All Segmetation Quiz Answers
-        const getAnswersSql=`SELECT * FROM segmentationAnswers WHERE
+        const getAnswersSql = `SELECT * FROM segmentationAnswers WHERE
                             questionNo IN (
-                                ${quizData.map(eachQuestion=>eachQuestion.question_id)}
+                                ${quizData.map(eachQuestion => eachQuestion.question_id)}
                             )       
                             AND is_correct=1
         `;
-        return await new Promise((resolve,reject)=>{
-            pool.query(getAnswersSql,async (err,result)=>{
-                if(err){
+        return await new Promise((resolve, reject) => {
+            pool.query(getAnswersSql, async (err, result) => {
+                if (err) {
                     console.log(err)
                 }
+
                 //Boolean to Check Correct Answers
-                var checkCorrectAnswersBool=true;
-                
-                //Checking Question Lengths are equal
-                if(result && result.length>0 && result.length===quizData.length){
-                    for(var i=0;i<result.length;i++){                        
-                        //Comparing Answer Id From Body with database Correct Answer Id
-                        //Assuming bulk body quizData contains all questions and asnwers so that same index matches 
-                        if(result[i]["id"]!==quizData[i]["answer_id"]){
-                            checkCorrectAnswersBool=false;
-                            break;
+                var checkCorrectAnswersBool = true;
+
+                if (result && result.length > 0) {
+                    //Pushing Correct Answers
+                    for (var i = 0; i < result.length; i++) {
+                        for (var j = 0; j < questions.length; j++) {
+                            if (result[i]["questionNo"] === questions[j]["question_id"]) {
+                                questions[j].answers.push(result[i]["id"]);
+                            }
                         }
-                    }    
-                    if(checkCorrectAnswersBool){
+                    }                                 
+                    
+                    //Checking Correct Answers
+                    for(var i=0;i<quizData.length;i++){
+                        for(var j=0;j<questions.length;j++){
+                            if(questions[j]["question_id"]===quizData[i]["question_id"]){                                
+                                if(JSON.stringify(questions[j]["answers"])!==JSON.stringify(quizData[i]["answer_id"])){
+                                    checkCorrectAnswersBool = false;
+                                    break;
+                                }
+                            }
+                        }
+                    }                    
+
+                    if (checkCorrectAnswersBool) {
                         await new Promise((resolve1,reject1)=>{
                             const updateUserStatusSql=`Update segmentationQuizStatus 
                                                         SET status="completed",
@@ -145,17 +170,18 @@ const saveUserStatus = async (req, res) => {
                                 }
                                 res.status(200).send("Success");
                             })
-                        })                        
-                    }else{
+                        }) 
+                        
+                    } else {
                         res.status(400).send("Fail");
-                    }                
-                }else{
+                    }
+                } else {
                     res.status(400).send("Question Not Found");
                 }
             })
         })
-        
-    }else{
+
+    } else {
         res.status(400).send("Result Not Sent.")
     }
 }
