@@ -7,7 +7,7 @@ module.exports = {
       await queryInterface.renameColumn("segmentationQuizStatus","user_id","webapp_user_id");
       await queryInterface.renameColumn("segmentation_course_menu_detail","user_id","webapp_user_id");
       await queryInterface.renameColumn("segmentation_course_sub_menu_detail","user_id","webapp_user_id");
-      await queryInterface.renameColumn("segmentation_course_sub_sub_menu_detail","user_id","webapp_user_id");
+      await queryInterface.renameColumn("segmentation_course_sub_sub_menu_detail","user_id","webapp_user_id");      
     })
     /**
      * Add altering commands here.

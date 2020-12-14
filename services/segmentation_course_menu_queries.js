@@ -182,10 +182,11 @@ const getSegmentationCourseMenu = async (req, res) => {
             for (var i = 0; i < segmentation_course_menu_user_details.length; i++) {
                 segmentation_course_menu_details["menu"].filter((menu, index) => {
 
-                    if (menu.menu_id === segmentation_course_menu_user_details[i]["menu_id"]) {
+                    if (menu.menu_id === segmentation_course_menu_user_details[i]["menu_id"]) {                        
                         segmentation_course_menu_details["menu"][index]["is_active"] = segmentation_course_menu_user_details[i]["is_active"];
+                        segmentation_course_menu_details["menu"][index]["status"] = segmentation_course_menu_user_details[i]["status"];
                     } else {
-                        segmentation_course_menu_details["menu"][index]["is_active"] = "0";
+                        segmentation_course_menu_details["menu"][index]["is_active"] = 0;
                     }
                 })
             }
@@ -203,7 +204,7 @@ const getSegmentationCourseMenu = async (req, res) => {
                         
                         //Uncommenting this will set is_active and status empty for all other menus
                         } else {
-                            segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["is_active"] = "0";
+                            segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["is_active"] = 0;
                             // segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["status"] = "";
                         }
                     })
@@ -223,7 +224,7 @@ const getSegmentationCourseMenu = async (req, res) => {
                                 
                                 //Uncommenting this will set is_active and status empty for all other menus
                                 }else {
-                                    segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["sub_sub_menu"][subsubmenuindex]["is_active"] = "0";
+                                    segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["sub_sub_menu"][subsubmenuindex]["is_active"] = 0;
                                     // segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["sub_sub_menu"][subsubmenuindex]["status"] = "";
                                 }
                             })
@@ -272,7 +273,8 @@ const updateSegmentationCourseUserFunction = async (user_id, menu_id, sub_menu_i
                 if (result && result.length > 0) {
                     //Update Previous Menu 
                     sql=`UPDATE segmentation_course_menu_detail 
-                        set is_active=0
+                        set is_active=0,
+                        status="completed"
                         WHERE 
                         webapp_user_id=${user_id} AND NOT menu_id=${menu_id}
                     `
@@ -281,8 +283,8 @@ const updateSegmentationCourseUserFunction = async (user_id, menu_id, sub_menu_i
                 }else if(result && !result.length > 0){
                     //Insert New Menu
                     sql=`INSERT INTO segmentation_course_menu_detail
-                        (webapp_user_id,menu_id,is_active) 
-                        VALUES (${user_id},${menu_id},1);
+                        (webapp_user_id,menu_id,is_active,status) 
+                        VALUES (${user_id},${menu_id},1,"in progress");
                     `;
                     await new Promise((resolve1,reject1)=>{
                         pool.query(sql,(err1,result)=>{
@@ -291,7 +293,8 @@ const updateSegmentationCourseUserFunction = async (user_id, menu_id, sub_menu_i
                             }
                             //Update Previous After Inserting New
                             let updateSql=`UPDATE segmentation_course_menu_detail 
-                            set is_active=0
+                            set is_active=0,
+                            status="completed"
                             WHERE 
                             webapp_user_id=${user_id} AND NOT menu_id=${menu_id}
                             `
@@ -341,6 +344,7 @@ const updateSegmentationCourseUserFunction = async (user_id, menu_id, sub_menu_i
                         (webapp_user_id,sub_menu_id,is_active,duration,status) 
                         VALUES (${user_id},${sub_menu_id},1,${duration},"in progress");
                     `;
+                    
                     await new Promise ((resolve1,reject)=>{
                         pool.query(sql,(err1,result)=>{
                             if(err1){
@@ -441,8 +445,8 @@ const insertIntoSegmentationCourse = (user_id, type, menu_type_id, duration = 0)
     let sql;
     if (type == "menu") {
         sql = `INSERT INTO segmentation_course_menu_detail
-            (webapp_user_id,menu_id,is_active) 
-            VALUES (${user_id},${menu_type_id},1)`;
+            (webapp_user_id,menu_id,is_active,status) 
+            VALUES (${user_id},${menu_type_id},1,"in progress")`;
     } else if (type == "sub_menu") {
         sql = `INSERT INTO segmentation_course_sub_menu_detail
             (webapp_user_id,sub_menu_id,status,is_active,duration) 

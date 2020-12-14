@@ -5,6 +5,8 @@ const segmentationLandingAPIs=require("../services/segmentation_landing_APIs");
 const trainingLandingAPIs=require("../services/training_landing_APIs");
 const transcriptionLandingAPIs=require("../services/transcription_landing_APIs");
 const transcriptionTaskLandingAPIs=require("../services/transcription_task_landing_APIs");
+const transcriptionReviewLandingAPIs=require("../services/transcription_review_landing_APIs");
+const transcriptionDifferenceCheckAPIs=require("../services/transcription_difference_check");
 
 const postsTable =require('../services/posts_table_queries');
 const actualTable=require("../services/actual_table_queries");
@@ -36,6 +38,16 @@ router.get("/react-api/transcription",transcriptionLandingAPIs.getTranscriptionL
 //Transcription Tasks Landing Route APIs
 router.get("/transcription-task",transcriptionTaskLandingAPIs.getTranscriptionTaskLandingRoute);
 router.get("/react-api/transcription-task",transcriptionTaskLandingAPIs.getTranscriptionTaskLandingRouteReactLT);
+
+//Transcription Review Landing Routes APIs
+router.get("/transcription-review",transcriptionReviewLandingAPIs.getTranscriptionReviewLandingRoute);
+router.get("/react-api/transcription-review",transcriptionReviewLandingAPIs.getTranscriptionReviewLandingRouteReactLT);
+
+//Transcription Text Difference Check Route
+//Post Route in Transcription Because of Initially the request was for post but not now
+router.post("/route-for-diff-check",transcriptionDifferenceCheckAPIs.transcriptionDifferenceCheck);
+router.get("/react-api/transcription-difference-check",transcriptionDifferenceCheckAPIs.transcriptionDifferenceCheck);
+
 
 //Segmentation Course APIs
 router.post("/react-api/segmentation-course",segmentationCourseAPIs.getSegmentationCourseMenu);
