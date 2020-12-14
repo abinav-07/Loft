@@ -81,6 +81,7 @@ module.exports = {
           defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
         }
       });
+      
 
       await queryInterface.createTable("segmentationQuizStatus",{
         id:{
@@ -109,6 +110,8 @@ module.exports = {
           defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
         },
       });
+
+      
 
       
     }) //Transaction End

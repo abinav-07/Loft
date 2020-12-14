@@ -30,7 +30,7 @@ const getQuizQuestion = async (req, res) => {
 
                     //Check Initial User Status
                     const checkSql = `SELECT * FROM segmentationQuizStatus 
-                        WHERE user_id=${req.body.user_id}        
+                        WHERE webapp_user_id=${req.body.user_id}        
                     `;
                     pool.query(checkSql, (err1, result1) => {
                         if (err1) {
@@ -41,7 +41,7 @@ const getQuizQuestion = async (req, res) => {
                         } else if (result1 && !result1.length > 0) {
                             //Insert Iniitial User Status
                             const insertSql = `INSERT INTO segmentationQuizStatus
-                                                (user_id,status)
+                                                (webapp_user_id,status)
                                                 VALUE (${req.body.user_id},"in progress")
                                                 `;
                             pool.query(insertSql, (err2, result2) => {
@@ -146,8 +146,9 @@ const saveUserStatus = async (req, res) => {
                     //Checking Correct Answers
                     for(var i=0;i<quizData.length;i++){
                         for(var j=0;j<questions.length;j++){
-                            if(questions[j]["question_id"]===quizData[i]["question_id"]){                                
-                                if(JSON.stringify(questions[j]["answers"])!==JSON.stringify(quizData[i]["answer_id"])){
+                            if(questions[j]["question_id"]===quizData[i]["question_id"]){   
+                                //Checking sorted Answers In Array                                               
+                                if(JSON.stringify(questions[j]["answers"].sort())!==JSON.stringify(quizData[i]["answer_id"].sort())){
                                     checkCorrectAnswersBool = false;
                                     break;
                                 }
@@ -161,7 +162,7 @@ const saveUserStatus = async (req, res) => {
                                                         SET status="completed",
                                                         result="passed"
                                                         WHERE 
-                                                        user_id=${req.body.user_id}
+                                                        webapp_user_id=${req.body.user_id}
                             `;
                             pool.query(updateUserStatusSql,(err1,result1)=>{
                                 if(err1){

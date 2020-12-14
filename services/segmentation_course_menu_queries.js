@@ -16,7 +16,7 @@ const getSegmentationCourseMenu = async (req, res) => {
                     //Checking If User is Already Inrolled
                     const check_user_data_sql = `Select * FROM segmentation_course_menu_detail 
                                             WHERE
-                                            user_id=${req.body.user_id}                                            
+                                            webapp_user_id=${req.body.user_id}                                            
                                             `;
                     pool.query(check_user_data_sql, async (check_user_err, check_user_result) => {
                         if (check_user_err) {
@@ -72,7 +72,7 @@ const getSegmentationCourseMenu = async (req, res) => {
         const segmentation_course_menu_user_details = await new Promise((resolve, reject) => {
             const sql = `SELECT * FROM segmentation_course_menu_detail 
                         WHERE
-                        user_id=${req.body.user_id}
+                        webapp_user_id=${req.body.user_id}
                         `;
             pool.query(sql, (err, result) => {
                 if (err) {
@@ -89,7 +89,7 @@ const getSegmentationCourseMenu = async (req, res) => {
         const segmentation_course_sub_menu_user_details = await new Promise((resolve, reject) => {
             const sql = `SELECT * FROM segmentation_course_sub_menu_detail 
                         WHERE
-                        user_id=${req.body.user_id}
+                        webapp_user_id=${req.body.user_id}
                         `;
             pool.query(sql, (err, result) => {
                 if (err) {
@@ -107,7 +107,7 @@ const getSegmentationCourseMenu = async (req, res) => {
         const segmentation_course_sub_sub_menu_user_details = await new Promise((resolve, reject) => {
             const sql = `SELECT * FROM segmentation_course_sub_sub_menu_detail 
                         WHERE
-                        user_id=${req.body.user_id}
+                        webapp_user_id=${req.body.user_id}
                         `;
             pool.query(sql, (err, result) => {
                 if (err) {
@@ -262,7 +262,7 @@ const updateSegmentationCourseUserFunction = async (user_id, menu_id, sub_menu_i
     if (menu_id) {
        menuPromise= await new Promise((resolve, reject) => {
             let check_user_data_sql = `SELECT * FROM segmentation_course_menu_detail 
-                            WHERE user_id=${user_id} AND menu_id=${menu_id}                    
+                            WHERE webapp_user_id=${user_id} AND menu_id=${menu_id}                    
         `;
             pool.query(check_user_data_sql, async (err, result) => {
                 if (err) {
@@ -274,14 +274,14 @@ const updateSegmentationCourseUserFunction = async (user_id, menu_id, sub_menu_i
                     sql=`UPDATE segmentation_course_menu_detail 
                         set is_active=0
                         WHERE 
-                        user_id=${user_id} AND NOT menu_id=${menu_id}
+                        webapp_user_id=${user_id} AND NOT menu_id=${menu_id}
                     `
                     
                     resolve(sql);
                 }else if(result && !result.length > 0){
                     //Insert New Menu
                     sql=`INSERT INTO segmentation_course_menu_detail
-                        (user_id,menu_id,is_active) 
+                        (webapp_user_id,menu_id,is_active) 
                         VALUES (${user_id},${menu_id},1);
                     `;
                     await new Promise((resolve1,reject1)=>{
@@ -293,7 +293,7 @@ const updateSegmentationCourseUserFunction = async (user_id, menu_id, sub_menu_i
                             let updateSql=`UPDATE segmentation_course_menu_detail 
                             set is_active=0
                             WHERE 
-                            user_id=${user_id} AND NOT menu_id=${menu_id}
+                            webapp_user_id=${user_id} AND NOT menu_id=${menu_id}
                             `
                             
                             resolve(updateSql);
@@ -319,7 +319,7 @@ const updateSegmentationCourseUserFunction = async (user_id, menu_id, sub_menu_i
     if (sub_menu_id) {
         subMenuPromise= await new Promise((resolve, reject) => {
             let check_user_data_sql = `SELECT * FROM segmentation_course_sub_menu_detail 
-                            WHERE user_id=${user_id} AND sub_menu_id=${sub_menu_id}                    
+                            WHERE webapp_user_id=${user_id} AND sub_menu_id=${sub_menu_id}                    
         `;
             pool.query(check_user_data_sql, async (err, result) => {
                 if (err) {
@@ -332,13 +332,13 @@ const updateSegmentationCourseUserFunction = async (user_id, menu_id, sub_menu_i
                         set is_active=0
                         ,status="completed"
                         WHERE 
-                        user_id=${user_id} AND NOT sub_menu_id=${sub_menu_id}
+                        webapp_user_id=${user_id} AND NOT sub_menu_id=${sub_menu_id}
                     `
                     resolve(sql);
                 }else if(result && !result.length > 0){
                     //Insert New And Update Previous
                     sql=`INSERT INTO segmentation_course_sub_menu_detail
-                        (user_id,sub_menu_id,is_active,duration,status) 
+                        (webapp_user_id,sub_menu_id,is_active,duration,status) 
                         VALUES (${user_id},${sub_menu_id},1,${duration},"in progress");
                     `;
                     await new Promise ((resolve1,reject)=>{
@@ -350,7 +350,7 @@ const updateSegmentationCourseUserFunction = async (user_id, menu_id, sub_menu_i
                             set is_active=0
                             ,status="completed"
                             WHERE 
-                            user_id=${user_id} AND NOT sub_menu_id=${sub_menu_id}
+                            webapp_user_id=${user_id} AND NOT sub_menu_id=${sub_menu_id}
                         `;
                             resolve(updateSql);
                         })
@@ -375,7 +375,7 @@ const updateSegmentationCourseUserFunction = async (user_id, menu_id, sub_menu_i
     if (sub_sub_menu_id) {
         subSubMenuPromise= await new Promise((resolve, reject) => {
             let check_user_data_sql = `SELECT * FROM segmentation_course_sub_sub_menu_detail 
-                            WHERE user_id=${user_id} AND sub_sub_menu_id=${sub_sub_menu_id}                    
+                            WHERE webapp_user_id=${user_id} AND sub_sub_menu_id=${sub_sub_menu_id}                    
         `;
             pool.query(check_user_data_sql, async (err, result) => {
                 if (err) {
@@ -388,13 +388,13 @@ const updateSegmentationCourseUserFunction = async (user_id, menu_id, sub_menu_i
                         set is_active=0
                         ,status="completed"
                         WHERE 
-                        user_id=${user_id} AND NOT sub_sub_menu_id=${sub_sub_menu_id}
+                        webapp_user_id=${user_id} AND NOT sub_sub_menu_id=${sub_sub_menu_id}
                     `
                     resolve(sql);
                 }else if(result && !result.length > 0){
                     //Insert New and Update Previous
                     sql=`INSERT INTO segmentation_course_sub_sub_menu_detail
-                        (user_id,sub_sub_menu_id,is_active,duration,status) 
+                        (webapp_user_id,sub_sub_menu_id,is_active,duration,status) 
                         VALUES (${user_id},${sub_sub_menu_id},1,${duration},"in progress");
                     `;
                     await new Promise((resolve1,reject)=>{
@@ -406,7 +406,7 @@ const updateSegmentationCourseUserFunction = async (user_id, menu_id, sub_menu_i
                             set is_active=0
                             ,status="completed"
                             WHERE 
-                            user_id=${user_id} AND NOT sub_sub_menu_id=${sub_sub_menu_id}
+                            webapp_user_id=${user_id} AND NOT sub_sub_menu_id=${sub_sub_menu_id}
                         `;
                             resolve(updateSql);
                         })    
@@ -441,15 +441,15 @@ const insertIntoSegmentationCourse = (user_id, type, menu_type_id, duration = 0)
     let sql;
     if (type == "menu") {
         sql = `INSERT INTO segmentation_course_menu_detail
-            (user_id,menu_id,is_active) 
+            (webapp_user_id,menu_id,is_active) 
             VALUES (${user_id},${menu_type_id},1)`;
     } else if (type == "sub_menu") {
         sql = `INSERT INTO segmentation_course_sub_menu_detail
-            (user_id,sub_menu_id,status,is_active,duration) 
+            (webapp_user_id,sub_menu_id,status,is_active,duration) 
             VALUES (${user_id},${menu_type_id},"in progress",1,${duration})`;
     } else if (type == "sub_sub_menu") {
         sql = `INSERT INTO segmentation_course_sub_sub_menu_detail
-            (user_id,sub_sub_menu_id,status,is_active,duration) 
+            (webapp_user_id,sub_sub_menu_id,status,is_active,duration) 
             VALUES (${user_id},${menu_type_id},"in progress",1,${duration})`;
     }
     return new Promise((resolve, reject) => {

@@ -90,6 +90,8 @@ module.exports = {
         }
       });
 
+      
+
       await queryInterface.createTable("segmentation_course_sub_menu_detail",{
         id:{
           type:Sequelize.DataTypes.INTEGER,
@@ -124,6 +126,8 @@ module.exports = {
         }
       });
 
+      
+
       await queryInterface.createTable("segmentation_course_sub_sub_menu_detail",{
         id:{
           type:Sequelize.DataTypes.INTEGER,
@@ -157,6 +161,7 @@ module.exports = {
           type: Sequelize.DataTypes.DATE,
         }
       });
+      
 
     }) //Transaction End
     /**
