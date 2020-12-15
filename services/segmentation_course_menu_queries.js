@@ -257,7 +257,7 @@ const getSegmentationCourseMenu = async (req, res) => {
             }
         }
 
-        //Total Course Completed Percentage
+        //Total Course Complete Percentage
         segmentation_course_menu_details["user_menu_progress"]=(totalCourseProgress/totalCourseDuration)*100;        
         //Send Response 
         res.status(200).send(segmentation_course_menu_details);
