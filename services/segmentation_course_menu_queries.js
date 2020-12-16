@@ -1,13 +1,14 @@
 //Database Connection
 const { resolve } = require("promise");
 const pool = require("../config/pool");
+const async = require('async');
 
 const getSegmentationCourseMenu = async (req, res) => {
 
     if (req.body.user_id) {
         //Total Course Progress
-        var totalCourseDuration=0;
-        var totalCourseProgress=0;
+        var totalCourseDuration = 0;
+        var totalCourseProgress = 0;
 
         const segmentation_course_menu = await new Promise((resolve, reject) => {
             const sql = `SELECT * FROM segmentation_course_menu`;
@@ -129,7 +130,7 @@ const getSegmentationCourseMenu = async (req, res) => {
         let segmentation_course_menu_details = {};
         segmentation_course_menu_details["user_id"] = req.body.user_id;
         segmentation_course_menu_details["menu"] = [];
-        segmentation_course_menu_details["user_menu_progress"]=0;
+        segmentation_course_menu_details["user_menu_progress"] = 0;
 
         if (segmentation_course_menu && segmentation_course_menu.length > 0) {
             for (var i = 0; i < segmentation_course_menu.length; i++) {
@@ -139,10 +140,10 @@ const getSegmentationCourseMenu = async (req, res) => {
                     total_duration: segmentation_course_menu[i]["totalDuration"],
                     sub_menu: []
                 }
-                if(segmentation_course_menu[i]["totalDuration"]){
-                    totalCourseDuration+=timeToSecs(segmentation_course_menu[i]["totalDuration"]);
+                if (segmentation_course_menu[i]["totalDuration"]) {
+                    totalCourseDuration += timeToSecs(segmentation_course_menu[i]["totalDuration"]);
                 }
-                
+
                 segmentation_course_menu_details["menu"].push(newObject);
             }
         }
@@ -156,9 +157,9 @@ const getSegmentationCourseMenu = async (req, res) => {
                     total_duration: segmentation_course_sub_menu[i]["totalDuration"],
                     sub_sub_menu: []
                 }
-                if(segmentation_course_sub_menu[i]["totalDuration"]){
-                    totalCourseDuration+=timeToSecs(segmentation_course_sub_menu[i]["totalDuration"])
-                }                
+                if (segmentation_course_sub_menu[i]["totalDuration"]) {
+                    totalCourseDuration += timeToSecs(segmentation_course_sub_menu[i]["totalDuration"])
+                }
                 segmentation_course_menu_details["menu"].filter((menu, index) => {
                     if (menu.menu_id === segmentation_course_sub_menu[i]["menu_id"]) {
                         segmentation_course_menu_details["menu"][index]["sub_menu"].push(newSubObject);
@@ -176,8 +177,8 @@ const getSegmentationCourseMenu = async (req, res) => {
                     sub_sub_menu_title: segmentation_course_sub_sub_menu[i]["sub_sub_menu_title"],
                     total_duration: segmentation_course_sub_sub_menu[i]["totalDuration"]
                 }
-                if(segmentation_course_sub_sub_menu[i]["totalDuration"]){
-                    totalCourseDuration+=timeToSecs(segmentation_course_sub_sub_menu[i]["totalDuration"]);
+                if (segmentation_course_sub_sub_menu[i]["totalDuration"]) {
+                    totalCourseDuration += timeToSecs(segmentation_course_sub_sub_menu[i]["totalDuration"]);
                 }
                 segmentation_course_menu_details["menu"].filter((menu, menuindex) => {
                     menu["sub_menu"].filter((submenu, submenuindex) => {
@@ -197,9 +198,9 @@ const getSegmentationCourseMenu = async (req, res) => {
             for (var i = 0; i < segmentation_course_menu_user_details.length; i++) {
                 segmentation_course_menu_details["menu"].filter((menu, index) => {
 
-                    if (menu.menu_id === segmentation_course_menu_user_details[i]["menu_id"]) {                      
-                        if(segmentation_course_menu_details["menu"][index]["total_duration"]){
-                            totalCourseProgress+=timeToSecs(segmentation_course_menu_details["menu"][index]["total_duration"]);
+                    if (menu.menu_id === segmentation_course_menu_user_details[i]["menu_id"]) {
+                        if (segmentation_course_menu_details["menu"][index]["total_duration"]) {
+                            totalCourseProgress += timeToSecs(segmentation_course_menu_details["menu"][index]["total_duration"]);
                         }
                         segmentation_course_menu_details["menu"][index]["is_active"] = segmentation_course_menu_user_details[i]["is_active"];
                         segmentation_course_menu_details["menu"][index]["status"] = segmentation_course_menu_user_details[i]["status"];
@@ -210,19 +211,18 @@ const getSegmentationCourseMenu = async (req, res) => {
             }
         }
 
-        if (segmentation_course_sub_menu_user_details && segmentation_course_sub_menu_user_details.length > 0) {            
+        if (segmentation_course_sub_menu_user_details && segmentation_course_sub_menu_user_details.length > 0) {
             for (var i = 0; i < segmentation_course_sub_menu_user_details.length; i++) {
                 segmentation_course_menu_details["menu"].filter((menu, menuindex) => {
                     menu["sub_menu"].filter((submenu, submenuindex) => {
-                        
                         if (submenu.sub_menu_id === segmentation_course_sub_menu_user_details[i]["sub_menu_id"]) {
-                            if(segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["total_duration"]){
-                                totalCourseProgress+=timeToSecs(segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["total_duration"]);                                
-                            }                            
+                            if (segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["total_duration"]) {
+                                totalCourseProgress += timeToSecs(segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["total_duration"]);
+                            }
                             segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["is_active"] = segmentation_course_sub_menu_user_details[i]["is_active"];
                             segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["status"] = segmentation_course_sub_menu_user_details[i]["status"];
-                        
-                        //Uncommenting this will set is_active and status empty for all other menus
+
+                            //Uncommenting this will set is_active and status empty for all other menus
                         } else {
                             segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["is_active"] = 0;
                             // segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["status"] = "";
@@ -239,14 +239,15 @@ const getSegmentationCourseMenu = async (req, res) => {
                         if (submenu["sub_sub_menu"] && submenu["sub_sub_menu"].length > 0) {
                             submenu["sub_sub_menu"].filter((subsubmenu, subsubmenuindex) => {
                                 if (subsubmenu.sub_sub_menu_id === segmentation_course_sub_sub_menu_user_details[i]["sub_sub_menu_id"]) {
-                                    if(segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["sub_sub_menu"][subsubmenuindex]["total_duration"]){
-                                        totalCourseProgress+=timeToSecs(segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["sub_sub_menu"][subsubmenuindex]["total_duration"]);                                                                        
-                                    }                            
+                                    if (segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["sub_sub_menu"][subsubmenuindex]["total_duration"]) {
+
+                                        totalCourseProgress += timeToSecs(segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["sub_sub_menu"][subsubmenuindex]["total_duration"]);
+                                    }
                                     segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["sub_sub_menu"][subsubmenuindex]["is_active"] = segmentation_course_sub_sub_menu_user_details[i]["is_active"];
                                     segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["sub_sub_menu"][subsubmenuindex]["status"] = segmentation_course_sub_sub_menu_user_details[i]["status"];
-                                
-                                //Uncommenting this will set is_active and status empty for all other menus
-                                }else {
+
+                                    //Uncommenting this will set is_active and status empty for all other menus
+                                } else {
                                     segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["sub_sub_menu"][subsubmenuindex]["is_active"] = 0;
                                     // segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["sub_sub_menu"][subsubmenuindex]["status"] = "";
                                 }
@@ -258,7 +259,7 @@ const getSegmentationCourseMenu = async (req, res) => {
         }
 
         //Total Course Complete Percentage
-        segmentation_course_menu_details["user_menu_progress"]=(totalCourseProgress/totalCourseDuration)*100;        
+        segmentation_course_menu_details["user_menu_progress"] = (totalCourseProgress / totalCourseDuration) * 100;
         //Send Response 
         res.status(200).send(segmentation_course_menu_details);
     } else {
@@ -267,27 +268,27 @@ const getSegmentationCourseMenu = async (req, res) => {
 }
 
 //Update Course Details
-const updateSegmentationCourseUserDetail =  async (req, res) => {
-    if(req.body.user_id && req.body.menu_id ){
-       const value= await updateSegmentationCourseUserFunction(req.body.user_id,req.body.menu_id,req.body.sub_menu_id,req.body.sub_sub_menu_id,req.body.duration);
-       
-       if(value=="OK"){
-           getSegmentationCourseMenu(req,res);
-        //res.status(200).send("Updated");
-       }else{
-           res.status(400).send("Error");
-       }
-    }else{
+const updateSegmentationCourseUserDetail = async (req, res) => {
+    if (req.body.user_id && req.body.menu_id) {
+        const value = await updateSegmentationCourseUserFunction(req.body.user_id, req.body.menu_id, req.body.sub_menu_id, req.body.sub_sub_menu_id, req.body.duration);
+
+        if (value == "OK") {
+            getSegmentationCourseMenu(req, res);
+            //res.status(200).send("Updated");
+        } else {
+            res.status(400).send("Error");
+        }
+    } else {
         res.status(400).send("User Id/Menu Id not found");
     }
-    
+
 }
 
 //Must send Menu Ids of the next menu
 const updateSegmentationCourseUserFunction = async (user_id, menu_id, sub_menu_id = null, sub_sub_menu_id = null, duration = 0) => {//User ID, Menu Type, Menu_Type Primary Key,Duration For menu
-    let menuPromise,subMenuPromise,subSubMenuPromise
+    let menuPromise, subMenuPromise, subSubMenuPromise
     if (menu_id) {
-       menuPromise= await new Promise((resolve, reject) => {
+        menuPromise = await new Promise((resolve, reject) => {
             let check_user_data_sql = `SELECT * FROM segmentation_course_menu_detail 
                             WHERE webapp_user_id=${user_id} AND menu_id=${menu_id}                    
         `;
@@ -298,55 +299,55 @@ const updateSegmentationCourseUserFunction = async (user_id, menu_id, sub_menu_i
                 let sql;
                 if (result && result.length > 0) {
                     //Update Previous Menu 
-                    sql=`UPDATE segmentation_course_menu_detail 
+                    sql = `UPDATE segmentation_course_menu_detail 
                         set is_active=0,
                         status="completed"
                         WHERE 
                         webapp_user_id=${user_id} AND NOT menu_id=${menu_id}
                     `
-                    
+
                     resolve(sql);
-                }else if(result && !result.length > 0){
+                } else if (result && !result.length > 0) {
                     //Insert New Menu
-                    sql=`INSERT INTO segmentation_course_menu_detail
+                    sql = `INSERT INTO segmentation_course_menu_detail
                         (webapp_user_id,menu_id,is_active,status) 
                         VALUES (${user_id},${menu_id},1,"in progress");
                     `;
-                    await new Promise((resolve1,reject1)=>{
-                        pool.query(sql,(err1,result)=>{
-                            if(err1){
+                    await new Promise((resolve1, reject1) => {
+                        pool.query(sql, (err1, result) => {
+                            if (err1) {
                                 console.log(err1);
                             }
                             //Update Previous After Inserting New
-                            let updateSql=`UPDATE segmentation_course_menu_detail 
+                            let updateSql = `UPDATE segmentation_course_menu_detail 
                             set is_active=0,
                             status="completed"
                             WHERE 
                             webapp_user_id=${user_id} AND NOT menu_id=${menu_id}
                             `
-                            
+
                             resolve(updateSql);
                         })
-                    })                                  
+                    })
                 }
             })
-        }).then(async (value)=>{
-            
-            return await new Promise((resolve1,reject)=>{
-                pool.query(value,(err,result)=>{
-                    if(err){
+        }).then(async (value) => {
+
+            return await new Promise((resolve1, reject) => {
+                pool.query(value, (err, result) => {
+                    if (err) {
                         console.log(err);
                         resolve1("Error");
                     }
-                    
-                    resolve1("OK");            
+
+                    resolve1("OK");
                 })
             })
         });
 
     }
     if (sub_menu_id) {
-        subMenuPromise= await new Promise((resolve, reject) => {
+        subMenuPromise = await new Promise((resolve, reject) => {
             let check_user_data_sql = `SELECT * FROM segmentation_course_sub_menu_detail 
                             WHERE webapp_user_id=${user_id} AND sub_menu_id=${sub_menu_id}                    
         `;
@@ -357,26 +358,26 @@ const updateSegmentationCourseUserFunction = async (user_id, menu_id, sub_menu_i
                 let sql;
                 if (result && result.length > 0) {
                     //Update Previous Menu
-                    sql=`UPDATE segmentation_course_sub_menu_detail 
+                    sql = `UPDATE segmentation_course_sub_menu_detail 
                         set is_active=0
                         ,status="completed"
                         WHERE 
                         webapp_user_id=${user_id} AND NOT sub_menu_id=${sub_menu_id}
                     `
                     resolve(sql);
-                }else if(result && !result.length > 0){
+                } else if (result && !result.length > 0) {
                     //Insert New And Update Previous
-                    sql=`INSERT INTO segmentation_course_sub_menu_detail
+                    sql = `INSERT INTO segmentation_course_sub_menu_detail
                         (webapp_user_id,sub_menu_id,is_active,duration,status) 
                         VALUES (${user_id},${sub_menu_id},1,${duration},"in progress");
                     `;
-                    
-                    await new Promise ((resolve1,reject)=>{
-                        pool.query(sql,(err1,result)=>{
-                            if(err1){
+
+                    await new Promise((resolve1, reject) => {
+                        pool.query(sql, (err1, result) => {
+                            if (err1) {
                                 console.log(err1);
                             }
-                            let updateSql=`UPDATE segmentation_course_sub_menu_detail 
+                            let updateSql = `UPDATE segmentation_course_sub_menu_detail 
                             set is_active=0
                             ,status="completed"
                             WHERE 
@@ -385,15 +386,15 @@ const updateSegmentationCourseUserFunction = async (user_id, menu_id, sub_menu_i
                             resolve(updateSql);
                         })
                     })
-                    
+
                 }
             })
-        }).then(async (value)=>{            
-            
-            return await new Promise((resolve1,reject)=>{
-                pool.query(value,(err,result)=>{
-                    
-                    if(err){
+        }).then(async (value) => {
+
+            return await new Promise((resolve1, reject) => {
+                pool.query(value, (err, result) => {
+
+                    if (err) {
                         console.log(err);
                         resolve1("Error");
                     }
@@ -403,7 +404,7 @@ const updateSegmentationCourseUserFunction = async (user_id, menu_id, sub_menu_i
         });
     }
     if (sub_sub_menu_id) {
-        subSubMenuPromise= await new Promise((resolve, reject) => {
+        subSubMenuPromise = await new Promise((resolve, reject) => {
             let check_user_data_sql = `SELECT * FROM segmentation_course_sub_sub_menu_detail 
                             WHERE webapp_user_id=${user_id} AND sub_sub_menu_id=${sub_sub_menu_id}                    
         `;
@@ -414,40 +415,40 @@ const updateSegmentationCourseUserFunction = async (user_id, menu_id, sub_menu_i
                 let sql;
                 if (result && result.length > 0) {
                     //Update Previous Menu
-                    sql=`UPDATE segmentation_course_sub_sub_menu_detail 
+                    sql = `UPDATE segmentation_course_sub_sub_menu_detail 
                         set is_active=0
                         ,status="completed"
                         WHERE 
                         webapp_user_id=${user_id} AND NOT sub_sub_menu_id=${sub_sub_menu_id}
                     `
                     resolve(sql);
-                }else if(result && !result.length > 0){
+                } else if (result && !result.length > 0) {
                     //Insert New and Update Previous
-                    sql=`INSERT INTO segmentation_course_sub_sub_menu_detail
+                    sql = `INSERT INTO segmentation_course_sub_sub_menu_detail
                         (webapp_user_id,sub_sub_menu_id,is_active,duration,status) 
                         VALUES (${user_id},${sub_sub_menu_id},1,${duration},"in progress");
                     `;
-                    await new Promise((resolve1,reject)=>{
-                        pool.query(sql,(err1,result)=>{
-                            if(err1){
+                    await new Promise((resolve1, reject) => {
+                        pool.query(sql, (err1, result) => {
+                            if (err1) {
                                 console.log(err1);
                             }
-                            let updateSql=`UPDATE segmentation_course_sub_sub_menu_detail 
+                            let updateSql = `UPDATE segmentation_course_sub_sub_menu_detail 
                             set is_active=0
                             ,status="completed"
                             WHERE 
                             webapp_user_id=${user_id} AND NOT sub_sub_menu_id=${sub_sub_menu_id}
                         `;
                             resolve(updateSql);
-                        })    
-                    })                
+                        })
+                    })
                 }
             })
-        }).then(async (value)=>{
-            
-            return await new Promise((resolve1,reject)=>{
-                pool.query(value,(err,result)=>{
-                    if(err){
+        }).then(async (value) => {
+
+            return await new Promise((resolve1, reject) => {
+                pool.query(value, (err, result) => {
+                    if (err) {
                         console.log(err);
                         resolve1("Error");
                     }
@@ -456,16 +457,85 @@ const updateSegmentationCourseUserFunction = async (user_id, menu_id, sub_menu_i
             })
         });
     }
-    
-    if(menuPromise && menuPromise.length > 0 ){
+
+    if (menuPromise && menuPromise.length > 0) {
         return ("OK");
-    }else{
+    } else {
         return ("Error");
     }
 
 }
 
 
+//Finish Segmentation Course Function
+//Set User Courses to Complement and active status to false
+//Only Call At the end of Course 
+const finishSegmentationCourse =  (req, res) => {
+    if (req.body.user_id) {        
+         async.parallel({
+            menu: function (callback) {
+                let sql = `UPDATE segmentation_course_menu_detail 
+                    SET is_active=0,
+                    status="completed"
+                    WHERE webapp_user_id=${req.body.user_id}
+            `
+                pool.query(sql, (err, result) => {
+                    if (err) {
+                        console.log(err);
+                    }                    
+                    if (result) {                        
+                        callback(null, "Success");
+                    }
+
+                })
+            },
+            sub_menu: function (callback) {
+                let sql = `UPDATE segmentation_course_sub_menu_detail 
+                    SET is_active=0,
+                    status="completed"
+                    WHERE webapp_user_id=${req.body.user_id}
+            `
+                pool.query(sql, (err, result) => {
+                    if (err) {
+                        console.log(err);
+
+                    }
+                    if (result) {
+                        callback(null, "Success");
+                    }
+                })
+            },
+            sub_sub_menu: function (callback) {
+                let sql = `UPDATE segmentation_course_sub_sub_menu_detail
+                    SET is_active=0,
+                    status="completed"
+                    WHERE webapp_user_id=${req.body.user_id}
+            `
+                pool.query(sql, (err, result) => {
+                    if (err) {
+                        console.log(err);
+
+                    }
+                    if (result) {
+                        callback(null, "Success");
+                    }
+                })
+            }
+        }, async function (err, results) {            
+            if (results) {                
+                if (results.menu === "Success" && results.sub_menu === "Success" && results.sub_sub_menu === "Success") {
+                   await getSegmentationCourseMenu(req, res);
+                } else {
+                    res.status(400).send("Error");
+                }
+            } else {
+                res.status(400).send("Error");
+            }
+        });
+    }else{
+        res.status(400).send("User Id Not Found");
+    }
+}
 //Insert Into Segmentation Course Tables 
 const insertIntoSegmentationCourse = (user_id, type, menu_type_id, duration = 0) => {//User ID, Menu Type, Menu_Type Primary Key,Duration For menu
     let sql;
@@ -502,10 +572,11 @@ const insertIntoSegmentationCourse = (user_id, type, menu_type_id, duration = 0)
 // Convert time in H[:mm[:ss]] format to seconds
 function timeToSecs(time) {
     let [h, m, s] = time.split(':');
-    return h*3600 + (m|0)*60 + (s|0)*1;
-  }
+    return h * 3600 + (m | 0) * 60 + (s | 0) * 1;
+}
 
 module.exports = {
     getSegmentationCourseMenu,
-    updateSegmentationCourseUserDetail
+    updateSegmentationCourseUserDetail,
+    finishSegmentationCourse
 }
