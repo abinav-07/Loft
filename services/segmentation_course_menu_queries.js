@@ -74,6 +74,20 @@ const getSegmentationCourseMenu = async (req, res) => {
             });
         })
 
+        const segmentation_course_videos = await new Promise((resolve, reject) => {
+            const sql = `SELECT * FROM segmentation_course_videos`;
+            pool.query(sql, (err, result) => {
+                if (err) {
+                    res.status(400).send(err);
+                }
+                if (result && result.length > 0) {
+                    return resolve(result);
+                } else {
+                    return resolve();
+                }
+            });
+        })
+
         const segmentation_course_menu_user_details = await new Promise((resolve, reject) => {
             const sql = `SELECT * FROM segmentation_course_menu_detail 
                         WHERE
@@ -131,6 +145,7 @@ const getSegmentationCourseMenu = async (req, res) => {
         segmentation_course_menu_details["user_id"] = req.body.user_id;
         segmentation_course_menu_details["menu"] = [];
         segmentation_course_menu_details["user_menu_progress"] = 0;
+        segmentation_course_menu_details["guided_videos"]=segmentation_course_videos;
 
         if (segmentation_course_menu && segmentation_course_menu.length > 0) {
             for (var i = 0; i < segmentation_course_menu.length; i++) {
@@ -200,7 +215,9 @@ const getSegmentationCourseMenu = async (req, res) => {
 
                     if (menu.menu_id === segmentation_course_menu_user_details[i]["menu_id"]) {
                         if (segmentation_course_menu_details["menu"][index]["total_duration"]) {
-                            totalCourseProgress += timeToSecs(segmentation_course_menu_details["menu"][index]["total_duration"]);
+                            if(segmentation_course_menu_user_details[i]["status"] && segmentation_course_menu_user_details[i]["status"]!="in progress"){
+                                totalCourseProgress += timeToSecs(segmentation_course_menu_details["menu"][index]["total_duration"]);
+                            }                            
                         }
                         segmentation_course_menu_details["menu"][index]["is_active"] = segmentation_course_menu_user_details[i]["is_active"];
                         segmentation_course_menu_details["menu"][index]["status"] = segmentation_course_menu_user_details[i]["status"];
@@ -217,7 +234,9 @@ const getSegmentationCourseMenu = async (req, res) => {
                     menu["sub_menu"].filter((submenu, submenuindex) => {
                         if (submenu.sub_menu_id === segmentation_course_sub_menu_user_details[i]["sub_menu_id"]) {
                             if (segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["total_duration"]) {
-                                totalCourseProgress += timeToSecs(segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["total_duration"]);
+                                if(segmentation_course_sub_menu_user_details[i]["status"] && segmentation_course_sub_menu_user_details[i]["status"]!="in progress"){
+                                    totalCourseProgress += timeToSecs(segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["total_duration"]);
+                                }                                
                             }
                             segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["is_active"] = segmentation_course_sub_menu_user_details[i]["is_active"];
                             segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["status"] = segmentation_course_sub_menu_user_details[i]["status"];
@@ -240,8 +259,9 @@ const getSegmentationCourseMenu = async (req, res) => {
                             submenu["sub_sub_menu"].filter((subsubmenu, subsubmenuindex) => {
                                 if (subsubmenu.sub_sub_menu_id === segmentation_course_sub_sub_menu_user_details[i]["sub_sub_menu_id"]) {
                                     if (segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["sub_sub_menu"][subsubmenuindex]["total_duration"]) {
-
-                                        totalCourseProgress += timeToSecs(segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["sub_sub_menu"][subsubmenuindex]["total_duration"]);
+                                        if(segmentation_course_sub_sub_menu_user_details[i]["status"] && segmentation_course_sub_sub_menu_user_details[i]["status"]!="in progress"){                                            
+                                            totalCourseProgress += timeToSecs(segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["sub_sub_menu"][subsubmenuindex]["total_duration"]);
+                                        }                                        
                                     }
                                     segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["sub_sub_menu"][subsubmenuindex]["is_active"] = segmentation_course_sub_sub_menu_user_details[i]["is_active"];
                                     segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["sub_sub_menu"][subsubmenuindex]["status"] = segmentation_course_sub_sub_menu_user_details[i]["status"];

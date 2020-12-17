@@ -84,7 +84,7 @@ const getQuizQuestion = async (req, res) => {
                 var newAnswerObject = {
                     answer_id: segmentation_quiz_answers[i]["id"],
                     title: segmentation_quiz_answers[i]["answer"],
-                    isCorrect: segmentation_quiz_answers[i]["is_correct"]
+                    // isCorrect: segmentation_quiz_answers[i]["is_correct"]
                 }
                 segmentationQuestions.filter((question, index) => {
                     if (question.question_id === segmentation_quiz_answers[i]["questionNo"]) {
