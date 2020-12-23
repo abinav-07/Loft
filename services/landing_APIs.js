@@ -13,7 +13,7 @@ const getLandingRoute=(req,res)=>{
             check_sql = `SELECT * FROM users_audio WHERE user_id IN (
                     SELECT user_id from users WHERE web_app_id='${req.query.user_id}'                
                 )          
-                    AND audio_id = '${req.query.audio_id}' AND users_audio.type= 'segmentation' `;
+                     AND users_audio.type= 'segmentation' `;
         } else if (req.query.type == "transcription") {
             check_sql = `SELECT * FROM users WHERE web_app_id='${req.query.user_id}' `;
         }

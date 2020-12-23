@@ -138,7 +138,30 @@ const getSegmentationCourseMenu = async (req, res) => {
                     return resolve();
                 }
             })
-        })
+        });
+
+        //Get LT Details
+        const get_Segmentation_course_LT_details=await new Promise((resolve,reject)=>{
+            const sql=`SELECT a.Language_id,a.audio_id,ua.status,ua.is_submitted FROM audio a
+                        JOIN users_audio ua ON
+                        ua.audio_id=a.audio_id
+                        WHERE
+                        ua.user_id IN (SELECT users.user_id FROM users WHERE
+                                        users.web_app_id=${req.body.user_id}
+                        )
+                        AND a.Language_id=${req.body.language_id}
+            `
+            pool.query(sql,(err,result)=>{
+                if (err) {
+                    res.status(400).send(err);
+                }
+                if (result && result.length > 0) {
+                    return resolve(result);
+                } else {
+                    return resolve();
+                }
+            })
+        });
 
         //New Object For Menus
         let segmentation_course_menu_details = {};
@@ -146,6 +169,7 @@ const getSegmentationCourseMenu = async (req, res) => {
         segmentation_course_menu_details["menu"] = [];
         segmentation_course_menu_details["user_menu_progress"] = 0;
         segmentation_course_menu_details["guided_videos"]=segmentation_course_videos;
+        segmentation_course_menu_details["LT_audio_details"]=get_Segmentation_course_LT_details;
 
         if (segmentation_course_menu && segmentation_course_menu.length > 0) {
             for (var i = 0; i < segmentation_course_menu.length; i++) {
