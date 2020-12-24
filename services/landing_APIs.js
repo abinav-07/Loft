@@ -68,7 +68,7 @@ const getLandingRoute = (req, res) => {
                             });
                         } else if (req.query.type == "segmentation-course") {
                             //Add Segmentation Type Here
-                            var getAudioIdSQL = `SELECT * FROM audio WHERE Language_id=${req.query.language_id} and type="segmentation" and segmentation_course_type=${req.query.segmentation_course_type}`;
+                            var getAudioIdSQL = `SELECT * FROM audio WHERE Language_id=${req.query.language_id} and type="segmentation" and segmentation_course_type="${req.query.segmentation_course_type}"`;
                             pool.query(getAudioIdSQL, (err, result1) => {
                                 if (err) {
                                     console.error(err);
@@ -117,7 +117,7 @@ const getLandingRoute = (req, res) => {
                         });
                     } else if (req.query.type == "segmentation-course") {
                         //Add Segmentation Type Here
-                        var getAudioIdSQL = `SELECT * FROM audio WHERE Language_id=${req.query.language_id} and type="segmentation" and segmentation_course_type=${req.query.segmentation_course_type}`;
+                        var getAudioIdSQL = `SELECT * FROM audio WHERE Language_id="${req.query.language_id}" and type="segmentation" and segmentation_course_type="${req.query.segmentation_course_type}"`;
                         pool.query(getAudioIdSQL, (err, result1) => {
                             if (err) {
                                 console.error(err);
@@ -125,7 +125,7 @@ const getLandingRoute = (req, res) => {
                             } else {
                                 if (result1 && result1.length > 0) {
                                     res.redirect(
-                                        `/transcribe?user_id=${result.insertId}&audio_id=${result1[0]["audio_id"]}`
+                                        `/transcribe?user_id=${result[0].user_id}&audio_id=${result1[0]["audio_id"]}`
                                     );
                                 } else {
                                     res.send(
@@ -161,7 +161,7 @@ const getLandingRoute = (req, res) => {
                         });
                     } else if (req.query.type == "segmentation-course") {
                         //Add Segmentation Type Here
-                        var getAudioIdSQL = `SELECT * FROM audio WHERE Language_id=${req.query.language_id} and type="segmentation" and segmentation_course_type=${req.query.segmentation_course_type}`;
+                        var getAudioIdSQL = `SELECT * FROM audio WHERE Language_id=${req.query.language_id} and type="segmentation" and segmentation_course_type="${req.query.segmentation_course_type}"`;
                         pool.query(getAudioIdSQL, (err, result1) => {
                             if (err) {
                                 console.error(err);
@@ -169,7 +169,7 @@ const getLandingRoute = (req, res) => {
                             } else {
                                 if (result1 && result1.length > 0) {
                                     res.redirect(
-                                        `/transcribe?user_id=${result.insertId}&audio_id=${result1[0]["audio_id"]}`
+                                        `/transcribe?user_id=${result[0].user_id}&audio_id=${result1[0]["audio_id"]}`
                                     );
                                 } else {
                                     res.send(

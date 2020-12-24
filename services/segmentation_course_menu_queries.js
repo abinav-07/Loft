@@ -143,7 +143,7 @@ const getSegmentationCourseMenu = async (req, res) => {
         //Get LT Details
         const get_Segmentation_course_LT_details = await new Promise((resolve, reject) => {
             if (req.body.language_id) {
-                const sql = `SELECT a.Language_id,a.audio_id,a.segmentation_course_type,ua.users_audio_id,ua.status,ua.is_submitted FROM audio a
+                const sql = `SELECT a.Language_id,a.audio_id,a.is_guided,a.segmentation_course_type,ua.users_audio_id,ua.status,ua.is_submitted FROM audio a
                 JOIN users_audio ua ON
                 ua.audio_id=a.audio_id
                 WHERE
@@ -564,7 +564,6 @@ const finishSegmentationCourse = (req, res) => {
                 pool.query(sql, (err, result) => {
                     if (err) {
                         console.log(err);
-
                     }
                     if (result) {
                         callback(null, "Success");
