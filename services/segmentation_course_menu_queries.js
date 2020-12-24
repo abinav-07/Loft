@@ -151,6 +151,7 @@ const getSegmentationCourseMenu = async (req, res) => {
                                 users.web_app_id=${req.body.user_id}
                 )
                 AND a.Language_id=${req.body.language_id}
+                AND a.segmentation_course_type IS NOT NULL
     `
                 pool.query(sql, (err, result) => {
                     if (err) {
@@ -159,7 +160,7 @@ const getSegmentationCourseMenu = async (req, res) => {
                     if (result && result.length > 0) {
                         return resolve(result);
                     } else {
-                        return resolve();
+                        return resolve("LT Audio not available.");
                     }
                 })
             } else {
