@@ -17,11 +17,11 @@ const getTrainingLandingRoute=(req,res)=>{
                 console.error(err);                
             }
             //Audio Name
-            if (result && result.length > 0 && result[0]["audio_order"] != null) {
+            if (result && result.length > 0) {
                 audio_url = result[0]["audio_url"];
 
-                //Getting audio order for training                
-                audio_order = result[0]["audio_order"];
+                //Getting audio order for training                              
+                audio_order = result[0]["audio_order"]?result[0]["audio_order"]:"No Order";
 
                 //SQL to get user name
                 var get_user_name = `SELECT * FROM users WHERE user_id='${req.query.user_id}'`;

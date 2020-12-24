@@ -141,26 +141,31 @@ const getSegmentationCourseMenu = async (req, res) => {
         });
 
         //Get LT Details
-        const get_Segmentation_course_LT_details=await new Promise((resolve,reject)=>{
-            const sql=`SELECT a.Language_id,a.audio_id,ua.status,ua.is_submitted FROM audio a
-                        JOIN users_audio ua ON
-                        ua.audio_id=a.audio_id
-                        WHERE
-                        ua.user_id IN (SELECT users.user_id FROM users WHERE
-                                        users.web_app_id=${req.body.user_id}
-                        )
-                        AND a.Language_id=${req.body.language_id}
-            `
-            pool.query(sql,(err,result)=>{
-                if (err) {
-                    res.status(400).send(err);
-                }
-                if (result && result.length > 0) {
-                    return resolve(result);
-                } else {
-                    return resolve();
-                }
-            })
+        const get_Segmentation_course_LT_details = await new Promise((resolve, reject) => {
+            if (req.body.language_id) {
+                const sql = `SELECT a.Language_id,a.audio_id,a.segmentation_course_type,ua.users_audio_id,ua.status,ua.is_submitted FROM audio a
+                JOIN users_audio ua ON
+                ua.audio_id=a.audio_id
+                WHERE
+                ua.user_id IN (SELECT users.user_id FROM users WHERE
+                                users.web_app_id=${req.body.user_id}
+                )
+                AND a.Language_id=${req.body.language_id}
+    `
+                pool.query(sql, (err, result) => {
+                    if (err) {
+                        res.status(400).send(err);
+                    }
+                    if (result && result.length > 0) {
+                        return resolve(result);
+                    } else {
+                        return resolve();
+                    }
+                })
+            } else {
+                return resolve("Language Id Not Found.")
+            }
+
         });
 
         //New Object For Menus
@@ -168,8 +173,8 @@ const getSegmentationCourseMenu = async (req, res) => {
         segmentation_course_menu_details["user_id"] = req.body.user_id;
         segmentation_course_menu_details["menu"] = [];
         segmentation_course_menu_details["user_menu_progress"] = 0;
-        segmentation_course_menu_details["guided_videos"]=segmentation_course_videos;
-        segmentation_course_menu_details["LT_audio_details"]=get_Segmentation_course_LT_details;
+        segmentation_course_menu_details["guided_videos"] = segmentation_course_videos;
+        segmentation_course_menu_details["LT_audio_details"] = get_Segmentation_course_LT_details;
 
         if (segmentation_course_menu && segmentation_course_menu.length > 0) {
             for (var i = 0; i < segmentation_course_menu.length; i++) {
@@ -239,9 +244,9 @@ const getSegmentationCourseMenu = async (req, res) => {
 
                     if (menu.menu_id === segmentation_course_menu_user_details[i]["menu_id"]) {
                         if (segmentation_course_menu_details["menu"][index]["total_duration"]) {
-                            if(segmentation_course_menu_user_details[i]["status"] && segmentation_course_menu_user_details[i]["status"]!="in progress"){
+                            if (segmentation_course_menu_user_details[i]["status"] && segmentation_course_menu_user_details[i]["status"] != "in progress") {
                                 totalCourseProgress += timeToSecs(segmentation_course_menu_details["menu"][index]["total_duration"]);
-                            }                            
+                            }
                         }
                         segmentation_course_menu_details["menu"][index]["is_active"] = segmentation_course_menu_user_details[i]["is_active"];
                         segmentation_course_menu_details["menu"][index]["status"] = segmentation_course_menu_user_details[i]["status"];
@@ -258,9 +263,9 @@ const getSegmentationCourseMenu = async (req, res) => {
                     menu["sub_menu"].filter((submenu, submenuindex) => {
                         if (submenu.sub_menu_id === segmentation_course_sub_menu_user_details[i]["sub_menu_id"]) {
                             if (segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["total_duration"]) {
-                                if(segmentation_course_sub_menu_user_details[i]["status"] && segmentation_course_sub_menu_user_details[i]["status"]!="in progress"){
+                                if (segmentation_course_sub_menu_user_details[i]["status"] && segmentation_course_sub_menu_user_details[i]["status"] != "in progress") {
                                     totalCourseProgress += timeToSecs(segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["total_duration"]);
-                                }                                
+                                }
                             }
                             segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["is_active"] = segmentation_course_sub_menu_user_details[i]["is_active"];
                             segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["status"] = segmentation_course_sub_menu_user_details[i]["status"];
@@ -283,9 +288,9 @@ const getSegmentationCourseMenu = async (req, res) => {
                             submenu["sub_sub_menu"].filter((subsubmenu, subsubmenuindex) => {
                                 if (subsubmenu.sub_sub_menu_id === segmentation_course_sub_sub_menu_user_details[i]["sub_sub_menu_id"]) {
                                     if (segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["sub_sub_menu"][subsubmenuindex]["total_duration"]) {
-                                        if(segmentation_course_sub_sub_menu_user_details[i]["status"] && segmentation_course_sub_sub_menu_user_details[i]["status"]!="in progress"){                                            
+                                        if (segmentation_course_sub_sub_menu_user_details[i]["status"] && segmentation_course_sub_sub_menu_user_details[i]["status"] != "in progress") {
                                             totalCourseProgress += timeToSecs(segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["sub_sub_menu"][subsubmenuindex]["total_duration"]);
-                                        }                                        
+                                        }
                                     }
                                     segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["sub_sub_menu"][subsubmenuindex]["is_active"] = segmentation_course_sub_sub_menu_user_details[i]["is_active"];
                                     segmentation_course_menu_details["menu"][menuindex]["sub_menu"][submenuindex]["sub_sub_menu"][subsubmenuindex]["status"] = segmentation_course_sub_sub_menu_user_details[i]["status"];
@@ -514,9 +519,9 @@ const updateSegmentationCourseUserFunction = async (user_id, menu_id, sub_menu_i
 //Finish Segmentation Course Function
 //Set User Courses to Complement and active status to false
 //Only Call At the end of Course 
-const finishSegmentationCourse =  (req, res) => {
-    if (req.body.user_id) {        
-         async.parallel({
+const finishSegmentationCourse = (req, res) => {
+    if (req.body.user_id) {
+        async.parallel({
             menu: function (callback) {
                 let sql = `UPDATE segmentation_course_menu_detail 
                     SET is_active=0,
@@ -526,8 +531,8 @@ const finishSegmentationCourse =  (req, res) => {
                 pool.query(sql, (err, result) => {
                     if (err) {
                         console.log(err);
-                    }                    
-                    if (result) {                        
+                    }
+                    if (result) {
                         callback(null, "Success");
                     }
 
@@ -565,10 +570,10 @@ const finishSegmentationCourse =  (req, res) => {
                     }
                 })
             }
-        }, async function (err, results) {            
-            if (results) {                
+        }, async function (err, results) {
+            if (results) {
                 if (results.menu === "Success" && results.sub_menu === "Success" && results.sub_sub_menu === "Success") {
-                   await getSegmentationCourseMenu(req, res);
+                    await getSegmentationCourseMenu(req, res);
                 } else {
                     res.status(400).send("Error");
                 }
@@ -576,7 +581,7 @@ const finishSegmentationCourse =  (req, res) => {
                 res.status(400).send("Error");
             }
         });
-    }else{
+    } else {
         res.status(400).send("User Id Not Found");
     }
 }

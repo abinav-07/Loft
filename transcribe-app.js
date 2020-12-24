@@ -386,16 +386,17 @@ app.post("/hr-review-table-datas", (req, res) => {
 //get data from users-table to training hr review table
 app.post("/training-hr-review-table-datas", (req, res) => {
     let sql = `
-    Select audio.audio_id, audio.audio_name, users_audio.users_audio_id, users_audio.user_id, users_audio.audio_id, CONVERT_TZ(users_audio.start_time, '+00:00', '+05:45') start_time,
+    Select audio.audio_id, audio.audio_name, users_audio.users_audio_id, users_audio.user_id, users_audio.audio_id, 
+    CONVERT_TZ(users_audio.start_time, '+00:00', '+05:45') start_time,
     CONVERT_TZ(users_audio.end_time, '+00:00', '+05:45') end_time, users_audio.overall_score, users.name,users.email, users_audio.status,audio.audio_order
     from users_audio, users , audio WHERE
     users_audio.user_id = users.user_id
     AND users_audio.audio_id = audio.audio_id
     AND (users_audio.status IS NULL OR users_audio.status = 'RETRY')
-    AND audio.is_training = "TRUE"
-    AND audio.audio_order IS NOT NULL
+    AND audio.is_training = "TRUE"   
     ORDER BY users.user_id asc,audio.audio_order DESC`;
-
+    //Commented Out
+    //AND audio.audio_order IS NOT NULL
     pool.query(sql, (err, result) => {
         if (err) {
             console.error(err);
@@ -492,6 +493,25 @@ app.post("/set-endtime-null-on-retry", (req, res) => {
         }
     })
 
+});
+
+app.post("/set-endtime-null-on-retry-for-segmentation_course",(req,res)=>{
+    var check_in_users_audio_logs = `SELECT * FROM users_audio_logs WHERE users_audio_id=${req.body.user_id}`;
+    pool.query(check_in_users_audio_logs, (err, result) => {
+        if (err) {
+            console.error(err);
+        }
+        if(result && result.length>0){
+            var setStatusNull = `Update users_audio SET status="RETRY", end_time=NULL WHERE users_audio_id=${req.body.user_id}`;
+            pool.query(setStatusNull, (resetErr, resetResult) => {
+                if (resetErr) {
+                    console.error(resetErr);
+                    res.status(400).send("error in get /reset-transcription-data-for-retry.");
+                }
+                res.status(200).send(resetResult);
+            });
+        }
+    });
 })
 
 
@@ -817,9 +837,10 @@ app.post("/training-admin-review-table-datas", (req, res) => {
     ON users_audio.audio_id = audio.audio_id
     WHERE   
      (users_audio.status IS NOT NULL AND users_audio.status NOT LIKE 'RETRY%')
-    AND audio.is_training = "TRUE"
-    AND audio.audio_order IS NOT NULL    
+    AND audio.is_training = "TRUE"     
     ORDER BY users.user_id asc,audio.audio_order DESC`;
+    //Commented Code
+    //AND audio.audio_order IS NOT NULL   
 
     pool.query(sql, (err, result) => {
         if (err) {
