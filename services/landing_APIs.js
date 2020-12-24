@@ -16,7 +16,7 @@ const getLandingRoute = (req, res) => {
                      AND users_audio.type= 'segmentation' `;
         } else if (req.query.type == "transcription") {
             check_sql = `SELECT * FROM users WHERE web_app_id='${req.query.user_id}' `;
-        } else if (req.query.type == "segementation-course") {
+        } else if (req.query.type == "segmentation-course") {
             check_sql = `SELECT * FROM users_audio WHERE user_id IN (
                 SELECT user_id from users WHERE web_app_id='${req.query.user_id}'                
             )          
@@ -66,7 +66,7 @@ const getLandingRoute = (req, res) => {
                                     }
                                 }
                             });
-                        } else if (req.query.type == "segementation-course") {
+                        } else if (req.query.type == "segmentation-course") {
                             //Add Segmentation Type Here
                             var getAudioIdSQL = `SELECT * FROM audio WHERE Language_id=${req.query.language_id} and type="segmentation" and segmentation_course_type=${req.query.segmentation_course_type}`;
                             pool.query(getAudioIdSQL, (err, result1) => {
@@ -115,7 +115,7 @@ const getLandingRoute = (req, res) => {
                                 }
                             }
                         });
-                    } else if (req.query.type == "segementation-course") {
+                    } else if (req.query.type == "segmentation-course") {
                         //Add Segmentation Type Here
                         var getAudioIdSQL = `SELECT * FROM audio WHERE Language_id=${req.query.language_id} and type="segmentation" and segmentation_course_type=${req.query.segmentation_course_type}`;
                         pool.query(getAudioIdSQL, (err, result1) => {
@@ -159,7 +159,7 @@ const getLandingRoute = (req, res) => {
                                 }
                             }
                         });
-                    } else if (req.query.type == "segementation-course") {
+                    } else if (req.query.type == "segmentation-course") {
                         //Add Segmentation Type Here
                         var getAudioIdSQL = `SELECT * FROM audio WHERE Language_id=${req.query.language_id} and type="segmentation" and segmentation_course_type=${req.query.segmentation_course_type}`;
                         pool.query(getAudioIdSQL, (err, result1) => {
