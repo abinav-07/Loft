@@ -150,9 +150,11 @@ const getSegmentationCourseMenu = async (req, res) => {
                 ua.user_id IN (SELECT users.user_id FROM users WHERE
                                 users.web_app_id=${req.body.user_id}
                 )
-                AND a.Language_id=${req.body.language_id}
+                AND (a.Language_id=${req.body.language_id} 
+                OR a.Language_id=83)
                 AND a.segmentation_course_type IS NOT NULL
     `
+    //In the above query check for user select language or english language_id 
                 pool.query(sql, (err, result) => {
                     if (err) {
                         res.status(400).send(err);
