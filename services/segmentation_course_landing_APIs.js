@@ -21,7 +21,7 @@ const getSegmentationCourseLandingRoute=(req,res)=>{
                     
                     audio_url = result[0]["audio_url"];                    
 
-                    res.render("segmentation-course", {
+                    res.render("segmentation_course", {
                         user_id: req.query.user_id,
                         audio_url: audio_url,
                         audio_name: result[0]["audio_name"],
