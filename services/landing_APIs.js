@@ -76,7 +76,7 @@ const getLandingRoute = (req, res) => {
                                 } else {
                                     if (result1 && result1.length > 0) {
                                         res.redirect(
-                                            `/transcribe?user_id=${result.insertId}&audio_id=${result1[0]["audio_id"]}`
+                                            `/segmentation-course?user_id=${result.insertId}&audio_id=${result1[0]["audio_id"]}`
                                         );
                                     } else {
                                         res.send(
@@ -125,7 +125,7 @@ const getLandingRoute = (req, res) => {
                             } else {
                                 if (result1 && result1.length > 0) {
                                     res.redirect(
-                                        `/transcribe?user_id=${result[0].user_id}&audio_id=${result1[0]["audio_id"]}`
+                                        `/segmentation-course?user_id=${result[0].user_id}&audio_id=${result1[0]["audio_id"]}`
                                     );
                                 } else {
                                     res.send(
@@ -169,7 +169,7 @@ const getLandingRoute = (req, res) => {
                             } else {
                                 if (result1 && result1.length > 0) {
                                     res.redirect(
-                                        `/transcribe?user_id=${result[0].user_id}&audio_id=${result1[0]["audio_id"]}`
+                                        `/segmentation-course?user_id=${result[0].user_id}&audio_id=${result1[0]["audio_id"]}`
                                     );
                                 } else {
                                     res.send(

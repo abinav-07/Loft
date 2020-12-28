@@ -1,6 +1,7 @@
 const express=require("express");
 
 const landingAPIs=require("../services/landing_APIs");
+const segmentationCourseLandingAPIs=require("../services/segmentation_course_landing_APIs");
 const segmentationLandingAPIs=require("../services/segmentation_landing_APIs");
 const trainingLandingAPIs=require("../services/training_landing_APIs");
 const transcriptionLandingAPIs=require("../services/transcription_landing_APIs");
@@ -22,6 +23,10 @@ const router=express.Router();
 //Landing Route APIs
 router.get("/",landingAPIs.getLandingRoute);
 router.get("/react-api/",landingAPIs.getLandingRouteForReactLT);
+
+//Segmentation Course Landing Route
+router.get("/segmentation-course",segmentationCourseLandingAPIs.getSegmentationCourseLandingRoute);
+router.get("/react-api/segmentation-course",segmentationCourseLandingAPIs.getSegmentationCourseLandingRouteForReactLT);
 
 //Segmentation Landing Route APIs
 router.get("/transcribe",segmentationLandingAPIs.getSegmentationLandingRoute);
