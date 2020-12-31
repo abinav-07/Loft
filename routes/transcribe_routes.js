@@ -13,6 +13,8 @@ const postsTable =require('../services/posts_table_queries');
 const actualTable=require("../services/actual_table_queries");
 const transcriptionTable=require("../services/transcription_table_queries");
 const transcriptionTaskSegmentsTable=require("../services/transcription_tasks_table_queries");
+const submitLTQueries=require("../services/lt_submit_queries");
+const ltFeedBackQueries=require("../services/lt_feedback_queries");
 
 const segmentationCourseAPIs=require("../services/segmentation_course_menu_queries");
 const segmentationQuizQuestionsAPIs=require("../services/segmentation_quiz_queries");
@@ -26,7 +28,7 @@ router.get("/react-api/",landingAPIs.getLandingRouteForReactLT);
 
 //Segmentation Course Landing Route
 router.get("/segmentation-course",segmentationCourseLandingAPIs.getSegmentationCourseLandingRoute);
-router.get("/react-api/segmentation-course",segmentationCourseLandingAPIs.getSegmentationCourseLandingRouteForReactLT);
+router.get("/react-api/segmentation-course-LT",segmentationCourseLandingAPIs.getSegmentationCourseLandingRouteForReactLT);
 
 //Segmentation Landing Route APIs
 router.get("/transcribe",segmentationLandingAPIs.getSegmentationLandingRoute);
@@ -78,6 +80,8 @@ router.post("/get-submitted-or-not",postsTable.getSubmittedBooleanForSegmentatio
 router.post("/react-api/get-submitted-or-not",postsTable.getSubmittedBooleanForSegmentation);
 
 //Actual Table APIs
+router.get("/actual-data-admin",actualTable.getActualLandingForAdmin);
+router.get("/react-api/actual-data-admin",actualTable.getActualLandingForAdminReactLT);
 router.post("/insert-into-actual-data",actualTable.insertDataIntoActual);
 router.post("/react-api/insert-into-actual-data",actualTable.insertDataIntoActual);
 router.post("/update-actual-database",actualTable.updateActualTable);
@@ -116,4 +120,15 @@ router.post("/remove-segments-from-transcription-task-segment",transcriptionTask
 router.post("/react-api/remove-segments-from-transcription-task-segment",transcriptionTaskSegmentsTable.deleteSegmentsFromTranscriptionTaskSegments);
 router.post("/top-speaker-control-save-button-for-transcription-task-segments",transcriptionTaskSegmentsTable.topSpeakerControlSaveTranscriptionTaskSegments);
 router.post("/react-api/top-speaker-control-save-button-for-transcription-task-segments",transcriptionTaskSegmentsTable.topSpeakerControlSaveTranscriptionTaskSegments);
+
+//Lt Submit Buttons Queries
+router.post("/save-test-score-on-users_audio_table",submitLTQueries.submitButtonClickSegmentation);
+router.post("/react-api/save-test-score-on-users_audio_table",submitLTQueries.submitButtonClickSegmentation);
+router.post("/save-test-score-on-users_audio_table-for-transcription",submitLTQueries.submitButtonClickTranscription);
+router.post("/react-api/save-test-score-on-users_audio_table-for-transcription",submitLTQueries.submitButtonClickTranscription);
+
+//LT FeedBack
+router.post("/insert-feedback-lt",ltFeedBackQueries.insertFeedBackLt);
+router.post("/react-api/insert-feedback-lt",ltFeedBackQueries.insertFeedBackLt)
+
 module.exports=router;

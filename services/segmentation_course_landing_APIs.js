@@ -123,7 +123,7 @@ const getSegmentationCourseLandingRouteForReactLT=(req,res)=>{
                             pool.query(sql, (err, result) => {
                                 if (err) {
                                     console.error(err);
-                                    res.status(400).send("error in get /transcribe query.");
+                                    res.status(400).send("error in get /segmentation-course query.");
                                 }
 
                             });
@@ -138,7 +138,7 @@ const getSegmentationCourseLandingRouteForReactLT=(req,res)=>{
                             pool.query(check_in_users_audio_logs, (err, result1) => {
                                 if (err) {
                                     console.error(err);
-                                    res.status(400).send("error in get /transcribe check_users_audio_logs query.");
+                                    res.status(400).send("error in get /segmentation-course check_users_audio_logs query.");
                                 }
                                 if (result1 && result1.length > 0) {
                                     var update_start_time_in_users_logs = `UPDATE users_audio_logs 
@@ -147,7 +147,7 @@ const getSegmentationCourseLandingRouteForReactLT=(req,res)=>{
                                     pool.query(update_start_time_in_users_logs, (err2, result2) => {
                                         if (err2) {
                                             console.error(err);
-                                            res.status(400).send("error in get /transcribe update_users_audio_logs query.");
+                                            res.status(400).send("error in get /segmentation-course update_users_audio_logs query.");
                                         }
                                     });
                                 }                                

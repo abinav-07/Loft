@@ -2,6 +2,8 @@ const express = require("express");
 //Database Connection
 const pool = require("../config/pool");
 
+
+//Landing APIs For admin data LT
 const getActualLandingForAdmin=(req,res)=>{
     var audioId = req.query.audio_id;
     var audio_url = "";
@@ -22,6 +24,34 @@ const getActualLandingForAdmin=(req,res)=>{
                     audio_name: result[0]["audio_name"],
                     audio_id: audioId,
                 });
+            } else {
+                res.send("Audio Not Found.");
+            }            
+        });
+    }
+}
+
+const getActualLandingForAdminReactLT=(req,res)=>{
+    var audioId = req.query.audio_id;
+    var audio_url = "";
+    if (!audioId) {
+        res.status(400).send("Error in URL. Please redirect again.");
+    } else {
+        var get_audio_url = `SELECT * FROM audio WHERE audio_id='${req.query.audio_id}'`;
+        pool.query(get_audio_url, (err, result) => {
+            if (err) {
+                console.error(err);
+                //res.status(400).send("error in get /transcribe query.");
+            }
+            if (result && result.length > 0) {
+                audio_url = result[0]["audio_url"];
+                ////console.log(audio_url);
+                res.status(200).json({
+                    type:"actual-data-admin",
+                    audio_url: audio_url,
+                    audio_name: result[0]["audio_name"],
+                    audio_id: audioId,
+                });                
             } else {
                 res.send("Audio Not Found.");
             }            
@@ -141,6 +171,8 @@ const topSpeakerControlSaveActual = (req, res) => {
 }
 
 module.exports = {
+    getActualLandingForAdmin,
+    getActualLandingForAdminReactLT,
     insertDataIntoActual,
     updateActualTable,
     updateActualOnSplit,

@@ -226,7 +226,7 @@ const getLandingRouteForReactLT = (req, res) => {
                             req.query.type == "segmentation" ||
                             typeof req.query.type == "undefined"
                         ) {
-                            res.status(300).json({
+                            res.status(200).json({
                                 type: "transcribe",
                                 user_id: result.insertId,
                                 audio_id: req.query.audio_id
@@ -239,11 +239,32 @@ const getLandingRouteForReactLT = (req, res) => {
                                     res.status(400).send("Error in Language Id.");
                                 } else {
                                     if (result1 && result1.length > 0) {
-                                        res.status(300).json({
+                                        res.status(200).json({
                                             type: "transcription",
                                             user_id: result.insertId,
                                             audio_id: result1[0]["audio_id"]
                                         })
+                                    } else {
+                                        res.status(400).send(
+                                            "No projects exists for this language currently. We will inform you once projects are available"
+                                        );
+                                    }
+                                }
+                            });
+                        } else if (req.query.type == "segmentation-course") {
+                            //Add Segmentation Type Here
+                            var getAudioIdSQL = `SELECT * FROM audio WHERE Language_id=${req.query.language_id} AND is_guided="${req.query.is_guided}" AND type="segmentation" and segmentation_course_type="${req.query.segmentation_course_type}"`;
+                            pool.query(getAudioIdSQL, (err, result1) => {
+                                if (err) {
+                                    console.error(err);
+                                    res.status(400).send("Error in Language Id.");
+                                } else {
+                                    if (result1 && result1.length > 0) {
+                                        res.status(200).json({
+                                            type:"segmentation-course",
+                                            user_id:result.insertId,
+                                            audio_id:result1[0]["audio_id"]
+                                        });                                        
                                     } else {
                                         res.status(400).send(
                                             "No projects exists for this language currently. We will inform you once projects are available"
@@ -260,7 +281,7 @@ const getLandingRouteForReactLT = (req, res) => {
                         req.query.type == "segmentation" ||
                         typeof req.query.type == "undefined"
                     ) {
-                        res.status(300).json({
+                        res.status(200).json({
                             type: "transcribe",
                             user_id: result[0].user_id,
                             audio_id: req.query.audio_id
@@ -274,11 +295,32 @@ const getLandingRouteForReactLT = (req, res) => {
                                 res.status(400).send("Error in Language Id.");
                             } else {
                                 if (result1 && result1.length > 0) {
-                                    res.status(300).json({
+                                    res.status(200).json({
                                         type: "transcription",
                                         user_id: result[0].user_id,
                                         audio_id: result1[0]["audio_id"]
                                     })
+                                } else {
+                                    res.status(400).send(
+                                        "No projects exists for this language currently. We will inform you once projects are available"
+                                    );
+                                }
+                            }
+                        });
+                    } else if (req.query.type == "segmentation-course") {
+                        //Add Segmentation Type Here
+                        var getAudioIdSQL = `SELECT * FROM audio WHERE Language_id="${req.query.language_id}" AND is_guided="${req.query.is_guided}" AND type="segmentation" and segmentation_course_type="${req.query.segmentation_course_type}"`;
+                        pool.query(getAudioIdSQL, (err, result1) => {
+                            if (err) {
+                                console.error(err);
+                                res.status(400).send("Error in Language Id.");
+                            } else {
+                                if (result1 && result1.length > 0) {
+                                    res.status(200).json({
+                                        type:"segmentation-course",
+                                        user_id:result[0].user_id,
+                                        audio_id:result1[0]["audio_id"]
+                                    });                                    
                                 } else {
                                     res.status(400).send(
                                         "No projects exists for this language currently. We will inform you once projects are available"
@@ -293,7 +335,7 @@ const getLandingRouteForReactLT = (req, res) => {
                         typeof req.query.type == "undefined"
                     ) {
                         //Redirecting With 25 Audio Id For Retry
-                        res.status(300).json({
+                        res.status(200).json({
                             type: "transcribe",
                             user_id: result[0].user_id,
                             audio_id: 25
@@ -307,11 +349,32 @@ const getLandingRouteForReactLT = (req, res) => {
                                 res.status(400).send("Error in Language Id.");
                             } else {
                                 if (result1 && result1.length > 0) {
-                                    res.status(300).json({
+                                    res.status(200).json({
                                         type: "transcription",
                                         user_id: result[0].user_id,
                                         audio_id: result1[0]["audio_id"]
                                     })
+                                } else {
+                                    res.status(400).send(
+                                        "No projects exists for this language currently. We will inform you once projects are available"
+                                    );
+                                }
+                            }
+                        });
+                    } else if (req.query.type == "segmentation-course") {
+                        //Add Segmentation Type Here
+                        var getAudioIdSQL = `SELECT * FROM audio WHERE Language_id=${req.query.language_id} AND is_guided="${req.query.is_guided}" and type="segmentation" and segmentation_course_type="${req.query.segmentation_course_type}"`;
+                        pool.query(getAudioIdSQL, (err, result1) => {
+                            if (err) {
+                                console.error(err);
+                                res.status(400).send("Error in Language Id.");
+                            } else {
+                                if (result1 && result1.length > 0) {
+                                    res.status(200).json({
+                                        type:"segmentation-course",
+                                        user_id:result[0].user_id,
+                                        audio_id:result1[0]["audio_id"]
+                                    });                                    
                                 } else {
                                     res.status(400).send(
                                         "No projects exists for this language currently. We will inform you once projects are available"

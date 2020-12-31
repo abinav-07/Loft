@@ -114,34 +114,6 @@ app.get("/guided-audio", (req, res) => {
     });
 });
 
-//Router for admin to insert actual data
-app.get("/actual-data-admin", (req, res) => {
-    var audioId = req.query.audio_id;
-    var audio_url = "";
-    if (!audioId) {
-        res.send("Error in URL. Please redirect again.");
-    } else {
-        var get_audio_url = `SELECT * FROM audio WHERE audio_id='${req.query.audio_id}'`;
-        pool.query(get_audio_url, (err, result) => {
-            if (err) {
-                console.error(err);
-                //res.status(400).send("error in get /transcribe query.");
-            }
-            if (result && result.length > 0) {
-                audio_url = result[0]["audio_url"];
-                ////console.log(audio_url);
-                res.render("actual_data_insert", {
-                    audio_url: audio_url,
-                    audio_name: result[0]["audio_name"],
-                    audio_id: audioId,
-                });
-            } else {
-                res.send("Audio Not Found.");
-            }            
-        });
-    }
-});
-
 //for same speaker route. Not Used Yet!
 app.post("/get-segments-with-same-speaker", (req, res) => {
     let sql = `
@@ -161,106 +133,6 @@ app.post("/get-segments-with-same-speaker", (req, res) => {
 });
 //get-segments-with-same-speaker route end
 
-//Save Test Score on Submit Click
-app.post("/save-test-score-on-users_audio_table", (req, res) => {
-    let sql = `
-            Update users_audio
-            Set speaker_labelling_error = "${req.body.wrongSpeakerScore}",
-                annotation_labelling_error = "${req.body.wrongAnnotationScore}",
-                unnecessary_segments_error = "${req.body.unnecessarySegmentsErrors}",
-                overall_score = "${req.body.overallScore}",
-                status=NULL,
-                end_time = Now(),
-                is_submitted = "${req.body.is_submitted}"
-            WHERE user_id = "${req.body.user_id}"
-            AND audio_id = ${req.body.audio_id}
-            `;
-
-    pool.query(sql, (err, result) => {
-        if (err) {
-            console.error(err);
-            res
-                .status(400)
-                .send("error in get /get-segments-with-same-speaker query.");
-        }
-        var check_in_users_audio_logs = `SELECT * FROM users_audio_logs WHERE users_audio_id IN 
-                                                (SELECT users_audio_id FROM users_audio WHERE
-                                                 user_id = "${req.body.user_id}"
-                                                AND audio_id = ${req.body.audio_id}
-                                                AND type="segmentation")
-                                                `;
-        pool.query(check_in_users_audio_logs, (err1, result1) => {
-            if (err1) {
-                console.log(err1);
-            }
-            if (result1 && result1.length > 0) {
-                var update_end_time_in_users_logs = `UPDATE users_audio_logs SET end_time=NOW() WHERE end_time IS NULL users_audio_id IN (SELECT users_audio_id FROM users_audio WHERE
-                    user_id = "${req.body.user_id}"
-                   AND audio_id = ${req.body.audio_id}
-                   AND type="segmentation")`;
-                pool.query(update_end_time_in_users_logs, (err2, result2) => {
-                    if (err2) {
-                        console.log(err2);
-                    }
-                })
-            }
-        });
-        ////console.log(result);
-        res.send(result);
-    });
-});
-//save testscore end
-
-//Save Test Score on Submit Click for transcription
-app.post(
-    "/save-test-score-on-users_audio_table-for-transcription",
-    (req, res) => {
-        //Setting status null
-        let sql = `
-            Update users_audio
-            Set transcription_score="${req.body.total_score}",
-                status=NULL,
-                end_time = Now(),
-                is_submitted = "${req.body.is_submitted}"
-            WHERE user_id = "${req.body.user_id}"
-            AND audio_id = "${req.body.audio_id}"
-            AND type="transcription"
-            `;
-
-        pool.query(sql, (err, result) => {
-            if (err) {
-                console.error(err);
-                res
-                    .status(400)
-                    .send("error in get /save-test-on-transcription query.");
-            }
-            //console.log(result);
-            var check_in_users_audio_logs = `SELECT * FROM users_audio_logs WHERE users_audio_id IN (SELECT users_audio_id FROM users_audio WHERE
-                    user_id = "${req.body.user_id}"
-                    AND audio_id = "${req.body.audio_id}"
-                    AND type="transcription" )`;
-            pool.query(check_in_users_audio_logs, (err1, result1) => {
-                if (err1) {
-                    console.log(err1);
-                }
-                if (result1 && result1.length > 0) {
-                    var update_end_time_in_users_logs = `UPDATE users_audio_logs SET end_time=NOW() WHERE end_time IS NULL AND users_audio_id IN (SELECT users_audio_id FROM users_audio WHERE
-                                user_id = "${req.body.user_id}"
-                               AND audio_id = ${req.body.audio_id}
-                               AND type="transcription")`;
-                    pool.query(update_end_time_in_users_logs, (err2, result2) => {
-                        if (err2) {
-                            console.log(err2);
-                        }
-                    })
-                }
-            });
-
-            res.send(result);
-        });
-    }
-);
-//save testscore end for transcription
 
 //Routes Below Are For HR Team
 // app.get("/hr-register-form", (req, res) => {
@@ -950,18 +822,6 @@ app.use("/signature", checkNotAuthenticated, require("./routes/signature.js"));
 
 //admin server side end
 
-//Feedback Routes
-app.post("/insert-feedback-lt", (req, res) => {
-
-    let sql = `INSERT INTO feedbackLT (feedback,audio_id,feedbackCreatedAt,user_id) VALUES ("${req.body.feedback.replace(/'/g, "\\'")}","${req.body.audio_id}",Now(),"${req.body.user_id}")`
-    pool.query(sql, (err, result) => {
-        if (err) {
-            console.error(err);
-            res.status(400).send("error in get /insert-feedback-lt.");
-        }
-        res.send(result);
-    })
-})
 
 //checking authentication
 function checkNotAuthenticated(req, res, next) {
