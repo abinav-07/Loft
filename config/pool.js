@@ -22,5 +22,13 @@ var pool = mysql.createPool({
     database: process.env.MYSQL_DBNAME_TRANSCRIBE_DB,
     supportBigNumbers: true,
 });
+pool.getConnection((err, connect) => {
+    if (err) {
+        console.error(err);
+        
+    }
+    console.log("Connected");
+    connect.release();
+});
 
 module.exports = pool;

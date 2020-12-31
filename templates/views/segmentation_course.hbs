@@ -18,6 +18,7 @@
   <link rel="stylesheet" type="text/css" href="/css/styles.css">
   <link rel="stylesheet" type="text/css"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
   <style>
     body {
       overflow: hidden;
@@ -115,23 +116,6 @@
       white-space: normal;
     }
 
-    #user_info {
-      text-align: center;
-      font-size: 14px;
-      /*width: 680px;*/
-      color: #fff;
-      float: right;
-      font-weight: bold;
-      padding: 16px;
-      background: #3e97e6;
-      display: inline-block;
-      border-radius: 4%;
-      list-style-type: none;
-      -webkit-font-smoothing: antialiased;
-      white-space: normal;
-      margin-right: 20px;
-    }
-
 
     /*CSS For errorToggle*/
     #v-container {
@@ -225,7 +209,7 @@
       position: absolute;
       z-index: 1;
       left: 0px;
-      top: 1500px;
+      top: 150px;
     }
 
     #plus-button {
@@ -414,6 +398,12 @@
       white-space: nowrap;
     }
 
+    #display-training-segments{
+      margin-top: 4rem;
+      margin-left: 1rem;
+      display: none;
+    }
+
     .discard-changes {
       background-color: #ddd;
       border: 1px solid #ddd;
@@ -500,24 +490,6 @@
       position: absolute;
       z-index: 10000;
       top: 50vh;
-      left: 40vw;
-      display: none;
-    }
-
-    #already-submitted-dialouge-box{
-      background-color: white;
-      box-shadow: 0 0 12px black;
-      clear: both;
-      font-size: 18px;
-      text-align: center;
-      color: #333;
-      margin: 0 auto;
-      padding: 2em;
-      position: absolute;
-      width:20vw;
-      height: 10vh;
-      z-index: 10000;
-      top: 20vh;
       left: 40vw;
       display: none;
     }
@@ -730,6 +702,24 @@
 
     }
 
+    #already-submitted-dialouge-box{
+      background-color: white;
+      box-shadow: 0 0 12px black;
+      clear: both;
+      text-align: center;
+      font-size: 18px;
+      color: #333;
+      margin: 0 auto;
+      padding: 2em;
+      position: absolute;
+      width:20vw;
+      height: 10vh;
+      z-index: 10000;
+      top: 20vh;
+      left: 40vw;
+      display: none;
+    }
+
     #top-div-control-navigator {
       border-top: 1px solid #888888;
       display: flex;
@@ -740,15 +730,10 @@
 
     }
 
-    #display-training-segments{
-      margin-top: 4rem;
-      margin-left: 1rem;
-      display: none;
-      
-    }
-
-    #already-submitted-div{
-      display: none;
+    @-moz-document url-prefix() { 
+      .annotation-time-ms-class{
+        width: 45px;
+      }
     }
 
     /* Chrome, Safari, Edge, Opera */
@@ -771,14 +756,13 @@
   </div>
   {{>body}}
 
-  
-
   <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 
   <script src="local_modules/wavesurfer.js/dist/wavesurfer.js"></script>
   <script src="local_modules/wavesurfer.js/dist/plugin/wavesurfer.timeline.js"></script>
   <script src="local_modules/wavesurfer.js/dist/plugin/wavesurfer.regions.js"></script>
   <script src="public/js/resize.js"></script>
+  <script src="public/js/create-div.js"></script>
   <script src="public/js/create-top-speaker-div.js"></script>
   <script src="public/js/repeat-region.js"></script>
   <script src="public/js/loadingScreen.js"></script>
@@ -786,22 +770,15 @@
   <script>
     var user_id;
     var audio_id;
-    
     audio_id = {{ audio_id }};
     user_id = {{ user_id }};
-    var audio_order;    
-    {{#if reward}}
-      audio_order = {{ audio_order }};
-      {{else}}
-      audio_order="No Order"
-    {{/if}}
     var VENDOR_WEBSITE;
     VENDOR_WEBSITE={{isVendorWebsite}};
-    //////console.log(user_id);
+    
   </script>
   <script>
     var is_submitted = "FALSE";
-    //console.log(audio_order);
+
     var actualResponseLength = 0;//Assigns total response length
     var postsResponseLength = 0;//Assigns total posts length
     var wrongSpeakerScore = 0;
@@ -867,7 +844,6 @@
 
     displayWaveSurferLoading();
 
-
     //handle play button
     buttons.play.addEventListener("click", function (event) {
       event.preventDefault();
@@ -879,17 +855,15 @@
         $("#play-button").find($(".fa")).toggleClass('fa-pause fa-play');
       }
       document.getElementById('total-timestamp').innerText = secondsToTimestamp(spectrum.getDuration());
-    })
+    });
+
+    if (navigator.userAgent.indexOf("Firefox") != -1) {
+      //console.log("Mozilla here");
+    }
 
     //function on spectrum is ready 
-    spectrum.on("ready", function () {    
-      
-        
-      //User Information On Top
-      $("#training-userId").text("User Name: " + "{{user_name}}");
-      $("#training-audioName").text("Audio: " + "{{audio_name}}" + ` (${audio_order})`)
+    spectrum.on("ready", function () {
 
-      //Total Duration Of the Audio
       totalDuration = spectrum.getDuration();
 
       //canvas height to set the top speaker annotation div position from left 
@@ -1002,7 +976,10 @@
       }
 
       //Making our canvas line visible 
-      $("#peaks-container > wave").css({ "overflow": "" });
+      $("#peaks-container > wave").css({ "overflow": "" });      
+      
+
+      //$("#peaks-container > wave").css({ "height": "65vw" });
       //Creating a Canvas straight Line
       var canvas = $("#peaks-container > wave canvas");
       var newCanvas = document.createElement("canvas");
@@ -1025,13 +1002,9 @@
         context.strokeStyle = "#000";
         context.lineWidth = 1;
         context.stroke();
-      }//Canvas Creation End    
-      
-
-
+      }//Canvas Creation End      
     });//Function end for on ready spectrum
 
-    
     //Resize Window on ready
     $(document).ready(function(){
       resizeWindow();
@@ -1050,12 +1023,11 @@
             setTimeout(function(){
               if (getCookie("current_time") > 0 && $("#peaks-container").children("div").length>1) {
                 spectrum.seekTo(parseFloat(getCookie("current_time")));
-                 updateTimer();
+                updateTimer();
               //spectrum.seekTo(0.0404);
             };
             },1500);
     }
-
 
     //Function to set current time
     function updateTimer() {
@@ -1096,13 +1068,15 @@
 
     //function to convert seconds to minute, seconds and milliseconds
     function secondsToTimestamp(seconds) {
+      ////console.log(seconds)
 
       var n = Math.floor(seconds);
       var ms = (seconds - n).toFixed(3);
+      
       seconds = Math.floor(seconds);
       var h = Math.floor(seconds / 3600);
       var m = Math.floor((seconds - (h * 3600)) / 60);
-      var s = seconds - (h * 3600) - (m * 60);
+      var s = Math.ceil(seconds) - (h * 3600) - (m * 60);
 
       m = m < 10 ? '0' + m : m;
       s = s < 10 ? '0' + s : s;
@@ -1161,7 +1135,7 @@
             temp = y;
 
             var req = (spectrum.getCurrentTime() + (diff * (-1) / 96)) / spectrum.getDuration();
-
+           
             req < 0 ? req = 0 : req = req;
             req > 1 ? req = 1 : req = req;
             spectrum.seekTo(req);
@@ -1240,14 +1214,7 @@
         })
       };
 
-      //Changing Header Text for 5 segments
-      //$("#guide-for-submit-button-appearance").text("Press the SUBMIT button once you finish. The SUBMIT button will only appear if you finish playing the entire audio creating at least 5 segments.")
-
-      //Load Wave to previous time stamp from cookie
-      if (getCookie("current_time") > 0 && $("#peaks-container").children("div").length>1) {
-        spectrum.seekTo(parseFloat(getCookie("current_time")));
-        //spectrum.seekTo(0.0404);
-      };
+      
 
       //Hiding Annotation Div
       $("#annotation-box").hide();
@@ -1352,7 +1319,7 @@
 
             //creating Segments 
             spectrum.addRegion({
-              id: segmentId,              
+              id: segmentId,
               start: segmentStart,
               end: segmentEnd,
               drag: false,
@@ -1380,16 +1347,13 @@
                 is_submitted = response[0]["is_submitted"];
                 //Checking if already submitted
                 if (is_submitted == "TRUE") {
+                  //$("#display-training-segments").show();//Display Select Tag For Correct Segments
                   //console.log("Euta log");
                   disableAllInterfaceOnSubmit();
-
-                  $("#display-training-segments").show();//Display Select Tag For Correct Segments
-                  
                   ajaxReq();//Ajax Request to check correct incorrect segment
                   //displayHamburger();
                   $("#submit-button").hide();
                   $("#profile-link-button").show();
-                  
                   if(!location.hash){
                     $("#already-submitted-dialouge-box").show();
                     $("body").not("#already-submitted-dialouge-box").css({
@@ -1397,7 +1361,7 @@
                       opacity: "0.8"
                     })
                     //Boolean to stop user from using LT
-                    confirmChangesboxBool = true;  
+                    confirmChangesboxBool = true;
                   }
                   
                 }
@@ -1480,7 +1444,7 @@
     function removeTopDivSpeakers(topSpeakerClickedId) {
       //Getting the clicked Top Div Class
       var getClickedIdClass = document.getElementById(topSpeakerClickedId).className;
-      ////console.log(getClickedIdClass);
+      //console.log(getClickedIdClass);
       //Checking if the segments of the class still remain
       if ($("#peaks-container").children().hasClass(getClickedIdClass)) {
 
@@ -1491,7 +1455,7 @@
         $("#top-div-speaker-control").hide();
         updateTopDivSpeakerOnClick = false;
         updateTopDivSpeaker = false;
-        ////console.log("Class Not Found");
+        //console.log("Class Not Found");
       }
     }
 
@@ -1511,7 +1475,7 @@
         $("#peaks-container").children().each(function (index, value) {
           if (this.className == getClickedIdClass) {
             speakerNameFound = true;
-            ////console.log(this.className);
+            //console.log(this.className);
             this.className = userInputTopSpeakerName.replace(/ /g, "-");
           }
         });
@@ -1563,7 +1527,6 @@
     });
 
     function navigateTurnsLastButton(topSpeakerClickedId) {
-      
       var getClickedIdClass = document.getElementById(topSpeakerClickedId).className;
       if ($("#peaks-container").children().hasClass(getClickedIdClass)) {
         var lastSegmentId = $(`#peaks-container .${getClickedIdClass}`)[$(`#peaks-container .${getClickedIdClass}`).length - 1].id;
@@ -1592,23 +1555,31 @@
         displayCurrentContents();
       }
       //Displaying submit button only if audio is played to last and 10 segements are created    
-      if ((spectrum.getCurrentTime() > (spectrum.getDuration() - 0.1)) && ($("#peaks-container").children("div").length > 5)) {
-        if(is_submitted=="FALSE"){
-            $("#submit-button").show();
-        }      
+      if ((spectrum.getCurrentTime() > (spectrum.getDuration() - 0.1)) && ($("#peaks-container").children("div").length > 3)) {
+        //console.log(is_submitted);
+        if (is_submitted == "FALSE") {
+          $("#submit-button").show();
+        }
+
       }else{
-         $("#submit-button").hide();
+          $("#submit-button").hide();
       }
     });
 
+    var colorArr=[];
     //colorPicker
     function getRandomColor() {
-      var hue = Math.floor(Math.random() * 355);
-      return `hsl(${hue},100%,90%)`;
+      
+      var hue = Math.floor(Math.random() * 360);        
+      
+      
+    return `hsl(${hue},100%,90%)`;
+      
     }
 
     //function to create a div
     var zindexLoop = 1000;
+    /*
     function createDiv(segmentId, segmentClass = "", segmentTitle = "", segmentStart, segmentEnd, annotationText, actual = false) {
       //leftMargin =400;
       //declaring the add region bool true to allow adding regions
@@ -1621,13 +1592,11 @@
       div.className = segmentClass.replace(/ /g, "-");
       div.title = segmentTitle;
       var p = document.createElement("p");
-      var colorArr = ["#f5d98c", "#f29363", "#b4ede9", "#a1edbc"];
+      
       var neededColor = getRandomColor();
-      div.style.height = "180px";
+      div.style.height = "250px";
       //if it is actual data from database, display correct or incorrect 
       if (actual) {
-        div.style.zIndex=800;
-        div.setAttribute("actual", "true");
         if (correctSegmentCreated) {
           div.style.border = `3.5px dashed #05f234`;
           div.style.opacity = "0.4";
@@ -1635,20 +1604,18 @@
           div.style.border = `3.5px dashed #ff0a0e`;
           div.style.opacity = "0.4";
         }
-      }else{
-        div.style.zIndex = zindexLoop + 1;
       }
       //div.style.boxShadow = "1px 1px 5px";
       div.style.background = neededColor;
-      
+      div.style.zIndex = zindexLoop + 1;
       p.innerHTML = annotationText;
       p.style.transform = "translateX(0%) rotate(270deg)";
-      p.style.width = "150px";
-      p.style.height = "140px";
+      p.style.width = "200px";
+      p.style.height = "200px";
       p.style.padding = "5px";
-      p.style.fontSize = "16px";
-      p.style.wordBreak="break-word";
+      p.style.fontSize = "18px";
       p.style.pointerEvents = "none";
+      p.style.wordBreak="break-word";
       div.appendChild(p);
       div.style.position = "absolute";
       //div.style.top = "0px";
@@ -1662,10 +1629,7 @@
       div.style.width = pos1 + "px";
 
       //onClick and onChange action listener
-      if (!actual) {
-        div.addEventListener("click", changeAnnotationOnClick);
-      }
-
+      div.addEventListener("click", changeAnnotationOnClick);
 
       if ($("#peaks-container").children().hasClass(segmentClass.replace(/ /g, "-").toString())) {
         if (segmentTitle !== "default" && segmentTitle !== "Singing") {
@@ -1673,12 +1637,14 @@
           div.style.height = "180px";
           p.style.width = "150px";
           p.style.height = "150px";
+
           $("#peaks-container").append(div);
         } else {
           $("#annotation-div").children().each(function (index, value) {
             if (value.className == segmentClass.replace(/ /g, "-")) {
               div.style.background = value.style.backgroundColor;
               div.style.bottom = (leftMargin + leftSpeakerCategoryDivMargin * (index)) + "px";
+              div.style.height = "250px";
               $("#peaks-container").append(div);
               return false;
             };
@@ -1687,21 +1653,23 @@
       } else if (segmentTitle !== "default" && segmentTitle !== "Singing") {
         div.style.top = "0px";
         div.style.height = "180px";
-          p.style.width = "150px";
-          p.style.height = "150px";
+        p.style.width = "150px";
+        p.style.height = "150px";
+
         $("#peaks-container").append(div);
       }
       else {
         //var topValue=$("#peaks-container").find("."+segmentClass.replace(" ","-")).position().top;
         div.style.bottom = (leftMargin + leftSpeakerCategoryDivMargin * (($("#annotation-div").children("div").length))) + "px";
         $("#peaks-container").append(div);
+        div.style.height = "250px";
         topSpeakerDiv(segmentClass, neededColor);
       }
     }//function createDiv end
-
+  */
 
     var leftSpeakerCategoryDivMargin = 120;
-  
+   
 
     //function to update Segment Start on start time change
     function updateSegmentonTimeChange() {
@@ -1903,7 +1871,7 @@
           region.element.style.backgroundColor = "rgba(168,221,227,0.6)";
           if ($("#peaks-container").children().is("#" + highlightId)) {
             //document.getElementById(highlightId).style.opacity = "0.8";
-            document.getElementById(highlightId).style.boxShadow = "2px 2px 20px";
+            document.getElementById(highlightId).style.boxShadow = "1px 1px 10px";
             //$("#annotation-box").show();
           }
         } else {
@@ -1912,7 +1880,7 @@
           region.element.style.backgroundColor = "rgba(0,0,0,0)";
           if ($("#peaks-container").children().is("#" + region.id)) {
             //document.getElementById(region.id).style.opacity = "1"
-            document.getElementById(region.id).style.boxShadow = "1px 1px 5px";
+            document.getElementById(region.id).style.boxShadow = "0.8px 0.8px 2px";
             //$("#annotation-box").show();
           }
 
@@ -1938,6 +1906,7 @@
 
           speakerName = document.getElementById("annotation-type").value;
           spellCheckSpeakerType="annotation";
+
           annotationText = val.value;
         } else {
           annotationType = document.getElementById("annotation-type").value;
@@ -2302,6 +2271,7 @@
       })
     }//function addRegion end
 
+    
     //function to renew annotation
     function renew() {
       $("#annotation-type").val("default");
@@ -2315,6 +2285,7 @@
     //Repeat a region on repeat icon click
     $("#repeat-button").on("click", function () {
       repeatRegion();
+      
     });
 
     //function for playback 
@@ -2358,12 +2329,12 @@
         document.getElementById(currentId).style.width = pos1 + "px";
       }
 
- 
+      
+
       //previous Div text 
       document.getElementById(currentId).querySelector("p").innerText = textBeforeCursor;
 
-      //createDiv(divId,divClass,divTitle,segmentStart,segmentEnd,annotationText) 
-      //createDiv(segmentId - 1, prevDivClassName, prevDivTitle, spectrumCurrentTime, regionEndTime, textAfterCursor);
+      
 
       //ajax Request to Update Previous Division 
       var updateParams = {
@@ -2422,7 +2393,7 @@
                 
                   window.currentId = response.insertId;
                   window.segment_id = response.insertId;
-            //  console.log(currentId);
+          //    console.log(currentId);
             }
         }
       })
@@ -2440,7 +2411,7 @@
         splitRegion(textBeforeCursor, textAfterCursor);
         updateAnnotationOnChange = false;
         updateAnnotationOnClick = false;
-      }
+      }      
     })
 
     //function for confirming changes on close click
@@ -2650,11 +2621,16 @@
 
     //Function to Check correct speakername
     function spellCheckSpeakerName(speakerName,type) {
+      
       //console.log(speakerName);
       var splitSpeakerName = speakerName.split(" ");
-      //console.log(splitSpeakerName);
-      if (splitSpeakerName[0] != "speaker") {
-        if (((type=="annotation") && (splitSpeakerName[0] == "DTMF" || splitSpeakerName[0] == "Applause" || splitSpeakerName[0] == "Laughter" || splitSpeakerName[0] == "Music" || splitSpeakerName[0] == "Noise" || splitSpeakerName[0] == "Ringtone")) || ((type=="speaker") && (splitSpeakerName[0] == "unidentifiable" && splitSpeakerName[1] == "speaker"))) {
+    
+      //console.log(splitSpeakerName[0]);
+      if (splitSpeakerName[0] != "speaker" ) {
+        console.log("Error Here");
+        console.log(type)
+        if (((type=="annotation") && (splitSpeakerName == "DTMF" || splitSpeakerName == "Applause" || splitSpeakerName == "Laughter" || splitSpeakerName == "Music" || splitSpeakerName == "Noise" || splitSpeakerName == "Ringtone")) || ((type=="speaker") && (splitSpeakerName[0] == "unidentifiable" && splitSpeakerName[1] == "speaker"))) {
+          
           return true;
         } else if (splitSpeakerName[0] == "pre" && splitSpeakerName[1] == "recorded" && splitSpeakerName[2] == "speaker") {
           //Insert More Code Below if pre recorded speaker name is needed too!
@@ -2716,7 +2692,7 @@
         var previousSpeakerEnd = spectrum.regions.list[region].end;
 
         //|| (segmentStart == previousSpeakerStart && segmentEnd == previousSpeakerEnd)
-        if ((segmentStart > previousSpeakerStart && segmentStart < previousSpeakerEnd) || //(segmentStart == previousSpeakerStart && segmentEnd == previousSpeakerEnd) ||
+        if ((segmentStart > previousSpeakerStart && segmentStart < previousSpeakerEnd) || //(segmentStart == previousSpeakerStart && segmentEnd == previousSpeakerEnd)||
           (segmentEnd > previousSpeakerStart && segmentEnd < previousSpeakerEnd) || (previousSpeakerStart > segmentStart && previousSpeakerStart < segmentEnd)) {
 
           if (speakerName != "DTMF" && speakerName != "Applause" && speakerName != "Laughter" && speakerName != "Music" && speakerName != "Noise" && speakerName != "Ringtone") {
@@ -2737,7 +2713,7 @@
     //function for promises and ajax request on submit
     function ajaxReq() {
       ////console.log("Hawa ");
-      if (Object.keys(spectrum.regions.list).length == 0 || overallScore<0) {
+      if (Object.keys(spectrum.regions.list).length == 0 || overallScore < 0) {
         overallScore = 100;
       } else {
         var promise = new Promise((resolve, reject) => {
@@ -2941,11 +2917,11 @@
       }
     }//ajaxReq function end
 
-  $("#select-display-training-segments").on("change",function(){
-    displayCorrectSegment();
-  });
+    $("#select-display-training-segments").on("change",function(){
+      displayCorrectSegment();
+    });
 
-    //Display Correct Training Segments 
+  //Display Correct Training Segments 
     function displayCorrectSegment(){
       var selected=$("#select-display-training-segments").val();
       //console.log(selected);
@@ -2965,6 +2941,7 @@
         });
       }
     }
+
 
     //Function to Display Errors and hamburger icons
     function displayHamburger() {
@@ -3017,94 +2994,111 @@
 
     //Function to call on submit click
     $("#submit-button").on("click", function () {
-      //submitClick();      
+
+      //submitClick();    
       ajaxReq();
-      disableAllInterfaceOnSubmit();
       displayHamburger();
       saveScores();
       $("#submit-button").hide();
       $("#profile-link-button").show();
-      //Event logs
-      var eventProperties = {
-        project_type: "Sample Segmentation",
-      };
-      logEvent("Sample Completed", eventProperties);
+      logEvent("Audio Test Submitted - S");
+      getWebAppId();
     });//Submit Button Click Function End
 
+    function getWebAppId() {
+      $.ajax({
+        method: "POST",
+        url: "/get-web-app-id",
+        data: {
+          user_id: user_id
+        },
+        success: function (data) {
+
+          var mailParams = {
+            "user_id": `${data[0].web_app_id}`,
+            "status": "3",
+            "project_type_id": "4"
+          }
+          $.ajax({
+            method: "POST",
+            url: "{{ webapp_basepath }}/api/set-user-language-project-type-status",
+            data: mailParams,
+            success: function () {
+              //console.log("Web app status set");
+            }
+          });
+        }
+      });
+    }
+
     //clicking in profile link button
-    $("#profile-link-button").on("click", () => {      
+    $("#profile-link-button").on("click", () => {
       if(VENDOR_WEBSITE){
         window.location.href = "{{ VENDOR_WEBSITE_URL }}/sample#segmentation";
         
       }else{
         window.location.href = "{{ webapp_basepath }}/sample#segmentation";
       }
+        
+      
     });//Profile Link Button function End
 
     //function to display current div content in annotation box
     function displayCurrentContents() {
-
-      //Variable to Get Actual Attribute From Div
-      var actualAttribute;
-
       if (spectrum.regions.getCurrentRegion() != null && !updateAnnotationOnChange && !updateAnnotationOnClick && !updateTopDivSpeaker && !updateTopDivSpeakerOnClick) {
         $("#top-div-speaker-control").hide();
         $("#annotation-box").show();
         var segmentId = spectrum.regions.getCurrentRegion().id;
         currentId = spectrum.regions.getCurrentRegion().id;
-        actualAttribute = document.getElementById(segmentId).getAttribute("actual")
 
-        if (!actualAttribute) {
-          //highlight current region
-          highlightRegion();
+        //highlight current region
+        highlightRegion();
 
-          //segment start variables
-          var startMinute = secondsToMinutes(spectrum.regions.getCurrentRegion().start);
-          var startSeconds = secondsToSeconds(spectrum.regions.getCurrentRegion().start);
-          var startMilliseconds = secondsToMilliseconds(spectrum.regions.getCurrentRegion().start);
-          currentStartTime = spectrum.regions.getCurrentRegion().start
+        //segment start variables
+        var startMinute = secondsToMinutes(spectrum.regions.getCurrentRegion().start);
+        var startSeconds = secondsToSeconds(spectrum.regions.getCurrentRegion().start);
+        var startMilliseconds = secondsToMilliseconds(spectrum.regions.getCurrentRegion().start);
+        currentStartTime = spectrum.regions.getCurrentRegion().start
 
-          //segment end variables
-          var endMinute = secondsToMinutes(spectrum.regions.getCurrentRegion().end);
-          var endSeconds = secondsToSeconds(spectrum.regions.getCurrentRegion().end);
-          var endMilliseconds = secondsToMilliseconds(spectrum.regions.getCurrentRegion().end);
-          currentEndTime = spectrum.regions.getCurrentRegion().end;
+        //segment end variables
+        var endMinute = secondsToMinutes(spectrum.regions.getCurrentRegion().end);
+        var endSeconds = secondsToSeconds(spectrum.regions.getCurrentRegion().end);
+        var endMilliseconds = secondsToMilliseconds(spectrum.regions.getCurrentRegion().end);
+        currentEndTime = spectrum.regions.getCurrentRegion().end;
 
-          //displaying texts   
-          $("#annotation-start-minute").val(startMinute);
-          $("#annotation-start-seconds").val(startSeconds);
-          $("#annotation-start-milliseconds").val(startMilliseconds);
-          $("#annotation-end-minute").val(endMinute);
-          $("#annotation-end-seconds").val(endSeconds);
-          $("#annotation-end-milliseconds").val(endMilliseconds);
+        //displaying texts   
+        $("#annotation-start-minute").val(startMinute);
+        $("#annotation-start-seconds").val(startSeconds);
+        $("#annotation-start-milliseconds").val(startMilliseconds);
+        $("#annotation-end-minute").val(endMinute);
+        $("#annotation-end-seconds").val(endSeconds);
+        $("#annotation-end-milliseconds").val(endMilliseconds);
 
-          //($("#peaks-container").children().is(`#${segmentId}`) > 0)
-          if ($("#peaks-container").children().is(`#${segmentId}`) > 0) {
-            var segmentType = document.getElementById(segmentId).title;
-            var segmentSpeaker = document.getElementById(segmentId).className.replace(/-/g, " ");
-            var segmentText = document.getElementById(segmentId).innerText;
-            var divColor = document.getElementById(segmentId).style.background;
+        //($("#peaks-container").children().is(`#${segmentId}`) > 0)
+        if ($("#peaks-container").children().is(`#${segmentId}`) > 0) {
+          var segmentType = document.getElementById(segmentId).title;
+          var segmentSpeaker = document.getElementById(segmentId).className.replace(/-/g, " ");
+          var segmentText = document.getElementById(segmentId).innerText;
+          var divColor = document.getElementById(segmentId).style.background;
 
-            //changing color of Annotation Heading
-            $(".annotation-editHeading").css("backgroundColor", divColor);
-            if (segmentType !== "default" && segmentType !== "Singing") {
-              document.getElementById("transcription-area").style.display = "none";
-              document.getElementById("speaker-name").style.display = "none";
-              //$("#annotation-box").css("height", 250 + "px");
-              document.getElementById("annotation-type").value = segmentType;
-              document.getElementById("speaker-name").value = "";
-              document.getElementById("transcription-area").value = "";
-            } else {
-              document.getElementById("transcription-area").style.display = "block";
-              document.getElementById("speaker-name").style.display = "block";
-              //$("#annotation-box").css("height", 32 + "rem");
-              document.getElementById("annotation-type").value = segmentType;
-              document.getElementById("speaker-name").value = segmentSpeaker;
-              document.getElementById("transcription-area").value = segmentText;
-            }
+          //changing color of Annotation Heading
+          $(".annotation-editHeading").css("backgroundColor", divColor);
+          if (segmentType !== "default" && segmentType !== "Singing") {
+            document.getElementById("transcription-area").style.display = "none";
+            document.getElementById("speaker-name").style.display = "none";
+            //$("#annotation-box").css("height", 250 + "px");
+            document.getElementById("annotation-type").value = segmentType;
+            document.getElementById("speaker-name").value = "";
+            document.getElementById("transcription-area").value = "";
+          } else {
+            document.getElementById("transcription-area").style.display = "block";
+            document.getElementById("speaker-name").style.display = "block";
+            //$("#annotation-box").css("height", 32 + "rem");
+            document.getElementById("annotation-type").value = segmentType;
+            document.getElementById("speaker-name").value = segmentSpeaker;
+            document.getElementById("transcription-area").value = segmentText;
           }
         }
-
       }
     }//DisplayCurrentContents function end
 
@@ -3218,21 +3212,19 @@
     })(window, document);
     var reqAPIKey = "{{ amplitude_api_key }}";
     var params = {
-      user_id
+      user_id:{{ user_id }}
     }
-    console.log(params);
     $.ajax({
       method: "POST",
       url: "/get-web-app-id",
       data: params,
       success: function (response) {
-
-        amplitude.getInstance().init(reqAPIKey, response.web_app_id, {
+        amplitude.getInstance().init(reqAPIKey, response[0].web_app_id.toString(), {
           includeReferrer: true,
           includeUtm: true,
           includeGclid: true,
         });
-        logEvent("Segmentation Task Loaded");
+        logEvent("Audio Test Screen Loaded - S");
       }
     });
 
