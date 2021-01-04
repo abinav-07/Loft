@@ -8,6 +8,7 @@ const transcriptionLandingAPIs=require("../services/transcription_landing_APIs")
 const transcriptionTaskLandingAPIs=require("../services/transcription_task_landing_APIs");
 const transcriptionReviewLandingAPIs=require("../services/transcription_review_landing_APIs");
 const transcriptionDifferenceCheckAPIs=require("../services/transcription_difference_check");
+const getWebAppIdAPI=require("../services/get_webapp_id_API");
 
 const postsTable =require('../services/posts_table_queries');
 const actualTable=require("../services/actual_table_queries");
@@ -126,6 +127,11 @@ router.post("/save-test-score-on-users_audio_table",submitLTQueries.submitButton
 router.post("/react-api/save-test-score-on-users_audio_table",submitLTQueries.submitButtonClickSegmentation);
 router.post("/save-test-score-on-users_audio_table-for-transcription",submitLTQueries.submitButtonClickTranscription);
 router.post("/react-api/save-test-score-on-users_audio_table-for-transcription",submitLTQueries.submitButtonClickTranscription);
+
+//WebApp Related APIs
+router.post("/get-web-app-id",getWebAppIdAPI.getWebAppId);
+//Post Method Above for transcription app
+router.get("/react-api/get-web-app-id",getWebAppIdAPI.getWebAppId);
 
 //LT FeedBack
 router.post("/insert-feedback-lt",ltFeedBackQueries.insertFeedBackLt);
