@@ -23,6 +23,7 @@
     "mysql2": "^2.2.5",
     "node-fetch": "^2.6.0",
     "node-google-drive-new": "^1.1.4",
+    "nodemon": "^2.0.7",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
     "peaks.js": "^0.17.0",
@@ -35,7 +36,8 @@
     "web-audio-api": "^0.2.2"
   },
   "devDependencies": {},
-  "scripts": {
+  "scripts": {    
+    "dev":"nodemon transcribe-app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
