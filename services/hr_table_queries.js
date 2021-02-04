@@ -2,8 +2,7 @@
 const pool = require("../config/pool");
 const async = require("async");
 const bcrypt = require("bcryptjs");
-const { Passport } = require("passport");
-const passport = require("passport");
+
 
 const registerHR = async (req, res) => {
     try {
@@ -59,6 +58,10 @@ const registerHRReact = async (req, res) => {
     } catch (err) {
         res.status(400).json(err);
     }
+}
+
+const getHRLoginPage = (req, res) => {
+    res.render("hrLogin");
 }
 
 const loginHRReact = (req, res) => {
@@ -489,7 +492,45 @@ const getWebAppIdForHR = (req, res) => {
     } else {
         res.status(400).send("Missing User Id");
     }
+}
 
+const saveHRTestLogs = (req, res) => {
+    let sql = `INSERT INTO reviewer_logs(reviewer_id,users_name,user_id,users_status,status_changed_time,type)
+            VALUES ("${req.body.reviewerId}","${req.body.user_name}","${req.body.user_id}","${req.body.user_status}",Now(),"${req.body.type}")
+    `;
+    pool.query(sql, (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(400).send("error in get /hr-save-test-logs");
+        }
+        res.status(200).send(result);
+    });
+}
+
+const saveHRTranscriptionLogs = (req, res) => {
+    let sql = `INSERT INTO reviewer_logs(reviewer_id,users_name,user_id,users_status,status_changed_time,type)
+    VALUES ("${req.body.reviewerId}","${req.body.user_name}","${req.body.user_id}","${req.body.user_status}",Now(),"${req.body.type}")
+`;
+    pool.query(sql, (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(400).send("error in get /hr-save-transcription-logs");
+        }
+        res.status(200).send(result);
+    });
+}
+
+const saveHRTrainingLogs=(req,res)=>{
+    let sql = `INSERT INTO reviewer_logs(reviewer_id,users_name,user_id,users_status,status_changed_time,type)
+            VALUES ("${req.body.reviewerId}","${req.body.user_name}","${req.body.user_id}","${req.body.user_status}",Now(),"${req.body.type}")
+    `;
+    pool.query(sql, (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(400).send("error in get /hr-save-training-logs");
+        }
+        res.status(200).send(result);
+    });
 }
 
 module.exports = {
@@ -514,5 +555,8 @@ module.exports = {
     confirmPassFailHR,
     getHRClickedUserId,
     getWebAppIdForHR,
-    
+    getHRLoginPage,
+    saveHRTestLogs,
+    saveHRTranscriptionLogs,
+    saveHRTrainingLogs,
 }

@@ -1,6 +1,7 @@
 const express = require("express");
 const passport = require("passport");
 
+//Landing Queries
 const landingAPIs = require("../services/landing_APIs");
 const segmentationCourseLandingAPIs = require("../services/segmentation_course_landing_APIs");
 const segmentationLandingAPIs = require("../services/segmentation_landing_APIs");
@@ -11,6 +12,7 @@ const transcriptionReviewLandingAPIs = require("../services/transcription_review
 const transcriptionDifferenceCheckAPIs = require("../services/transcription_difference_check");
 const getWebAppIdAPI = require("../services/get_webapp_id_API");
 
+//Table Queries
 const postsTable = require('../services/posts_table_queries');
 const actualTable = require("../services/actual_table_queries");
 const transcriptionTable = require("../services/transcription_table_queries");
@@ -18,11 +20,13 @@ const transcriptionTaskSegmentsTable = require("../services/transcription_tasks_
 const submitLTQueries = require("../services/lt_submit_queries");
 const ltFeedBackQueries = require("../services/lt_feedback_queries");
 
+//Segmentation Course Queries
 const segmentationCourseAPIs = require("../services/segmentation_course_menu_queries");
 const segmentationQuizQuestionsAPIs = require("../services/segmentation_quiz_queries");
 
+//HR, admin Queries
 const hrReviewTableQueries = require("../services/hr_table_queries");
-
+const adminReviewTableQueries=require("../services/admin_table_queries");
 
 const router = express.Router();
 
@@ -136,6 +140,9 @@ router.post("/get-web-app-id", getWebAppIdAPI.getWebAppId);
 //Post Method Above for transcription app
 router.get("/react-api/get-web-app-id", getWebAppIdAPI.getWebAppId);
 
+//get Language id of an audio
+router.post("/get-language-id",getWebAppIdAPI.getLanguageId);
+
 //LT FeedBack
 router.post("/insert-feedback-lt", ltFeedBackQueries.insertFeedBackLt);
 router.post("/react-api/insert-feedback-lt", ltFeedBackQueries.insertFeedBackLt);
@@ -143,6 +150,7 @@ router.post("/react-api/insert-feedback-lt", ltFeedBackQueries.insertFeedBackLt)
 //HR Review Table APIs
 router.post("/register-hr", hrReviewTableQueries.registerHR);
 router.post("/react-api/register-hr", hrReviewTableQueries.registerHRReact);
+router.get("/hr-login-form",hrReviewTableQueries.getHRLoginPage);
 router.post("/hr-login",
     passport.authenticate("local", {
         failureRedirect: "/hr-login-form",
@@ -178,6 +186,31 @@ router.post("/hr-click-get-user-id",hrReviewTableQueries.getHRClickedUserId);
 router.post("/react-api/hr-click-get-user-id",hrReviewTableQueries.getHRClickedUserId);
 router.post("/get-web-app-id-for-hr",hrReviewTableQueries.getWebAppIdForHR);
 router.post("/react-api/get-web-app-id-for-hr",hrReviewTableQueries.getWebAppIdForHR);
+//Route for test logs
+router.post("/save-hr-test-logs",hrReviewTableQueries.saveHRTestLogs);
+router.post("/react-api/save-hr-test-logs",hrReviewTableQueries.saveHRTestLogs);
+router.post("/save-hr-training-logs",hrReviewTableQueries.saveHRTrainingLogs);
+router.post("/react-api/save-hr-training-logs",hrReviewTableQueries.saveHRTrainingLogs);
+router.post("/save-hr-transcription-logs",hrReviewTableQueries.saveHRTrainingLogs);
+router.post("/react-api/save-hr-transcription-logs",hrReviewTableQueries.saveHRTrainingLogs);
+
+//Admin Review Table APIs
+router.get("/admin-login-form",adminReviewTableQueries.getAdminLoginPage);
+router.get("/admin-review-table",adminReviewTableQueries.getAdminReviewPage);
+router.get("/transcription-admin-review-table",adminReviewTableQueries.getTranscriptionAdminPage);
+router.get("/training-admin-review-table",adminReviewTableQueries.getTrainingAdminPage);
+router.post("/admin-review-table-datas",adminReviewTableQueries.adminReviewTableDatas);
+router.post("/react-api/admin-review-table-datas",adminReviewTableQueries.adminReviewTableDatas);
+router.post("/transcription-admin-review-table-datas",adminReviewTableQueries.adminTranscriptionReviewTableDatas);
+router.post("/react-api/transcription-admin-review-table-datas",adminReviewTableQueries.adminTranscriptionReviewTableDatas);
+router.post("/training-admin-review-table-datas",adminReviewTableQueries.adminTrainingReviewTableDatas);
+router.post("/react-api/training-admin-review-table-datas",adminReviewTableQueries.adminTrainingReviewTableDatas);
+router.post("/confirm-pass-fail-admin-review",adminReviewTableQueries.confirmPassFailAdmin);
+router.post("/react-api/confirm-pass-fail-admin-review",adminReviewTableQueries.confirmPassFailAdmin);
+router.post("/get-web-app-id-for-admin",adminReviewTableQueries.getWebAppIdForAdmin);
+router.post("/react-api/get-web-app-id-for-admin",adminReviewTableQueries.getWebAppIdForAdmin);
+router.post("/admin-click-get-user-id",adminReviewTableQueries.getAdminClickedUserId);
+router.post("/react-api/admin-click-get-user-id",adminReviewTableQueries.getAdminClickedUserId);
 
 //checking authentication
 function checkNotAuthenticated(req, res, next) {
