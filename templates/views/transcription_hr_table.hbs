@@ -97,7 +97,8 @@
             <th>End Time</th>
             <th>Score</th>
             <th>Status
-                {{!-- <span id="export-work" style="display: none;">&emsp; &emsp;<button id="export-button">EXPORT</button></span> --}}
+                {{!-- <span id="export-work" style="display: none;">&emsp; &emsp;<button
+                        id="export-button">EXPORT</button></span> --}}
             </th>
         </thead>
         <tbody>
@@ -112,135 +113,7 @@
 <script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.html5.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.print.min.js"></script>
 <!-- Amplitude -->
-<script type="text/javascript">
-    (function (e, t) {
-        var n = e.amplitude || {
-            _q: [],
-            _iq: {}
-        };
-        var r = t.createElement("script");
-        r.type = "text/javascript";
-        r.integrity =
-            "sha384-RsEu4WZflrqYcEacpfoGSib3qaSvdYwT4D+DrWqeBuDarSzjwUQR1jO8gDiXZd0E";
-        r.crossOrigin = "anonymous";
-        r.async = true;
-        r.src = "https://cdn.amplitude.com/libs/amplitude-6.2.0-min.gz.js";
-        r.onload = function () {
-            if (!e.amplitude.runQueuedFunctions) {
-                //console.log("[Amplitude] Error: could not load SDK");
-            }
-        };
-        var i = t.getElementsByTagName("script")[0];
-        i.parentNode.insertBefore(r, i);
-
-
-        function s(e, t) {
-            e.prototype[t] = function () {
-                this._q.push([t].concat(Array.prototype.slice.call(arguments, 0)));
-                return this;
-            };
-        }
-        var o = function () {
-            this._q = [];
-            return this;
-        };
-        var a = [
-            "add",
-            "append",
-            "clearAll",
-            "prepend",
-            "set",
-            "setOnce",
-            "unset",
-        ];
-        for (var u = 0; u < a.length; u++) {
-            s(o, a[u]);
-        }
-        n.Identify = o;
-        var c = function () {
-            this._q = [];
-            return this;
-        };
-        var l = [
-            "setProductId",
-            "setQuantity",
-            "setPrice",
-            "setRevenueType",
-            "setEventProperties",
-        ];
-        for (var p = 0; p < l.length; p++) {
-            s(c, l[p]);
-        }
-        n.Revenue = c;
-        var d = [
-            "init",
-            "logEvent",
-            "logRevenue",
-            "setUserId",
-            "setUserProperties",
-            "setOptOut",
-            "setVersionName",
-            "setDomain",
-            "setDeviceId",
-            "enableTracking",
-            "setGlobalUserProperties",
-            "identify",
-            "clearUserProperties",
-            "setGroup",
-            "logRevenueV2",
-            "regenerateDeviceId",
-            "groupIdentify",
-            "onInit",
-            "logEventWithTimestamp",
-            "logEventWithGroups",
-            "setSessionId",
-            "resetSessionId",
-        ];
-
-        function v(e) {
-            function t(t) {
-                e[t] = function () {
-                    e._q.push([t].concat(Array.prototype.slice.call(arguments, 0)));
-                };
-            }
-            for (var n = 0; n < d.length; n++) {
-                t(d[n]);
-            }
-        }
-        v(n);
-        n.getInstance = function (e) {
-            e = (!e || e.length === 0 ? "$default_instance" : e).toLowerCase();
-            if (!n._iq.hasOwnProperty(e)) {
-                n._iq[e] = {
-                    _q: []
-                };
-                v(n._iq[e]);
-            }
-            return n._iq[e];
-        };
-        e.amplitude = n;
-    })(window, document);
-    var reqAPIKey = "{{ amplitude_api_key }}";
-</script>
-<script>
-    function logEvent(ampEventName, ampEventProp) {
-        //console.log("logging event : " + ampEventName);
-        amplitude.getInstance().logEvent(ampEventName, ampEventProp);
-    }
-
-    function setUserProp(identifyObj) {
-        amplitude.getInstance().Identify(identifyObj);
-    }
-</script>
-<script>
-    $(document).ready(() => {
-        amplitude.getInstance().init(reqAPIKey, null, {
-            includeReferrer: true,
-            includeUtm: true,
-            includeGclid: true,
-        });
-    })
-</script>
+{{>amplitude_script}}
 <script>
     var reviewerId = {{ reviewerId }};
     var reviewerEmail = `{{reviewerEmail}}`;
@@ -285,7 +158,7 @@
                                     <button class="${users_data[i].users_audio_id} confirm-button">Confirm</button>
                                  </td>
                             </tr>`);
-                        } else if(users_data[i].status == "RETRY") {
+                        } else if (users_data[i].status == "RETRY") {
                             $("#users_table tbody").append(
                                 `<tr data-user-id="${users_data[i].users_audio_id}" data-user-name="${users_data[i].name}" data-language-id="${users_data[i].Language_id}" data-audio-id="${users_data[i].audio_id}">
                                 <td class="user-name-class">${users_data[i].name}</td>
@@ -298,7 +171,7 @@
                                     <button class="${users_data[i].users_audio_id} confirm-button">Confirm</button>
                                  </td>
                             </tr>`);
-                        }else{
+                        } else {
                             $("#users_table tbody").append(
                                 `<tr data-user-id="${users_data[i].users_audio_id}" data-user-name="${users_data[i].name}" data-language-id="${users_data[i].Language_id}" data-audio-id="${users_data[i].audio_id}">
                                 <td class="user-name-class">${users_data[i].name}</td>
@@ -340,7 +213,7 @@
                                                 .to$()
                                                 .find(':selected')
                                                 .text() */
-                                                return $(data).find("option:selected").text()
+                                            return $(data).find("option:selected").text()
                                         } else {
                                             return data;
                                         }
@@ -374,13 +247,13 @@
                     if (response[0]["is_submitted"] == "TRUE") {
                         window.open(
                             //`http://localhost:3000/transcribe?user_id=${clicked_user_id}`,
-                            `${new URL(window.location).origin}/transcription-review?user_id=${response[0]["user_id"]}&audio_id=${response[0]["audio_id"]}`,
+                            `${new URL(window.location).origin}/transcription-review?user_id=${response[0]["user_id"]}&audio_id=${response[0]["audio_id"]}&uaId=${clicked_user_id}&rId=${reviewerId}`,
                             '_blank' //New Tab
                         );
                     } else {
                         window.open(
                             //`http://localhost:3000/transcribe?user_id=${clicked_user_id}`,
-                            `${new URL(window.location).origin}/transcription?user_id=${response[0]["user_id"]}&audio_id=${response[0]["audio_id"]}`,
+                            `${new URL(window.location).origin}/transcription?user_id=${response[0]["user_id"]}&audio_id=${response[0]["audio_id"]}&uaId=${clicked_user_id}&rId=${reviewerId}`,
                             '_blank' //New Tab
                         );
                     }
@@ -409,16 +282,12 @@
                     userId,
                     changedPassFailValue
                 }
-                console.log(params);
                 await $.ajax({
                     method: "POST",
                     url: "/confirm-pass-fail-hr-review",
                     data: params,
                     success: function () {
                         $(`button.${userId}`).hide();
-                        //console.log("Pass Fail Saved");
-                        // //console.log(userId);
-
                         $.ajax({
                             method: "POST",
                             url: "/save-hr-transcription-logs",
@@ -442,128 +311,39 @@
                                             status: changedPassFailValue
                                         }
                                         logEvent("Sample Reviewed - Trans", eventProperties);
-                                        var mailParams;
-                                        var status;
-                                        //console.log(response);
-
+                                        var mailParams, status;
+                                        mailParams = {
+                                            "user_id": `${web_app_id}`,
+                                            "project_type_id": "2",
+                                            "language_id": languageId
+                                        }
                                         if (changedPassFailValue == "PASS") {
-
                                             $.ajax({
                                                 method: "GET",
                                                 url: `{{ webapp_basepath }}/api/tcp/test/status?user_id=${web_app_id}&language_id=${languageId}`,
                                                 success: function (quizResponse) {
                                                     console.log(quizResponse);
-                                                    if (quizResponse && (quizResponse.audioTestResult && quizResponse.audioTestResult == "Not Submitted") ) {
-                                                        status = 2;
-                                                        mailParams = {
-                                                            "user_id": `${web_app_id}`,
-                                                            "status": status,
-                                                            "project_type_id": "2",
-                                                            "language_id": languageId
-                                                        }
-                                                        //sendEmailWebapp(mailParams);
-                                                    } else if (quizResponse && (quizResponse.audioTestResult == "Failed" || quizResponse.quizResult=="Failed")) {
-                                                        status = 6;
-                                                        mailParams = {
-                                                            "user_id": `${web_app_id}`,
-                                                            "status": status,
-                                                            "project_type_id": "2",
-                                                            "language_id": languageId
-                                                        }
-                                                        //sendEmailWebapp(mailParams);
-                                                    } else if (quizResponse && (quizResponse.audioTestResult == "Retry" || quizResponse.quizResult=="Retry" )) {
-                                                        status = 4;
-                                                        mailParams = {
-                                                            "user_id": `${web_app_id}`,
-                                                            "status": status,
-                                                            "project_type_id": "2",
-                                                            "language_id": languageId
-                                                        }
-                                                    } else if ((quizResponse && quizResponse.quizResult=="Passed" && !quizResponse.audioTestResult ) || 
-                                                    (quizResponse && quizResponse.audioTestResult == "Passed" && quizResponse.quizResult=="Passed" )) {
-                                                        status = 5;
-                                                        mailParams = {
-                                                            "user_id": `${web_app_id}`,
-                                                            "status": status,
-                                                            "project_type_id": "2",
-                                                            "language_id": languageId
-                                                        }
-                                                        //sendEmailWebapp(mailParams);
+                                                    if (quizResponse && (quizResponse.audioTestResult && quizResponse.audioTestResult == "Not Submitted")) {
+                                                        mailParams.status = 2;
+                                                    } else if (quizResponse && (quizResponse.audioTestResult == "Failed" || quizResponse.quizResult == "Failed")) {
+                                                        mailParams.status = 6;
+                                                    } else if (quizResponse && (quizResponse.audioTestResult == "Retry" || quizResponse.quizResult == "Retry")) {
+                                                        mailParams.status = 4;
+                                                    } else if ((quizResponse && quizResponse.quizResult == "Passed" && !quizResponse.audioTestResult) ||
+                                                        (quizResponse && quizResponse.audioTestResult == "Passed" && quizResponse.quizResult == "Passed")) {
+                                                        mailParams.status = 5;
                                                     }
-                                                    console.log(mailParams);
-                                                    
-                                                    $.ajax({
-                                                        method: "POST",
-                                                        url: "{{ webapp_basepath }}/api/set-user-language-project-type-status",
-                                                        data: mailParams,
-                                                        success: function () {
-                                                            console.log("EMAIl Sent and web app status set");
-                                                            //recreatingHRTable();
-                                                        }
-                                                    });
-                                                    
+                                                    setULPT(mailParams, userId, audioId)
                                                 }
                                             });
-
                                         } else if (changedPassFailValue == "FAIL") {
-
-                                            status = 6;
-                                            mailParams = {
-                                                "user_id": `${web_app_id}`,
-                                                "status": status,
-                                                "project_type_id": "2",
-                                                "language_id": languageId
-                                            }
-                                            //console.log(mailParams);
-
-                                            $.ajax({
-                                                method: "POST",
-                                                url: "{{ webapp_basepath }}/api/set-user-language-project-type-status",
-                                                data: mailParams,
-                                                success: function () {
-                                                    console.log("EMAIl Sent and web app status set");
-                                                    //recreatingHRTable();
-                                                }
-                                            });
+                                            mailParams.status = 6;
+                                            setULPT(mailParams, userId, audioId)
                                         } else if (changedPassFailValue == "RETRY") {
-
-                                            status = 4;
-
-                                            mailParams = {
-                                                "user_id": `${web_app_id}`,
-                                                "status": status,
-                                                "project_type_id": "2",
-                                                "language_id": languageId
-                                            }
-                                            console.log(mailParams);
-
-                                            $.ajax({
-                                                method: "POST",
-                                                url: "{{ webapp_basepath }}/api/set-user-language-project-type-status",
-                                                data: mailParams,
-                                                success: function () {
-                                                    console.log(mailParams);
-                                                    if (status == 4) {
-
-                                                        $.ajax({
-                                                            method: "POST",
-                                                            url: "/reset-transcription-data-for-retry",
-                                                            data: { user_id: userId, audio_id: audioId },
-                                                            success: function () {
-                                                                console.log("EMAIl Sent and web app status set and transcription reset");
-                                                                // recreatingHRTable();
-                                                            }
-                                                        })
-                                                    } else {
-
-                                                        console.log("EMAIl Sent and web app status set");
-                                                        //recreatingHRTable();
-                                                    }
-
-                                                }
-                                            });
-
+                                            mailParams.status = 4;
+                                            setULPT(mailParams, userId, audioId)
                                         }
+
                                     }
                                 })
                             }
@@ -574,7 +354,31 @@
             });
         }
 
+        function setULPT(mailParams, userId, audioId) {
 
+            $.ajax({
+                method: "POST",
+                url: "{{ webapp_basepath }}/api/set-user-language-project-type-status",
+                data: mailParams,
+                success: function () {
+                    console.log("EMAIl Sent and web app status set");
+                    console.log(mailParams);
+                    if (status == 4) {
+                        $.ajax({
+                            method: "POST",
+                            url: "/reset-transcription-data-for-retry",
+                            data: { user_id: userId, audio_id: audioId },
+                            success: function () {
+                                console.log("EMAIl Sent and web app status set and transcription reset");
+                            }
+                        })
+                    } else {
+                        consolelog("EMAIl Sent and web app status set");
+                    }
+
+                }
+            });
+        }
         //Function to export data to csv file
         function download_csvFile(csv, fileName) {
             var csvFile;
@@ -611,7 +415,7 @@
                     row.push(cols[j].innerText);
                 }
                 row.push(cols[cols.length - 1].querySelector("select").value);
-                
+
                 console.log(cols[cols.length - 1].querySelector("select").value);
                 csv.push('"' + row.join('","') + '"');
             }

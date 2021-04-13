@@ -5,13 +5,11 @@ const pool = require("./../config/pool");
 function initialize(passport) {
     const authenticateUser = (email, password, done) => {
         var getUserSql = `SELECT * FROM reviewers WHERE reviewer_email='${email}'`
-        console.log(getUserSql);
         pool.query(getUserSql, async(err, result) => {
             if (err) {
                 console.error(err);
                 res.status(400).send(err);
             }
-            console.log(result[0]);
             if (result.length == 0) {
                 console.log("Email Not Registered");
                 return done(null, false, {
@@ -19,7 +17,6 @@ function initialize(passport) {
                 })
             }
             if (await bcrypt.compare(password, result[0].reviewer_password)) {
-                console.log(result[0]);
                 return done(null, result[0]);
             } else {
 
