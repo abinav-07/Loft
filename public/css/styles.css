@@ -106,6 +106,7 @@
         /*width: 680px;*/
         color: #fff;
         float: right;
+        display: none;
         font-weight: bold;
         padding: 5px;
         margin-top: 1rem;
