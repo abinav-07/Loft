@@ -1156,7 +1156,7 @@
 
   {{!-- Submit button for review testing --}}  
   <button id="submit-button" class="disable-all-on-Submit">Submit</button>
-  <button id="profile-link-button" style="display:none">Go To My Profile</button>
+  {{!-- <button id="profile-link-button" style="display:none">Go To My Profile</button> --}}
 
   <audio id="my-audio">
     <source src="example.mp3">
@@ -1212,6 +1212,7 @@
   <!-- Amplitude -->
   {{>amplitude_script}}
   <script>
+    $("#profile-link-button").hide();
     var user_id;
     var audio_id;
     audio_id = {{ audio_id }};
@@ -3722,6 +3723,7 @@
     $("#send-feedback-btn").click(() => {
       var changedPassFailValue = $("input[name=userStatus]:checked").val();
       var reviewerFeedback = $("#userFeedback").val()
+      $("#feedbackModal ").modal('toggle');
       $.ajax({
         method: "POST",
         url: "/confirm-pass-fail-hr-review",
