@@ -57,7 +57,7 @@ const updateTranscriptionTable = (req, res) => {
 
 const getSubmittedBooleanForTranscription = (req, res) => {
     const sql = `
-            Select users_audio.is_submitted FROM users_audio
+            Select users_audio_id,is_submitted,status,user_id FROM users_audio
             WHERE
             user_id = '${req.body.user_id}'
             AND audio_id = '${req.body.audio_id}'

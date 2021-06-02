@@ -49,9 +49,9 @@
       </a>
 
       {{!--<a href="#">
-          <li id="total-points">Total Points: 100%</li>
-        </a>
-        --}}
+        <li id="total-points">Total Points: 100%</li>
+      </a>
+      --}}
     </ul>
   </div>
   {{!-- Hambuger Work Finish --}}
@@ -239,13 +239,10 @@
   <button id="feedback-close-button" style="float:right">X</button>
 
   <div>
-    <h3 style="text-align: left;">Feedback</h3>
+    <h3>Feedbacks</h3>
   </div>
-  <div>
-    <textarea id="feedback-textarea" placeholder="Feedbacks..."></textarea>
-  </div>
-  <div>
-    <button id="feedback-submit-btn" style="float:right">Submit</button>
+  <div id="feedbacks-list" style="text-align:left">
+    {{!-- DYNAMIC --}}
   </div>
 </div>
 
@@ -284,20 +281,20 @@
           <td></td>
           <td></td>
         </tr>
-        {{!--         
-          <tr>
-            <td>Page up</td>
-            <td>pg-up</td>
-            <td>alt+up</td>
-            <td></td>
-          </tr>
-          <tr>
-            <td>Page down</td>
-            <td>pg-down</td>
-            <td>alt+down</td>
-            <td></td>
-          </tr>
-           --}}
+        {{!--
+        <tr>
+          <td>Page up</td>
+          <td>pg-up</td>
+          <td>alt+up</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Page down</td>
+          <td>pg-down</td>
+          <td>alt+down</td>
+          <td></td>
+        </tr>
+        --}}
         <tr>
           <td>Jump to start</td>
           <td>home</td>
@@ -331,20 +328,20 @@
           <td></td>
           <td></td>
         </tr>
-        {{!--           
-          <tr>
-            <td>Jump to largest gap in coverage</td>
-            <td>ctrl+shift+space</td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td>Skip to next gap in coverage</td>
-            <td>ctrl+alt+space</td>
-            <td></td>
-            <td></td>
-          </tr>
-           --}}
+        {{!--
+        <tr>
+          <td>Jump to largest gap in coverage</td>
+          <td>ctrl+shift+space</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Skip to next gap in coverage</td>
+          <td>ctrl+alt+space</td>
+          <td></td>
+          <td></td>
+        </tr>
+        --}}
         <tr>
           <td>Play current turn or annotation</td>
           <td>r</td>
@@ -409,7 +406,7 @@
           })
         }
       })
-      
+
     }
 
   })

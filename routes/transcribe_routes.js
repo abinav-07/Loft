@@ -135,6 +135,9 @@ router.post("/react-api/save-test-score-on-users_audio_table", submitLTQueries.s
 router.post("/save-test-score-on-users_audio_table-for-transcription", submitLTQueries.submitButtonClickTranscription);
 router.post("/react-api/save-test-score-on-users_audio_table-for-transcription", submitLTQueries.submitButtonClickTranscription);
 
+//Feedbacks Routes
+router.get("/get-feedbacks/:type/:userAudioId",ltFeedBackQueries.getFeedbacksLT);
+
 //WebApp Related APIs
 router.post("/get-web-app-id", getWebAppIdAPI.getWebAppId);
 //Post Method Above for transcription app
