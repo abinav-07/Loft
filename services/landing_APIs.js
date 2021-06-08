@@ -49,7 +49,7 @@ const getLandingRoute = (req, res) => {
                                 `/transcribe?user_id=${result.insertId}&audio_id=${req.query.audio_id}`
                             );
                         } else if (req.query.type == "transcription") {
-                            var getAudioIdSQL = `SELECT * FROM audio WHERE Language_id=${req.query.language_id}`;
+                            var getAudioIdSQL = `SELECT * FROM audio WHERE Language_id=${req.query.language_id} and type='transcription'`;
                             pool.query(getAudioIdSQL, (err, result1) => {
                                 if (err) {
                                     console.error(err);
@@ -98,7 +98,7 @@ const getLandingRoute = (req, res) => {
                             `/transcribe?user_id=${result[0].user_id}&audio_id=${req.query.audio_id}`
                         );
                     } else if (req.query.type == "transcription") {
-                        var getAudioIdSQL = `SELECT * FROM audio WHERE Language_id=${req.query.language_id}`;
+                        var getAudioIdSQL = `SELECT * FROM audio WHERE Language_id=${req.query.language_id} and type='transcription'`;
                         pool.query(getAudioIdSQL, (err, result1) => {
                             if (err) {
                                 console.error(err);
@@ -142,7 +142,7 @@ const getLandingRoute = (req, res) => {
                     ) {
                         res.redirect(`/transcribe?user_id=${result[0].user_id}&audio_id=25`);
                     } else if (req.query.type == "transcription") {
-                        var getAudioIdSQL = `SELECT * FROM audio WHERE Language_id=${req.query.language_id}`;
+                        var getAudioIdSQL = `SELECT * FROM audio WHERE Language_id=${req.query.language_id} and type='transcription'`;
                         pool.query(getAudioIdSQL, (err, result1) => {
                             if (err) {
                                 console.error(err);
@@ -232,7 +232,7 @@ const getLandingRouteForReactLT = (req, res) => {
                                 audio_id: req.query.audio_id
                             });
                         } else if (req.query.type == "transcription") {
-                            var getAudioIdSQL = `SELECT * FROM audio WHERE Language_id=${req.query.language_id}`;
+                            var getAudioIdSQL = `SELECT * FROM audio WHERE Language_id=${req.query.language_id} and type='transcription'`;
                             pool.query(getAudioIdSQL, (err, result1) => {
                                 if (err) {
                                     console.error(err);
@@ -288,7 +288,7 @@ const getLandingRouteForReactLT = (req, res) => {
                         })
 
                     } else if (req.query.type == "transcription") {
-                        var getAudioIdSQL = `SELECT * FROM audio WHERE Language_id=${req.query.language_id}`;
+                        var getAudioIdSQL = `SELECT * FROM audio WHERE Language_id=${req.query.language_id} and type='transcription'`;
                         pool.query(getAudioIdSQL, (err, result1) => {
                             if (err) {
                                 console.error(err);
@@ -342,7 +342,7 @@ const getLandingRouteForReactLT = (req, res) => {
                         });
 
                     } else if (req.query.type == "transcription") {
-                        var getAudioIdSQL = `SELECT * FROM audio WHERE Language_id=${req.query.language_id}`;
+                        var getAudioIdSQL = `SELECT * FROM audio WHERE Language_id=${req.query.language_id} and type='transcription'`;
                         pool.query(getAudioIdSQL, (err, result1) => {
                             if (err) {
                                 console.error(err);
