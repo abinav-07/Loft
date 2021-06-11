@@ -17,6 +17,7 @@ const getActualLandingForAdmin = (req, res) => {
         //res.status(400).send("error in get /transcribe query.");
       }
       if (result && result.length > 0) {
+        audioId = result[0]['audio_id'];
         audio_url = result[0]['audio_url'];
         ////console.log(audio_url);
         res.render('actual_data_insert', {
@@ -45,6 +46,7 @@ const getActualLandingForAdminReactLT = (req, res) => {
       }
       if (result && result.length > 0) {
         audio_url = result[0]['audio_url'];
+        audioId = result[0]['audio_id'];
         ////console.log(audio_url);
         res.status(200).json({
           type: 'actual-data-admin',
