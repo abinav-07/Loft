@@ -1033,11 +1033,14 @@
     function updateTimer() {
       var formatTime = secondsToTimestamp(spectrum.getCurrentTime());
       document.getElementById('start-timestamp').innerText = formatTime;
-      //setTimeout(updateTimer, 100);
-      if ((spectrum.getCurrentTime()) > 0) {
-        setCookie("current_time", `${spectrum.getCurrentTime() / spectrum.getDuration()}`, 30);
-      }
+      //setTimeout(updateTimer, 100);      
     }
+
+    $(function(){
+      if ((spectrum.getCurrentTime()) > 0) {
+        setInterval(setCookie("current_time", `${spectrum.getCurrentTime() / spectrum.getDuration()}`, 30),5000) ;
+      }
+    })
     setInterval(updateTimer(), 100);
 
     //function to set cookie for current time stamp
@@ -3049,6 +3052,7 @@
         $("#top-div-speaker-control").hide();
         $("#annotation-box").show();
         var segmentId = spectrum.regions.getCurrentRegion().id;
+        if(segmentId!=currentId){
         currentId = spectrum.regions.getCurrentRegion().id;
 
         //highlight current region
@@ -3078,7 +3082,7 @@
         if ($("#peaks-container").children().is(`#${segmentId}`) > 0) {
           var segmentType = document.getElementById(segmentId).title;
           var segmentSpeaker = document.getElementById(segmentId).className.replace(/-/g, " ");
-          var segmentText = document.getElementById(segmentId).innerText;
+          var segmentText = document.getElementById(segmentId).textContent
           var divColor = document.getElementById(segmentId).style.background;
 
           //changing color of Annotation Heading
@@ -3099,6 +3103,8 @@
             document.getElementById("transcription-area").value = segmentText;
           }
         }
+        }
+        
       }
     }//DisplayCurrentContents function end
 

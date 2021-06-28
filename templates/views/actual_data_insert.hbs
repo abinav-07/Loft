@@ -800,7 +800,7 @@
       mediaControls: true,
       barWidth: 1,
       barHeight: 0.5,
-      height: 316,
+      height: 316,      
       plugins: [
         WaveSurfer.timeline.create({
           container: "#time-line",
@@ -827,7 +827,7 @@
         spectrum.pause();
         $("#play-button").find($(".fa")).toggleClass('fa-pause fa-play');
       }
-      document.getElementById('total-timestamp').innerText = secondsToTimestamp(spectrum.getDuration());
+      document.getElementById('total-timestamp').innertText = secondsToTimestamp(spectrum.getDuration());
     })
 
     //function on spectrum is ready 
@@ -1066,7 +1066,7 @@
     //Function to set current time
     function updateTimer() {
       var formatTime = secondsToTimestamp(spectrum.getCurrentTime());
-      document.getElementById('start-timestamp').innerText = formatTime;
+      document.getElementById('start-timestamp').textContent = formatTime;
       //setTimeout(updateTimer, 100);
       if ((spectrum.getCurrentTime()) > 0) {
         setCookie("current_time", `${spectrum.getCurrentTime() / spectrum.getDuration()}`, 30);
@@ -1568,9 +1568,12 @@
     //displaying contents on audio processing
     spectrum.on("audioprocess", () => {
       if (spectrum.regions.getCurrentRegion() != null && !updateAnnotationOnChange && !updateTopDivSpeaker) {
-        currentId = spectrum.regions.getCurrentRegion().id;
-        displayCurrentContents();
-        highlightRegion();
+        //Check If same segments
+        if(currentId !=spectrum.regions.getCurrentRegion().id){
+          currentId = spectrum.regions.getCurrentRegion().id;
+          displayCurrentContents();
+          highlightRegion();
+        }        
       }
     })
 
@@ -2985,7 +2988,10 @@
         $("#top-div-speaker-control").hide();
         $("#annotation-box").show();
         var segmentId = spectrum.regions.getCurrentRegion().id;
-        currentId = spectrum.regions.getCurrentRegion().id;
+
+        //Update Contents only if different segments 
+        if(segmentId!=currentId){
+            currentId = spectrum.regions.getCurrentRegion().id;
 
         //highlight current region
         highlightRegion();
@@ -3014,7 +3020,7 @@
         if ($("#peaks-container").children().is(`#${segmentId}`) > 0) {
           var segmentType = document.getElementById(segmentId).title;
           var segmentSpeaker = document.getElementById(segmentId).className.replace(/-/g, " ");
-          var segmentText = document.getElementById(segmentId).innerText;
+          var segmentText = document.getElementById(segmentId).textContent;
           var divColor = document.getElementById(segmentId).style.background;
 
           //changing color of Annotation Heading
@@ -3035,6 +3041,8 @@
             document.getElementById("transcription-area").value = segmentText;
           }
         }
+        }
+        
       }
     }//DisplayCurrentContents function end
 
