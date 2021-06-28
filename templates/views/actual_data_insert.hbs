@@ -1569,11 +1569,13 @@
     spectrum.on("audioprocess", () => {
       if (spectrum.regions.getCurrentRegion() != null && !updateAnnotationOnChange && !updateTopDivSpeaker) {
         //Check If same segments
-        if(currentId !=spectrum.regions.getCurrentRegion().id){
-          currentId = spectrum.regions.getCurrentRegion().id;
+        let spectrumRegionId=spectrum.regions.getCurrentRegion().id;        
+        
+        if(currentId!=spectrum.regions.getCurrentRegion().id){          
+          //currentId = spectrum.regions.getCurrentRegion().id;        
           displayCurrentContents();
           highlightRegion();
-        }        
+        }               
       }
     })
 
@@ -2989,9 +2991,10 @@
         $("#annotation-box").show();
         var segmentId = spectrum.regions.getCurrentRegion().id;
 
-        //Update Contents only if different segments 
+        //Update Contents only if different segments         
         if(segmentId!=currentId){
-            currentId = spectrum.regions.getCurrentRegion().id;
+          
+        currentId = spectrum.regions.getCurrentRegion().id;
 
         //highlight current region
         highlightRegion();
