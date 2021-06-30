@@ -112,7 +112,7 @@
       <input id="annotation-start-milliseconds" class="annotation-time-ms-class disable-all-on-Submit" type="number"
         min="0" max="999" oninput="" onchange="updateSegmentonTimeChange()" value="000">
     </span>
-    <span style="font-size: 40px;">-</span>
+    <span class="time-stamp-separtor">-</span>
     <span id="annotation-end" style="font-size: 16px;font-weight: 600;">
       <input id="annotation-end-minute" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
         max="59" oninput="" onchange="updateSegmentonTimeChange()" value="00">
@@ -126,6 +126,8 @@
   </div>
 
   <form class="form-inline">
+      <label class="form-inputs-labels" for="take">Take:</label>
+      <input type="text" class="form-inputs" id="annotation-take" value="1" name="take"><br>
       <label class="form-inputs-labels" for="micActivationAttempt">MAA:</label>
       <input type="text" class="form-inputs" id="mic-activation-attempt" value="1" name="micActivationAttempt"><br>
       <label class="form-inputs-labels" for="iteration">I:</label>
@@ -150,9 +152,11 @@
             max="59" oninput="" onchange="updateSegmentonTimeChange()" value="00"> sec
         .
         <input id="micOpen-start-milliseconds" class="annotation-time-ms-class disable-all-on-Submit" type="number"
-            min="0" max="999" oninput="" onchange="updateSegmentonTimeChange()" value="000"> ms<br>
+            min="0" max="999" oninput="" onchange="updateSegmentonTimeChange()" value="000"> ms
       </span>
-      <span>-</span>
+
+      <span class="time-stamp-separtor">-</span>
+      
       <span class="form-inputs">
         <input id="micOpen-end-minute" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
         max="59" onclick="" onchange="updateSegmentonTimeChange()" value="00"> min
@@ -163,86 +167,93 @@
         <input id="micOpen-end-milliseconds" class="annotation-time-ms-class disable-all-on-Submit" type="number"
             min="0" max="999" oninput="" onchange="updateSegmentonTimeChange()" value="000"> ms<br>
       </span><br>      
-      <label class="form-inputs-labels" for="utteranceStart">US-UE:</label>
-      <span class="form-inputs">
-        <input id="utterance-start-minute" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
-        max="59" onclick="" onchange="updateSegmentonTimeChange()" value="00"> min
-        :
-        <input id="utterance-start-seconds" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
-            max="59" oninput="" onchange="updateSegmentonTimeChange()" value="00"> sec
-        .
-        <input id="utterance-start-milliseconds" class="annotation-time-ms-class disable-all-on-Submit" type="number"
-            min="0" max="999" oninput="" onchange="updateSegmentonTimeChange()" value="000"> ms<br>
-      </span>
-      <span>-</span>
-      <span class="form-inputs">
-        <input id="utterance-end-minute" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
-        max="59" onclick="" onchange="updateSegmentonTimeChange()" value="00"> min
-        :
-        <input id="utterance-end-seconds" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
-            max="59" oninput="" onchange="updateSegmentonTimeChange()" value="00"> sec
-        .
-        <input id="utterance-end-milliseconds" class="annotation-time-ms-class disable-all-on-Submit" type="number"
-            min="0" max="999" oninput="" onchange="updateSegmentonTimeChange()" value="000"> ms<br>
-      </span>
-      <br>                    
-      <label class="form-inputs-labels" for="utteranceFirstWordEnd">UFE:</label>
-      <span class="form-inputs">
-        <input id="first-word-minute" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
-        max="59" onclick="" onchange="updateSegmentonTimeChange()" value="00"> min
-        :
-        <input id="first-word-seconds" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
-            max="59" oninput="" onchange="updateSegmentonTimeChange()" value="00"> sec
-        .
-        <input id="first-word-milliseconds" class="annotation-time-ms-class disable-all-on-Submit" type="number"
-            min="0" max="999" oninput="" onchange="updateSegmentonTimeChange()" value="000"> ms<br>
-      </span>
-      <label class="form-inputs-labels" for="utteranceDisplayStart">UDS-UDE:</label>
-      <span class="form-inputs">
-        <input id="utterance-display-start-minute" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
-        max="59" onclick="" onchange="updateSegmentonTimeChange()" value="00"> min
-        :
-        <input id="utterance-display-start-seconds" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
-            max="59" oninput="" onchange="updateSegmentonTimeChange()" value="00"> sec
-        .
-        <input id="utterance-display-start-milliseconds" class="annotation-time-ms-class disable-all-on-Submit" type="number"
-            min="0" max="999" oninput="" onchange="updateSegmentonTimeChange()" value="000"> ms<br>
-      </span>
-      <span>-</span>
-      <span class="form-inputs">
-        <input id="utterance-display-end-minute" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
-        max="59" onclick="" onchange="updateSegmentonTimeChange()" value="00"> min
-        :
-        <input id="utterance-display-end-seconds" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
-            max="59" oninput="" onchange="updateSegmentonTimeChange()" value="00"> sec
-        .
-        <input id="utterance-display-end-milliseconds" class="annotation-time-ms-class disable-all-on-Submit" type="number"
-            min="0" max="999" oninput="" onchange="updateSegmentonTimeChange()" value="000"> ms<br>
-      </span>
-      <br>        
-      <label class="form-inputs-labels" for="finalTextDisplay">FTD:</label>
-      <span class="form-inputs">
-        <input id="final-text-minute" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
-        max="59" onclick="" onchange="updateSegmentonTimeChange()" value="00"> min
-        :
-        <input id="final-text-seconds" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
-            max="59" oninput="" onchange="updateSegmentonTimeChange()" value="00"> sec
-        .
-        <input id="final-text-milliseconds" class="annotation-time-ms-class disable-all-on-Submit" type="number"
-            min="0" max="999" oninput="" onchange="updateSegmentonTimeChange()" value="000"> ms<br>
-      </span>
-      <label class="form-inputs-labels" for="actualText">AT:</label>
-      <textarea id="transcription-area" class="text-areas form-inputs disable-all-on-Submit" rows="3" name="actualText"></textarea><br>
-      <label class="form-inputs-labels" for="utteranceText">UT:</label>
-      <textarea id="utterance-text-area" class="text-areas form-inputs disable-all-on-Submit" rows="3" name="utteranceText"></textarea><br>
+      <div id="utterance-div">
+            <label class="form-inputs-labels" for="utteranceStart">US-UE:</label>
+            <span class="form-inputs">
+                <input id="utterance-start-minute" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
+                max="59" onclick="" onchange="updateSegmentonTimeChange()" value="00"> min
+                :
+                <input id="utterance-start-seconds" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
+                    max="59" oninput="" onchange="updateSegmentonTimeChange()" value="00"> sec
+                .
+                <input id="utterance-start-milliseconds" class="annotation-time-ms-class disable-all-on-Submit" type="number"
+                    min="0" max="999" oninput="" onchange="updateSegmentonTimeChange()" value="000"> ms
+            </span>
+            <span class="time-stamp-separtor">-</span>
+            <span class="form-inputs">
+                <input id="utterance-end-minute" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
+                max="59" onclick="" onchange="updateSegmentonTimeChange()" value="00"> min
+                :
+                <input id="utterance-end-seconds" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
+                    max="59" oninput="" onchange="updateSegmentonTimeChange()" value="00"> sec
+                .
+                <input id="utterance-end-milliseconds" class="annotation-time-ms-class disable-all-on-Submit" type="number"
+                    min="0" max="999" oninput="" onchange="updateSegmentonTimeChange()" value="000"> ms<br>
+            </span>
+            <br>                    
+            <label class="form-inputs-labels" for="utteranceFirstWordEnd">UFE:</label>
+            <span class="form-inputs">
+                <input id="first-word-minute" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
+                max="59" onclick="" onchange="updateSegmentonTimeChange()" value="00"> min
+                :
+                <input id="first-word-seconds" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
+                    max="59" oninput="" onchange="updateSegmentonTimeChange()" value="00"> sec
+                .
+                <input id="first-word-milliseconds" class="annotation-time-ms-class disable-all-on-Submit" type="number"
+                    min="0" max="999" oninput="" onchange="updateSegmentonTimeChange()" value="000"> ms<br>
+            </span>
+            <label class="form-inputs-labels" for="utteranceDisplayStart">UDS-UDE:</label>
+            <span class="form-inputs">
+                <input id="utterance-display-start-minute" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
+                max="59" onclick="" onchange="updateSegmentonTimeChange()" value="00"> min
+                :
+                <input id="utterance-display-start-seconds" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
+                    max="59" oninput="" onchange="updateSegmentonTimeChange()" value="00"> sec
+                .
+                <input id="utterance-display-start-milliseconds" class="annotation-time-ms-class disable-all-on-Submit" type="number"
+                    min="0" max="999" oninput="" onchange="updateSegmentonTimeChange()" value="000"> ms
+            </span>
+            <span class="time-stamp-separtor">-</span>
+            <span class="form-inputs">
+                <input id="utterance-display-end-minute" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
+                max="59" onclick="" onchange="updateSegmentonTimeChange()" value="00"> min
+                :
+                <input id="utterance-display-end-seconds" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
+                    max="59" oninput="" onchange="updateSegmentonTimeChange()" value="00"> sec
+                .
+                <input id="utterance-display-end-milliseconds" class="annotation-time-ms-class disable-all-on-Submit" type="number"
+                    min="0" max="999" oninput="" onchange="updateSegmentonTimeChange()" value="000"> ms<br>
+            </span>
+            <br>        
+            <label class="form-inputs-labels" for="finalTextDisplay">FTD:</label>
+            <span class="form-inputs">
+                <input id="final-text-minute" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
+                max="59" onclick="" onchange="updateSegmentonTimeChange()" value="00"> min
+                :
+                <input id="final-text-seconds" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
+                    max="59" oninput="" onchange="updateSegmentonTimeChange()" value="00"> sec
+                .
+                <input id="final-text-milliseconds" class="annotation-time-ms-class disable-all-on-Submit" type="number"
+                    min="0" max="999" oninput="" onchange="updateSegmentonTimeChange()" value="000"> ms<br>
+            </span>
+            <label class="form-inputs-labels" for="promptId">Prompt Id:</label>
+            <input type="text" class="form-inputs" id="prompt-Id" name="promptId" value="0"><br>
+            <label class="form-inputs-labels" for="actualText">AT:</label>
+            <textarea id="transcription-area" class="text-areas form-inputs disable-all-on-Submit" rows="3" name="actualText"></textarea><br>
+            <label class="form-inputs-labels" for="utteranceText">UT:</label>
+            <textarea id="utterance-text-area" class="text-areas form-inputs disable-all-on-Submit" rows="3" name="utteranceText"></textarea><br>
+      </div>        
   </form> 
-
+  <div style="text-align: center;">
+    <button id="display-utterance-btn" type="button" onClick="displayUtterancesBtnClick()">See more..</button>    
+  </div>
+  
   <hr style="opacity: 0.5;">
   <div class="annotation-footer">
     <button id="annotation-remove" class="disable-all-on-Submit"
         style="margin:5px 10px 20px 0px;color:red; border:none;background: none;font-size: 18px; cursor:pointer;">REMOVE</button>
-    <button id="annotation-split" class="disable-all-on-Submit"
-        style="margin:5px 10px 20px 0px;color:black; border:none;background: none;font-size: 18px;">SPLIT</button>
+    {{!-- <button id="annotation-split" class="disable-all-on-Submit"
+        style="margin:5px 10px 20px 0px;color:black; border:none;background: none;font-size: 18px;">SPLIT</button> --}}
     <button id="annotation-save" class="disable-all-on-Submit"
         style="padding:10px; margin:0px 10px 15px 50px;color:white; border-radius:4px;border:none;background: #2f84ba;font-size: 18px;cursor: pointer;">SAVE</button>
   </div>

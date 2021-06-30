@@ -20,6 +20,7 @@ const transcriptionTable = require('../services/transcription_table_queries');
 const transcriptionTaskSegmentsTable = require('../services/transcription_tasks_table_queries');
 const submitLTQueries = require('../services/lt_submit_queries');
 const ltFeedBackQueries = require('../services/lt_feedback_queries');
+const transperfectUserSegmentQueries = require('../services/transperfectUserSegmentQueries');
 
 //Segmentation Course Queries
 const segmentationCourseAPIs = require('../services/segmentation_course_menu_queries');
@@ -157,9 +158,21 @@ router.post(
 TEST
 */
 
-router.get("/wavesurfer-video", actualTable.getTestLandingForAdmin);
+router.get('/wavesurfer-video', actualTable.getTestLandingForAdmin);
 
-
+//Transperfect User Segment Table
+router.post(
+  '/get-transperfect-created-segments',
+  transperfectUserSegmentQueries.getUserCreatedSegments
+);
+router.post(
+  `/remove-transperfect-user-segments`,
+  transperfectUserSegmentQueries.removeUserCreatedSegments
+);
+router.post(
+  '/create-transperfect-segment',
+  transperfectUserSegmentQueries.addTransperfectSegments
+);
 
 //Actual Table APIs
 router.get('/actual-data-admin', actualTable.getActualLandingForAdmin);

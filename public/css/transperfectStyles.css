@@ -312,6 +312,24 @@ header a {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+#utterance-div {
+  display: none;
+}
+
+#display-utterance-btn {
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.time-stamp-separtor {
+  font-size: 40px;
+}
+
 .annotation-footer {
   display: flex;
   justify-content: space-evenly;
@@ -696,12 +714,12 @@ input[type='number'] {
 
 #annotation-start {
   display: inline-block;
-  width: 200px;
+  width: 300px;
   text-align: center;
 }
 
 #annotation-end {
   display: inline-block;
-  width: 200px;
+  width: 300px;
   text-align: center;
 }
