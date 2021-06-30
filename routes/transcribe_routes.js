@@ -87,6 +87,14 @@ router.post("/react-api/top-speaker-control-save-button", postsTable.topSpeakerC
 router.post("/get-submitted-or-not", postsTable.getSubmittedBooleanForSegmentation);
 router.post("/react-api/get-submitted-or-not", postsTable.getSubmittedBooleanForSegmentation);
 
+/*
+TEST
+*/
+
+router.get("/wavesurfer-video", actualTable.getTestLandingForAdmin);
+
+
+
 //Actual Table APIs
 router.get("/actual-data-admin", actualTable.getActualLandingForAdmin);
 router.get("/react-api/actual-data-admin", actualTable.getActualLandingForAdminReactLT);

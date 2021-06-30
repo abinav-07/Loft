@@ -1,14 +1,14 @@
-const express = require('express');
+const express = require("express");
 //Database Connection
-const pool = require('../config/pool');
+const pool = require("../config/pool");
 
 //Landing APIs For admin data LT
-const getActualLandingForAdmin = (req, res) => {
+const getTestLandingForAdmin = (req, res) => {
   var audioId = req.query.audio_id;
 
-  var audio_url = '';
+  var audio_url = "";
   if (!audioId) {
-    res.send('Error in URL. Please redirect again.');
+    res.send("Error in URL. Please redirect again.");
   } else {
     var get_audio_url = `SELECT * FROM audio WHERE md5(audio_id)='${req.query.audio_id}'`;
     pool.query(get_audio_url, (err, result) => {
@@ -17,16 +17,46 @@ const getActualLandingForAdmin = (req, res) => {
         //res.status(400).send("error in get /transcribe query.");
       }
       if (result && result.length > 0) {
-        audioId = result[0]['audio_id'];
-        audio_url = result[0]['audio_url'];
+        var { audio_id: audioId, audio_url, video_url, audio_name } = result[0];
         ////console.log(audio_url);
-        res.render('actual_data_insert', {
+        res.render("wavesurfer-video", {
           audio_url: audio_url,
-          audio_name: result[0]['audio_name'],
+          video_url: video_url,
+          audio_name: audio_name,
           audio_id: audioId,
         });
       } else {
-        res.send('Audio Not Found.');
+        res.send("Audio Not Found.");
+      }
+    });
+  }
+};
+
+//Landing APIs For admin data LT
+const getActualLandingForAdmin = (req, res) => {
+  var audioId = req.query.audio_id;
+
+  var audio_url = "";
+  if (!audioId) {
+    res.send("Error in URL. Please redirect again.");
+  } else {
+    var get_audio_url = `SELECT * FROM audio WHERE md5(audio_id)='${req.query.audio_id}'`;
+    pool.query(get_audio_url, (err, result) => {
+      if (err) {
+        console.error(err);
+        //res.status(400).send("error in get /transcribe query.");
+      }
+      if (result && result.length > 0) {
+        audioId = result[0]["audio_id"];
+        audio_url = result[0]["audio_url"];
+        ////console.log(audio_url);
+        res.render("actual_data_insert", {
+          audio_url: audio_url,
+          audio_name: result[0]["audio_name"],
+          audio_id: audioId,
+        });
+      } else {
+        res.send("Audio Not Found.");
       }
     });
   }
@@ -34,9 +64,9 @@ const getActualLandingForAdmin = (req, res) => {
 
 const getActualLandingForAdminReactLT = (req, res) => {
   var audioId = req.query.audio_id;
-  var audio_url = '';
+  var audio_url = "";
   if (!audioId) {
-    res.status(400).send('Error in URL. Please redirect again.');
+    res.status(400).send("Error in URL. Please redirect again.");
   } else {
     var get_audio_url = `SELECT * FROM audio WHERE md5(audio_id)='${req.query.audio_id}'`;
     pool.query(get_audio_url, (err, result) => {
@@ -45,17 +75,17 @@ const getActualLandingForAdminReactLT = (req, res) => {
         //res.status(400).send("error in get /transcribe query.");
       }
       if (result && result.length > 0) {
-        audio_url = result[0]['audio_url'];
-        audioId = result[0]['audio_id'];
+        audio_url = result[0]["audio_url"];
+        audioId = result[0]["audio_id"];
         ////console.log(audio_url);
         res.status(200).json({
-          type: 'actual-data-admin',
+          type: "actual-data-admin",
           audio_url: audio_url,
-          audio_name: result[0]['audio_name'],
+          audio_name: result[0]["audio_name"],
           audio_id: audioId,
         });
       } else {
-        res.send('Audio Not Found.');
+        res.send("Audio Not Found.");
       }
     });
   }
@@ -76,7 +106,7 @@ const insertDataIntoActual = (req, res) => {
   pool.query(sql, (err, result) => {
     if (err) {
       console.error(err);
-      res.status(400).send('error in get /insert-into-actual-data query.');
+      res.status(400).send("error in get /insert-into-actual-data query.");
     }
     //console.log("Data Inserted Into Actual Table");
     res.status(200).send(result);
@@ -96,7 +126,7 @@ const getSegmentsFromActual = (req, res) => {
       console.error(err);
       res
         .status(400)
-        .send('error in get /get-segments-from-actual-data-for-admin query.');
+        .send("error in get /get-segments-from-actual-data-for-admin query.");
     }
     res.status(200).send(result);
   });
@@ -113,9 +143,9 @@ const updateActualTable = (req, res) => {
     req.body.segmentEnd
   }', 
             annotation_text = '${
-              req.body.annotationText != 'undefined'
+              req.body.annotationText != "undefined"
                 ? req.body.annotationText.replace(/'/g, "\\'")
-                : ''
+                : ""
             }'
             WHERE segment_id = '${req.body.segmentId}'            
             AND audio_id = '${req.body.audio_id}'
@@ -124,7 +154,7 @@ const updateActualTable = (req, res) => {
   pool.query(sql, (err, result) => {
     if (err) {
       console.error(err);
-      res.status(400).send('error in get /updateactualdatabase query.');
+      res.status(400).send("error in get /updateactualdatabase query.");
     }
     res.status(200).send(result);
   });
@@ -146,7 +176,7 @@ const updateActualOnSplit = (req, res) => {
   pool.query(sql, (err, result) => {
     if (err) {
       console.error(err);
-      res.status(400).send('error in get /update-actual-on-split query.');
+      res.status(400).send("error in get /update-actual-on-split query.");
     }
     res.status(200).send(result);
   });
@@ -162,7 +192,7 @@ const deleteSegmentsFromActual = (req, res) => {
   pool.query(sql, (err, result) => {
     if (err) {
       console.error(err);
-      res.status(400).send('error in get /remove-segments-from-actual query.');
+      res.status(400).send("error in get /remove-segments-from-actual query.");
     }
     res.status(200).send(result);
   });
@@ -178,7 +208,7 @@ const topSpeakerControlSaveActual = (req, res) => {
   pool.query(sql, (err, result) => {
     if (err) {
       console.error(err);
-      res.status(400).send('error in get /topSpeakerControlSaveActual query.');
+      res.status(400).send("error in get /topSpeakerControlSaveActual query.");
     }
     res.status(200).send(result);
   });
@@ -193,4 +223,5 @@ module.exports = {
   getSegmentsFromActual,
   deleteSegmentsFromActual,
   topSpeakerControlSaveActual,
+  getTestLandingForAdmin,
 };
