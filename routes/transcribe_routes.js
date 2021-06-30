@@ -153,6 +153,14 @@ router.post(
   postsTable.getSubmittedBooleanForSegmentation
 );
 
+/*
+TEST
+*/
+
+router.get("/wavesurfer-video", actualTable.getTestLandingForAdmin);
+
+
+
 //Actual Table APIs
 router.get('/actual-data-admin', actualTable.getActualLandingForAdmin);
 router.get(
