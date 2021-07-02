@@ -1,7 +1,287 @@
 body {
   overflow: hidden;
   margin-top: -10px;
+  color: #333333;
+  font-family: arial;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
+
+#top-header {
+  width: inherit;
+}
+
+header {
+  padding-top: 16px;
+  padding-bottom: 16px;
+  position: fixed;
+  /*z-index: 2;*/
+  opacity: 1;
+  /**/
+  top: 0;
+  background-color: #fff;
+  padding: 0;
+  width: inherit;
+  z-index: 2000;
+  height: 60px;
+  border-bottom: 1px #eee solid;
+}
+
+.annotation-box-row {
+  width: 90%;
+  margin: auto;
+  padding: 10px;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+
+@media only screen and (max-width: 1300px) {
+  .annotation-box-row {
+    width: 100%;
+  }
+  #play-button-div {
+    padding-left: 50px !important;
+  }
+}
+
+.video-js {
+  position: absolute !important;
+  right: 0;
+  z-index: 999;
+  height: 500px;
+}
+
+.icons-rows {
+  justify-content: space-between;
+}
+
+.annotation-box-textarea-row {
+  width: 90%;
+  margin: auto;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.annotation-box-textarea-row .form-inputs-labels {
+  font-size: 16px;
+  font-weight: 600;
+  text-align: left;
+}
+
+.annotation-box-row .form-time-inputs {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.annotation-box-row .form-labels-div {
+  width: 55%;
+  text-align: left;
+  display: flex;
+}
+.annotation-box-row .form-input-div {
+  /* flex: 2; */
+  text-align: end;
+  width: 40%;
+}
+
+.annotation-box-row .form-inputs-labels {
+  font-size: 16px;
+  font-weight: 520;
+  text-align: left;
+  word-break: break-word;
+}
+
+.annotation-box-row .form-inputs {
+  height: 10px;
+  width: 60px;
+  margin: 5px;
+  border-radius: 10%;
+  padding: 8px;
+  font-size: 16px;
+  border-color: #afb5bd;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.solid-dash-line {
+  border-top: 0.1px solid #bbb;
+}
+
+.guidelines-div {
+  margin-left: auto;
+}
+
+.disabled {
+  pointer-events: none;
+  cursor: default;
+}
+
+#tasks-header,
+#history-header {
+  font-size: 14px;
+}
+
+#loft-header {
+  padding-right: 20px;
+  font-size: 18px;
+}
+
+#read-guidelines-header {
+  font-size: 20px;
+  margin-left: 0.5rem;
+  margin-right: 1.5rem;
+  color: #888888;
+  /*margin-right: 16px;*/
+  text-decoration: none;
+  font-weight: 300;
+  color: #444;
+  display: inline-block;
+  margin-top: 3rem;
+}
+
+#help-icon {
+  margin-top: 3rem;
+  margin-right: 1rem;
+  font-size: 24px;
+  color: grey;
+  cursor: pointer;
+}
+
+header a {
+  color: #888888;
+  /*margin-right: 16px;*/
+  text-decoration: none;
+  font-weight: 300;
+  color: #444;
+  margin: 1em 1em 0.375em 1.5em;
+  font-size: 1.85em;
+  display: inline-block;
+}
+
+#time {
+  display: flex;
+  flex-direction: row;
+  margin-left: 20px;
+}
+
+#loading_flag {
+  box-shadow: 0 0 12px lightgrey;
+  clear: both;
+  color: #333;
+  margin: 0 auto;
+  padding: 2em;
+  background-color: #e3e1e1;
+  position: absolute;
+  z-index: 10000;
+  top: 50vh;
+  left: 40vw;
+  display: block;
+}
+
+#feedback-btn {
+  text-align: center;
+  font-size: 14px;
+  /*width: 680px;*/
+  color: #fff;
+  float: right;
+  display: none;
+  font-weight: bold;
+  padding: 5px;
+  margin-top: 1rem;
+  background: #3e97e6;
+  display: inline-block;
+  border-radius: 4%;
+  list-style-type: none;
+  -webkit-font-smoothing: antialiased;
+  white-space: normal;
+  margin-right: 20px;
+}
+
+#display-training-segments {
+  float: left;
+}
+
+#feedback-modal {
+  background-color: white;
+  box-shadow: 0 0 12px black;
+  clear: both;
+  text-align: center;
+  font-size: 18px;
+  color: #333;
+  margin: 0 auto;
+  padding: 2.5rem;
+  border: 1px solid black;
+  border-radius: 1rem;
+  position: absolute;
+  width: 20vw;
+  height: 30vh;
+  z-index: 10000;
+  top: 20vh;
+  left: 40vw;
+  display: none;
+}
+
+#feedback-modal h3 {
+  text-align: center;
+}
+
+#feedback-textarea {
+  width: 30vw;
+  height: 25vh;
+}
+
+#feedback-close-button {
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+#feedback-submit-btn {
+  right: 0.1rem;
+  height: 2rem;
+  margin-top: 1rem;
+  background-color: blue;
+  color: #fff;
+  font-size: 18px;
+  border-radius: 10%;
+  cursor: pointer;
+}
+
+#transperfect-body {
+  display: flex;
+  width: 75vw;
+}
+
+/* 
+  Annotation box width is related to .transperfect-body
+*/
+#annotation-box {
+  box-shadow: '4px 4px 4px #888888';
+  right: 0;
+  width: 24.3vw;
+  bottom: 0;
+  height: 100vh;
+  border: 1px solid grey;
+  border-left: 2px solid black;
+  border-right: 2px solid black;
+  border-top: 2px solid black;
+  position: fixed;
+  z-index: 3;
+  background-color: white;
+  overflow-x: hidden;
+  /* overflow-y: hidden; */
+}
+
+#main-div {
+  width: inherit;
+  position: relative;
+}
+
 /*CSS For errorToggle*/
 #errorToggle {
   display: none;
@@ -95,6 +375,10 @@ body {
   margin-top: -50vh;
 }
 
+#play-button-div {
+  padding-left: 100px;
+}
+
 #play-button {
   color: #555;
   cursor: pointer;
@@ -152,7 +436,7 @@ body {
 }
 
 .audio-button-bottom-row {
-  margin-top: 4em;
+  margin-top: 2.8em;
 }
 
 .playback_speed {
@@ -198,17 +482,17 @@ header a {
 }
 
 #top-block {
+  display: flex;
+  width: inherit;
   position: fixed;
-  width: 100%;
+  /* width: 100%; */
   opacity: 1;
   margin-top: 50px;
   z-index: 99;
-  background: #fff;
   border-bottom: 3px groove #888888;
-
   background: #fff;
   box-shadow: 0px 5px 5px #ccc;
-  padding-left: 100px;
+  /* padding-left: 100px; */
   height: 100px;
   overflow-y: hidden;
   overflow-x: hidden;
@@ -263,19 +547,23 @@ header a {
 }
 
 .annotation-time-class {
-  font-size: 24px;
+  font-size: 16px;
   font-weight: 520;
-  padding-left: 5px;
-  width: 30px;
-  border: none;
+  color: black;
+  border: 0.1px solid #e6e3e3;
+  width: 20px;
+  border-radius: 15%;
+  background-color: #f5f2f2;
 }
 
 .annotation-time-ms-class {
-  font-size: 24px;
+  font-size: 16px;
   font-weight: 520;
-  padding-left: 5px;
-  width: 40px;
-  border: none;
+  color: black;
+  border: 0.1px solid #e6e3e3;
+  width: 30px;
+  border-radius: 15%;
+  background-color: #f5f2f2;
 }
 
 #annotation-type {
@@ -303,27 +591,61 @@ header a {
   padding: 10px;
 }
 
-.form-inputs {
-  width: 200px;
-  margin: 5px;
-  border-radius: 15px;
-  padding: 8px;
-  font-size: 16px;
-  font-family: Arial, Helvetica, sans-serif;
+#utterance-div {
+  display: block;
 }
 
-#utterance-div {
-  display: none;
+.labels-prefixes {
+  border-radius: 50%;
+  font-size: 12px;
+  background-color: #b8dba2;
+  color: black;
+  padding: 2px 0px 0px;
+  margin-right: 5px;
+  width: 20px;
+  display: inline-block;
+  text-align: center;
+  height: 17px;
+}
+.icon-labels-prefixes {
+  border-radius: 50%;
+  font-size: 12px;
+  background-color: #b8dba2;
+  color: black;
+  padding: 2px 0px 0px;
+  margin-right: 5px;
+  width: 20px;
+  display: inline-block;
+  text-align: center;
+  height: 17px;
+  position: absolute;
+  top: 0;
 }
 
 #display-utterance-btn {
   padding: 0;
   border: none;
   background: none;
+  color: #0069d9;
   cursor: pointer;
   text-align: center;
   font-size: 16px;
   font-weight: 600;
+}
+
+.annotation-box-col {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  margin: 8px;
+}
+
+.mic-icons {
+  text-align: center;
+  margin-bottom: 10px;
+}
+.annotation-icons {
+  font-size: 3rem;
 }
 
 .time-stamp-separtor {
@@ -332,22 +654,27 @@ header a {
 
 .annotation-footer {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
+  width: 95%;
+  margin: auto;
+  margin-bottom: 2px;
 }
 
 .text-areas {
   display: inline-table;
+  width: 100%;
+  margin-top: 0.8rem;
+  border: 2px solid #d6d6d6;
+  border-radius: 2%;
 }
 
 .form-inline {
   text-align: end;
   margin-left: 10px;
-}
-
-.form-inputs-labels {
-  margin: 5px;
-  font-size: 20px;
-  font-weight: 520;
+  margin-top: 1rem;
+  padding: 10px;
+  height: fit-content;
+  min-height: 90%;
 }
 
 .annotation-time-class:invalid {

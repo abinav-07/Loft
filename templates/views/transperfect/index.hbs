@@ -4,7 +4,7 @@
 <head>
     <title>Transperfect</title>
     <link rel="stylesheet" href="../css/transperfectStyles.css">
-    <link rel="stylesheet" type="text/css" href="/css/styles.css">
+    {{!-- <link rel="stylesheet" type="text/css" href="/css/styles.css"> --}}
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 
@@ -16,21 +16,334 @@
     <script src="public/js/repeat-region.js"></script>
     <script src="public/js/loadingScreen.js"></script>
     <script src="public/js/create-transperfect-divs.js"></script>
+    <link href="./node_modules/bootstrap-icons/font/bootstrap-icons.css">
 
-    <link href="../node_modules/video.js/dist/video-js.min.css" rel="stylesheet">    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <link href="https://vjs.zencdn.net/7.11.4/video-js.css" rel="stylesheet" />
+  <link rel="stylesheet" href="//unpkg.com/videojs-wavesurfer/dist/css/videojs.wavesurfer.min.css">
+    {{!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"> --}}
 
-    <script src="../node_modules/video.js/dist/video.min.js"></script>
+
+    <script src="https://vjs.zencdn.net/7.11.4/video.min.js"></script>
+  <script src="//unpkg.com/videojs-wavesurfer/dist/videojs.wavesurfer.min.js"></script>
     {{!-- <script src="../node_modules/wavesurfer.js/dist/wavesurfer.min.js"></script> --}}
     
 </head>
 <body>
-    <div id="header">
-        {{>header}}
-    </div>
+  <div id="transperfect-body">    
+        {{>transperfectHeader}}
+    
     {{>transperfectBody}}
+  </div>
+  
 
-    {{!-- Video-waveform Js --}}
-    {{!-- <video id="waveform-video" playsinline class="video-js vjs-default-skin"></video> --}}
+<div id="annotation-box">
+  
+  {{!-- <div id="annotation-time">
+    <button id="repeat-button" style=" margin-left: 7px; border:none; background: none;"><i class="fa fa-repeat"
+        style=" color:black;font-size:16px;cursor:pointer;"></i> </button>
+    <span id="annotation-start" style="font-size: 16px;font-weight: 600;">
+      <input id="annotation-start-minute" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
+        max="59" onclick="" onchange="updateSegmentonTimeChange()" value="00">
+      :
+      <input id="annotation-start-seconds" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
+        max="59" oninput="" onchange="updateSegmentonTimeChange()" value="00">
+      .
+      <input id="annotation-start-milliseconds" class="annotation-time-ms-class disable-all-on-Submit" type="number"
+        min="0" max="999" oninput="" onchange="updateSegmentonTimeChange()" value="000">
+    </span>
+    <span class="time-stamp-separtor">-</span>
+    <span id="annotation-end" style="font-size: 16px;font-weight: 600;">
+      <input id="annotation-end-minute" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
+        max="59" oninput="" onchange="updateSegmentonTimeChange()" value="00">
+      :
+      <input id="annotation-end-seconds" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
+        max="59" oninput="" onchange="updateSegmentonTimeChange()" value="00">
+      .
+      <input id="annotation-end-milliseconds" class="annotation-time-ms-class disable-all-on-Submit" type="number"
+        min="0" max="999" oninput="" onchange="updateSegmentonTimeChange()" value="000">
+    </span>
+  </div> --}}
+
+  <form class="form-inline">
+    <div class="annotation-box-row">
+      <div class="form-labels-div">
+        <label class="form-inputs-labels" for="take">Take</label>
+      </div>
+      <div class="form-input-div">
+        <input type="text" class="form-inputs" id="annotation-take" value="1" name="take">
+      </div>      
+    </div>
+
+    <div class="annotation-box-row">
+      <div class="form-labels-div">
+        <label class="form-inputs-labels" for="micActivationAttempt">Mic Activation Attempt</label>
+      </div>
+      <div class="form-input-div">
+        <input type="text" class="form-inputs" id="mic-activation-attempt" value="1" name="micActivationAttempt">
+      </div>        
+    </div>
+    
+<div class="annotation-box-row">
+      <div class="form-labels-div">
+              <label class="form-inputs-labels" for="iteration">Iteration</label>
+      </div>
+      <div class="form-input-div">
+        <input type="text" class="form-inputs" id="annotation-iteration" value="1" name="iteration"><br>
+      </div>
+    </div>
+
+    <hr class="solid-dash-line">
+
+    
+    <div class="annotation-box-row icons-rows">
+      <div class="annotation-box-col">
+        <div class="mic-icons">
+          <i class="bi bi-mic annotation-icons"></i><span class="icon-labels-prefixes">M</span>
+        </div>
+        <div>
+          <span class="form-time-inputs">
+        <input id="micTap-minute" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
+        max="59" onclick="" onchange="updateSegmentonTimeChange()" value="00">
+        :
+        <input id="micTap-seconds" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
+            max="59" oninput="" onchange="updateSegmentonTimeChange()" value="00"> 
+        .
+        <input id="micTap-milliseconds" class="annotation-time-ms-class disable-all-on-Submit" type="number"
+            min="0" max="999" oninput="" onchange="updateSegmentonTimeChange()" value="000">
+      </span>      
+        </div>        
+      </div>
+      <div class="annotation-box-col">
+        <div class="mic-icons">
+          <i class="bi bi-mic-fill annotation-icons"></i><span class="icon-labels-prefixes">O</span>
+        </div>
+        <div>
+            <span class="form-time-inputs">
+        <input id="micOpen-start-minute" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
+        max="59" onclick="" onchange="updateSegmentonTimeChange()" value="00">
+        :
+        <input id="micOpen-start-seconds" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
+            max="59" oninput="" onchange="updateSegmentonTimeChange()" value="00">
+        .
+        <input id="micOpen-start-milliseconds" class="annotation-time-ms-class disable-all-on-Submit" type="number"
+            min="0" max="999" oninput="" onchange="updateSegmentonTimeChange()" value="000"> 
+            </span>
+        </div>        
+      </div>            
+      <div class="annotation-box-col">
+        <div class="mic-icons">
+          <i class="bi bi-mic annotation-icons"></i><span class="icon-labels-prefixes">C</span>
+        </div>
+        <div>
+            <span class="form-time-inputs">
+        
+        <input id="micOpen-end-minute" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
+        max="59" onclick="" onchange="updateSegmentonTimeChange()" value="00"> 
+        :
+        <input id="micOpen-end-seconds" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
+            max="59" oninput="" onchange="updateSegmentonTimeChange()" value="00">
+        .
+        <input id="micOpen-end-milliseconds" class="annotation-time-ms-class disable-all-on-Submit" type="number"
+            min="0" max="999" oninput="" onchange="updateSegmentonTimeChange()" value="000">
+      </span>
+        </div>        
+      </div>            
+    </div>    
+
+    <hr class="solid-dash-line">
+    
+    <div style="text-align: center;  color: #0069d9;">
+      <input id="display-utterance-btn" type="checkbox" onClick="displayUtterancesBtnClick()" checked/> Show Detail Informations
+    </div>
+  
+    
+    {{!-- Utterance Display toggle div started --}}
+    <div id="utterance-div">
+
+    <div class="annotation-box-row">
+      <div class="form-labels-div">
+        <span class="labels-prefixes">S</span>
+        <label class="form-inputs-labels" for="utteranceStart">Utterance Start</label>
+      </div>
+      <div class="form-input-div">
+        <span class="form-time-inputs">
+                <input id="annotation-start-minute" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
+                max="59" onclick="" onchange="updateSegmentonTimeChange()" value="00"> 
+                :
+                <input id="annotation-start-seconds" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
+                    max="59" oninput="" onchange="updateSegmentonTimeChange()" value="00"> 
+                .
+                <input id="annotation-start-milliseconds" class="annotation-time-ms-class disable-all-on-Submit" type="number"
+                    min="0" max="999" oninput="" onchange="updateSegmentonTimeChange()" value="000"> 
+            </span>
+            </div>
+        </div>
+      
+      <div class="annotation-box-row">
+              <div class="form-labels-div">
+                <span class="labels-prefixes">E</span>
+              <label class="form-inputs-labels" for="utteranceEnd">Utterance End</label>
+                    </div>
+                    <div class="form-input-div">
+                      <span class="form-time-inputs">
+                              <input id="annotation-end-minute" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
+                              max="59" onclick="" onchange="updateSegmentonTimeChange()" value="00"> 
+                              :
+                              <input id="annotation-end-seconds" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
+                                  max="59" oninput="" onchange="updateSegmentonTimeChange()" value="00"> 
+                              .
+                              <input id="annotation-end-milliseconds" class="annotation-time-ms-class disable-all-on-Submit" type="number"
+                                  min="0" max="999" oninput="" onchange="updateSegmentonTimeChange()" value="000"> 
+                      </span>
+                    </div>
+
+        </div>
+
+      <div class="annotation-box-row">
+        <div class="form-labels-div">
+          <span class="labels-prefixes">[</span>
+            <label class="form-inputs-labels" for="utteranceFirstWordEnd">Utterance First Word End</label>
+        </div>
+        <div class="form-input-div">          
+            <span class="form-time-inputs">
+                  <input id="first-word-minute" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
+                  max="59" onclick="" onchange="updateSegmentonTimeChange()" value="00">
+                  :
+                  <input id="first-word-seconds" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
+                      max="59" oninput="" onchange="updateSegmentonTimeChange()" value="00"> 
+                  .
+                  <input id="first-word-milliseconds" class="annotation-time-ms-class disable-all-on-Submit" type="number"
+                      min="0" max="999" oninput="" onchange="updateSegmentonTimeChange()" value="000">
+            </span>
+        </div>
+      </div>   
+
+  <div class="annotation-box-row">
+        <div class="form-labels-div">
+          <span class="labels-prefixes">]</span>
+            <label class="form-inputs-labels" for="utteranceFirstWordDisplayEnd">Utterance First Word  Display End</label>
+        </div>
+        <div class="form-input-div">
+          <span class="form-time-inputs">
+                  <input id="first-word-display-end-minute" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
+                  max="59" onclick="" onchange="updateSegmentonTimeChange()" value="00">
+                  :
+                  <input id="first-word-display-end-seconds" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
+                      max="59" oninput="" onchange="updateSegmentonTimeChange()" value="00"> 
+                  .
+                  <input id="first-word-display-end-milliseconds" class="annotation-time-ms-class disable-all-on-Submit" type="number"
+                      min="0" max="999" oninput="" onchange="updateSegmentonTimeChange()" value="000">
+            </span>
+        </div>
+      </div>  
+
+      <div class="annotation-box-row">
+        <div class="form-labels-div">
+          <span class="labels-prefixes">,</span>
+          <label class="form-inputs-labels" for="utteranceDisplayStart">Utterance Display Start</label>
+        </div>
+        <div class="form-input-div">
+          <span class="form-time-inputs">
+                <input id="utterance-display-start-minute" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
+                max="59" onclick="" onchange="updateSegmentonTimeChange()" value="00"> 
+                :
+                <input id="utterance-display-start-seconds" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
+                    max="59" oninput="" onchange="updateSegmentonTimeChange()" value="00"> 
+                .
+                <input id="utterance-display-start-milliseconds" class="annotation-time-ms-class disable-all-on-Submit" type="number"
+                    min="0" max="999" oninput="" onchange="updateSegmentonTimeChange()" value="000"> 
+            </span>
+        </div>
+      </div>    
+
+      <div class="annotation-box-row">
+        <div class="form-labels-div">
+          <span class="labels-prefixes">.</span>
+          <label class="form-inputs-labels" for="utteranceDisplayEnd">Utterance Display End</label>
+        </div>
+        <div class="form-input-div">
+          <span class="form-time-inputs">
+                <input id="utterance-display-end-minute" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
+                max="59" onclick="" onchange="updateSegmentonTimeChange()" value="00"> 
+                :
+                <input id="utterance-display-end-seconds" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
+                    max="59" oninput="" onchange="updateSegmentonTimeChange()" value="00"> 
+                .
+                <input id="utterance-display-end-milliseconds" class="annotation-time-ms-class disable-all-on-Submit" type="number"
+                    min="0" max="999" oninput="" onchange="updateSegmentonTimeChange()" value="000"> 
+            </span>
+        </div>
+      </div>    
+      <div class="annotation-box-row">
+        <div class="form-labels-div">
+          <span class="labels-prefixes">S</span>
+          <label class="form-inputs-labels" for="finalTextDisplay">Final Text Display</label>
+        </div>
+        <div class="form-input-div">
+          <span class="form-time-inputs">
+                <input id="final-text-minute" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
+                max="59" onclick="" onchange="updateSegmentonTimeChange()" value="00"> 
+                :
+                <input id="final-text-seconds" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
+                    max="59" oninput="" onchange="updateSegmentonTimeChange()" value="00"> 
+                .
+                <input id="final-text-milliseconds" class="annotation-time-ms-class disable-all-on-Submit" type="number"
+                    min="0" max="999" oninput="" onchange="updateSegmentonTimeChange()" value="000"> 
+            </span>
+        </div>
+      </div>  
+
+      <div class="annotation-box-row">
+        <div class="form-labels-div">
+          <span class="labels-prefixes">S</span>
+          <label class="form-inputs-labels" for="promptId">Prompt Id</label>
+        </div>
+        <div class="form-input-div">
+          <input type="text" class="form-inputs" id="prompt-Id" name="promptId" value="0">
+        </div>
+      </div>                
+      
+      <div class="annotation-box-textarea-row">
+        <div class="form-textarea-div">
+          <label class="form-inputs-labels" for="actualText">Actual Text</label>
+        </div>
+        <div>
+          <textarea id="transcription-area" class="text-areas form-inputs disable-all-on-Submit" rows="5" name="actualText"></textarea>
+        </div>
+      </div>      
+            
+      <div class="annotation-box-textarea-row">
+        <div class="form-textarea-div">
+          <label class="form-inputs-labels" for="utteranceText">Utterance Text</label>
+        </div>
+        <div>
+          <textarea id="utterance-text-area" class="text-areas form-inputs disable-all-on-Submit" rows="5" name="utteranceText"></textarea><br>
+        </div>
+      </div>      
+            
+    </div>
+    {{!-- Utterance toggle div end --}}
+  </form>   
+  <hr style="opacity: 0.5;">
+  <div class="annotation-footer">
+    <div>
+      {{!-- <button id="annotation-split" class="disable-all-on-Submit"
+        style="margin:5px 10px 20px 0px;color:black; border:none;background: none;font-size: 18px;">SPLIT</button> --}}
+        <button id="close" class="disable-all-on-Submit"
+        style="padding:8px; color:white; border:none;background: red;font-size: 14px; cursor:pointer;border-radius:10%">CANCEL</button>    
+    </div>
+    <div style="align-items: center; display: flex;">
+        <button id="annotation-remove" class="disable-all-on-Submit"
+        style="padding:8px; color:white; border:none;background: red;font-size: 14px; cursor:pointer;border-radius:10%">REMOVE</button>    
+        <button id="annotation-save" class="disable-all-on-Submit"
+        style="padding:8px; margin:0px 20px 0px 20px;color:white; border-radius:4px;border:none;background:#007bff;font-size: 14px;cursor: pointer;border-radius:10%">SAVE</button>
+    </div>
+    
+  </div>
+  
+</div><!-- Ending tag for Annotation Box -->
+    
 
     <script>
         var user_id;
@@ -76,6 +389,31 @@
             play: document.getElementById("play-button")
         }
 
+        //Video Js Options
+    let videoJSOptions={
+       controls: false,
+       bigPlayButton: false,
+      autoplay: false,
+      loop: false,
+      fluid: false,
+      width: 300,
+      height: 600,
+      muted: true
+    }
+
+    // create player
+    var player = videojs('myVideo', videoJSOptions, function () {
+      // print version information at startup
+      var msg = 'Using video.js ' + videojs.VERSION +
+        ' with videojs-wavesurfer ' +
+        videojs.getPluginVersion('wavesurfer') +
+        ' and wavesurfer.js ' + WaveSurfer.VERSION;
+      videojs.log(msg);
+
+      // load file
+      player.src({ src: 'https://audiobee-production-user-files.s3.eu-north-1.amazonaws.com/tcp_projects/Samsung_P000_2_20210602.mp4', type: 'video/mp4' });
+    });
+
     //Creating the audio stream from Wavesurfer 
     let wavesurferOptions={
       container: '#peaks-container',
@@ -103,21 +441,7 @@
     var spectrum = WaveSurfer.create(wavesurferOptions);
     spectrum.zoom(96);
 
-    //Video Js Options
-    let videoJSOptions={
-        controls: true,
-        autoplay: false,
-        loop: false,
-        muted: false,
-        fluid: false,
-        width: 600,
-        height: 300,
-        inactivityTimeout: 0,
-        bigPlayButton: false,
-        plugins:{
-            wavesurfer:wavesurferOptions
-        }
-    }
+    
     
 
     displayWaveSurferLoading();
@@ -125,15 +449,31 @@
     //handle play button
     buttons.play.addEventListener("click", function (event) {
       event.preventDefault();
-      if (!spectrum.isPlaying()) {
+      playPauseSpectrum();
+      document.getElementById('total-timestamp').innerText = secondsToTimestamp(spectrum.getDuration());
+    });
+
+    function playPauseSpectrum() {
+      var playing = spectrum.isPlaying()
+      if (!playing) {
         spectrum.play();
+        player.play();
         $("#play-button").find($(".fa")).toggleClass('fa-play fa-pause');
       } else {
         spectrum.pause();
+        player.pause();
         $("#play-button").find($(".fa")).toggleClass('fa-pause fa-play');
       }
-      document.getElementById('total-timestamp').innerText = secondsToTimestamp(spectrum.getDuration());
-    });
+      return playing;
+    }
+
+    function pauseSpectrum() {
+      if (spectrum.isPlaying()) {
+        spectrum.pause();
+        player.pause();
+        $("#play-button").find($(".fa")).toggleClass('fa-pause fa-play');
+      }
+    }
 
     //function on spectrum is ready 
     spectrum.on("ready", function () {
@@ -162,8 +502,7 @@
       document.getElementById('total-timestamp').innerText = secondsToTimestamp(totalDuration);
 
       //Add Region on key down
-      $("html").on("keydown", function (event) {
-
+      $("html").on("keydown", function (event) {        
         if (!updateTopDivSpeaker) {
           if (event.ctrlKey && event.shiftKey && event.which == 65) {
             //console.log("Pressed");
@@ -176,58 +515,93 @@
         }
 
          //Replay Region on KeyDown
-        if (event.altKey && event.which == 82 || event.which == 82 && event.target.id != "speaker-name" && event.target.id != "transcription-area" && event.target.id != "top-div-control-speaker-name" && event.target.id !="feedback-textarea") {        
+        if (((event.altKey && event.which == 82) || event.which == 82) && (checkInputFieldOnKeyPress())) {                  
           event.preventDefault();
           repeatRegion();
         }
         //Replay Function end
 
         //play pause on space bar
-        if ((event.which == 32 || event.which == 96 || event.which == 48) && event.target.id != "speaker-name" && event.target.id != "transcription-area" && event.target.id != "annotation-start-minute" && event.target.id != "annotation-start-seconds" && event.target.id != "annotation-start-milliseconds" && event.target.id != "annotation-end-minute" && event.target.id != "annotation-end-seconds" && event.target.id != "annotation-end-milliseconds" && event.target.id != "top-div-control-speaker-name" && event.target.id !="feedback-textarea") {
+        if ((event.which == 32 || event.which == 96 || event.which == 48) && (checkInputFieldOnKeyPress())) {
 
-          if (spectrum.isPlaying()) {
-            spectrum.pause();
-            $("#play-button").find($(".fa")).toggleClass('fa-pause fa-play');
-          }
-          else {
-            spectrum.play();
-            $("#play-button").find($(".fa")).toggleClass('fa-play fa-pause');
+            if (playPauseSpectrum())
+              highlightRegion();
+
+        }else if( (event.ctrlKey && event.which == 32) && (checkInputFieldOnKeyPress()) ){
+          if (playPauseSpectrum())
             highlightRegion();
-          }
-        }else if( (event.ctrlKey && event.which == 32) && (event.target.id == "speaker-name" || event.target.id == "transcription-area" || event.target.id == "annotation-start-minute" || event.target.id == "annotation-start-seconds" || event.target.id == "annotation-start-milliseconds" || event.target.id == "annotation-end-minute" || event.target.id == "annotation-end-seconds" || event.target.id == "annotation-end-milliseconds" || event.target.id == "top-div-control-speaker-name") ){
-          if (spectrum.isPlaying()) {
-            spectrum.pause();
-            $("#play-button").find($(".fa")).toggleClass('fa-pause fa-play');
-          }
-          else {
-            spectrum.play();
-            $("#play-button").find($(".fa")).toggleClass('fa-play fa-pause');
-            highlightRegion();
-          }
         }//Play Pause End
 
         //skip audio backwards 500ms on "8" pressed
-        if ((event.which == 104 || event.which == 56) && event.target.id != "speaker-name" && event.target.id != "transcription-area" && event.target.id != "annotation-start-minute" && event.target.id != "annotation-start-seconds" && event.target.id != "annotation-start-milliseconds" && event.target.id != "annotation-end-minute" && event.target.id != "annotation-end-seconds" && event.target.id != "annotation-end-milliseconds") {
+        if ((event.which == 104 || event.which == 56) && (checkInputFieldOnKeyPress())) {
           event.preventDefault();
           skipAudio(-0.5);
         }
 
         //skip audio backwards 500ms on "5" pressed
-        if ((event.which == 101 || event.which == 53) && event.target.id != "speaker-name" && event.target.id != "transcription-area" && event.target.id != "annotation-start-minute" && event.target.id != "annotation-start-seconds" && event.target.id != "annotation-start-milliseconds" && event.target.id != "annotation-end-minute" && event.target.id != "annotation-end-seconds" && event.target.id != "annotation-end-milliseconds") {
+        if ((event.which == 101 || event.which == 53) && (checkInputFieldOnKeyPress())) {
           event.preventDefault();
           skipAudio(0.5);
         }
 
         //jump audio to start
-        if (event.which == 36 || (event.which == 18 && event.which == 37)) {
+        if (event.which == 36 || (event.which == 18 && event.which == 37) && (checkInputFieldOnKeyPress())) {
           event.preventDefault();
           spectrum.seekTo(0);
         }
 
         //jump audio to end
-        if (event.which == 35) {
+        if (event.which == 35 && checkInputFieldOnKeyPress()) {
           event.preventDefault();
           skipAudio(spectrum.getDuration());
+        }
+
+        //CTRL+SHIFT+M MIC TAP
+        if((event.ctrlKey && event.shiftKey && event.which===77)){          
+          event.preventDefault();          
+          updateFieldOnShortCutPress($("#micTap-minute"),$("#micTap-seconds"),$("#micTap-milliseconds"));
+        }
+
+        //Ctrl+shift+o Mic OPEN
+        if(event.ctrlKey && event.shiftKey && event.which===79){          
+          event.preventDefault();
+          updateFieldOnShortCutPress($("#micOpen-start-minute"),$("#micOpen-start-seconds"),$("#micOpen-start-milliseconds"));
+        }
+
+        //ctrl+shif+c Mic Close
+        if(event.ctrlKey && event.shiftKey  && event.which===67){
+          event.preventDefault();
+           updateFieldOnShortCutPress($("#micOpen-end-minute"),$("#micOpen-end-seconds"),$("#micOpen-end-milliseconds"));
+        }
+
+        //Ctrl+shift+[ Utterance First Word End
+        if(event.ctrlKey && event.shiftKey  && event.which===219){
+          event.preventDefault();
+          updateFieldOnShortCutPress($("#first-word-minute"),$("#first-word-seconds"),$("#first-word-milliseconds"));
+        }
+
+        //Ctrl+shift+] Utterance First Word Display End
+        if(event.ctrlKey && event.shiftKey  && event.which===221){
+          event.preventDefault();
+          updateFieldOnShortCutPress($("#first-word-display-end-minute"),$("#first-word-display-end-seconds"),$("#first-word-display-end-milliseconds"));
+        }
+
+        //ctrl+shift+, Utterance Display Start
+        if(event.ctrlKey && event.shiftKey  && event.which===188){
+          event.preventDefault();
+          updateFieldOnShortCutPress($("#utterance-display-start-minute"),$("#utterance-display-start-seconds"),$("#utterance-display-start-milliseconds"));
+        }
+
+        //ctrl+shift+. Utterance Display End
+        if(event.ctrlKey && event.shiftKey  && event.which===190){
+          event.preventDefault();
+          updateFieldOnShortCutPress($("#utterance-display-end-minute"),$("#utterance-display-end-seconds"),$("#utterance-display-end-milliseconds"));
+        }
+
+        //ctrl+shift+f Final Text Display
+        if(event.ctrlKey && event.shiftKey  && event.which===70){
+          event.preventDefault();
+          updateFieldOnShortCutPress($("#final-text-minute"),$("#final-text-seconds"),$("#final-text-milliseconds"));
         }
       });
 
@@ -282,6 +656,15 @@
               //spectrum.seekTo(0.0404);
             };
         },1500);
+    }
+
+    function checkInputFieldOnKeyPress(){
+      if(        
+         event.target.tagName.toUpperCase()!=="INPUT"
+         && event.target.tagName.toUpperCase()!=="TEXTAREA"
+        )
+        return true;
+      return false;
     }
 
     //Function to set current time
@@ -344,9 +727,9 @@
     }
 
     //function to convert seconds to minute for editing annotation box  
-    function secondsToMinutes(seconds) {
+    function secondsToMinutes(seconds) {      
       var h = Math.floor(seconds / 3600);
-      var m = Math.floor((seconds - (h * 3600)) / 60);
+      var m = Math.floor((seconds - (h * 3600)) / 60);      
       m = m < 10 ? '0' + m : m;
       return m;
     }
@@ -378,10 +761,7 @@
       if (!confirmChangesboxBool) {
         $("#peaks-container,#top-div-for-scrolling-enabling").on("mousedown", function (e) {
           ////console.log("Touched");
-          if (spectrum.isPlaying()) {
-            spectrum.pause();
-            $("#play-button").find($(".fa")).toggleClass('fa-pause fa-play');
-          }
+          pauseSpectrum();
           dragging = true;
           temp = y = e.clientY;
         })
@@ -416,10 +796,7 @@
       }*/
 
       if (!confirmChangesboxBool) {
-        if (spectrum.isPlaying()) {
-          spectrum.pause();
-          $("#play-button").find($(".fa")).toggleClass('fa-pause fa-play');
-        }
+        pauseSpectrum();
         var req = (spectrum.getCurrentTime() + (event.deltaY / 96)) / spectrum.getDuration();
         req < 0 ? req = 0 : req = req;
         req > 1 ? req = 1 : req = req;
@@ -429,10 +806,7 @@
 
     document.getElementById("top-div-for-scrolling-enabling").addEventListener("wheel", function (event) {
       if (!confirmChangesboxBool) {
-        if (spectrum.isPlaying()) {
-          spectrum.pause();
-          $("#play-button").find($(".fa")).toggleClass('fa-pause fa-play');
-        }
+        pauseSpectrum();
         var req = (spectrum.getCurrentTime() + (event.deltaY / 96)) / spectrum.getDuration();
         req < 0 ? req = 0 : req = req;
         req > 1 ? req = 1 : req = req;
@@ -463,10 +837,8 @@
     }
 
     //function on spectrum ready
-    spectrum.on("ready", function () {      
-
-      //Hiding Annotation Div
-      $("#annotation-box").hide();
+    spectrum.on("ready", function () {            
+      
       //function on ctrl+quote key down and ctrl+colon
       ctrlquote();
       ctrlcolon();
@@ -513,6 +885,7 @@
                 utteranceDisplayEnd,
                 utteranceEnd,
                 utteranceFirstWordEnd,
+                utteranceFirstWordDisplayEnd,
                 utteranceStart,
                 utteranceText
             }=response[i];           
@@ -542,6 +915,7 @@
                 utteranceDisplayEnd,
                 utteranceEnd,
                 utteranceFirstWordEnd,
+                utteranceFirstWordDisplayEnd,
                 utteranceStart,
                 utteranceText);
           }
@@ -599,12 +973,13 @@
       if (updateAnnotationOnChange) {
         confirmDialogue();
         confirmChangesboxBool = true;
-      } else {
-        $("#annotation-box").hide();
+      } else {       
         addRegionBool = true;
       }
       //current region highlight
+      renew();
       highlightRegion();
+      
     });
 
     $("#top-div-control-close-button").on("click", function () {
@@ -631,9 +1006,7 @@
           method: "POST",
           url: "/remove-transperfect-user-segments",
           data: params,
-          success: function () {
-            //Hiding Annotation Div      
-            $("#annotation-box").hide();
+          success: function () {            
             ////console.log("Removed");
             updateAnnotationOnChange = false;
             updateAnnotationOnClick = false;
@@ -729,6 +1102,7 @@
         var firstSegmentId = $(`#peaks-container .${getClickedIdClass}`)[0].id;
         var firstSegmentStartTime = spectrum.regions.list[firstSegmentId].start;
         spectrum.seekTo(firstSegmentStartTime / spectrum.getDuration());
+        player.currentTime(spectrum.getCurrentTime())
       }
     }
 
@@ -769,6 +1143,7 @@
     //Seeking Specturm
     spectrum.on("seek", function () {
       //Displaying Current Segments Contents in our Annotation Box      
+      player.currentTime(spectrum.getCurrentTime())
       if (!updateTopDivSpeaker) {
         displayCurrentContents();
       }
@@ -920,8 +1295,7 @@
 
     //function to display top div speakers on click
     function displayTopDivSpeakersControls(speakerName) {
-      if (!updateAnnotationOnChange) {
-        $("#annotation-box").hide();
+      if (!updateAnnotationOnChange) {        
         $("#top-div-speaker-control").show();
         $("#top-div-control-speaker-name").val(speakerName);
       }
@@ -1000,9 +1374,10 @@
         var micTap =parseAnnotationTime($("#micTap-minute").val(),$("#micTap-seconds").val(),$("#micTap-milliseconds").val());
         var micOpen=parseAnnotationTime($("#micOpen-start-minute").val(),$("#micOpen-start-seconds").val(),$("#micOpen-start-milliseconds").val());
         var micClose=parseAnnotationTime($("#micOpen-end-minute").val(),$("#micOpen-end-seconds").val(),$("#micOpen-end-milliseconds").val());
-        var utteranceStart=parseAnnotationTime($("#utterance-start-minute").val(),$("#utterance-start-seconds").val(),$("#utterance-start-milliseconds").val());
-        var utteranceEnd=parseAnnotationTime($("#utterance-end-minute").val(),$("#utterance-end-seconds").val(),$("#utterance-end-milliseconds").val())
+        var utteranceStart=segmentStart
+        var utteranceEnd=segmentEnd
         var utteranceFirstWordEnd=parseAnnotationTime($("#first-word-minute").val(),$("#first-word-seconds").val(),$("#first-word-milliseconds").val());
+        var utteranceFirstWordDisplayEnd=parseAnnotationTime($("#first-word-display-end-minute").val(),$("#first-word-display-end-seconds").val(),$("#first-word-display-end-milliseconds").val());
         var utteranceDisplayStart=parseAnnotationTime($("#utterance-display-start-minute").val(),$("#utterance-display-start-seconds").val(),$("#utterance-display-start-milliseconds").val());
         var utteranceDisplayEnd=parseAnnotationTime($("#utterance-display-end-minute").val(),$("#utterance-display-end-seconds").val(),$("#utterance-display-end-milliseconds").val());
         var finalTextDisplay=parseAnnotationTime($("#final-text-minute").val(),$("#final-text-seconds").val(),$("#final-text-milliseconds").val());
@@ -1021,6 +1396,7 @@
           utteranceStart,
           utteranceEnd,
           utteranceFirstWordEnd,
+          utteranceFirstWordDisplayEnd,
           utteranceDisplayStart,
           utteranceDisplayEnd,
           finalTextDisplay,
@@ -1035,6 +1411,8 @@
 
       if (updateSegments == false) {
         ////console.log("New Save Click");
+
+        
 
         
         ////console.log(checkOverlappingDiv(speakerName, segmentStart, segmentEnd));
@@ -1076,6 +1454,7 @@
                     utteranceDisplayEnd,
                     utteranceEnd,
                     utteranceFirstWordEnd,
+                    utteranceFirstWordDisplayEnd,
                     utteranceStart,
                     utteranceText,
                     );
@@ -1085,9 +1464,7 @@
             
             updateAnnotationOnChange = false;
             updateAnnotationOnClick = false;
-
-            //Hiding Annotation Div      
-            $("#annotation-box").hide();
+            
 
             //setting update segments bool to true to allow updating
             updateSegments = true;          
@@ -1103,43 +1480,66 @@
             sameSpeakerOverlappingDialougeBox();
           }
         }
-      } else if (updateAnnotationOnChange == true) {        
-        var segmentId = currentId;
-        var annotationText = "";
-        var speakerName = "";
-        var annotationType = "";
-        var segmentclass = document.getElementById("speaker-name").value;
+      } else if (updateAnnotationOnChange == true) {   
+        
+        var segmentId = currentId;        
         ////console.log(segmentclass.replace(" ", "-"));
         var val = document.getElementById("annotation-type");   
             
             $("#annotation-div").children().each(function (index, value) {
-              if (value.className == "speaker") {                               
+              if (value.className == "speaker") {    
+                console.log(checkOverlappingDiv( newStartTime, newEndTime))                           
                 if (!checkOverlappingDiv( newStartTime, newEndTime)) {                  
                   
                   // annotationText = $("#transcription-area").val();
                   document.getElementById(segmentId).querySelector("p").innerText = actualText;
                   document.getElementById(segmentId).style.background = value.style.backgroundColor;                  
+                  document.getElementById(segmentId).style.bottom = ((canvasHeight - 8) + leftSpeakerCategoryDivMargin * (1)) + "px";
                   
                   document.getElementById(segmentId).style.top = "inherit";
+
+                  setDataAttributes(
+                    document.getElementById(segmentId),
+                    segmentStart,
+                    segmentEnd,
+                    finalTextDisplay,
+                    iteration,
+                    micActivationAttempt,
+                    micClose,
+                    micOpen,
+                    micTap,
+                    promptId,
+                    take,
+                    utteranceDisplayStart,
+                    utteranceDisplayEnd,
+                    utteranceFirstWordEnd,
+                    utteranceFirstWordDisplayEnd,
+                    utteranceText,
+                    actualText
+                  )
                 }
               }
             });
         
-
         //ajax Request To Update        
         if ( hundredMillisecSegmentCheck && !segmentEndingTimeMoreThanStartingTime && !checkOverlappingDiv(newStartTime, newEndTime)) {
-          ////console.log("Update vairako");
+          
+          //Remove User Id and Audio Id
+          delete params.userId;
+          delete params.audioId;
+          
           $.ajax({
             method: "POST",
             url: "/update-transperfect-segment",
-            data: params,
+            data: {...params,segmentId},
             success: function () {
+              
             }
           })
-          //Hiding Annotation Div      
-          $("#annotation-box").hide();
+          
           updateAnnotationOnChange = false;
           updateAnnotationOnClick = false;
+          updateSegments=true;
 
         } else {
            if (!hundredMillisecSegmentCheck) {
@@ -1181,6 +1581,24 @@
           createSegments(currentId, starting, ending);
         }
       });
+    }
+
+    //Function to update input fields timers on shortcut keys events
+    function updateFieldOnShortCutPress(minuteInputId,secondsInputId,millisecondsInputId){
+          var currentTime = spectrum.getCurrentTime();
+          updateAnnotationOnChange = true;
+          updateAnnotationOnClick = true;
+          updateSegments=true;          
+
+          //Timer Values to set
+          var minutes = secondsToMinutes(currentTime);
+          var seconds = secondsToSeconds(currentTime);
+          var milliseconds = secondsToMilliseconds(currentTime);
+
+          minuteInputId.val(minutes);
+          secondsInputId.val(seconds);
+          millisecondsInputId.val(milliseconds);
+
     }
 
     function parseAnnotationTime(minute,second,millisecond){
@@ -1297,6 +1715,8 @@
       $("#speaker-name").val("");
       $("#transcription-area").val("");
       document.getElementById("transcription-area").style.display = "inline-table";
+      
+      $(".form-inline").get(0).reset()
       //document.getElementById("speaker-name").style.display = "block";
     }//renew function end
 
@@ -1320,9 +1740,7 @@
 
     //function for split
     function splitRegion(textBeforeCursor = "", textAfterCursor = "") {
-      if(spectrum.isPlaying()){
-        spectrum.pause();
-      }
+      pauseSpectrum();
       var getCurrentIdForSplit=currentId;
       var spectrumCurrentTime = spectrum.getCurrentTime();
       var regionStartTime = spectrum.regions.list[currentId].start;
@@ -1437,9 +1855,7 @@
     function confirmChanges() {
       //if changes were made in annotation box
       if (updateAnnotationOnChange) {
-        //console.log("Update Annotation Cancel");
-        //Hiding Annotation Div      
-        $("#annotation-box").hide();
+        //console.log("Update Annotation Cancel");        
         updateAnnotationOnChange = false;
         if ($("#peaks-container").children().is("#" + currentId)) {
           spectrum.regions.list[currentId].update({
@@ -2095,40 +2511,45 @@
       }
     }//DisplayCurrentContents function end
 
-    function setTransperfectFields(segmentId){
-        $("#annotation-take").val($(`#${segmentId}`).data("take"));
-        $("#mic-activation-attempt").val($(`#${segmentId}`).data("mic-activation-attempt"));
-        $("#annotation-iteration").val($(`#${segmentId}`).data("iteration"));
-        $("#micTap-minute").val(secondsToMinutes($(`#${segmentId}`).data("mic-tap")));
-        $("#micTap-seconds").val(secondsToSeconds($(`#${segmentId}`).data("mic-tap")));
-        $("#micTap-milliseconds").val(secondsToMilliseconds($(`#${segmentId}`).data("mic-tap")));
-        $("#micOpen-start-minute").val(secondsToMinutes($(`#${segmentId}`).data("mic-open")));
-        $("#micOpen-start-seconds").val(secondsToSeconds($(`#${segmentId}`).data("mic-open")));
-        $("#micOpen-start-milliseconds").val(secondsToMilliseconds($(`#${segmentId}`).data("mic-open")));
-        $("#micOpen-end-minute").val(secondsToMinutes($(`#${segmentId}`).data("mic-close")));
-        $("#micOpen-end-seconds").val(secondsToSeconds($(`#${segmentId}`).data("mic-close")));
-        $("#micOpen-end-milliseconds").val(secondsToMilliseconds($(`#${segmentId}`).data("mic-close")));
-        $("#utterance-start-minute").val(secondsToMinutes($(`#${segmentId}`).data("utterance-start")));
+    function setTransperfectFields(segmentId){      
+        $("#annotation-take").val($(`#${segmentId}`).attr("data-take"));
+        $("#mic-activation-attempt").val($(`#${segmentId}`).attr("data-mic-activation-attempt"));
+        $("#annotation-iteration").val($(`#${segmentId}`).attr("data-iteration"));
+        $("#micTap-minute").val(secondsToMinutes($(`#${segmentId}`).attr("data-mic-tap")));
+        $("#micTap-seconds").val(secondsToSeconds($(`#${segmentId}`).attr("data-mic-tap")));
+        $("#micTap-milliseconds").val(secondsToMilliseconds($(`#${segmentId}`).attr("data-mic-tap")));
+        $("#micOpen-start-minute").val(secondsToMinutes($(`#${segmentId}`).attr("data-mic-open")));
+        $("#micOpen-start-seconds").val(secondsToSeconds($(`#${segmentId}`).attr("data-mic-open")));
+        $("#micOpen-start-milliseconds").val(secondsToMilliseconds($(`#${segmentId}`).attr("data-mic-open")));
+        $("#micOpen-end-minute").val(secondsToMinutes($(`#${segmentId}`).attr("data-mic-close")));
+        $("#micOpen-end-seconds").val(secondsToSeconds($(`#${segmentId}`).attr("data-mic-close")));
+        $("#micOpen-end-milliseconds").val(secondsToMilliseconds($(`#${segmentId}`).attr("data-mic-close")));
+        
+        /*$("#utterance-start-minute").val(secondsToMinutes($(`#${segmentId}`).data("utterance-start")));
         $("#utterance-start-seconds").val(secondsToSeconds($(`#${segmentId}`).data("utterance-start")));
         $("#utterance-start-milliseconds").val(secondsToMilliseconds($(`#${segmentId}`).data("utterance-start")));
-        $("#utterance-end-minute").val(secondsToMinutes($(`#${segmentId}`).data("utterance-end")));
+        $("#utterance-end-minute").val(secondsToMinutes($(`#${segmentId}`).data("utterance-end")));        
         $("#utterance-end-seconds").val(secondsToSeconds($(`#${segmentId}`).data("utterance-end")));
         $("#utterance-end-milliseconds").val(secondsToMilliseconds($(`#${segmentId}`).data("utterance-end")));
-        $("#first-word-minute").val(secondsToMinutes($(`#${segmentId}`).data("utterance-first-word-end")));
-        $("#first-word-seconds").val(secondsToSeconds($(`#${segmentId}`).data("utterance-first-word-end")));
-        $("#first-word-milliseconds").val(secondsToMilliseconds($(`#${segmentId}`).data("utterance-first-word-end")));
-        $("#utterance-display-start-minute").val(secondsToMinutes($(`#${segmentId}`).data("utterance-display-start")));
-        $("#utterance-display-start-seconds").val(secondsToSeconds($(`#${segmentId}`).data("utterance-display-start")));
-        $("#utterance-display-start-milliseconds").val(secondsToMilliseconds($(`#${segmentId}`).data("utterance-display-start")));
-        $("#utterance-display-end-minute").val(secondsToMinutes($(`#${segmentId}`).data("utterance-display-end")));
-        $("#utterance-display-end-seconds").val(secondsToSeconds($(`#${segmentId}`).data("utterance-display-end")));
-        $("#utterance-display-end-milliseconds").val(secondsToMilliseconds($(`#${segmentId}`).data("utterance-display-end")));
-        $("#final-text-minute").val(secondsToMinutes($(`#${segmentId}`).data("final-text-display")));
-        $("#final-text-seconds").val(secondsToSeconds($(`#${segmentId}`).data("final-text-display")));
-        $("#final-text-milliseconds").val(secondsToMilliseconds($(`#${segmentId}`).data("final-text-display")));
-        $("#prompt-Id").val($(`#${segmentId}`).data("prompt-id"));
-        $("#transcription-area").val($(`#${segmentId}`).data("actual-text"));
-        $("#utterance-text-area").val($(`#${segmentId}`).data("utterance-text"))
+        */
+        $("#first-word-minute").val(secondsToMinutes($(`#${segmentId}`).attr("data-utterance-first-word-end")));
+        $("#first-word-seconds").val(secondsToSeconds($(`#${segmentId}`).attr("data-utterance-first-word-end")));
+        $("#first-word-milliseconds").val(secondsToMilliseconds($(`#${segmentId}`).attr("data-utterance-first-word-end")));
+        $("#first-word-display-end-minute").val(secondsToMinutes($(`#${segmentId}`).attr("data-utterance-first-word-display-end")));
+        $("#first-word-display-end-seconds").val(secondsToSeconds($(`#${segmentId}`).attr("data-utterance-first-word-display-end")));
+        $("#first-word-display-end-milliseconds").val(secondsToMilliseconds($(`#${segmentId}`).attr("data-utterance-first-word-display-end")));
+        $("#utterance-display-start-minute").val(secondsToMinutes($(`#${segmentId}`).attr("data-utterance-display-start")));
+        $("#utterance-display-start-seconds").val(secondsToSeconds($(`#${segmentId}`).attr("data-utterance-display-start")));
+        $("#utterance-display-start-milliseconds").val(secondsToMilliseconds($(`#${segmentId}`).attr("data-utterance-display-start")));
+        $("#utterance-display-end-minute").val(secondsToMinutes($(`#${segmentId}`).attr("data-utterance-display-end")));
+        $("#utterance-display-end-seconds").val(secondsToSeconds($(`#${segmentId}`).attr("data-utterance-display-end")));
+        $("#utterance-display-end-milliseconds").val(secondsToMilliseconds($(`#${segmentId}`).attr("data-utterance-display-end")));
+        $("#final-text-minute").val(secondsToMinutes($(`#${segmentId}`).attr("data-final-text-display")));
+        $("#final-text-seconds").val(secondsToSeconds($(`#${segmentId}`).attr("data-final-text-display")));
+        $("#final-text-milliseconds").val(secondsToMilliseconds($(`#${segmentId}`).attr("data-final-text-display")));
+        $("#prompt-Id").val($(`#${segmentId}`).attr("data-prompt-id"));
+        $("#transcription-area").val($(`#${segmentId}`).attr("data-actual-text"));
+        $("#utterance-text-area").val($(`#${segmentId}`).attr("data-utterance-text"))
     }
 
     //function to disable all on submit
@@ -2142,11 +2563,9 @@
         const seeMoreBtn=$("#display-utterance-btn");
         
         if(utteranceDiv.css("display")=="none"){
-            utteranceDiv.show();
-            seeMoreBtn.html("See less..");
+            utteranceDiv.show();            
         }else{
-            utteranceDiv.hide();
-            seeMoreBtn.html("See more..");
+            utteranceDiv.hide();            
         }
     }  
 

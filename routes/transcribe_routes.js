@@ -173,6 +173,10 @@ router.post(
   '/create-transperfect-segment',
   transperfectUserSegmentQueries.addTransperfectSegments
 );
+router.post(
+  '/update-transperfect-segment',
+  transperfectUserSegmentQueries.updateTransperfectSegments
+);
 
 //Actual Table APIs
 router.get('/actual-data-admin', actualTable.getActualLandingForAdmin);

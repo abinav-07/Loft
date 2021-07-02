@@ -17,6 +17,7 @@ const addTransperfectSegments = async (req, res, next) => {
     utteranceStart,
     utteranceEnd,
     utteranceFirstWordEnd,
+    utteranceFirstWordDisplayEnd,
     utteranceDisplayStart,
     utteranceDisplayEnd,
     finalTextDisplay,
@@ -42,6 +43,7 @@ const addTransperfectSegments = async (req, res, next) => {
       utteranceStart: Joi.number(),
       utteranceEnd: Joi.number(),
       utteranceFirstWordEnd: Joi.number(),
+      utteranceFirstWordDisplayEnd: Joi.number(),
       utteranceDisplayStart: Joi.number(),
       utteranceDisplayEnd: Joi.number(),
       finalTextDisplay: Joi.number(),
@@ -69,6 +71,7 @@ const addTransperfectSegments = async (req, res, next) => {
       utteranceStart,
       utteranceEnd,
       utteranceFirstWordEnd,
+      utteranceFirstWordDisplayEnd,
       utteranceDisplayStart,
       utteranceDisplayEnd,
       finalTextDisplay,
@@ -78,7 +81,90 @@ const addTransperfectSegments = async (req, res, next) => {
     });
     res.status(200).json(addSegment);
   } catch (error) {
-    console.log(error);
+    res.status(400).json({ message: error });
+  }
+};
+
+const updateTransperfectSegments = async (req, res, next) => {
+  const {
+    segmentStart,
+    segmentEnd,
+    take,
+    micActivationAttempt,
+    iteration,
+    micTap,
+    micOpen,
+    micClose,
+    utteranceStart,
+    utteranceEnd,
+    utteranceFirstWordEnd,
+    utteranceFirstWordDisplayEnd,
+    utteranceDisplayStart,
+    utteranceDisplayEnd,
+    finalTextDisplay,
+    promptId,
+    actualText,
+    utteranceText,
+    segmentId,
+  } = req.body;
+
+  try {
+    const schema = Joi.object({
+      segmentStart: Joi.number().required(),
+      segmentEnd: Joi.number().required(),
+      take: Joi.number().required().min(1),
+      segmentId: Joi.number().required(),
+      micActivationAttempt: Joi.number().required().min(1),
+      iteration: Joi.number().required().min(1),
+      micTap: Joi.number(),
+      micOpen: Joi.number(),
+      micClose: Joi.number(),
+      utteranceStart: Joi.number(),
+      utteranceEnd: Joi.number(),
+      utteranceFirstWordEnd: Joi.number(),
+      utteranceFirstWordDisplayEnd: Joi.number(),
+      utteranceDisplayStart: Joi.number(),
+      utteranceDisplayEnd: Joi.number(),
+      finalTextDisplay: Joi.number(),
+      promptId: Joi.number().allow(null),
+      actualText: Joi.string().allow(null).allow(''),
+      utteranceText: Joi.string().allow(null).allow(''),
+    });
+    const validationResult = schema.validate(req.body, { abortEarly: false });
+
+    if (validationResult && validationResult.error) {
+      throw validationResult.error;
+    }
+
+    await TRANSCRIPTION_DB.TransperfectUserSegment.update(
+      {
+        segmentStart,
+        segmentEnd,
+        take,
+        micActivationAttempt,
+        iteration,
+        micTap,
+        micOpen,
+        micClose,
+        utteranceStart,
+        utteranceEnd,
+        utteranceFirstWordEnd,
+        utteranceFirstWordDisplayEnd,
+        utteranceDisplayStart,
+        utteranceDisplayEnd,
+        finalTextDisplay,
+        promptId,
+        actualText,
+        utteranceText,
+      },
+      {
+        where: {
+          segmentId,
+        },
+      }
+    );
+    res.status(200).json({ message: 'Segment Updated!' });
+  } catch (error) {
     res.status(400).json({ message: error });
   }
 };
@@ -128,4 +214,5 @@ module.exports = {
   addTransperfectSegments,
   getUserCreatedSegments,
   removeUserCreatedSegments,
+  updateTransperfectSegments,
 };

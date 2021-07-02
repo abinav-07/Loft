@@ -110,18 +110,18 @@ function resizeTransperfectScreen() {
     11;
   if (window.matchMedia('(max-width: 1500px)').matches) {
     $('#peaks-container > wave').css({ height: '35vw' });
-    $('#annotation-box').css({
-      'box-shadow': '4px 4px 4px #888888',
-      marginLeft: '40vw',
-      height: `${annotationBoxHeight}px`,
-      border: '1px solid grey',
-      position: 'fixed',
-      'z-index': '3',
-      'background-color': 'white',
-      'overflow-x': 'hidden',
-      'overflow-y': 'hidden',
-      display: 'none',
-    });
+    // $('#annotation-box').css({
+    //   'box-shadow': '4px 4px 4px #888888',
+    //   marginLeft: '40vw',
+    //   height: `${annotationBoxHeight}px`,
+    //   border: '1px solid grey',
+    //   position: 'fixed',
+    //   'z-index': '3',
+    //   'background-color': 'white',
+    //   'overflow-x': 'hidden',
+    //   'overflow-y': 'hidden',
+    //   display: 'none',
+    // });
     //canvas height to set the top speaker annotation div position from left
     canvasHeight = $('#peaks-container > wave canvas').height();
 
@@ -162,22 +162,22 @@ function resizeTransperfectScreen() {
     /* The viewport is less than, or equal to, 1500 pixels wide */
   } else if (window.matchMedia('(min-width: 1500px)').matches) {
     $('#peaks-container > wave').css({ height: '35vw' });
-    $('#annotation-box').css({
-      'box-shadow': '4px 4px 4px #888888',
-      marginLeft: '40vw',
-      bottom: 0,
-      height: `${annotationBoxHeight}px`,
-      border: '1px solid grey',
-      'border-left': '2px solid black',
-      'border-right': '2px solid black',
-      'border-top': '2px solid black',
-      position: 'fixed',
-      'z-index': '3',
-      'background-color': 'white',
-      'overflow-x': 'hidden',
-      'overflow-y': 'hidden',
-      display: 'none',
-    });
+    // $('#annotation-box').css({
+    //   'box-shadow': '4px 4px 4px #888888',
+    //   marginLeft: '40vw',
+    //   bottom: 0,
+    //   height: `${annotationBoxHeight}px`,
+    //   border: '1px solid grey',
+    //   'border-left': '2px solid black',
+    //   'border-right': '2px solid black',
+    //   'border-top': '2px solid black',
+    //   position: 'fixed',
+    //   'z-index': '3',
+    //   'background-color': 'white',
+    //   'overflow-x': 'hidden',
+    //   'overflow-y': 'hidden',
+    //   display: 'none',
+    // });
 
     //canvas height to set the top speaker annotation div position from left
     canvasHeight = $('#peaks-container > wave canvas').height();

@@ -1,0 +1,121 @@
+ <div  id="top-header">
+ <header >
+  <div>
+    <a href="#" class="disabled" id="loft-header">LT</a>
+    <a href="#" id="tasks-header" class="disabled">TASKS</a>
+    {{!-- <a href="#" id="history-header">HISTORY</a> --}}
+
+    <div id="guide-for-submit-button-appearance">
+      <span>Press the SUBMIT button once you’ve completed creating all the required segments.</span>
+    </div>
+    <div style="float:right; overflow:auto">
+      <button id="feedback-btn" style="display:none">Feedbacks</button>
+    </div>
+    <div id="user_info">
+      <div id="training-userId"></div> 
+      <div id="training-audioName"></div>
+    </div>
+    {{!-- div for Guided Instructions --}}
+    <div id="guides-to-follow">
+      <div id="guided-menu" style="display: none;">
+        <span id="guided-welcome" class="guided-audio-instructions">Welcome to LT, I am your guide Mr.Bee. <br>COMPLETE THIS GUIDED TUTORIAL TO START THE ACTUAL TEST. Press Next to Get Started. </span>
+        <span id="play-and-pause-guided" class="guided-audio-instructions" style="display:none;"> Press the "SPACEBAR" key to PAUSE or PLAY the audio. You can also click on the <i class="fa fa-play"></i> icon/button. </span>
+        <span id="play-to-required-time-guided" class="guided-audio-instructions" style="display:none">
+          Click the <i class="fa fa-plus"></i> button or
+          press "Control Key + Shift Key+ A" to create a NEW SEGMENT.</span>
+        <span id="create-region-guided" class="guided-audio-instructions" style="display:none"> Create a segment anywhere in the audio. </span>
+        <span id="copy-current-time-to-end-time-guided" class="guided-audio-instructions" style="display:none">Press "Control + single quote" to set the current time as END TIME. This is the time that your segment will end.</span>
+        <span id="scrolling-audio-guided" class="guided-audio-instructions" style="display:none"> CLICK and DRAG the audio wave to scroll through the audio. Now, Scroll to the top.</span>
+        <span id="copy-current-time-to-start-time-guided" class="guided-audio-instructions" style="display:none"> Use "Control + Semicolon" to set the current time as START TIME. This is the time that the segment will begin.</span>
+        <span id="time-from-annotation-box-guided" class="guided-audio-instructions" style="display:none"> You can also change the START and END TIME by entering the desired timestamp in the box to the right.</span>
+        <span id="annotation-type-guided" class="guided-audio-instructions" style="display:none">  Choose the appropriate annotation label from the dropdown list. For now, leave this section as blank.</span>
+        <span id="speaker-name-guided" class="guided-audio-instructions" style="display:none">Label a new speaker using the format "speaker" + [space] + [number].</span>
+        <span id="save-segmentation-guided" class="guided-audio-instructions" style="display:none">Click "SAVE" to create your segment. Segments can be edited later after saving it. </span>
+        <span id="go-to-test-from-guided" class="guided-audio-instructions" style="display:none">You have completed the Guided Tuturial. Click on "Take Test" to begin the test.
+        </span>
+        <input type="button" id="previous-guide-button" class="guided-button" style="display:none" value="Prev">
+        <input type="button" id="next-guide-button" class="guided-button" style="display:none" value="Next">
+        <input type="button" id="go-to-test" class="guided-button" style="display:none" value="Take Test">
+      </div>
+    </div>  
+  {{!-- Guided Instruction Work Finish --}}
+
+  {{!-- <a href="../../public/guidelines.html" target="_blank" id="read-guidelines-header" style="cursor: pointer;">Guidelines</a> --}}
+  {{!-- <i id="help-icon" class="fa fa-question-circle"></i> --}}
+  </div>  
+</header>
+<div id="top-block">
+  <div id="play-button-div">
+    <a class="btn" id="play-button" href="#">
+      <i class="fa fa-play" style="color:grey;font-size:30px"></i></a>
+  </div>
+  <div id="time">
+    <h3 class="audio_time_hours">00 h</h3>
+    <h2 id="start-timestamp">00:00.000 </h2>
+    <span id="audio-time-divider"></span>
+    <h3 class="audio_time_hours">00 h</h3>
+    <h3 id="total-timestamp">00:00.000</h3>
+  </div>
+  <div class="audio-button-top-container">
+    <div class="audio-button-top-row">
+
+    </div>
+    <div class="audio-button-bottom-row">
+      <label class="playback_speed">
+        Playback Speed:
+        <select id="play_back_rate" style="border-style: none; font-size: 1em; margin-left: .1em;">
+          <option value="0.5">0.5x</option>
+          <option value="0.75">0.75x</option>
+          <option value="1" selected>1x</option>
+          <option value="1.25">1.25x</option>
+          <option value="1.5">1.5x</option>
+        </select>
+      </label>
+    </div>
+  </div>
+  {{!-- div for hamburger Icons After Submit Click --}}
+  <div id="errorToggle">
+    <input type="checkbox" id="displayErrorCB" />
+    <span class="showHamburger"></span>
+    <span class="showHamburger"></span>
+    <span class="showHamburger"></span>
+    <p id="closeHamburger">X</p>
+    <ul id="errorMenu">
+      <a href="#">
+        <li id="speaker-labelling-error"></li>
+      </a>
+      <a href="#">
+        <li id="annotation-labelling-error"></li>
+      </a>
+      <a href="#">
+        <li id="unnecessary-segments-errors"></li>
+      </a>
+      <a href="#">
+        <li id="total-errors"></li>
+      </a>
+
+      {{!--<a href="#">
+        <li id="total-points">Total Points: 100%</li>
+      </a>
+      --}}
+    </ul>
+  </div>
+  {{!-- Hambuger Work Finish --}}
+  {{!-- Training Segment Display Button --}}
+  <div id="display-training-segments">
+    <label>Display Correct Segments: </label>
+    <select id="select-display-training-segments">
+      <option value="on" selected="selected">On</option>
+      <option value="off">Off</option>
+    </select>
+  </div>
+
+<div class="guidelines-div">
+    <i id="help-icon" class="fa fa-question-circle"></i>
+    <span style="font-size: 30px;color: #d1d6de;">|</span>
+    <a href="../../public/guidelines.html" target="_blank" id="read-guidelines-header"
+    style="cursor: pointer;">Guidelines</a>
+</div> 
+
+</div>
+</div>

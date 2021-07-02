@@ -15,6 +15,7 @@ function createTransperfectSegments(
   utteranceDisplayEnd,
   utteranceEnd,
   utteranceFirstWordEnd,
+  utteranceFirstWordDisplayEnd,
   utteranceStart,
   utteranceText,
   actual = false
@@ -36,21 +37,25 @@ function createTransperfectSegments(
   div.style.height = '180px';
 
   //Transperfect Data Sets
-  div.dataset.finalTextDisplay = finalTextDisplay;
-  div.dataset.iteration = iteration;
-  div.dataset.micActivationAttempt = micActivationAttempt;
-  div.dataset.micClose = micClose;
-  div.dataset.micOpen = micOpen;
-  div.dataset.micTap = micTap;
-  div.dataset.promptId = promptId;
-  div.dataset.take = take;
-  div.dataset.utteranceDisplayStart = utteranceDisplayStart;
-  div.dataset.utteranceDisplayEnd = utteranceDisplayEnd;
-  div.dataset.utteranceEnd = utteranceEnd;
-  div.dataset.utteranceFirstWordEnd = utteranceFirstWordEnd;
-  div.dataset.utteranceStart = utteranceStart;
-  div.dataset.utteranceText = utteranceText;
-  div.dataset.actualText = annotationText;
+  setDataAttributes(
+    div,
+    segmentStart,
+    segmentEnd,
+    finalTextDisplay,
+    iteration,
+    micActivationAttempt,
+    micClose,
+    micOpen,
+    micTap,
+    promptId,
+    take,
+    utteranceDisplayStart,
+    utteranceDisplayEnd,
+    utteranceFirstWordEnd,
+    utteranceFirstWordDisplayEnd,
+    utteranceText,
+    annotationText
+  );
 
   //if it is actual data from database, display correct or incorrect
   if (actual) {
@@ -117,3 +122,41 @@ function createTransperfectSegments(
     topSpeakerDiv('speaker', neededColor);
   }
 } //function createDiv end
+
+function setDataAttributes(
+  div,
+  segmentStart,
+  segmentEnd,
+  finalTextDisplay,
+  iteration,
+  micActivationAttempt,
+  micClose,
+  micOpen,
+  micTap,
+  promptId,
+  take,
+  utteranceDisplayStart,
+  utteranceDisplayEnd,
+  utteranceFirstWordEnd,
+  utteranceFirstWordDisplayEnd,
+  utteranceText,
+  annotationText
+) {
+  //Transperfect Data Sets
+  div.dataset.finalTextDisplay = finalTextDisplay;
+  div.dataset.iteration = iteration;
+  div.dataset.micActivationAttempt = micActivationAttempt;
+  div.dataset.micClose = micClose;
+  div.dataset.micOpen = micOpen;
+  div.dataset.micTap = micTap;
+  div.dataset.promptId = promptId;
+  div.dataset.take = take;
+  div.dataset.utteranceDisplayStart = utteranceDisplayStart;
+  div.dataset.utteranceDisplayEnd = utteranceDisplayEnd;
+  div.dataset.utteranceEnd = segmentEnd;
+  div.dataset.utteranceFirstWordEnd = utteranceFirstWordEnd;
+  div.dataset.utteranceFirstWordDisplayEnd = utteranceFirstWordDisplayEnd;
+  div.dataset.utteranceStart = segmentStart;
+  div.dataset.utteranceText = utteranceText;
+  div.dataset.actualText = annotationText;
+}

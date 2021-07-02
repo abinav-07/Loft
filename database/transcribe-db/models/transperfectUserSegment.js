@@ -64,6 +64,9 @@ module.exports = (sequelize, DataTypes) => {
       utteranceFirstWordEnd: {
         type: DataTypes.FLOAT,
       },
+      utteranceFirstWordDisplayEnd: {
+        type: DataTypes.FLOAT,
+      },
       utteranceDisplayStart: {
         type: DataTypes.FLOAT,
       },
