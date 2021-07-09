@@ -1,4 +1,14 @@
 function resizeWindow() {
+  //Responsiveness for annotation box
+  if (
+    window.screen.width * window.devicePixelRatio < 1920 &&
+    window.screen.height * window.devicePixelRatio < 1080
+  ) {
+    $('#annotation-box').css({
+      bottom: '1vh',
+      transform: 'scale(0.7)',
+    });
+  }
   if (window.matchMedia('(max-width: 1500px)').matches) {
     $('#peaks-container > wave').css({ height: '65vw' });
     $('#annotation-box').css({

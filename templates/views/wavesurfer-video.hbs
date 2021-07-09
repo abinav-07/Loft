@@ -2464,7 +2464,7 @@
     })
 
     //function for confirming changes on close click
-    function confirmChanges() {
+    function discardChanges() {
       //if changes were made in annotation box
       if (updateAnnotationOnChange) {
         //console.log("Update Annotation Cancel");
@@ -2530,7 +2530,7 @@
 
     //function for confirm click 
     $(".confirm-changes").on("click", function () {
-      confirmChanges();
+      discardChanges();
       addRegionBool = true;
       confirmChangesboxBool = false;
       $("#confirmation-box").hide();

@@ -23,6 +23,7 @@ function createDiv(
   div.style.height = '180px';
   //if it is actual data from database, display correct or incorrect
   if (actual) {
+    div.setAttribute('actual', 'true');
     if (correctSegmentCreated) {
       div.style.border = `3.5px dashed #05f234`;
       div.style.opacity = '0.4';
@@ -70,7 +71,9 @@ function createDiv(
   div.style.width = pos1 + 'px';
 
   //onClick and onChange action listener
-  div.addEventListener('click', changeAnnotationOnClick);
+  if (!actual) {
+    div.addEventListener('click', changeAnnotationOnClick);
+  }
 
   if (
     $('#peaks-container')

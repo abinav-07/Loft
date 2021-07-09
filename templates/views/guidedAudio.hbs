@@ -2521,7 +2521,7 @@
     })
 
     //function for confirming changes on close click
-    function confirmChanges() {
+    function discardChanges() {
       //Hiding Annotation Div      
       $("#annotation-box").hide();
       updateAnnotationOnChange = false;
@@ -2578,7 +2578,7 @@
 
     //function for confirm click 
     $(".confirm-changes").on("click", function () {
-      confirmChanges();
+      discardChanges();
       addRegionBool = true;
       confirmChangesboxBool = false;
       $("#confirmation-box").hide();
