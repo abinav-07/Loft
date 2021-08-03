@@ -7,13 +7,13 @@
     {{!-- <link rel="stylesheet" type="text/css" href="/css/styles.css"> --}}
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
-    <link href="https://vjs.zencdn.net/7.11.4/video-js.css" rel="stylesheet" />
-    <link rel="stylesheet" href="//unpkg.com/videojs-wavesurfer/dist/css/videojs.wavesurfer.min.css"> 
+    {{!-- <link href="https://vjs.zencdn.net/7.11.4/video-js.css" rel="stylesheet" />
+    <link rel="stylesheet" href="//unpkg.com/videojs-wavesurfer/dist/css/videojs.wavesurfer.min.css">  --}}
     <link href="./node_modules/bootstrap-icons/font/bootstrap-icons.css">
 
     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
-    <script src="https://vjs.zencdn.net/7.11.4/video.min.js"></script>
-    <script src="//unpkg.com/videojs-wavesurfer/dist/videojs.wavesurfer.min.js"></script>
+    {{!-- <script src="https://vjs.zencdn.net/7.11.4/video.min.js"></script> --}}
+    {{!-- <script src="//unpkg.com/videojs-wavesurfer/dist/videojs.wavesurfer.min.js"></script> --}}
 
     <script src="local_modules/wavesurfer.js/dist/wavesurfer.js"></script>
     <script src="local_modules/wavesurfer.js/dist/plugin/wavesurfer.timeline.js"></script>
@@ -366,30 +366,6 @@
             play: document.getElementById("play-button")
         }
 
-        //Video Js Options
-    let videoJSOptions={
-       controls: false,
-       bigPlayButton: false,
-      autoplay: false,
-      loop: false,
-      fluid: false,
-      width: 300,
-      height: 600,
-      muted: true
-    }
-
-    // create player
-    var player = videojs('myVideo', videoJSOptions, function () {
-      // print version information at startup
-      var msg = 'Using video.js ' + videojs.VERSION +
-        ' with videojs-wavesurfer ' +
-        videojs.getPluginVersion('wavesurfer') +
-        ' and wavesurfer.js ' + WaveSurfer.VERSION;
-      videojs.log(msg);
-
-      // load file
-      player.src({ src: 'https://audiobee-production-user-files.s3.eu-north-1.amazonaws.com/tcp_projects/Samsung_P000_2_20210602.mp4', type: 'video/mp4' });
-    });
 
     //Creating the audio stream from Wavesurfer 
     let wavesurferOptions={

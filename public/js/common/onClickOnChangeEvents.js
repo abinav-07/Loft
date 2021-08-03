@@ -166,7 +166,7 @@ $(function () {
     if (VENDOR_WEBSITE) {
       window.location.href = `${vendor_website_url}/sample#segmentation`;
     } else {
-      window.location.href = `${webapp_basepath}/test/segmentation`;
+      window.location.href = `${webapp_basepath}/sample`;
     }
   }); //Profile Link Button function End
 
