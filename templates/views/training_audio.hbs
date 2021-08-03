@@ -89,7 +89,10 @@
       audio_order="No Order"
     {{/if}}
     var VENDOR_WEBSITE;
-    VENDOR_WEBSITE={{isVendorWebsite}};    
+    VENDOR_WEBSITE={{isVendorWebsite}};  
+    var webapp_basepath;
+    webapp_basepath = '{{ webapp_basepath }}';  
+    const vendor_website_url='{{VENDOR_WEBSITE_URL}}'
   </script>
   <script>
     var is_submitted = "FALSE";    

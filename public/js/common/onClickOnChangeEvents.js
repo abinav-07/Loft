@@ -164,9 +164,9 @@ $(function () {
   //clicking in profile link button
   $('#profile-link-button').on('click', () => {
     if (VENDOR_WEBSITE) {
-      window.location.href = '{{ VENDOR_WEBSITE_URL }}/sample#segmentation';
+      window.location.href = `${vendor_website_url}/sample#segmentation`;
     } else {
-      window.location.href = '{{ webapp_basepath }}/test/segmentation';
+      window.location.href = `${webapp_basepath}/test/segmentation`;
     }
   }); //Profile Link Button function End
 
