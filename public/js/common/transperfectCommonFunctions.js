@@ -1,36 +1,37 @@
 //Update Transperfect Input Fields
 function setTransperfectFields(segmentId) {
-  $('#annotation-take').val($(`#${segmentId}`).attr('data-take'));
-  $('#mic-activation-attempt').val(
-    $(`#${segmentId}`).attr('data-mic-activation-attempt')
+  console.log(segmentId);
+  // console.log(`#${segmentId}`).attr('data-date-of-delivery');
+  $('#annotation-latency').val($(`#${segmentId}`).attr('data-latency'));
+  $('#transcription-area').val($(`#${segmentId}`).attr('data-wake-word'));
+  $('#date-of-delivery').val($(`#${segmentId}`).attr('data-date-of-delivery'));
+  $('#command').val($(`#${segmentId}`).attr('data-command'));
+  $('#wake-word-start-minute').val(
+    secondsToMinutes($(`#${segmentId}`).attr('data-wake-word-start'))
   );
-  $('#annotation-iteration').val($(`#${segmentId}`).attr('data-iteration'));
-  $('#micTap-minute').val(
-    secondsToMinutes($(`#${segmentId}`).attr('data-mic-tap'))
+  $('#wake-word-start-seconds').val(
+    secondsToSeconds($(`#${segmentId}`).attr('data-wake-word-start'))
   );
-  $('#micTap-seconds').val(
-    secondsToSeconds($(`#${segmentId}`).attr('data-mic-tap'))
+  $('#wake-word-start-milliseconds').val(
+    secondsToMilliseconds($(`#${segmentId}`).attr('data-wake-word-start'))
   );
-  $('#micTap-milliseconds').val(
-    secondsToMilliseconds($(`#${segmentId}`).attr('data-mic-tap'))
+  $('#wake-word-end-minute').val(
+    secondsToMinutes($(`#${segmentId}`).attr('data-wake-word-end'))
   );
-  $('#micOpen-start-minute').val(
-    secondsToMinutes($(`#${segmentId}`).attr('data-mic-open'))
+  $('#wake-word-end-seconds').val(
+    secondsToSeconds($(`#${segmentId}`).attr('data-wake-word-end'))
   );
-  $('#micOpen-start-seconds').val(
-    secondsToSeconds($(`#${segmentId}`).attr('data-mic-open'))
+  $('#wake-word-end-milliseconds').val(
+    secondsToMilliseconds($(`#${segmentId}`).attr('data-wake-word-end'))
   );
-  $('#micOpen-start-milliseconds').val(
-    secondsToMilliseconds($(`#${segmentId}`).attr('data-mic-open'))
+  $('#command-start-minute').val(
+    secondsToMinutes($(`#${segmentId}`).attr('data-command-start'))
   );
-  $('#micOpen-end-minute').val(
-    secondsToMinutes($(`#${segmentId}`).attr('data-mic-close'))
+  $('#command-start-seconds').val(
+    secondsToSeconds($(`#${segmentId}`).attr('data-command-start'))
   );
-  $('#micOpen-end-seconds').val(
-    secondsToSeconds($(`#${segmentId}`).attr('data-mic-close'))
-  );
-  $('#micOpen-end-milliseconds').val(
-    secondsToMilliseconds($(`#${segmentId}`).attr('data-mic-close'))
+  $('#command-start-milliseconds').val(
+    secondsToMilliseconds($(`#${segmentId}`).attr('data-command-start'))
   );
 
   /*$("#utterance-start-minute").val(secondsToMinutes($(`#${segmentId}`).data("utterance-start")));
@@ -40,64 +41,15 @@ function setTransperfectFields(segmentId) {
     $("#utterance-end-seconds").val(secondsToSeconds($(`#${segmentId}`).data("utterance-end")));
     $("#utterance-end-milliseconds").val(secondsToMilliseconds($(`#${segmentId}`).data("utterance-end")));
     */
-  $('#first-word-minute').val(
-    secondsToMinutes($(`#${segmentId}`).attr('data-utterance-first-word-end'))
+  $('#start-of-assistant-minute').val(
+    secondsToMinutes($(`#${segmentId}`).attr('data-start-of-assistant'))
   );
-  $('#first-word-seconds').val(
-    secondsToSeconds($(`#${segmentId}`).attr('data-utterance-first-word-end'))
+  $('#start-of-assistant-seconds').val(
+    secondsToSeconds($(`#${segmentId}`).attr('data-start-of-assistant'))
   );
-  $('#first-word-milliseconds').val(
-    secondsToMilliseconds(
-      $(`#${segmentId}`).attr('data-utterance-first-word-end')
-    )
+  $('#start-of-assistant-milliseconds').val(
+    secondsToMilliseconds($(`#${segmentId}`).attr('data-start-of-assistant'))
   );
-  $('#first-word-display-end-minute').val(
-    secondsToMinutes(
-      $(`#${segmentId}`).attr('data-utterance-first-word-display-end')
-    )
-  );
-  $('#first-word-display-end-seconds').val(
-    secondsToSeconds(
-      $(`#${segmentId}`).attr('data-utterance-first-word-display-end')
-    )
-  );
-  $('#first-word-display-end-milliseconds').val(
-    secondsToMilliseconds(
-      $(`#${segmentId}`).attr('data-utterance-first-word-display-end')
-    )
-  );
-  $('#utterance-display-start-minute').val(
-    secondsToMinutes($(`#${segmentId}`).attr('data-utterance-display-start'))
-  );
-  $('#utterance-display-start-seconds').val(
-    secondsToSeconds($(`#${segmentId}`).attr('data-utterance-display-start'))
-  );
-  $('#utterance-display-start-milliseconds').val(
-    secondsToMilliseconds(
-      $(`#${segmentId}`).attr('data-utterance-display-start')
-    )
-  );
-  $('#utterance-display-end-minute').val(
-    secondsToMinutes($(`#${segmentId}`).attr('data-utterance-display-end'))
-  );
-  $('#utterance-display-end-seconds').val(
-    secondsToSeconds($(`#${segmentId}`).attr('data-utterance-display-end'))
-  );
-  $('#utterance-display-end-milliseconds').val(
-    secondsToMilliseconds($(`#${segmentId}`).attr('data-utterance-display-end'))
-  );
-  $('#final-text-minute').val(
-    secondsToMinutes($(`#${segmentId}`).attr('data-final-text-display'))
-  );
-  $('#final-text-seconds').val(
-    secondsToSeconds($(`#${segmentId}`).attr('data-final-text-display'))
-  );
-  $('#final-text-milliseconds').val(
-    secondsToMilliseconds($(`#${segmentId}`).attr('data-final-text-display'))
-  );
-  $('#prompt-Id').val($(`#${segmentId}`).attr('data-prompt-id'));
-  $('#transcription-area').val($(`#${segmentId}`).attr('data-actual-text'));
-  $('#utterance-text-area').val($(`#${segmentId}`).attr('data-utterance-text'));
 }
 //Update Transperfect Input Fields End
 
@@ -117,11 +69,11 @@ function playPauseSpectrum() {
   var playing = spectrum.isPlaying();
   if (!playing) {
     spectrum.play();
-    player.play();
+    // player.play();
     $('#play-button').find($('.fa')).toggleClass('fa-play fa-pause');
   } else {
     spectrum.pause();
-    player.pause();
+    // player.pause();
     $('#play-button').find($('.fa')).toggleClass('fa-pause fa-play');
   }
   return playing;

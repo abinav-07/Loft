@@ -29,6 +29,15 @@ const getTransperfectPage = (req, res, next) => {
   }
 };
 
+const getTransperfectAudioUploadPage = (req, res, next) => {
+  try {
+    res.render('transperfect/upload-audios');
+  } catch (err) {
+    res.status(400).json({ message: err });
+  }
+};
+
 module.exports = {
   getTransperfectPage,
+  getTransperfectAudioUploadPage,
 };

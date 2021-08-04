@@ -72,6 +72,10 @@ router.get(
 
 //Transperfect Landing Routes
 router.get('/transperfect', transperfectLandingAPIS.getTransperfectPage);
+router.get(
+  '/transperfect/upload-audio',
+  transperfectLandingAPIS.getTransperfectAudioUploadPage
+);
 
 //Transcription Tasks Landing Route APIs
 router.get(
@@ -176,6 +180,11 @@ router.post(
 router.post(
   '/update-transperfect-segment',
   transperfectUserSegmentQueries.updateTransperfectSegments
+);
+//Transperfect Upload Audio
+router.post(
+  '/transperfect/upload-audio',
+  transperfectUserSegmentQueries.uploadAudio
 );
 
 //Actual Table APIs

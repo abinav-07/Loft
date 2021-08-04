@@ -34,56 +34,32 @@ module.exports = (sequelize, DataTypes) => {
       segmentEnd: {
         type: DataTypes.FLOAT,
       },
-      take: {
-        type: DataTypes.INTEGER,
-        defaultValue: 1,
-      },
-      micActivationAttempt: {
-        type: DataTypes.INTEGER,
-        defaultValue: 1,
-      },
-      iteration: {
-        type: DataTypes.INTEGER,
-        defaultValue: 1,
-      },
-      micTap: {
+      wakeWordStart: {
         type: DataTypes.FLOAT,
       },
-      micOpen: {
+      wakeWordEnd: {
         type: DataTypes.FLOAT,
       },
-      micClose: {
+      commandStart: {
         type: DataTypes.FLOAT,
       },
-      utteranceStart: {
+      latency: {
         type: DataTypes.FLOAT,
       },
-      utteranceEnd: {
+      startOfAssistant: {
         type: DataTypes.FLOAT,
       },
-      utteranceFirstWordEnd: {
+      duration: {
         type: DataTypes.FLOAT,
       },
-      utteranceFirstWordDisplayEnd: {
-        type: DataTypes.FLOAT,
-      },
-      utteranceDisplayStart: {
-        type: DataTypes.FLOAT,
-      },
-      utteranceDisplayEnd: {
-        type: DataTypes.FLOAT,
-      },
-      finalTextDisplay: {
-        type: DataTypes.FLOAT,
-      },
-      promptId: {
-        type: DataTypes.INTEGER,
-      },
-      actualText: {
+      wakeWord: {
         type: DataTypes.TEXT('long'),
       },
-      utteranceText: {
-        type: DataTypes.TEXT('long'),
+      command: {
+        type: DataTypes.STRING,
+      },
+      dateOfDelivery: {
+        type: DataTypes.DATEONLY,
       },
     },
     {

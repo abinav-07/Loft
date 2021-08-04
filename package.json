@@ -7,7 +7,7 @@
     "async": "^3.2.0",
     "audio-decode": "^1.4.0",
     "audio-lena": "^2.1.1",
-    "aws-sdk": "^2.735.0",
+    "aws-sdk": "^2.960.0",
     "axios": "^0.19.2",
     "bcryptjs": "^2.4.3",
     "bootstrap-icons": "^1.5.0",
@@ -17,6 +17,7 @@
     "express": "^4.17.1",
     "express-flash": "0.0.2",
     "express-session": "^1.17.0",
+    "formidable": "^1.2.2",
     "hbs": "^4.1.1",
     "joi": "^17.4.0",
     "lodash": "^4.17.20",
@@ -25,6 +26,7 @@
     "mysql2": "^2.2.5",
     "node-fetch": "^2.6.0",
     "node-google-drive-new": "^1.1.4",
+    "node-xlsx": "^0.17.1",
     "nodemon": "^2.0.7",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
@@ -36,7 +38,8 @@
     "videojs-wavesurfer": "^3.8.0",
     "waveform-data": "^3.1.0",
     "wavesurfer.js": "^3.3.1",
-    "web-audio-api": "^0.2.2"
+    "web-audio-api": "^0.2.2",
+    "xlsx": "^0.17.0"
   },
   "scripts": {
     "dev": "nodemon transcribe-app.js",

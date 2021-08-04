@@ -42,106 +42,52 @@
 
 <div id="annotation-box">
 
-  <form class="form-inline">
-    <div class="annotation-box-row">
-      <div class="form-labels-div">
-        <label class="form-inputs-labels" for="take">Take</label>
-      </div>
-      <div class="form-input-div">
-        <input type="text" class="form-inputs" id="annotation-take" value="1" name="take">
-      </div>      
-    </div>
+  <form class="form-inline">  
 
+        
     <div class="annotation-box-row">
       <div class="form-labels-div">
-        <label class="form-inputs-labels" for="micActivationAttempt">Mic Activation Attempt</label>
+              <label class="form-inputs-labels" for="latency">Latency</label>
       </div>
       <div class="form-input-div">
-        <input type="text" class="form-inputs" id="mic-activation-attempt" value="1" name="micActivationAttempt">
+        <input type="text" class="form-inputs" id="annotation-latency" onchange="updateSegmentonTimeChange()" value="1" name="latency"><br>
+      </div>
+    </div>
+      <div class="annotation-box-row">
+        <div class="form-labels-div">
+          <label class="form-inputs-labels" for="actualText">Wake Up Word</label>
+        </div>
+        <div class="form-input-div">
+          <input id="transcription-area" class="form-inputs" onchange="updateSegmentonTimeChange()" name="actualText">
+        </div>
+      </div>      
+
+      <div class="annotation-box-row">
+        <div class="form-labels-div">
+          <label class="form-inputs-labels" for="dateOfDelivery">Date of Delivery</label>
+        </div>
+        <div class="form-input-div">
+          <input id="date-of-delivery" style="width: 140px; border-radius:5%" onchange="updateSegmentonTimeChange()" type="date" class="form-inputs" name="dateOfDelivery">
+        </div>
+      </div>      
+
+      <div class="annotation-box-textarea-row">
+      <div class="form-textarea-div">
+        <label class="form-inputs-labels" for="command">Command</label>
+      </div>
+      <div >
+        <textarea type="text" class="text-areas form-inputs disable-all-on-Submit" id="command" onchange="updateSegmentonTimeChange()" rows="3" placeholder="Command" name="command"></textarea>
       </div>        
     </div>
-    
-<div class="annotation-box-row">
-      <div class="form-labels-div">
-              <label class="form-inputs-labels" for="iteration">Iteration</label>
-      </div>
-      <div class="form-input-div">
-        <input type="text" class="form-inputs" id="annotation-iteration" value="1" name="iteration"><br>
-      </div>
-    </div>
-
     <hr class="solid-dash-line">
 
-    
-    <div class="annotation-box-row icons-rows">
-      <div class="annotation-box-col">
-        <div class="mic-icons">
-          <i class="bi bi-mic annotation-icons"></i><span class="icon-labels-prefixes">M</span>
-        </div>
-        <div>
-          <span class="form-time-inputs">
-        <input id="micTap-minute" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
-        max="59" onclick="" onchange="updateSegmentonTimeChange()" value="00">
-        :
-        <input id="micTap-seconds" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
-            max="59" oninput="" onchange="updateSegmentonTimeChange()" value="00"> 
-        .
-        <input id="micTap-milliseconds" class="annotation-time-ms-class disable-all-on-Submit" type="number"
-            min="0" max="999" oninput="" onchange="updateSegmentonTimeChange()" value="000">
-      </span>      
-        </div>        
-      </div>
-      <div class="annotation-box-col">
-        <div class="mic-icons">
-          <i class="bi bi-mic-fill annotation-icons"></i><span class="icon-labels-prefixes">O</span>
-        </div>
-        <div>
-            <span class="form-time-inputs">
-        <input id="micOpen-start-minute" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
-        max="59" onclick="" onchange="updateSegmentonTimeChange()" value="00">
-        :
-        <input id="micOpen-start-seconds" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
-            max="59" oninput="" onchange="updateSegmentonTimeChange()" value="00">
-        .
-        <input id="micOpen-start-milliseconds" class="annotation-time-ms-class disable-all-on-Submit" type="number"
-            min="0" max="999" oninput="" onchange="updateSegmentonTimeChange()" value="000"> 
-            </span>
-        </div>        
-      </div>            
-      <div class="annotation-box-col">
-        <div class="mic-icons">
-          <i class="bi bi-mic annotation-icons"></i><span class="icon-labels-prefixes">C</span>
-        </div>
-        <div>
-            <span class="form-time-inputs">
-        
-        <input id="micOpen-end-minute" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
-        max="59" onclick="" onchange="updateSegmentonTimeChange()" value="00"> 
-        :
-        <input id="micOpen-end-seconds" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
-            max="59" oninput="" onchange="updateSegmentonTimeChange()" value="00">
-        .
-        <input id="micOpen-end-milliseconds" class="annotation-time-ms-class disable-all-on-Submit" type="number"
-            min="0" max="999" oninput="" onchange="updateSegmentonTimeChange()" value="000">
-      </span>
-        </div>        
-      </div>            
-    </div>    
-
-    <hr class="solid-dash-line">
-    
-    <div style="text-align: center;  color: #0069d9;">
-      <input id="display-utterance-btn" type="checkbox" onClick="displayUtterancesBtnClick()" checked/> Show Detail Informations
-    </div>
-  
-    
     {{!-- Utterance Display toggle div started --}}
     <div id="utterance-div">
 
     <div class="annotation-box-row">
       <div class="form-labels-div">
-        <span class="labels-prefixes">S</span>
-        <label class="form-inputs-labels" for="utteranceStart">Utterance Start</label>
+        <span class="labels-prefixes">;</span>
+        <label class="form-inputs-labels" for="segmentStart">Segment Start</label>
       </div>
       <div class="form-input-div">
         <span class="form-time-inputs">
@@ -159,8 +105,8 @@
       
       <div class="annotation-box-row">
               <div class="form-labels-div">
-                <span class="labels-prefixes">E</span>
-              <label class="form-inputs-labels" for="utteranceEnd">Utterance End</label>
+                <span class="labels-prefixes">:</span>
+              <label class="form-inputs-labels" for="segmentEnd">Segment End</label>
                     </div>
                     <div class="form-input-div">
                       <span class="form-time-inputs">
@@ -180,17 +126,17 @@
       <div class="annotation-box-row">
         <div class="form-labels-div">
           <span class="labels-prefixes">[</span>
-            <label class="form-inputs-labels" for="utteranceFirstWordEnd">Utterance First Word End</label>
+            <label class="form-inputs-labels" for="wakeWordStart">Wake Word Start</label>
         </div>
         <div class="form-input-div">          
             <span class="form-time-inputs">
-                  <input id="first-word-minute" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
+                  <input id="wake-word-start-minute" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
                   max="59" onclick="" onchange="updateSegmentonTimeChange()" value="00">
                   :
-                  <input id="first-word-seconds" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
+                  <input id="wake-word-start-seconds" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
                       max="59" oninput="" onchange="updateSegmentonTimeChange()" value="00"> 
                   .
-                  <input id="first-word-milliseconds" class="annotation-time-ms-class disable-all-on-Submit" type="number"
+                  <input id="wake-word-start-milliseconds" class="annotation-time-ms-class disable-all-on-Submit" type="number"
                       min="0" max="999" oninput="" onchange="updateSegmentonTimeChange()" value="000">
             </span>
         </div>
@@ -199,17 +145,17 @@
   <div class="annotation-box-row">
         <div class="form-labels-div">
           <span class="labels-prefixes">]</span>
-            <label class="form-inputs-labels" for="utteranceFirstWordDisplayEnd">Utterance First Word  Display End</label>
+            <label class="form-inputs-labels" for="wakeWordStart">Wake Word End</label>
         </div>
         <div class="form-input-div">
           <span class="form-time-inputs">
-                  <input id="first-word-display-end-minute" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
+                  <input id="wake-word-end-minute" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
                   max="59" onclick="" onchange="updateSegmentonTimeChange()" value="00">
                   :
-                  <input id="first-word-display-end-seconds" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
+                  <input id="wake-word-end-seconds" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
                       max="59" oninput="" onchange="updateSegmentonTimeChange()" value="00"> 
                   .
-                  <input id="first-word-display-end-milliseconds" class="annotation-time-ms-class disable-all-on-Submit" type="number"
+                  <input id="wake-word-end-milliseconds" class="annotation-time-ms-class disable-all-on-Submit" type="number"
                       min="0" max="999" oninput="" onchange="updateSegmentonTimeChange()" value="000">
             </span>
         </div>
@@ -218,17 +164,17 @@
       <div class="annotation-box-row">
         <div class="form-labels-div">
           <span class="labels-prefixes">,</span>
-          <label class="form-inputs-labels" for="utteranceDisplayStart">Utterance Display Start</label>
+          <label class="form-inputs-labels" for="commandStart">Command Start</label>
         </div>
         <div class="form-input-div">
           <span class="form-time-inputs">
-                <input id="utterance-display-start-minute" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
+                <input id="command-start-minute" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
                 max="59" onclick="" onchange="updateSegmentonTimeChange()" value="00"> 
                 :
-                <input id="utterance-display-start-seconds" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
+                <input id="command-start-seconds" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
                     max="59" oninput="" onchange="updateSegmentonTimeChange()" value="00"> 
                 .
-                <input id="utterance-display-start-milliseconds" class="annotation-time-ms-class disable-all-on-Submit" type="number"
+                <input id="command-start-milliseconds" class="annotation-time-ms-class disable-all-on-Submit" type="number"
                     min="0" max="999" oninput="" onchange="updateSegmentonTimeChange()" value="000"> 
             </span>
         </div>
@@ -237,68 +183,21 @@
       <div class="annotation-box-row">
         <div class="form-labels-div">
           <span class="labels-prefixes">.</span>
-          <label class="form-inputs-labels" for="utteranceDisplayEnd">Utterance Display End</label>
+          <label class="form-inputs-labels" for="startOfAssistant">Start of Assistant</label>
         </div>
         <div class="form-input-div">
           <span class="form-time-inputs">
-                <input id="utterance-display-end-minute" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
+                <input id="start-of-assistant-minute" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
                 max="59" onclick="" onchange="updateSegmentonTimeChange()" value="00"> 
                 :
-                <input id="utterance-display-end-seconds" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
+                <input id="start-of-assistant-seconds" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
                     max="59" oninput="" onchange="updateSegmentonTimeChange()" value="00"> 
                 .
-                <input id="utterance-display-end-milliseconds" class="annotation-time-ms-class disable-all-on-Submit" type="number"
+                <input id="start-of-assistant-milliseconds" class="annotation-time-ms-class disable-all-on-Submit" type="number"
                     min="0" max="999" oninput="" onchange="updateSegmentonTimeChange()" value="000"> 
             </span>
         </div>
       </div>    
-      <div class="annotation-box-row">
-        <div class="form-labels-div">
-          <span class="labels-prefixes">S</span>
-          <label class="form-inputs-labels" for="finalTextDisplay">Final Text Display</label>
-        </div>
-        <div class="form-input-div">
-          <span class="form-time-inputs">
-                <input id="final-text-minute" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
-                max="59" onclick="" onchange="updateSegmentonTimeChange()" value="00"> 
-                :
-                <input id="final-text-seconds" class="annotation-time-class disable-all-on-Submit" type="number" min="0"
-                    max="59" oninput="" onchange="updateSegmentonTimeChange()" value="00"> 
-                .
-                <input id="final-text-milliseconds" class="annotation-time-ms-class disable-all-on-Submit" type="number"
-                    min="0" max="999" oninput="" onchange="updateSegmentonTimeChange()" value="000"> 
-            </span>
-        </div>
-      </div>  
-
-      <div class="annotation-box-row">
-        <div class="form-labels-div">
-          <span class="labels-prefixes">S</span>
-          <label class="form-inputs-labels" for="promptId">Prompt Id</label>
-        </div>
-        <div class="form-input-div">
-          <input type="text" class="form-inputs" id="prompt-Id" name="promptId" value="0">
-        </div>
-      </div>                
-      
-      <div class="annotation-box-textarea-row">
-        <div class="form-textarea-div">
-          <label class="form-inputs-labels" for="actualText">Actual Text</label>
-        </div>
-        <div>
-          <textarea id="transcription-area" class="text-areas form-inputs disable-all-on-Submit" rows="5" name="actualText"></textarea>
-        </div>
-      </div>      
-            
-      <div class="annotation-box-textarea-row">
-        <div class="form-textarea-div">
-          <label class="form-inputs-labels" for="utteranceText">Utterance Text</label>
-        </div>
-        <div>
-          <textarea id="utterance-text-area" class="text-areas form-inputs disable-all-on-Submit" rows="5" name="utteranceText"></textarea><br>
-        </div>
-      </div>      
-            
     </div>
     {{!-- Utterance toggle div end --}}
   </form>   
@@ -544,22 +443,14 @@
                 segmentId,                
                 segmentStart,
                 segmentEnd,
-                actualText,
-                finalTextDisplay,
-                iteration,
-                micActivationAttempt,
-                micClose,
-                micOpen,
-                micTap,
-                promptId,                
-                take,
-                utteranceDisplayStart,
-                utteranceDisplayEnd,
-                utteranceEnd,
-                utteranceFirstWordEnd,
-                utteranceFirstWordDisplayEnd,
-                utteranceStart,
-                utteranceText
+                wakeWord,                
+                latency,
+                command,
+                wakeWordStart,
+                wakeWordEnd,
+                commandStart,
+                startOfAssistant,                                
+                dateOfDelivery,
             }=response[i];           
 
             //creating Segments 
@@ -573,23 +464,15 @@
             //createDiv(divId,divClass,divTitle,segmentStart,segmentEnd,annotationText) 
             createTransperfectSegments(segmentId,                
                 segmentStart,
-                segmentEnd,
-                actualText,
-                finalTextDisplay,
-                iteration,
-                micActivationAttempt,
-                micClose,
-                micOpen,
-                micTap,
-                promptId,                
-                take,
-                utteranceDisplayStart,
-                utteranceDisplayEnd,
-                utteranceEnd,
-                utteranceFirstWordEnd,
-                utteranceFirstWordDisplayEnd,
-                utteranceStart,
-                utteranceText);
+                segmentEnd,                
+                wakeWord,                
+                latency,
+                command,
+                wakeWordStart,
+                wakeWordEnd,
+                commandStart,
+                startOfAssistant,                                
+                dateOfDelivery);
           }
 
           //ajax to check if the user has already submitted
@@ -714,8 +597,7 @@
 
     //First Navigator Turn Button
     $("#top-speaker-first-navigator-button").on("click", function () {
-      navigateTurnsFirstButton(getTopClickedId,spectrum);
-      player.currentTime(spectrum.getCurrentTime());
+      navigateTurnsFirstButton(getTopClickedId,spectrum);      
     });   
     //first navigator function end
 
@@ -741,8 +623,7 @@
 
     //Seeking Specturm
     spectrum.on("seek", function () {
-      //Displaying Current Segments Contents in our Annotation Box      
-      player.currentTime(spectrum.getCurrentTime())
+      //Displaying Current Segments Contents in our Annotation Box            
       if (!updateTopDivSpeaker) {
         displayCurrentContents();
       }
@@ -816,46 +697,34 @@
     function saveClick() {        
         segmentStart = spectrum.regions.list[currentId].start;
         segmentEnd = spectrum.regions.list[currentId].end;
-        var take = $("#annotation-take").val().trim()===""?1:$("#annotation-take").val();
-        var micActivationAttempt = $("#mic-activation-attempt").val().trim()===""?1:$("#annotation-take").val();        
-        var iteration = $("#annotation-iteration").val().trim()===""?1:$("#annotation-take").val();
-        var micTap =parseAnnotationTime($("#micTap-minute").val(),$("#micTap-seconds").val(),$("#micTap-milliseconds").val());
-        var micOpen=parseAnnotationTime($("#micOpen-start-minute").val(),$("#micOpen-start-seconds").val(),$("#micOpen-start-milliseconds").val());
-        var micClose=parseAnnotationTime($("#micOpen-end-minute").val(),$("#micOpen-end-seconds").val(),$("#micOpen-end-milliseconds").val());
-        var utteranceStart=segmentStart
-        var utteranceEnd=segmentEnd
-        var utteranceFirstWordEnd=parseAnnotationTime($("#first-word-minute").val(),$("#first-word-seconds").val(),$("#first-word-milliseconds").val());
-        var utteranceFirstWordDisplayEnd=parseAnnotationTime($("#first-word-display-end-minute").val(),$("#first-word-display-end-seconds").val(),$("#first-word-display-end-milliseconds").val());
-        var utteranceDisplayStart=parseAnnotationTime($("#utterance-display-start-minute").val(),$("#utterance-display-start-seconds").val(),$("#utterance-display-start-milliseconds").val());
-        var utteranceDisplayEnd=parseAnnotationTime($("#utterance-display-end-minute").val(),$("#utterance-display-end-seconds").val(),$("#utterance-display-end-milliseconds").val());
-        var finalTextDisplay=parseAnnotationTime($("#final-text-minute").val(),$("#final-text-seconds").val(),$("#final-text-milliseconds").val());
-        var promptId=$("#prompt-Id").val().trim()===""?null:$("#prompt-Id").val();
-        var actualText=$("#transcription-area").val();
-        var utteranceText=$("#utterance-text-area").val();
+        var latency = $("#annotation-latency").val().trim()===""?0:$("#annotation-latency").val();
+        var wakeUpWordStart = parseAnnotationTime($("#wake-word-start-minute").val(),$("#wake-word-start-seconds").val(),$("#wake-word-start-milliseconds").val());
+        var wakeUpWordEnd =  parseAnnotationTime($("#wake-word-end-minute").val(),$("#wake-word-end-seconds").val(),$("#wake-word-end-milliseconds").val());
+        var commandStart =parseAnnotationTime($("#command-start-minute").val(),$("#command-start-seconds").val(),$("#command-start-milliseconds").val());
+        var startOfAssistant=parseAnnotationTime($("#start-of-assistant-minute").val(),$("#start-of-assistant-seconds").val(),$("#start-of-assistant-milliseconds").val());        
+        var wakeUpWord=$("#transcription-area").val();
+        var command=$("#command").val();
+        var dateOfDelivery=$("#date-of-delivery").val();
+
+
 
         //ajax Request to Create    
-        var params = {
-          take,
-          micActivationAttempt,
-          iteration,
-          micTap,
-          micOpen,
-          micClose,
-          utteranceStart,
-          utteranceEnd,
-          utteranceFirstWordEnd,
-          utteranceFirstWordDisplayEnd,
-          utteranceDisplayStart,
-          utteranceDisplayEnd,
-          finalTextDisplay,
-          promptId,
-          actualText,
-          utteranceText,
+        var params = {          
+          latency,
+          wakeUpWordStart,
+          wakeUpWordEnd,
+          commandStart,
+          startOfAssistant,
+          wakeUpWord,
+          command,
+          dateOfDelivery,
           segmentStart,
           segmentEnd,          
           userId:user_id,
           audioId: audio_id
         }
+
+        console.log(updateSegments)
 
       if (updateSegments == false) {
         
@@ -884,24 +753,15 @@
                     segmentIdFromDatabase, 
                     segmentStart, 
                     segmentEnd, 
-                    actualText,
-                    finalTextDisplay,
-                    iteration,
-                    micActivationAttempt,
-                    micClose,
-                    micOpen,
-                    micTap,
-                    promptId,
-                    take,
-                    utteranceDisplayStart,
-                    utteranceDisplayEnd,
-                    utteranceEnd,
-                    utteranceFirstWordEnd,
-                    utteranceFirstWordDisplayEnd,
-                    utteranceStart,
-                    utteranceText,
-                    );
-
+                    wakeUpWord,
+                    latency,
+                    command,
+                    wakeUpWordStart,
+                    wakeUpWordEnd,
+                    commandStart,
+                    startOfAssistant,                   
+                    dateOfDelivery,
+                  );
               }
             })
             
@@ -930,12 +790,11 @@
         var val = document.getElementById("annotation-type");   
             
             $("#annotation-div").children().each(function (index, value) {
-              if (value.className == "speaker") {    
-                console.log(checkOverlappingDiv( newStartTime, newEndTime))                           
+              if (value.className == "speaker") {                    
                 if (!checkOverlappingDiv( newStartTime, newEndTime)) {                  
                   
                   // annotationText = $("#transcription-area").val();
-                  document.getElementById(segmentId).querySelector("p").innerText = actualText;
+                  document.getElementById(segmentId).querySelector("p").innerText = wakeUpWord;
                   document.getElementById(segmentId).style.background = value.style.backgroundColor;                  
                   document.getElementById(segmentId).style.bottom = ((canvasHeight - 8) + leftSpeakerCategoryDivMargin * (1)) + "px";
                   
@@ -945,20 +804,14 @@
                     document.getElementById(segmentId),
                     segmentStart,
                     segmentEnd,
-                    finalTextDisplay,
-                    iteration,
-                    micActivationAttempt,
-                    micClose,
-                    micOpen,
-                    micTap,
-                    promptId,
-                    take,
-                    utteranceDisplayStart,
-                    utteranceDisplayEnd,
-                    utteranceFirstWordEnd,
-                    utteranceFirstWordDisplayEnd,
-                    utteranceText,
-                    actualText
+                    wakeUpWord,
+                    latency,
+                    command,
+                    wakeUpWordStart,
+                    wakeUpWordEnd,
+                    commandStart,
+                    startOfAssistant,
+                    dateOfDelivery,                   
                   )
                 }
               }

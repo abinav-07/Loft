@@ -2,22 +2,14 @@ function createTransperfectSegments(
   segmentId,
   segmentStart,
   segmentEnd,
-  annotationText,
-  finalTextDisplay,
-  iteration,
-  micActivationAttempt,
-  micClose,
-  micOpen,
-  micTap,
-  promptId,
-  take,
-  utteranceDisplayStart,
-  utteranceDisplayEnd,
-  utteranceEnd,
-  utteranceFirstWordEnd,
-  utteranceFirstWordDisplayEnd,
-  utteranceStart,
-  utteranceText,
+  wakeWord,
+  latency,
+  command,
+  wakeWordStart,
+  wakeWordEnd,
+  commandStart,
+  startOfAssistant,
+  dateOfDelivery,
   actual = false
 ) {
   var leftSpeakerCategoryDivMargin = 120;
@@ -41,20 +33,14 @@ function createTransperfectSegments(
     div,
     segmentStart,
     segmentEnd,
-    finalTextDisplay,
-    iteration,
-    micActivationAttempt,
-    micClose,
-    micOpen,
-    micTap,
-    promptId,
-    take,
-    utteranceDisplayStart,
-    utteranceDisplayEnd,
-    utteranceFirstWordEnd,
-    utteranceFirstWordDisplayEnd,
-    utteranceText,
-    annotationText
+    wakeWord,
+    latency,
+    command,
+    wakeWordStart,
+    wakeWordEnd,
+    commandStart,
+    startOfAssistant,
+    dateOfDelivery
   );
 
   //if it is actual data from database, display correct or incorrect
@@ -71,7 +57,7 @@ function createTransperfectSegments(
   div.style.background = neededColor;
   div.style.overflow = 'hidden';
   div.style.zIndex = zindexLoop + 1;
-  p.innerHTML = annotationText;
+  p.innerHTML = wakeWord;
 
   p.style.transform = 'translateX(0%) rotate(270deg)';
   p.style.width = '150px';
@@ -127,36 +113,22 @@ function setDataAttributes(
   div,
   segmentStart,
   segmentEnd,
-  finalTextDisplay,
-  iteration,
-  micActivationAttempt,
-  micClose,
-  micOpen,
-  micTap,
-  promptId,
-  take,
-  utteranceDisplayStart,
-  utteranceDisplayEnd,
-  utteranceFirstWordEnd,
-  utteranceFirstWordDisplayEnd,
-  utteranceText,
-  annotationText
+  wakeWord,
+  latency,
+  command,
+  wakeWordStart,
+  wakeWordEnd,
+  commandStart,
+  startOfAssistant,
+  dateOfDelivery
 ) {
   //Transperfect Data Sets
-  div.dataset.finalTextDisplay = finalTextDisplay;
-  div.dataset.iteration = iteration;
-  div.dataset.micActivationAttempt = micActivationAttempt;
-  div.dataset.micClose = micClose;
-  div.dataset.micOpen = micOpen;
-  div.dataset.micTap = micTap;
-  div.dataset.promptId = promptId;
-  div.dataset.take = take;
-  div.dataset.utteranceDisplayStart = utteranceDisplayStart;
-  div.dataset.utteranceDisplayEnd = utteranceDisplayEnd;
-  div.dataset.utteranceEnd = segmentEnd;
-  div.dataset.utteranceFirstWordEnd = utteranceFirstWordEnd;
-  div.dataset.utteranceFirstWordDisplayEnd = utteranceFirstWordDisplayEnd;
-  div.dataset.utteranceStart = segmentStart;
-  div.dataset.utteranceText = utteranceText;
-  div.dataset.actualText = annotationText;
+  div.dataset.wakeWord = wakeWord;
+  div.dataset.latency = latency;
+  div.dataset.command = command;
+  div.dataset.wakeWordStart = wakeWordStart;
+  div.dataset.wakeWordEnd = wakeWordEnd;
+  div.dataset.commandStart = commandStart;
+  div.dataset.startOfAssistant = startOfAssistant;
+  div.dataset.dateOfDelivery = dateOfDelivery;
 }

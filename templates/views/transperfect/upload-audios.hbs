@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Upload Audio</title>
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+        <link src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-validator/0.4.5/css/bootstrapvalidator.min.css" crossorigin="anonymous" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-validator/0.4.5/js/bootstrapvalidator.min.js" crossorigin="anonymous"></script>        
+         
+    </head>
+    <body class="body">
+        <div class="container-fluid mt-4">
+            <div class="jumbotron">
+                <form action="/transperfect/upload-audio" class="needs-validation" method="POST" enctype="multipart/form-data">                
+                    <div class="card">
+                        <div class="card-header bg-white">
+                            {{#if error}}
+                            <div class="text-center bg-warning">
+                                <span class="text-danger">Error: </span><span>{{error}}</span>
+                            </div>
+                            {{/if}}
+                            {{#if message}}
+                            <div class="text-center bg-warning">
+                                <span class="text-success"></span><span>{{message}}</span>
+                            </div>
+                            {{/if}}
+                            <div>
+                                <button type="submit" class="btn btn-primary" id="confirm-audio-upload" style="float: right;">Save</button>
+                            </div>
+                        </div>
+                        <div class="card-body p-5">
+                            <div class="row mt-3">
+                                <div class="col-md-3">
+                                     <span class="text-primary">Upload Excel file following the template: </span>
+                                </div>    
+                                  <div class="col-md-3">
+                                      <button id="display-template" class="btn btn-primary" type="button"  data-bs-toggle="modal" data-bs-target="#excel-upload-template">Template</button>
+                                  </div>
+                            </div>                            
+                            <div class="row mt-3">
+                                <div class="col-md-3"></div>    
+                                <div class="col-md-3">Please Upload audio in .wav format</div>    
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-3">Upload Audios</div>
+                                <div class="col-md-3">
+                                    <input name="uploaded-audio-file"  type="file" accept=".wav" class="form-control" multiple required />                                     
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-3">
+                                    Upload Excel
+                                </div>
+                                <div class="col-md-3 upload-excel-section">
+                                    <input id="excel-uploaded-file" class="form-control" name="excel-uploaded-file"  type="file" accept=".xls,.xlsx" required />                                
+                                </div>
+                            </div>                            
+                        </div>
+                    </div>
+                </form>
+                <!--Excel Template -->
+                <div class="modal" id="excel-upload-template" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-xl  modal-dialog-centered">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Template</h4>
+                                <button type="button" class="close close-modal" data-bs-dismiss="modal">
+                        &times;
+                    </button>
+                            </div>
+                            <div class="modal-body">
+
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <th>FileName</th>
+                                            <th>SubjectID</th>
+                                            <th>Region</th>
+                                            <th>Language</th>
+                                            <th>Group</th>
+                                            <th>Gender</th>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td colspan="6">Example</td>
+                                            </tr>
+                                            <tr class="template-guide">
+                                                <td>15713182_Hi_02_0.59.wav</td>
+                                                <td>12345</td>
+                                                <td>India</td>
+                                                <td>Bengali</td>
+                                                <td>18-29</td>
+                                                <td>Male</td>
+                                            </tr>                                            
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="close-modal" class="btn btn-default" data-bs-dismiss="modal">
+                                Close
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+        </div>        
+    </body>
+    <script>        
+        /*
+        $("#display-template").on("click",()=>{
+            $("#excel-upload-template").show();       
+        });
+        $(".close-modal").on("click",()=>{
+            $("#excel-upload-template").hide();
+        })
+        */
+    </script>
+</html>

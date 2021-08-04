@@ -16,7 +16,6 @@ function updateFieldOnShortCutPress(
   var currentTime = spectrum.getCurrentTime();
   updateAnnotationOnChange = true;
   updateAnnotationOnClick = true;
-  updateSegments = true;
 
   //Timer Values to set
   var minutes = secondsToMinutes(currentTime);
@@ -175,6 +174,7 @@ function transperfectKeyEvents(spectrum) {
   ltKeyEvents(spectrum);
   //Transperfect Events
   $('html').on('keydown', function (event) {
+    /*
     //CTRL+SHIFT+M MIC TAP
     if (event.ctrlKey && event.shiftKey && event.which === 77) {
       event.preventDefault();
@@ -225,26 +225,6 @@ function transperfectKeyEvents(spectrum) {
       );
     }
 
-    //ctrl+shift+, Utterance Display Start
-    if (event.ctrlKey && event.shiftKey && event.which === 188) {
-      event.preventDefault();
-      updateFieldOnShortCutPress(
-        $('#utterance-display-start-minute'),
-        $('#utterance-display-start-seconds'),
-        $('#utterance-display-start-milliseconds')
-      );
-    }
-
-    //ctrl+shift+. Utterance Display End
-    if (event.ctrlKey && event.shiftKey && event.which === 190) {
-      event.preventDefault();
-      updateFieldOnShortCutPress(
-        $('#utterance-display-end-minute'),
-        $('#utterance-display-end-seconds'),
-        $('#utterance-display-end-milliseconds')
-      );
-    }
-
     //ctrl+shift+f Final Text Display
     if (event.ctrlKey && event.shiftKey && event.which === 70) {
       event.preventDefault();
@@ -252,6 +232,47 @@ function transperfectKeyEvents(spectrum) {
         $('#final-text-minute'),
         $('#final-text-seconds'),
         $('#final-text-milliseconds')
+      );
+    }
+    */
+
+    //Ctrl+shift+[ wake-word-start
+    if (event.ctrlKey && event.shiftKey && event.which === 219) {
+      event.preventDefault();
+      updateFieldOnShortCutPress(
+        $('#wake-word-start-minute'),
+        $('#wake-word-start-seconds'),
+        $('#wake-word-start-milliseconds')
+      );
+    }
+
+    //Ctrl+shift+] wake-word-end
+    if (event.ctrlKey && event.shiftKey && event.which === 221) {
+      event.preventDefault();
+      updateFieldOnShortCutPress(
+        $('#wake-word-end-minute'),
+        $('#wake-word-end-seconds'),
+        $('#wake-word-end-milliseconds')
+      );
+    }
+
+    //ctrl+shift+, Command Start
+    if (event.ctrlKey && event.shiftKey && event.which === 188) {
+      event.preventDefault();
+      updateFieldOnShortCutPress(
+        $('#command-start-minute'),
+        $('#command-start-seconds'),
+        $('#command-start-milliseconds')
+      );
+    }
+
+    //ctrl+shift+. Utterance Display End
+    if (event.ctrlKey && event.shiftKey && event.which === 190) {
+      event.preventDefault();
+      updateFieldOnShortCutPress(
+        $('#start-of-assistant-minute'),
+        $('#start-of-assistant-seconds'),
+        $('#start-of-assistant-milliseconds')
       );
     }
   });

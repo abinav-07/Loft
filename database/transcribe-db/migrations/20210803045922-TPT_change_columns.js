@@ -13,7 +13,7 @@ module.exports = {
         queryInterface.addColumn(
           'transperfectUserSegment',
           'dateOfDelivery',
-          { type: Sequelize.DataTypes.DATE, after: 'duration' },
+          { type: Sequelize.DataTypes.DATEONLY, after: 'duration' },
           { transaction: t }
         ),
         queryInterface.changeColumn(

@@ -54,6 +54,11 @@ $(function () {
   }
 });
 
+function parseAnnotationTime(minute, second, millisecond) {
+  const value = parseInt(minute * 60) + parseInt(second) + '.' + millisecond;
+  return value;
+}
+
 //function to get cookie for currentTime Stamp
 function getCookie(cookieName) {
   var name = cookieName + '=';
@@ -104,6 +109,7 @@ function addRegion() {
       Boolean to whether create new segment or delete previous new region and create new segment again
       Two New Segments Cannot Be Created
     */
+  console.log(addRegionBool);
   if (addRegionBool == true) {
     if (!updateAnnotationOnChange && !updateTopDivSpeaker) {
       renew(); //Renew Annotation Box
