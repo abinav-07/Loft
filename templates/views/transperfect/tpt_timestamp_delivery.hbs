@@ -50,7 +50,7 @@
               <label class="form-inputs-labels" for="latency">Latency</label>
       </div>
       <div class="form-input-div">
-        <input type="text" class="form-inputs" id="annotation-latency" onchange="updateSegmentonTimeChange()" value="1" name="latency"><br>
+        <input type="text" class="form-inputs" id="annotation-latency" onchange="updateSegmentonTimeChange()" value="0" name="latency"><br>
       </div>
     </div>
       <div class="annotation-box-row">
@@ -58,25 +58,25 @@
           <label class="form-inputs-labels" for="actualText">Wake Up Word</label>
         </div>
         <div class="form-input-div">
-          <input id="transcription-area" class="form-inputs" onchange="updateSegmentonTimeChange()" name="actualText">
+          <input id="transcription-area" class="form-inputs" onchange="updateSegmentonTimeChange()" name="actualText" value=''>
         </div>
       </div>      
 
-      <div class="annotation-box-row">
+      {{!-- <div class="annotation-box-row">
         <div class="form-labels-div">
           <label class="form-inputs-labels" for="dateOfDelivery">Date of Delivery</label>
         </div>
         <div class="form-input-div">
           <input id="date-of-delivery" style="width: 140px; border-radius:5%" onchange="updateSegmentonTimeChange()" type="date" class="form-inputs" name="dateOfDelivery">
         </div>
-      </div>      
+      </div>       --}}
 
       <div class="annotation-box-textarea-row">
       <div class="form-textarea-div">
         <label class="form-inputs-labels" for="command">Command</label>
       </div>
       <div >
-        <textarea type="text" class="text-areas form-inputs disable-all-on-Submit" id="command" onchange="updateSegmentonTimeChange()" rows="3" placeholder="Command" name="command"></textarea>
+        <textarea type="text" class="text-areas form-inputs disable-all-on-Submit" id="command" onchange="updateSegmentonTimeChange()" rows="3" placeholder="Command" name="command" value=''></textarea>
       </div>        
     </div>
     <hr class="solid-dash-line">
@@ -449,8 +449,7 @@
                 wakeWordStart,
                 wakeWordEnd,
                 commandStart,
-                startOfAssistant,                                
-                dateOfDelivery,
+                startOfAssistant,                                                
             }=response[i];           
 
             //creating Segments 
@@ -471,8 +470,8 @@
                 wakeWordStart,
                 wakeWordEnd,
                 commandStart,
-                startOfAssistant,                                
-                dateOfDelivery);
+                startOfAssistant
+                );
           }
 
           //ajax to check if the user has already submitted
@@ -704,8 +703,12 @@
         var startOfAssistant=parseAnnotationTime($("#start-of-assistant-minute").val(),$("#start-of-assistant-seconds").val(),$("#start-of-assistant-milliseconds").val());        
         var wakeUpWord=$("#transcription-area").val();
         var command=$("#command").val();
-        var dateOfDelivery=$("#date-of-delivery").val();
+        
 
+        if(wakeUpWord=="" || command ==""){
+          alert("All fields must be filled");
+          return;
+        }
 
 
         //ajax Request to Create    
@@ -716,15 +719,12 @@
           commandStart,
           startOfAssistant,
           wakeUpWord,
-          command,
-          dateOfDelivery,
+          command,          
           segmentStart,
           segmentEnd,          
           userId:user_id,
           audioId: audio_id
         }
-
-        console.log(updateSegments)
 
       if (updateSegments == false) {
         
@@ -759,9 +759,11 @@
                     wakeUpWordStart,
                     wakeUpWordEnd,
                     commandStart,
-                    startOfAssistant,                   
-                    dateOfDelivery,
+                    startOfAssistant,                                       
                   );
+              },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert('Error '+errorThrown)
               }
             })
             
@@ -810,8 +812,7 @@
                     wakeUpWordStart,
                     wakeUpWordEnd,
                     commandStart,
-                    startOfAssistant,
-                    dateOfDelivery,                   
+                    startOfAssistant,                    
                   )
                 }
               }
@@ -830,6 +831,9 @@
             data: {...params,segmentId},
             success: function () {
               
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+              alert('Error '+errorThrown)
             }
           })
           

@@ -64,7 +64,6 @@ const addTransperfectSegments = async (req, res, next) => {
     commandStart,
     startOfAssistant,
     wakeUpWord,
-    dateOfDelivery,
     command,
     audioId,
     userId,
@@ -81,7 +80,6 @@ const addTransperfectSegments = async (req, res, next) => {
       startOfAssistant: Joi.number(),
       wakeUpWord: Joi.string().required(),
       command: Joi.string(),
-      dateOfDelivery: Joi.date(),
       audioId: Joi.number().required(),
       userId: Joi.number().required(),
     });
@@ -105,12 +103,12 @@ const addTransperfectSegments = async (req, res, next) => {
       commandStart,
       startOfAssistant,
       wakeWord: wakeUpWord,
-      dateOfDelivery,
       command,
       duration: segmentDuration,
     });
     res.status(200).json(addSegment);
   } catch (error) {
+    console.log(error);
     res.status(400).json({ message: error });
   }
 };
@@ -125,7 +123,6 @@ const updateTransperfectSegments = async (req, res, next) => {
     commandStart,
     startOfAssistant,
     wakeUpWord,
-    dateOfDelivery,
     command,
     segmentId,
   } = req.body;
@@ -141,7 +138,6 @@ const updateTransperfectSegments = async (req, res, next) => {
       startOfAssistant: Joi.number(),
       wakeUpWord: Joi.string().required(),
       command: Joi.string(),
-      dateOfDelivery: Joi.date(),
       segmentId: Joi.number().required(),
     });
     const validationResult = schema.validate(req.body, { abortEarly: false });
@@ -163,7 +159,6 @@ const updateTransperfectSegments = async (req, res, next) => {
         commandStart,
         startOfAssistant,
         wakeWord: wakeUpWord,
-        dateOfDelivery,
         command,
         duration: segmentDuration,
       },
