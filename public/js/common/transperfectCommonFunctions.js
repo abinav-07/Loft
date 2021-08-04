@@ -1,6 +1,5 @@
 //Update Transperfect Input Fields
 function setTransperfectFields(segmentId) {
-  console.log(segmentId);
   // console.log(`#${segmentId}`).attr('data-date-of-delivery');
   $('#annotation-latency').val($(`#${segmentId}`).attr('data-latency'));
   $('#transcription-area').val($(`#${segmentId}`).attr('data-wake-word'));
@@ -69,11 +68,11 @@ function playPauseSpectrum() {
   var playing = spectrum.isPlaying();
   if (!playing) {
     spectrum.play();
-    // player.play();
+    player.play();
     $('#play-button').find($('.fa')).toggleClass('fa-play fa-pause');
   } else {
     spectrum.pause();
-    // player.pause();
+    player.pause();
     $('#play-button').find($('.fa')).toggleClass('fa-pause fa-play');
   }
   return playing;

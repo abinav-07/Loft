@@ -9,7 +9,6 @@ function createTransperfectSegments(
   wakeWordEnd,
   commandStart,
   startOfAssistant,
-  dateOfDelivery,
   actual = false
 ) {
   var leftSpeakerCategoryDivMargin = 120;
@@ -39,8 +38,7 @@ function createTransperfectSegments(
     wakeWordStart,
     wakeWordEnd,
     commandStart,
-    startOfAssistant,
-    dateOfDelivery
+    startOfAssistant
   );
 
   //if it is actual data from database, display correct or incorrect
@@ -57,7 +55,7 @@ function createTransperfectSegments(
   div.style.background = neededColor;
   div.style.overflow = 'hidden';
   div.style.zIndex = zindexLoop + 1;
-  p.innerHTML = wakeWord;
+  p.innerHTML = wakeWord + ' ' + command;
 
   p.style.transform = 'translateX(0%) rotate(270deg)';
   p.style.width = '150px';
@@ -119,8 +117,7 @@ function setDataAttributes(
   wakeWordStart,
   wakeWordEnd,
   commandStart,
-  startOfAssistant,
-  dateOfDelivery
+  startOfAssistant
 ) {
   //Transperfect Data Sets
   div.dataset.wakeWord = wakeWord;
@@ -130,5 +127,4 @@ function setDataAttributes(
   div.dataset.wakeWordEnd = wakeWordEnd;
   div.dataset.commandStart = commandStart;
   div.dataset.startOfAssistant = startOfAssistant;
-  div.dataset.dateOfDelivery = dateOfDelivery;
 }

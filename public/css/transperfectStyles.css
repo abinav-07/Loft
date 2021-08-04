@@ -670,7 +670,7 @@ header a {
 .form-inline {
   text-align: end;
   margin-left: 10px;
-  margin-top: 1rem;
+  /* margin-top: 1rem; */
   padding: 10px;
   height: fit-content;
   min-height: 90%;

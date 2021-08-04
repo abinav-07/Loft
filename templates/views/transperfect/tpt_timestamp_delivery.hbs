@@ -7,13 +7,13 @@
     {{!-- <link rel="stylesheet" type="text/css" href="/css/styles.css"> --}}
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
-    {{!-- <link href="https://vjs.zencdn.net/7.11.4/video-js.css" rel="stylesheet" />
-    <link rel="stylesheet" href="//unpkg.com/videojs-wavesurfer/dist/css/videojs.wavesurfer.min.css">  --}}
+    <link href="https://vjs.zencdn.net/7.11.4/video-js.css" rel="stylesheet" />
+    <link rel="stylesheet" href="//unpkg.com/videojs-wavesurfer/dist/css/videojs.wavesurfer.min.css"> 
     <link href="./node_modules/bootstrap-icons/font/bootstrap-icons.css">
 
     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
-    {{!-- <script src="https://vjs.zencdn.net/7.11.4/video.min.js"></script> --}}
-    {{!-- <script src="//unpkg.com/videojs-wavesurfer/dist/videojs.wavesurfer.min.js"></script> --}}
+    <script src="https://vjs.zencdn.net/7.11.4/video.min.js"></script>
+    <script src="//unpkg.com/videojs-wavesurfer/dist/videojs.wavesurfer.min.js"></script>
 
     <script src="local_modules/wavesurfer.js/dist/wavesurfer.js"></script>
     <script src="local_modules/wavesurfer.js/dist/plugin/wavesurfer.timeline.js"></script>
@@ -47,7 +47,7 @@
         
     <div class="annotation-box-row">
       <div class="form-labels-div">
-              <label class="form-inputs-labels" for="latency">Latency</label>
+              <label class="form-inputs-labels" for="latency">*Latency</label>
       </div>
       <div class="form-input-div">
         <input type="text" class="form-inputs" id="annotation-latency" onchange="updateSegmentonTimeChange()" value="0" name="latency"><br>
@@ -55,7 +55,7 @@
     </div>
       <div class="annotation-box-row">
         <div class="form-labels-div">
-          <label class="form-inputs-labels" for="actualText">Wake Up Word</label>
+          <label class="form-inputs-labels" for="actualText">*Wake Up Word</label>
         </div>
         <div class="form-input-div">
           <input id="transcription-area" class="form-inputs" onchange="updateSegmentonTimeChange()" name="actualText" value=''>
@@ -73,7 +73,7 @@
 
       <div class="annotation-box-textarea-row">
       <div class="form-textarea-div">
-        <label class="form-inputs-labels" for="command">Command</label>
+        <label class="form-inputs-labels" for="command">*Command</label>
       </div>
       <div >
         <textarea type="text" class="text-areas form-inputs disable-all-on-Submit" id="command" onchange="updateSegmentonTimeChange()" rows="3" placeholder="Command" name="command" value=''></textarea>
@@ -265,6 +265,30 @@
             play: document.getElementById("play-button")
         }
 
+        //Video Js Options
+    let videoJSOptions={
+       controls: false,
+       bigPlayButton: false,
+      autoplay: false,
+      loop: false,
+      fluid: false,
+      width: 300,
+      height: 600,
+      muted: true
+    }
+
+    // create player
+    var player = videojs('myVideo', videoJSOptions, function () {
+      // print version information at startup
+      var msg = 'Using video.js ' + videojs.VERSION +
+        ' with videojs-wavesurfer ' +
+        videojs.getPluginVersion('wavesurfer') +
+        ' and wavesurfer.js ' + WaveSurfer.VERSION;
+      videojs.log(msg);
+
+      // load file
+      player.src({ src: 'https://audiobee-production-user-files.s3.eu-north-1.amazonaws.com/tcp_projects/Samsung_P000_2_20210602.mp4', type: 'video/mp4' });
+    });
 
     //Creating the audio stream from Wavesurfer 
     let wavesurferOptions={
@@ -299,7 +323,7 @@
     //handle play button
     buttons.play.addEventListener("click", function (event) {
       event.preventDefault();
-      playPauseAudio();
+      playPauseSpectrum();
       document.getElementById('total-timestamp').innerText = secondsToTimestamp(spectrum.getDuration());
     });
 
@@ -344,9 +368,9 @@
       resizeTransperfectScreen();
     });
     window.onload = function(e){ 
-      resizeWindow();
+      resizeTransperfectScreen();
     }
-    window.addEventListener("resize",resizeWindow)
+    window.addEventListener("resize",resizeTransperfectScreen)
 
     //Update Time
     setInterval(updateTimer(), 100);    
@@ -596,7 +620,8 @@
 
     //First Navigator Turn Button
     $("#top-speaker-first-navigator-button").on("click", function () {
-      navigateTurnsFirstButton(getTopClickedId,spectrum);      
+      navigateTurnsFirstButton(getTopClickedId,spectrum);  
+      player.currentTime(spectrum.getCurrentTime());    
     });   
     //first navigator function end
 
@@ -623,6 +648,7 @@
     //Seeking Specturm
     spectrum.on("seek", function () {
       //Displaying Current Segments Contents in our Annotation Box            
+      player.currentTime(spectrum.getCurrentTime())
       if (!updateTopDivSpeaker) {
         displayCurrentContents();
       }
@@ -796,7 +822,7 @@
                 if (!checkOverlappingDiv( newStartTime, newEndTime)) {                  
                   
                   // annotationText = $("#transcription-area").val();
-                  document.getElementById(segmentId).querySelector("p").innerText = wakeUpWord;
+                  document.getElementById(segmentId).querySelector("p").innerText = wakeUpWord+" "+command;
                   document.getElementById(segmentId).style.background = value.style.backgroundColor;                  
                   document.getElementById(segmentId).style.bottom = ((canvasHeight - 8) + leftSpeakerCategoryDivMargin * (1)) + "px";
                   
