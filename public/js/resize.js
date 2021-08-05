@@ -53,7 +53,9 @@ function resizeWindow() {
     });
 
     $('#plus-button').css({
-      marginTop: `${$('#peaks-container').position().top}px`,
+      marginTop: `calc(${
+        $('#peaks-container > wave > wave').offset().top
+      }px + ${$('#peaks-container > wave > wave').width()}px - 10px)`,
     });
 
     //$("#annotation-div-head").css({
@@ -105,8 +107,11 @@ function resizeWindow() {
     });
 
     $('#plus-button').css({
-      marginTop: `${$('#peaks-container').position().top}px`,
+      marginTop: `calc(${
+        $('#peaks-container > wave > wave').offset().top
+      }px + ${$('#peaks-container > wave > wave').width()}px - 10px)`,
     });
+
     seekToCookie();
   }
 }
@@ -160,9 +165,18 @@ function resizeTransperfectScreen() {
     });
 
     $('#plus-button').css({
-      marginTop: `${$('#peaks-container').position().top}px`,
+      marginTop: `calc(${
+        $('#peaks-container > wave > wave').offset().top
+      }px + ${$('#peaks-container > wave > wave').width()}px - 10px)`,
     });
 
+    $('#guidelines-box').css({
+      top: '13vh',
+    });
+
+    $('.video-js').css({
+      height: '400px',
+    });
     //$("#annotation-div-head").css({
     //  "left": `${canvasHeight}px`
     //})
@@ -215,7 +229,17 @@ function resizeTransperfectScreen() {
     });
 
     $('#plus-button').css({
-      marginTop: `${$('#peaks-container').position().top}px`,
+      marginTop: `calc(${
+        $('#peaks-container > wave > wave').offset().top
+      }px + ${$('#peaks-container > wave > wave').width()}px - 10px)`,
+    });
+
+    $('#guidelines-box').css({
+      top: '16vh',
+    });
+
+    $('.video-js').css({
+      height: '500px',
     });
     seekToCookie();
   }

@@ -814,9 +814,10 @@ header a {
   clear: both;
   color: #333;
   margin: 0 auto;
-  padding: 1.5em;
+  padding: 1.2em;
   position: absolute;
   z-index: 10000;
+  border: 1px solid gold;
   top: 16vh;
   left: 30vw;
   display: none;

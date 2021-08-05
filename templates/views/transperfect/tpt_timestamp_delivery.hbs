@@ -339,9 +339,9 @@
       $("#peaks-container").css({
         "width": `calc(${totalDuration} * 96px)`
       })
-
+  
       $("#plus-button").css({
-        "marginTop": `${$("#peaks-container").position().top}px`
+        "marginTop": `calc(${$('#peaks-container > wave > wave').offset().top}px - 15px)`
       })
       $("#time-line").css({
         "transform": `translate(0px,${$("wave").height() - 10}px)`

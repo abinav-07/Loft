@@ -41,17 +41,16 @@ function setCookie(cookieName, cookieValue, expireDays) {
 }
 
 //Set Current Time Stamp to cookie every 5 sec
-$(function () {
-  if (spectrum.getCurrentTime() > 0) {
-    setInterval(
+$(document).ready(function () {
+  setInterval(() => {
+    if (spectrum.getCurrentTime() > 0) {
       setCookie(
         'current_time',
         `${spectrum.getCurrentTime() / spectrum.getDuration()}`,
         30
-      ),
-      5000
-    );
-  }
+      );
+    }
+  }, 5000);
 });
 
 function parseAnnotationTime(minute, second, millisecond) {
