@@ -39,6 +39,7 @@ const readAndUploadFile = async (
         })
         .promise();
       await uploadS3.catch((s3Err) => {
+        //Loggin S3 error
         console.log(s3Err);
         if (!hasError) {
           hasError = true;
