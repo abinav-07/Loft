@@ -76,7 +76,7 @@
         <label class="form-inputs-labels" for="command">*Command</label>
       </div>
       <div >
-        <textarea type="text" class="text-areas form-inputs disable-all-on-Submit" id="command" onchange="updateSegmentonTimeChange()" rows="3" placeholder="Command" name="command" value=''></textarea>
+        <textarea type="text" class="text-areas form-inputs disable-all-on-Submit" id="command" onchange="updateSegmentonTimeChange()" rows="4" placeholder="Command" name="command" value=''></textarea>
       </div>        
     </div>
     <hr class="solid-dash-line">
@@ -1116,7 +1116,7 @@ function renew() {
   $('#annotation-type').val('default');
   $('#speaker-name').val('');
   $('#transcription-area').val('');
-  document.getElementById('transcription-area').style.display = 'inline-table';
+  document.getElementById('transcription-area').style.display = 'block';
 
   $('.form-inline').get(0).reset();
 } //renew function end

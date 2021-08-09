@@ -597,7 +597,11 @@ function ctrlquote() {
 //function for ctrl+singlequote for region start time
 function ctrlcolon() {
   $('html').on('keydown', function (event) {
-    if (event.ctrlKey && event.which == 186) {
+    if (
+      (event.ctrlKey && event.which == 186) ||
+      (event.ctrlKey && event.key == ';') ||
+      (event.ctrlKey && event.code == 'Semicolon')
+    ) {
       event.preventDefault();
       ////console.log("Pressed");
       var currentTime = spectrum.getCurrentTime();
