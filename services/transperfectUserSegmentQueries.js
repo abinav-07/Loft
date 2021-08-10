@@ -239,10 +239,19 @@ const uploadAudio = async (req, res, next) => {
         return;
       }
       //Destructure
-      const [FileName, SubjectID, Region, Language, Group, Gender] = arr;
+      const [FileName, SubjectID, Region, Language, Group, Gender, Wakeword] =
+        arr;
+
       //Check if upload Files is in array i.e multiple files
       if (Array.isArray(files['uploaded-audio-file'])) {
-        if (!files['uploaded-audio-file'].includes(FileName)) {
+        // console.log(FileName);
+
+        let fileNameArr = [];
+        files['uploaded-audio-file'].forEach((eachFile) => {
+          fileNameArr.push(eachFile.name);
+        });
+
+        if (!fileNameArr.includes(FileName)) {
           //Only render error if it is first error to avoid multiple headers send
           if (!hasError) {
             hasError = true;
@@ -271,7 +280,7 @@ const uploadAudio = async (req, res, next) => {
         audioUrl: `https://${process.env.FILES_BUCKET}.s3.eu-north-1.amazonaws.com/transcription/${FileName}`,
         type: 'transcription',
         languageId: 83, //English
-        extras: `{SubjectID:${SubjectID},Region:${Region},Language:${Language},Group:${Group},Gender:${Gender}}`,
+        extras: `{'SubjectID':${SubjectID},'Region':'${Region}','Language':'${Language}','Group':'${Group}','Gender':'${Gender}','Wakeword':'${Wakeword}'}`,
       });
     });
 

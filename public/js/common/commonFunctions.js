@@ -108,7 +108,7 @@ function addRegion() {
       Boolean to whether create new segment or delete previous new region and create new segment again
       Two New Segments Cannot Be Created
     */
-  console.log(addRegionBool);
+
   if (addRegionBool == true) {
     if (!updateAnnotationOnChange && !updateTopDivSpeaker) {
       renew(); //Renew Annotation Box
@@ -157,6 +157,14 @@ function addRegion() {
       $('#annotation-end-minute').val(endMinute);
       $('#annotation-end-seconds').val(endSeconds);
       $('#annotation-end-milliseconds').val(endMilliseconds);
+
+      console.log(isTransperfect);
+
+      if (isTransperfect) {
+        $('#wake-word-start-minute').val(startMinute);
+        $('#wake-word-start-seconds').val(startSeconds);
+        $('#wake-word-start-milliseconds').val(startMilliseconds);
+      }
     }
   } else {
     if (!updateAnnotationOnChange && !updateTopDivSpeaker) {

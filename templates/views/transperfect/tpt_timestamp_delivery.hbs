@@ -50,7 +50,7 @@
               <label class="form-inputs-labels" for="latency">*Latency</label>
       </div>
       <div class="form-input-div">
-        <input type="text" class="form-inputs" id="annotation-latency" onchange="updateSegmentonTimeChange()" value="0" name="latency"><br>
+        <input type="text" class="form-inputs" id="annotation-latency" onchange="updateSegmentonTimeChange()" value="0" name="latency" disabled><br>
       </div>
     </div>
       <div class="annotation-box-row">
@@ -58,7 +58,7 @@
           <label class="form-inputs-labels" for="actualText">*Wake Up Word</label>
         </div>
         <div class="form-input-div">
-          <input id="transcription-area" class="form-inputs" onchange="updateSegmentonTimeChange()" name="actualText" value=''>
+          <input id="transcription-area" class="form-inputs" onchange="updateSegmentonTimeChange()" name="actualText" value='{{wakeWord}}' style="font-size:12px;margin-left:auto">
         </div>
       </div>      
 
@@ -87,7 +87,8 @@
     <div class="annotation-box-row">
       <div class="form-labels-div">
         <span class="labels-prefixes">;</span>
-        <label class="form-inputs-labels" for="segmentStart">Segment Start</label>
+        <label class="form-inputs-labels" for="segmentStart">Segment Start</label> 
+        {{!-- Segment start --}}
       </div>
       <div class="form-input-div">
         <span class="form-time-inputs">
@@ -102,10 +103,10 @@
             </span>
             </div>
         </div>
-      
-      <div class="annotation-box-row">
+
+             <div class="annotation-box-row">
               <div class="form-labels-div">
-                <span class="labels-prefixes">:</span>
+                <span class="labels-prefixes">'</span>
               <label class="form-inputs-labels" for="segmentEnd">Segment End</label>
                     </div>
                     <div class="form-input-div">
@@ -123,7 +124,7 @@
 
         </div>
 
-      <div class="annotation-box-row">
+        <div class="annotation-box-row" style="">
         <div class="form-labels-div">
           <span class="labels-prefixes">[</span>
             <label class="form-inputs-labels" for="wakeWordStart">Wake Word Start</label>
@@ -140,7 +141,9 @@
                       min="0" max="999" oninput="" onchange="updateSegmentonTimeChange()" value="000">
             </span>
         </div>
-      </div>   
+      </div>
+
+            
 
   <div class="annotation-box-row">
         <div class="form-labels-div">
@@ -160,6 +163,10 @@
             </span>
         </div>
       </div>  
+   
+      
+ 
+
 
       <div class="annotation-box-row">
         <div class="form-labels-div">
@@ -225,7 +232,9 @@
         var user_id;
         var audio_id;
         audio_id = {{ audio_id }};
-        user_id = {{ user_id }};
+        user_id = '{{ user_id }}';
+
+        var Wakeword='{{wakeWord}}';
 
         var is_submitted = "FALSE";
         var leftSpeakerCategoryDivMargin = 120;
@@ -260,6 +269,8 @@
         var pixels = 0;
         var correctSegmentCreated = false;
         var getTopClickedId;
+
+        var isTransperfect=true;
 
         var buttons = {
             play: document.getElementById("play-button")
@@ -314,6 +325,8 @@
         WaveSurfer.regions.create({})
       ]
     };
+
+  
 
     var spectrum = WaveSurfer.create(wavesurferOptions);
     spectrum.zoom(96);
@@ -721,18 +734,24 @@
     //function to save data to database on saveClick
     function saveClick() {        
         segmentStart = spectrum.regions.list[currentId].start;
-        segmentEnd = spectrum.regions.list[currentId].end;
-        var latency = $("#annotation-latency").val().trim()===""?0:$("#annotation-latency").val();
-        var wakeUpWordStart = parseAnnotationTime($("#wake-word-start-minute").val(),$("#wake-word-start-seconds").val(),$("#wake-word-start-milliseconds").val());
+        segmentEnd = spectrum.regions.list[currentId].end;        
+        var wakeUpWordStart = segmentStart 
+        //parseAnnotationTime($("#wake-word-start-minute").val(),$("#wake-word-start-seconds").val(),$("#wake-word-start-milliseconds").val());
         var wakeUpWordEnd =  parseAnnotationTime($("#wake-word-end-minute").val(),$("#wake-word-end-seconds").val(),$("#wake-word-end-milliseconds").val());
         var commandStart =parseAnnotationTime($("#command-start-minute").val(),$("#command-start-seconds").val(),$("#command-start-milliseconds").val());
         var startOfAssistant=parseAnnotationTime($("#start-of-assistant-minute").val(),$("#start-of-assistant-seconds").val(),$("#start-of-assistant-milliseconds").val());        
-        var wakeUpWord=$("#transcription-area").val();
+        var wakeUpWord=$("#transcription-area").val()==""?Wakeword:$("#transcription-area").val();
         var command=$("#command").val();
+        var latency = commandStart-wakeUpWordEnd;
         
 
         if(wakeUpWord=="" || command ==""){
           alert("All fields must be filled");
+          return;
+        }
+
+        if(latency<0){
+          alert("Command start time must be greater than wakeword start time!");
           return;
         }
 
@@ -751,6 +770,8 @@
           userId:user_id,
           audioId: audio_id
         }
+
+        console.log(params)
 
       if (updateSegments == false) {
         
@@ -787,6 +808,8 @@
                     commandStart,
                     startOfAssistant,                                       
                   );
+                  $("#annotation-latency").val(latency);
+                  $("#transcription-area").val(wakeUpWord)
               },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                 alert('Error '+errorThrown)
@@ -856,7 +879,8 @@
             url: "/update-transperfect-segment",
             data: {...params,segmentId},
             success: function () {
-              
+              $("#annotation-latency").val(latency);
+              $("#transcription-area").val(wakeUpWord);
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
               alert('Error '+errorThrown)

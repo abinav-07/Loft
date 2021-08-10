@@ -2,7 +2,7 @@ function createTransperfectSegments(
   segmentId,
   segmentStart,
   segmentEnd,
-  wakeWord,
+  wakeWord = Wakeword,
   latency,
   command,
   wakeWordStart,
