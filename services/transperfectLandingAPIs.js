@@ -16,14 +16,18 @@ const getTransperfectPage = (req, res, next) => {
       if (result && result.length > 0) {
         audio_url = result[0]['audio_url'];
 
-        const extras = JSON.parse(result?.[0]?.['extras']);
+        let wakeWord = '';
+        if (result?.[0]?.['extras']) {
+          const extras = JSON.parse(result?.[0]?.['extras']);
+          wakeWord = extras.Wakeword;
+        }
 
         res.render('transperfect/tpt_timestamp_delivery', {
           user_id: req.query.user_id,
           audio_url: audio_url,
           audio_name: result[0]['audio_name'],
           audio_id: req.query.audio_id,
-          wakeWord: `${extras.Wakeword}`,
+          wakeWord: `${wakeWord}`,
         });
       }
     });
