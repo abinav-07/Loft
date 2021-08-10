@@ -4,6 +4,7 @@ const Joi = require('joi');
 var formidable = require('formidable');
 var XLSX = require('node-xlsx');
 var fs = require('fs/promises');
+const json2csv = require('json2csv').parse;
 
 //AWS S3 Config
 var AWS = require('aws-sdk');
@@ -323,17 +324,31 @@ const uploadAudio = async (req, res, next) => {
 
     if (!hasError) {
       //Bulk insert rows to audio table
-      await TRANSCRIPTION_DB.Audio.bulkCreate(bulkInsertSql).catch((err) => {
-        if (!hasError) {
-          hasError = true;
-          res.render('transperfect/upload-audios', {
-            error: 'Error while inserting rows',
-          });
-        }
-      });
-      if (!hasError) {
-        res.render('transperfect/upload-audios', { message: 'Success' });
-      }
+      await TRANSCRIPTION_DB.Audio.bulkCreate(bulkInsertSql)
+        .then((result) => {
+          //Csv Name
+          const jsonData = JSON.parse(JSON.stringify(result));
+          const csvString = json2csv(jsonData);
+          res.setHeader(
+            'Content-disposition',
+            'attachment; filename=audio.csv'
+          );
+          res.set('Content-Type', 'text/csv');
+          res.status(200).send(csvString);
+          return;
+        })
+        .catch((err) => {
+          console.log(err);
+          if (!hasError) {
+            hasError = true;
+            res.render('transperfect/upload-audios', {
+              error: 'Error while inserting rows',
+            });
+          }
+        });
+      // if (!hasError) {
+      //   res.render('transperfect/upload-audios', { message: 'Success' });
+      // }
     }
   });
 };

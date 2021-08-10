@@ -82,12 +82,6 @@ module.exports = {
           ),
         },
       }),
-      queryInterface.sequelize.query(
-        `ALTER TABLE transperfectUserSegment MODIFY COLUMN actualText longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL`
-      ),
-      queryInterface.sequelize.query(
-        `ALTER TABLE transperfectUserSegment MODIFY COLUMN utteranceText longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL`
-      ),
     ]);
   },
 

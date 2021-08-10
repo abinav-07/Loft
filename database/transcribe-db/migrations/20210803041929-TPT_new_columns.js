@@ -84,11 +84,6 @@ module.exports = {
         queryInterface.removeColumn('transperfectUserSegment', 'promptId', {
           transaction: t,
         }),
-        queryInterface.removeColumn(
-          'transperfectUserSegment',
-          'utteranceDisplayStart',
-          { transaction: t }
-        ),
         queryInterface.removeColumn('transperfectUserSegment', 'take', {
           transaction: t,
         }),

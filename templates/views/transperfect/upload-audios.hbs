@@ -13,19 +13,23 @@
     <body class="body">
         <div class="container-fluid mt-4">
             <div class="jumbotron">
+                {{#if error}}
+                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                <span class="text-danger">Error: </span><span>{{error}}</span>
+                                 <span type="button" class="close" data-bs-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></span>
+                            </div>
+                {{/if}}
+                                            
+                {{#if message}}
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                <span class="text-success"></span><span>{{message}}</span>
+                                 <span type="button" class="close" data-bs-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></span>
+                            </div>
+                            {{/if}}
                 <form action="/transperfect/upload-audio" class="needs-validation" method="POST" enctype="multipart/form-data">                
                     <div class="card">
                         <div class="card-header bg-white">
-                            {{#if error}}
-                            <div class="text-center bg-warning">
-                                <span class="text-danger">Error: </span><span>{{error}}</span>
-                            </div>
-                            {{/if}}
-                            {{#if message}}
-                            <div class="text-center bg-warning">
-                                <span class="text-success"></span><span>{{message}}</span>
-                            </div>
-                            {{/if}}
+
                             <div>
                                 <button type="submit" class="btn btn-primary" id="confirm-audio-upload" style="float: right;">Save</button>
                             </div>
