@@ -18,7 +18,7 @@ const getTransperfectPage = (req, res, next) => {
 
         let wakeWord = '';
         if (result?.[0]?.['extras']) {
-          const extras = JSON.parse(result?.[0]?.['extras']);
+          const extras = JSON.parse(JSON.stringify(result?.[0]?.['extras']));
           wakeWord = extras.Wakeword;
         }
 
