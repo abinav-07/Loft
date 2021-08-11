@@ -19,6 +19,7 @@ AWS.config.update({
 var s3 = new AWS.S3();
 
 // TRANSCRIPTION_DB;
+// WEBAPP_DB;
 
 //Uplaods to S3 and Returns Error boolean
 const readAndUploadFile = async (
@@ -323,35 +324,88 @@ const uploadAudio = async (req, res, next) => {
     }
 
     if (!hasError) {
-      //Bulk insert rows to audio table
-      await TRANSCRIPTION_DB.Audio.bulkCreate(bulkInsertSql)
-        .then((result) => {
-          //Csv Name
-          const jsonData = JSON.parse(JSON.stringify(result));
-          const csvString = json2csv(jsonData);
-          res.setHeader(
-            'Content-disposition',
-            'attachment; filename=audio.csv'
-          );
-          res.set('Content-Type', 'text/csv');
-          res.status(200).send(csvString);
-          return;
-        })
-        .catch((err) => {
-          console.log(err);
-          if (!hasError) {
-            hasError = true;
-            res.render('transperfect/upload-audios', {
-              error: 'Error while inserting rows',
-            });
-          }
+      //Get Project ID
+      const project = await WEBAPP_DB.Project.findOne({
+        where: { projectName: 'TransPerfect_Transcription_Segmentation' },
+      });
+      if (project?.projectId) {
+        //Bulk insert rows to audio table
+        await TRANSCRIPTION_DB.Audio.bulkCreate(bulkInsertSql)
+          .then(async (result) => {
+            const jsonData = JSON.parse(JSON.stringify(result));
+
+            //Add to Webapp Transcription List table
+            for (let i = 0; i < jsonData.length; i++) {
+              const taskId = new IDGenerator().generate();
+              await WEBAPP_DB.TranscriptionTaskList.create({
+                projectId: project.projectId,
+                taskName: jsonData[i].audioName,
+                taskId,
+                taskUrl: `${project.projectUrl}/transperfect?user_id=877&audio_id=${jsonData[i]['audioId']}`,
+              }).catch((err) => {
+                res.render('transperfect/upload-audios', {
+                  error: 'Error while inserting rows to transcription list',
+                });
+                return;
+              });
+            }
+
+            //Csv Name
+            const csvString = json2csv(jsonData);
+            res.setHeader(
+              'Content-disposition',
+              'attachment; filename=audio.csv'
+            );
+            res.set('Content-Type', 'text/csv');
+            res.status(200).send(csvString);
+            return;
+          })
+          .catch((err) => {
+            console.log(err);
+            if (!hasError) {
+              hasError = true;
+              res.render('transperfect/upload-audios', {
+                error: 'Error while inserting rows',
+              });
+            }
+          });
+      } else {
+        res.render('transperfect/upload-audios', {
+          error: 'Project not available',
         });
+        return;
+      }
+
       // if (!hasError) {
       //   res.render('transperfect/upload-audios', { message: 'Success' });
       // }
     }
   });
 };
+
+function IDGenerator() {
+  this.length = 16;
+  this.timestamp = +new Date();
+
+  var _getRandomInt = function (min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  };
+
+  this.generate = function () {
+    var ts = this.timestamp.toString();
+    var parts = ts.split('').reverse();
+    var id = '';
+
+    for (var i = 0; i < this.length; ++i) {
+      var index = _getRandomInt(0, parts.length - 1);
+      id += parts[index];
+    }
+    while (id[0] == '0') {
+      id = id.substring(1);
+    }
+    return id;
+  };
+}
 
 module.exports = {
   addTransperfectSegments,

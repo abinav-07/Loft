@@ -82,6 +82,7 @@ hbs.registerPartials(partialPaths);
  * GLOBAL DATABASE SETTINGS
  */
 global.TRANSCRIPTION_DB = require('./database/transcribe-db/models');
+global.WEBAPP_DB = require('./database/webapp-db/models');
 
 //Database Connection
 const pool = require('./config/pool');
