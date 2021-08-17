@@ -275,5 +275,39 @@ function transperfectKeyEvents(spectrum) {
         $('#start-of-assistant-milliseconds')
       );
     }
+
+    //Ctrl+alt+[ Repeat Wake word start to end
+    if (event.altKey && event.shiftKey && event.which === 219) {
+      event.preventDefault();
+      repeatMarker(
+        parseAnnotationTime(
+          $('#wake-word-start-minute').val(),
+          $('#wake-word-start-seconds').val(),
+          $('#wake-word-start-milliseconds').val()
+        ),
+        parseAnnotationTime(
+          $('#wake-word-end-minute').val(),
+          $('#wake-word-end-seconds').val(),
+          $('#wake-word-end-milliseconds').val()
+        )
+      );
+    }
+
+    //Ctrl+alt+[ Repeat Wake word start to end
+    if (event.altKey && event.shiftKey && event.which === 188) {
+      event.preventDefault();
+      repeatMarker(
+        parseAnnotationTime(
+          $('#command-start-minute').val(),
+          $('#command-start-seconds').val(),
+          $('#command-start-milliseconds').val()
+        ),
+        parseAnnotationTime(
+          $('#annotation-end-minute').val(),
+          $('#annotation-end-seconds').val(),
+          $('#annotation-end-milliseconds').val()
+        )
+      );
+    }
   });
 }

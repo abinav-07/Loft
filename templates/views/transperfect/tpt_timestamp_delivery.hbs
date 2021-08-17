@@ -18,6 +18,8 @@
     <script src="local_modules/wavesurfer.js/dist/wavesurfer.js"></script>
     <script src="local_modules/wavesurfer.js/dist/plugin/wavesurfer.timeline.js"></script>
     <script src="local_modules/wavesurfer.js/dist/plugin/wavesurfer.regions.js"></script>
+    <script src="https://unpkg.com/wavesurfer.js/dist/plugin/wavesurfer.markers.js"></script>
+    
     <script src="public/js/resize.js"></script>  
     <script src="public/js/create-top-speaker-div.js"></script>
     <script src="public/js/repeat-region.js"></script>
@@ -322,7 +324,8 @@
           height: 50,
           notchPercentHeight: 25
         }),
-        WaveSurfer.regions.create({})
+        WaveSurfer.regions.create({}),
+          WaveSurfer.markers.create({}),
       ]
     };
 
@@ -751,7 +754,7 @@
         }
 
         if(latency<0){
-          alert("Command start time must be greater than wakeword start time!");
+          alert("Command start time must be greater than wakeword END time!");
           return;
         }
 
@@ -1440,11 +1443,33 @@ function renew() {
 
     //function to display current div content in annotation box
     function displayCurrentContents() {
+       
       if (spectrum.regions.getCurrentRegion() != null && !updateAnnotationOnChange && !updateAnnotationOnClick && !updateTopDivSpeaker && !updateTopDivSpeakerOnClick) {
         $("#top-div-speaker-control").hide();
         $("#annotation-box").show();
         var segmentId = spectrum.regions.getCurrentRegion().id;
+
+         
+        //Add Markers after clearing previous markers
+        //Wake word start marker        
+        spectrum.markers.clear();
+        const wordStart=parseAnnotationTime($("#wake-word-start-minute").val(),$("#wake-word-start-seconds").val(),$("#wake-word-start-milliseconds").val());
+        addMarker(spectrum,wordStart,'WS','#ff990a');
+
+        //Wake word end marker
+        const wordEnd=parseAnnotationTime($("#wake-word-end-minute").val(),$("#wake-word-end-seconds").val(),$("#wake-word-end-milliseconds").val());
+        addMarker(spectrum,wordEnd,'WE','#00ffcc');
+
+        //Command start marker
+        const commandStart=parseAnnotationTime($("#command-start-minute").val(),$("#command-start-seconds").val(),$("#command-start-milliseconds").val());
+        addMarker(spectrum,commandStart,'CS','#eb4034');
+
+        //Start of assistant marker
+        const assistantStart=parseAnnotationTime($("#start-of-assistant-minute").val(),$("#start-of-assistant-seconds").val(),$("#start-of-assistant-milliseconds").val());
+        addMarker(spectrum,assistantStart,'SOA','#a71dbf');
+        
         if(segmentId!=currentId){
+         
         currentId = spectrum.regions.getCurrentRegion().id;
 
         //highlight current region
@@ -1470,6 +1495,9 @@ function renew() {
         $("#annotation-end-seconds").val(endSeconds);
         $("#annotation-end-milliseconds").val(endMilliseconds);
 
+        
+      
+
         //($("#peaks-container").children().is(`#${segmentId}`) > 0)
         if ($("#peaks-container").children().is(`#${segmentId}`) > 0) {          
           
@@ -1482,6 +1510,18 @@ function renew() {
         }        
       }
     }//DisplayCurrentContents function end
+
+    function addMarker(spectrum, time, label, color) {
+     
+      if (time && time > 0) {
+        spectrum.markers.add({
+          time: time,
+          label,
+          color,
+          position: 'top',
+        });
+      }
+    }
 
 </script>    
 </body>
