@@ -60,13 +60,13 @@ function ltKeyEvents(spectrum) {
       (event.which == 32 || event.which == 96 || event.which == 48) &&
       checkInputFieldOnKeyPress(event)
     ) {
-      if (playPauseSpectrum()) highlightRegion();
+      if (playPauseAudio()) highlightRegion();
     } else if (
       event.ctrlKey &&
       event.which == 32 &&
       checkInputFieldOnKeyPress(event)
     ) {
-      if (playPauseSpectrum()) highlightRegion();
+      if (playPauseAudio()) highlightRegion();
     } //Play Pause End
 
     //skip audio backwards 500ms on "8" pressed
@@ -174,6 +174,19 @@ function transperfectKeyEvents(spectrum) {
   ltKeyEvents(spectrum);
   //Transperfect Events
   $('html').on('keydown', function (event) {
+    //play pause on space bar
+    if (
+      (event.which == 32 || event.which == 96 || event.which == 48) &&
+      checkInputFieldOnKeyPress(event)
+    ) {
+      if (playPauseSpectrum()) highlightRegion();
+    } else if (
+      event.ctrlKey &&
+      event.which == 32 &&
+      checkInputFieldOnKeyPress(event)
+    ) {
+      if (playPauseSpectrum()) highlightRegion();
+    } //Play Pause End
     /*
     //CTRL+SHIFT+M MIC TAP
     if (event.ctrlKey && event.shiftKey && event.which === 77) {

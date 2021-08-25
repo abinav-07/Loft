@@ -158,8 +158,6 @@ function addRegion() {
       $('#annotation-end-seconds').val(endSeconds);
       $('#annotation-end-milliseconds').val(endMilliseconds);
 
-      console.log(isTransperfect);
-
       if (isTransperfect) {
         $('#wake-word-start-minute').val(startMinute);
         $('#wake-word-start-seconds').val(startSeconds);
