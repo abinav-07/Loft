@@ -13,12 +13,11 @@ dotenv.config();
 AWS.config.update({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  // region: 'eu-north-1',
-  // version: process.env.AWS_VERSION,
+  region: 'eu-north-1',
+  version: process.env.AWS_VERSION,
 });
-// Create DO service object
-const doEndPoint = new AWS.Endpoint(process.env.DIGITAL_OCEAN_ENDPOINT);
-var s3 = new AWS.S3({ endpoint: doEndPoint });
+
+var s3 = new AWS.S3();
 
 // TRANSCRIPTION_DB;
 // WEBAPP_DB;
@@ -281,7 +280,7 @@ const uploadAudio = async (req, res, next) => {
       //Sql Insert
       bulkInsertSql.push({
         audioName: `${FileName.split('.')[0]}`,
-        audioUrl: `https://${process.env.FILES_BUCKET}.${process.env.DIGITAL_OCEAN_ENDPOINT}/transcription/${FileName}`,
+        audioUrl: `https://${process.env.FILES_BUCKET}.s3.eu-north-1.amazonaws.com/transcription/${FileName}`,
         type: 'transcription',
         languageId: 83, //English
         extras: `{'SubjectID':${SubjectID},'Region':'${Region}','Language':'${Language}','Group':'${Group}','Gender':'${Gender}','Wakeword':'${Wakeword}'}`,
