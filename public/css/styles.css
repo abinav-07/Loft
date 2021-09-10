@@ -319,9 +319,10 @@ header a {
   width: 320px;
   margin: 10px;
   border-radius: 15px;
-  padding: 10px;
+  padding: 8px;
   font-size: 16px;
   font-family: Arial, Helvetica, sans-serif;
+  word-break: break-word;
 }
 
 .annotation-time-class:invalid {

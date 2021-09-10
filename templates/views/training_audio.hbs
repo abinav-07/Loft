@@ -603,7 +603,7 @@
 
           speakerName = document.getElementById("annotation-type").value;
           spellCheckSpeakerType="annotation";
-          annotationText = val.value;
+          annotationText = val.value.trim();
         } else {
           annotationType = document.getElementById("annotation-type").value;
           speakerName = document.getElementById("speaker-name").value;
@@ -650,9 +650,7 @@
                   window.currentId = segmentIdFromDatabase;
                   window.segment_id = segmentIdFromDatabase;
                 }
-              }
-            })
-            //Create Div 
+                            //Create Div 
             createDiv(segmentIdFromDatabase, speakerName, annotationType, segmentStart, segmentEnd, annotationText);
 
             updateAnnotationOnChange = false;
@@ -673,6 +671,9 @@
 
             //setting update segments bool to true to allow updating
             updateSegments = true;
+              }
+            })
+
           } else {
             emptySpeaker();
           }
@@ -705,7 +706,7 @@
           document.getElementById(segmentId).title = annotationType;
           speakerName = document.getElementById("annotation-type").value;
           document.getElementById(segmentId).className = speakerName;
-          annotationText = val.value;
+          annotationText = val.value.trim();
           document.getElementById(segmentId).querySelector("p").innerText = annotationText;
         } else if (segmentclass.length >= 1 /*&& segmentclass.split(" ").length <= 2*/ && spellCheckSpeakerName(segmentclass,"speaker")) {
           //checking if speaker is already Available          
@@ -721,9 +722,9 @@
 
                   document.getElementById(segmentId).className = speakerName.replace(/ /g, "-");
                   if (val.value == "Singing" && $("#transcription-area").val().trim() !== "") {
-                    annotationText = $("#transcription-area").val();
+                    annotationText = $("#transcription-area").val().trim();
                   } else if (val.value == "default") {
-                    annotationText = $("#transcription-area").val();
+                    annotationText = $("#transcription-area").val().trim();
                   } else if (val.value == "Singing" && $("#transcription-area").val().trim() == "") {
                     annotationText = "Singing";
                   }
@@ -745,9 +746,9 @@
             speakerName = document.getElementById("speaker-name").value;
             document.getElementById(currentId).className = speakerName.replace(/ /g, "-");
             if (val.value == "Singing" && $("#transcription-area").val().trim() !== "") {
-              annotationText = $("#transcription-area").val();
+              annotationText = $("#transcription-area").val().trim();
             } else if (val.value == "default") {
-              annotationText = $("#transcription-area").val();
+              annotationText = $("#transcription-area").val().trim();
             } else if (val.value == "Singing" && $("#transcription-area").val().trim() == "") {
               annotationText = "Singing";
             }
