@@ -453,12 +453,12 @@
 
     //First Navigator Turn Button
     $("#top-speaker-first-navigator-button").on("click", function () {
-      navigateTurnsFirstButton(getTopClickedId);
+      navigateTurnsFirstButton(getTopClickedId,spectrum);
     });
     
     //second navigator function start
     $("#top-speaker-last-navigator-button").on("click", function () {
-      navigateTurnsLastButton(getTopClickedId);
+      navigateTurnsLastButton(getTopClickedId,spectrum);
     });
 
     //displaying contents on audio processing

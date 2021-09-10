@@ -1926,10 +1926,10 @@
 
     //First Navigator Turn Button
     $("#top-speaker-first-navigator-button").on("click", function () {
-      navigateTurnsFirstButton(getTopClickedId);
+      navigateTurnsFirstButton(getTopClickedId,spectrum);
     });
 
-    function navigateTurnsFirstButton(topSpeakerClickedId) {
+    function navigateTurnsFirstButton(topSpeakerClickedId,spectrum {
       var getClickedIdClass = document.getElementById(topSpeakerClickedId).className;
       if ($("#peaks-container").children().hasClass(getClickedIdClass)) {
         var firstSegmentId = $(`#peaks-container .${getClickedIdClass}`)[0].id;
@@ -1942,10 +1942,10 @@
 
     //second navigator function start
     $("#top-speaker-last-navigator-button").on("click", function () {
-      navigateTurnsLastButton(getTopClickedId);
+      navigateTurnsLastButton(getTopClickedId,spectrum);
     });
 
-    function navigateTurnsLastButton(topSpeakerClickedId) {
+    function navigateTurnsLastButton(topSpeakerClickedId,spectrum) {
       var getClickedIdClass = document.getElementById(topSpeakerClickedId).className;
       if ($("#peaks-container").children().hasClass(getClickedIdClass)) {
         var lastSegmentId = $(`#peaks-container .${getClickedIdClass}`)[$(`#peaks-container .${getClickedIdClass}`).length - 1].id;
