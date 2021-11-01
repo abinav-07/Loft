@@ -2100,7 +2100,7 @@
         div2.id = `top-${segmentClass.replace(/ /g, "-")}`;
         div2.style.backgroundColor = neededColor;
         div2.style.border = `2px groove ${neededColor}`;
-        div2.style.boxShadow = "2px 2px 10px";
+        div2.style.boxShadow = "0.5px 0.5px 3px";
         p2.innerHTML = segmentClass;
         p2.style.height = "30px";
         p2.style.fontSize = "16px";
@@ -2377,7 +2377,7 @@
           region.element.style.backgroundColor = "rgba(168,221,227,0.6)";
           if ($("#peaks-container").children().is("#" + highlightId)) {
             //document.getElementById(highlightId).style.opacity = "0.8";
-            document.getElementById(highlightId).style.boxShadow = "2px 2px 20px";
+            document.getElementById(highlightId).style.boxShadow = "0.5px 0.5px 3px";
             //$("#annotation-box").show();
           }
         } else {
@@ -2386,7 +2386,7 @@
           region.element.style.backgroundColor = "rgba(0,0,0,0)";
           if ($("#peaks-container").children().is("#" + region.id)) {
             //document.getElementById(region.id).style.opacity = "1"
-            document.getElementById(region.id).style.boxShadow = "1px 1px 5px";
+            document.getElementById(region.id).style.boxShadow = "0.5px 0.5px 3px";
             //$("#annotation-box").show();
           }
 

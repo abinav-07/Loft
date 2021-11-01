@@ -389,7 +389,8 @@ function highlightRegion() {
           .children()
           .is('#' + highlightId)
       ) {
-        document.getElementById(highlightId).style.boxShadow = '1px 1px 10px';
+        document.getElementById(highlightId).style.boxShadow =
+          '0.5px 0.5px 3px';
       }
     } else {
       region.element.children[0].style.backgroundColor = 'rgba(0,0,0,0)';
