@@ -15,6 +15,7 @@ function repeatRegion() {
   spectrum.on('pause', function () {
     document.getElementById('start-timestamp').innerText =
       secondsToTimestamp(end);
+    document.getElementById('start-time-hour').innerText = secondsToHours(end);
   });
 } //function repeatRegion End
 

@@ -869,6 +869,8 @@
       event.preventDefault();
 
       document.getElementById('total-timestamp').innertText = secondsToTimestamp(spectrum.getDuration());
+      document.getElementById("total-time-hour").innerText=secondsToHours(spectrum.getDuration());
+
     })
     function playPauseSpectrum() {
       var playing = spectrum.isPlaying()
@@ -915,6 +917,8 @@
       buttons.play.disabled = false;
       totalDuration = spectrum.getDuration();
       document.getElementById('total-timestamp').innerText = secondsToTimestamp(totalDuration);
+      document.getElementById("total-time-hour").innerText=secondsToHours(totalDuration);
+
 
       //Add Region on key down
       $("html").on("keydown", function (event) {
@@ -1114,6 +1118,9 @@
     function updateTimer() {
       var formatTime = secondsToTimestamp(spectrum.getCurrentTime());
       document.getElementById('start-timestamp').textContent = formatTime;
+       document.getElementById('start-time-hour').innerText = secondsToHours(
+    spectrum.getCurrentTime()
+  );
       //setTimeout(updateTimer, 100);
       if ((spectrum.getCurrentTime()) > 0) {
         setCookie("current_time", `${spectrum.getCurrentTime() / spectrum.getDuration()}`, 30);

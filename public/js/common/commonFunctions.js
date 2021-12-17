@@ -94,6 +94,9 @@ function seekToCookie() {
 function updateTimer() {
   var formatTime = secondsToTimestamp(spectrum.getCurrentTime());
   document.getElementById('start-timestamp').innerText = formatTime;
+  document.getElementById('start-time-hour').innerText = secondsToHours(
+    spectrum.getCurrentTime()
+  );
 }
 
 //Add New Region
@@ -203,6 +206,15 @@ function secondsToTimestamp(seconds) {
   ms = ms < 10 ? '0' + ms : ms;
 
   return m + ':' + s + '.' + ms.split('.')[1];
+}
+
+function secondsToHours(seconds) {
+  seconds = Math.floor(seconds);
+  var h = Math.floor(seconds / 3600);
+
+  h = h < 10 ? '0' + h : h;
+
+  return h;
 }
 
 //function to convert seconds to minute for editing annotation box

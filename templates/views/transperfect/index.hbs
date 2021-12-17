@@ -426,6 +426,8 @@
       event.preventDefault();
       playPauseSpectrum();
       document.getElementById('total-timestamp').innerText = secondsToTimestamp(spectrum.getDuration());
+      document.getElementById("total-time-hour").innerText=secondsToHours(spectrum.getDuration());
+
     });
 
     //function on spectrum is ready 
@@ -452,7 +454,9 @@
       })
       buttons.play.disabled = false;
       totalDuration = spectrum.getDuration();
-      document.getElementById('total-timestamp').innerText = secondsToTimestamp(totalDuration);      
+      document.getElementById('total-timestamp').innerText = secondsToTimestamp(totalDuration);   
+      document.getElementById("total-time-hour").innerText=secondsToHours(totalDuration);
+
 
       //Key Down Events
       transperfectKeyEvents(spectrum);

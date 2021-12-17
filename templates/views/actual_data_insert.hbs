@@ -157,6 +157,7 @@
       event.preventDefault();
       playPauseAudio();
       document.getElementById('total-timestamp').innertText = secondsToTimestamp(spectrum.getDuration());
+      document.getElementById("total-time-hour").innerText=secondsToHours(spectrum.getDuration());
     })
 
     //function on spectrum is ready 
@@ -184,6 +185,7 @@
       buttons.play.disabled = false;
       totalDuration = spectrum.getDuration();
       document.getElementById('total-timestamp').innerText = secondsToTimestamp(totalDuration);
+      document.getElementById("total-time-hour").innerText=secondsToHours(totalDuration);
 
       //Key down events
       ltKeyEvents(spectrum);

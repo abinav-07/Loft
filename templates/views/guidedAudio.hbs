@@ -614,10 +614,10 @@
         <i class="fa fa-play" style="color:grey;font-size:30px"></i></a>
     </div>
     <div id="time">
-      <h3 class="audio_time_hours">00 h</h3>
+      <h3 class="audio_time_hours"><span id="start-time-hour">00</span> h</h3>
       <h2 id="start-timestamp">00:00.000 </h2>
       <span id="audio-time-divider"></span>
-      <h3 class="audio_time_hours">00 h</h3>
+      <h3 class="audio_time_hours"><span id="total-time-hour">00</span> h</h3>
       <h3 id="total-timestamp">00:00.000</h3>
     </div>
     <div class="audio-button-top-container">
@@ -1036,6 +1036,8 @@
         $("#play-button").find($(".fa")).toggleClass('fa-pause fa-play');
       }
       document.getElementById('total-timestamp').innerText = secondsToTimestamp(spectrum.getDuration());
+      document.getElementById("total-time-hour").innerText=secondsToHours(spectrum.getDuration());
+
     })
 
     //function on spectrum is ready 
@@ -1108,6 +1110,8 @@
       buttons.play.disabled = false;
       totalDuration = spectrum.getDuration();
       document.getElementById('total-timestamp').innerText = secondsToTimestamp(totalDuration);
+      document.getElementById("total-time-hour").innerText=secondsToHours(totalDuration);
+
 
       //Add Region on key down
       $("html").on("keydown", function (event) {
@@ -1319,6 +1323,9 @@
     function updateTimer() {
       var formatTime = secondsToTimestamp(spectrum.getCurrentTime());
       document.getElementById('start-timestamp').innerText = formatTime;
+       document.getElementById('start-time-hour').innerText = secondsToHours(
+    spectrum.getCurrentTime()
+  );
       setTimeout(updateTimer, 100);
     }
     updateTimer();

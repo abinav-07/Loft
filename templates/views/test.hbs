@@ -325,12 +325,16 @@
         spectrum.pause();
       }
       document.getElementById('total-timestamp').innerText = secondsToTimestamp(spectrum.getDuration());
+      document.getElementById("total-time-hour").innerText=secondsToHours(spectrum.getDuration());
+
     })
 
     spectrum.on("ready", function () {
       buttons.play.disabled = false;
       totalDuration = spectrum.getDuration();
       document.getElementById('total-timestamp').innerText = secondsToTimestamp(totalDuration);
+      document.getElementById("total-time-hour").innerText=secondsToHours(totalDuration);
+
     });
 
     function updateTimer() {
