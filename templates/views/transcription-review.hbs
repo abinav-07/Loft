@@ -1488,22 +1488,24 @@
       return "";
     }
 
-    //function to convert seconds to minute, seconds and milliseconds
-    function secondsToTimestamp(seconds) {
+  //function to convert seconds to minute, seconds and milliseconds
+function secondsToTimestamp(seconds) {
+  var n = Math.floor(seconds);
+  // var ms = (seconds - n).toFixed(3);
+  var ms = seconds - n;
+  ms = Math.floor(ms * 1000) / 1000;
 
-      var n = Math.floor(seconds);
-      var ms = (seconds - n).toFixed(3);
-      seconds = Math.floor(seconds);
-      var h = Math.floor(seconds / 3600);
-      var m = Math.floor((seconds - (h * 3600)) / 60);
-      var s = seconds - (h * 3600) - (m * 60);
+  seconds = Math.floor(seconds);
+  var h = Math.floor(seconds / 3600);
+  var m = Math.floor((seconds - h * 3600) / 60);
+  var s = Math.ceil(seconds) - h * 3600 - m * 60;
 
-      m = m < 10 ? '0' + m : m;
-      s = s < 10 ? '0' + s : s;
-      ms = ms < 10 ? '0' + ms : ms;
+  m = m < 10 ? '0' + m : m;
+  s = s < 10 ? '0' + s : s;
+  ms = ms < 10 ? '0' + ms : ms;
 
-      return m + ':' + s + '.' + ms.split(".")[1];
-    }
+  return m + ':' + s + '.' + ms.split('.')[1];
+}
 
     //function to convert seconds to minute for editing annotation box  
     function secondsToMinutes(seconds) {
@@ -1523,13 +1525,14 @@
       return s;
     }
 
-    //function to convert seconds to milliseconds for editing annotation box  
-    function secondsToMilliseconds(seconds) {
-      var n = Math.floor(seconds);
-      var ms = (seconds - n).toFixed(3);
-      ms = ms < 10 ? '0' + ms : ms;
-      return ms.split(".")[1];
-    }
+   //function to convert seconds to milliseconds for editing annotation box
+function secondsToMilliseconds(seconds) {
+  var n = Math.floor(seconds);
+  var ms = seconds - n;
+  ms = Math.floor(ms * 1000) / 1000;
+  ms = ms < 10 ? '0' + ms : ms;
+  return ms.split('.')[1];
+}
 
 
     //Loading the Audio

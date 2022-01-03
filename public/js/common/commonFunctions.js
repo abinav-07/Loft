@@ -194,7 +194,9 @@ function addRegion() {
 //function to convert seconds to minute, seconds and milliseconds
 function secondsToTimestamp(seconds) {
   var n = Math.floor(seconds);
-  var ms = (seconds - n).toFixed(3);
+  // var ms = (seconds - n).toFixed(3);
+  var ms = seconds - n;
+  ms = Math.floor(ms * 1000) / 1000;
 
   seconds = Math.floor(seconds);
   var h = Math.floor(seconds / 3600);
@@ -238,7 +240,8 @@ function secondsToSeconds(seconds) {
 //function to convert seconds to milliseconds for editing annotation box
 function secondsToMilliseconds(seconds) {
   var n = Math.floor(seconds);
-  var ms = (seconds - n).toFixed(3);
+  var ms = seconds - n;
+  ms = Math.floor(ms * 1000) / 1000;
   ms = ms < 10 ? '0' + ms : ms;
   return ms.split('.')[1];
 }
