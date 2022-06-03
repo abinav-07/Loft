@@ -207,7 +207,13 @@ function secondsToTimestamp(seconds) {
   s = s < 10 ? '0' + s : s;
   ms = ms < 10 ? '0' + ms : ms;
 
-  return m + ':' + s + '.' + ms.split('.')[1];
+  return (
+    m +
+    ':' +
+    s +
+    '.' +
+    (typeof ms.split('.')[1] == 'undefined' ? '000' : ms.split('.')[1])
+  );
 }
 
 function secondsToHours(seconds) {
